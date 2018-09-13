@@ -19,4 +19,12 @@ public interface CollectionMapper {
 
     public List<Map<String,Object>> searchVideoByCollect();
 
+    public Map<String,Object> infoBasicDetail(String id);
+
+    public Map<String,Object> videoCourseDetail(String id);
+
+    public Map<String,Object> mallSupplyDetail(String id);
+
+    public Map<String,Object> mallPurchaseDetail(String id);
+
 }

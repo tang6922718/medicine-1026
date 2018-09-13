@@ -66,4 +66,40 @@
 			publish_time DESC
 	</select>
 
+	<select id="infoBasicDetail" parameterType="String" resultType="Map">
+		SELECT id,title,content,img_url,read_count,publish_date FROM info_basic WHERE id = #{id}
+	</select>
+	
+	<select id="videoCourseDetail" parameterType="String" resultType="Map">
+		SELECT
+			id,
+			title,
+			video_type,
+			lecturer_name,
+			publish_time,
+			course_introduce,
+			duration,
+			video_url,
+			img_url
+		FROM
+			train_video_course
+		WHERE id = #{id}
+	</select>
+
+	<select id="mallSupplyDetail" parameterType="String" resultType="Map">
+		 SELECT id,goods_name,supply_cat_code,goods_cat_code,price,price_unit,
+			img_url,specification,inventory,sales_volumn,produce_area,storehouse,receipt,
+			quality_standard,send_sample,payment,packing,detail,tel,linkman
+		FROM mall_supply
+		WHERE id =#{id}
+	</select>
+
+	<select id="mallPurchaseDetail" parameterType="String" resultType="Map">
+		SELECT id,goods_name,purchase_cat_code,specification,img_url,publish_time,purchase_quantity,
+		produce_area,storehouse,receipt,quality_standard,qualification_standard,
+		send_sample,payment,packing,linkman,linkman_phone
+		FROM mall_purchase
+		WHERE id = #{id}
+	</select>
+
 </mapper>

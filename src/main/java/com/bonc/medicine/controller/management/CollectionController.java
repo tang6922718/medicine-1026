@@ -36,12 +36,38 @@ public class CollectionController {
         return ResultUtil.success(collectionService.searchInfoByCollect());
     }
 
+
     /*
-    * 收藏夹—商品列表搜索
+    * 收藏夹—资讯搜索详情
+    * */
+    @GetMapping("/infoBasicDetail/{id}")
+    public Result<Object> infoBasicDetail(@PathVariable String id){
+        return ResultUtil.success(collectionService.infoBasicDetail(id));
+    }
+
+    /*
+    * 收藏夹—商品列表搜索,供应和求购列表
     * */
     @GetMapping("/searchSupplyByCollect")
     public Result<Object> searchSupplyByCollect(){
         return ResultUtil.success(collectionService.searchSupplyByCollect());
+    }
+
+    /*
+    * 收藏夹—供应详情
+    * */
+    @GetMapping("/mallSupplyDetail/{id}")
+    public Result<Object> mallSupplyDetail(@PathVariable String id){
+        return ResultUtil.success(collectionService.mallSupplyDetail(id));
+    }
+
+
+    /*
+    * 收藏夹—求购详情
+    * */
+    @GetMapping("/mallPurchaseDetail/{id}")
+    public Result<Object> mallPurchaseDetail(@PathVariable String id){
+        return ResultUtil.success(collectionService.mallPurchaseDetail(id));
     }
 
 
@@ -52,6 +78,17 @@ public class CollectionController {
     public Result<Object> searchVideoByCollect(){
         return ResultUtil.success(collectionService.searchVideoByCollect());
     }
+
+    /*
+    * 收藏夹—视频搜索详情
+    * (知识库：视频分类详情一致)
+    * */
+    public Result<Object> videoCourseDetail(String id){
+        return ResultUtil.success(collectionService.videoCourseDetail(id));
+    }
+
+
+
 
 
 

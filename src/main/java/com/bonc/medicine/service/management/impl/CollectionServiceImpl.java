@@ -36,4 +36,26 @@ public class CollectionServiceImpl implements CollectionService {
     public List<Map<String, Object>> searchVideoByCollect() {
         return collectionMapper.searchVideoByCollect();
     }
+
+    @Override
+    public Map<String, Object> infoBasicDetail(String id) {
+        return collectionMapper.infoBasicDetail(id);
+    }
+
+    @Override
+    public Map<String, Object> videoCourseDetail(String id) {
+        return collectionMapper.videoCourseDetail(id);
+    }
+
+    @Override
+    public Map<String, Object> mallSupplyDetail(String id) {
+        return collectionMapper.mallSupplyDetail(id);
+    }
+
+    @Override
+    public Map<String, Object> mallPurchaseDetail(String id) {
+        return collectionMapper.mallPurchaseDetail(id);
+    }
+
+
 }
