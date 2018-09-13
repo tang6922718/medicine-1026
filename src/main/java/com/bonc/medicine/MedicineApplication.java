@@ -8,18 +8,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 @SpringBootApplication(scanBasePackages = "com.bonc.medicine")
 @MapperScan("com.bonc.medicine.mapper")
-public class MedicineApplication extends WebMvcConfigurationSupport {
+public class MedicineApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MedicineApplication.class, args);
     }
 
-    @Override
+   /* @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
                 .allowCredentials(true)
                 .allowedHeaders("*")
                 .allowedOrigins("*")
                 .allowedMethods("*");
-    }
+    }*/
 }

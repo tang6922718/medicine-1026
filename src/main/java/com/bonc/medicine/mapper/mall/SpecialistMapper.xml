@@ -45,7 +45,7 @@
 		SELECT variety_code, variety_name FROM common_medicine_variety
 	</select>
 	
-	<select id="specialList" parameterType="java.util.Map">
+	<select id="specialList" parameterType="java.util.Map" resultType="Map">
 		SELECT  si.spec_id, si.name, si.head_portrait, si.employment_age, si.expertise_field, sis.interact_count
 		FROM spec_info si LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id 
 		<if test="subject_code != null and subject_code != ''">
