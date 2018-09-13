@@ -37,11 +37,11 @@
 		where spec_id = #{spec_id}
 	</update>
 	
-	<select id="subjectList" >
+	<select id="subjectList" resultType="Map">
 		SELECT * FROM dict_subject
 	</select>
 	
-	<select id="catalogList" >
+	<select id="catalogList" resultType="Map">
 		SELECT variety_code, variety_name FROM common_medicine_variety
 	</select>
 	
