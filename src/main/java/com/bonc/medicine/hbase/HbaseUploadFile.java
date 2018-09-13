@@ -71,9 +71,10 @@ public class HbaseUploadFile {
     public String readFileFromHbase(String key,String dirPath) throws Exception{
         conf = getConf();
         HTable table = new HTable(conf,"image_audio_vedio");
-        Get get = new Get(key.getBytes());
-        Result rs = table.get(get);
-        byte[] bs = rs.value(); //保存get result的结果，字节数组形式
+//        Get get = new Get(key.getBytes());
+//        Result rs = table.get(get);
+//        byte[] bs = rs.value(); //保存get result的结果，字节数组形式
+        byte[] bs = downloadFile(key);
         table.close();
         String filePath = dirPath+"/"+key;
         File file=new File(filePath);//将输出的二进制流转化后的图片的路径
@@ -83,16 +84,29 @@ public class HbaseUploadFile {
         return filePath; //返回图片路径
     }
 
-    /*
+
+    /**
      * 从hbase读取图片转为base64
-     * */
+     * @param key
+     * @return 将二进制转成base64返回
+     * @throws Exception
+     */
     public String readImgByByte(String key) throws Exception{
+        return Base64.encodeBase64String(downloadFile(key));
+    }
+
+    /**
+     * 从hbase读取文件返回byte[]
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public byte[] downloadFile(String key) throws Exception{
         conf = getConf();
         HTable table = new HTable(conf,"image_audio_vedio");
         Get get = new Get(key.getBytes());
         Result rs = table.get(get);
-        byte[] bs = rs.value(); //保存get result的结果，字节数组形式
-        return Base64.encodeBase64String(bs);
+        return rs.value();
     }
 
 

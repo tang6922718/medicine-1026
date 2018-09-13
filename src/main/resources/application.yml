@@ -2,12 +2,11 @@ server:
   servlet:
     context-path: /medicine
   port: 8088
-
 logging:
   level:
-    com.bonc.field: debug
+    com.bonc.medicine: debug
     org.springfromework.web: info
-    #org.hibernate: error
+    org.hibernate: error
 
 spring:
   datasource:
@@ -69,5 +68,4 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
   returnPageInfo: check
-
 
