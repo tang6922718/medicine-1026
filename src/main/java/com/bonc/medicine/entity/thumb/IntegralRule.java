@@ -20,8 +20,11 @@ public class IntegralRule {
     //有效标志1：有效 0：无效
     private char isEffect;
 
+    private String chineseName;
+
     //每日上限
     private int upperBound;
+
 
     public IntegralRule() {
     }
@@ -58,6 +61,14 @@ public class IntegralRule {
         this.isEffect = isEffect;
     }
 
+    public String getChineseName() {
+        return chineseName;
+    }
+
+    public void setChineseName(String chineseName) {
+        this.chineseName = chineseName;
+    }
+
     public int getUpperBound() {
         return upperBound;
     }
@@ -73,6 +84,7 @@ public class IntegralRule {
                 ", actionCode='" + actionCode + '\'' +
                 ", point=" + point +
                 ", isEffect=" + isEffect +
+                ", chineseName='" + chineseName + '\'' +
                 ", upperBound=" + upperBound +
                 '}';
     }

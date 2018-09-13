@@ -8,6 +8,7 @@
         <result property="point" column="point"/>
         <result property="isEffect" column="is_effect"/>
         <result property="upperBound" column="upper_bound"/>
+        <result property="chineseName" column="chinese_name"/>
     </resultMap>
 
     <resultMap id="IntegralHistoryEntity" type="com.bonc.medicine.entity.thumb.IntegralHistory">

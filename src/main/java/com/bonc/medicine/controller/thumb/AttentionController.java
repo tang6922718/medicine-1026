@@ -4,7 +4,10 @@ import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.thumb.AttentionService;
+import com.bonc.medicine.utils.IntegralKeyUtil;
+import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ public class AttentionController {
 
     @Autowired
     JedisAdapter jedisAdapter;
+
 
 
     /**
@@ -144,12 +148,13 @@ public class AttentionController {
     public Set keys (){
         return jedisAdapter.keys();
     }
-/*
-    @RequestMapping("/get")
-    public Set keys222 (){
-        return jedisAdapter.sdiff(RedisKeyUtil.getAttentionKey("123", "0"));
-    }
-*/
+
+   /* @RequestMapping("/get")
+    public long keys222 (){
+        long p = redisService.redisService(IntegralKeyUtil.getIntegralRuleKey());
+        return p;
+    }*/
+
 
     public void validatePram( Map<String, String> paramMap){
         if (null == paramMap){
