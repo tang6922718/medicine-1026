@@ -30,7 +30,7 @@
     <!--查询积分规则的全部信息 -->
     <select id="getIntegralRules" resultMap="IntegralRuleEntity">
       select
-        id, action_code, point, is_effect, upper_bound
+        id, action_code, point, is_effect, upper_bound, chinese_name
       from
         common_integral_rule
       order by
