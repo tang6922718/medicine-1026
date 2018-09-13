@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.user.UserManagerMapper">
+
+	<insert id="addBasic" parameterType="com.bonc.medicine.entity.user.Basicinfo"
+		useGeneratedKeys="true" keyProperty="id">
+		Insert into common_user
+		(telephone,name,password,sex,age,address)
+		values(#{telephone},#{name},#{password},#{sex},#{age},#{address});
+	</insert>
+
+	<insert id="addUserRoleRel" parameterType="Map">
+		Insert into
+		common_user_role_rel
+		(user_id,role_id)
+		values(#{user_id},#{role_id});
+	</insert>
+
+	<insert id="addExpert" parameterType="com.bonc.medicine.entity.user.Expert">
+		Insert into spec_info
+		(name,employment_age,education,expertise_field,detail)
+		values(#{name},#{employment_age},#{education},#{expertise_field},#{detail});
+	</insert>
+
+	<insert id="addCatRel" parameterType="Map">
+		Insert into
+		spec_cat_rel
+		(spec_id,cat_id)
+		values(#{id},#{cat_rel_id});
+	</insert>
+
+	<insert id="addSubject_rel" parameterType="Map">
+		Insert into
+		spec_subject_rel
+		(spec_id,subject_id)
+		values(#{id},#{subject_rel_id});
+	</insert>
+
+	<insert id="addCooperative" parameterType="com.bonc.medicine.entity.user.Cooperative">
+		Insert into
+		field_coop
+		(name,official_user_name,address,img_url,cultivar)
+		values(#{name},#{official_user_name},#{address},#{img_url},#{cultivar});
+	</insert>
+
+	<select id="basicInfo" parameterType="Map" resultType="Map">
+		SELECT
+		a.id,
+		a.NAME,
+		a.age,
+		a.address,
+		a.log_time,
+		GROUP_CONCAT( DISTINCT (
+		c.chinese_name ) ) AS care_name,
+		GROUP_CONCAT( DISTINCT ( e.role_name )
+		) AS role_name,
+		a.head_portrait
+		FROM
+		common_user a,
+		common_user_care_varieties_r b,
+		km_variety_encyclopedia c,
+		common_user_role_rel d,
+		common_role e
+		WHERE
+		a.id = b.user_id
+		AND
+		b.variety_code = c.id
+		AND a.id = d.user_id
+		AND d.role_id = e.id
+		AND a.id
+		= #{id}
+	</select>
+
+	<update id="userStatus" parameterType="Map">
+		update common_user set
+		status = #{status} where id = #{id}
+	</update>
+
+	<select id="fans" parameterType="Map" resultType="Map">
+		select count(1)
+		as fans from common_follow where object_id = #{id}
+	</select>
+
+	<select id="care" parameterType="Map" resultType="Map">
+		select count(1)
+		s care from common_follow where follow_user_id = #{id}
+	</select>
+
+	<select id="integral" parameterType="Map" resultType="Map">
+		select
+		current_integral from common_integral where user_id = #{id}
+	</select>
+
+	<select id="issue" parameterType="Map" resultType="Map">
+		select
+		count(1) as issue from spec_issue where issue_user_id = #{id}
+	</select>
+
+	<select id="supply" parameterType="Map" resultType="Map">
+		select
+		count(1) as supply from mall_supply where state ='0' and seller_id =
+		#{id}
+	</select>
+
+	<select id="purchase" parameterType="Map" resultType="Map">
+		select
+		count(1) as purchase from mall_purchase where state ='1' and user_id =
+		#{id}
+	</select>
+
+	<select id="field" parameterType="Map" resultType="Map">
+		select
+		count(1) as field from field_info where state ='1' and user_id = #{id}
+	</select>
+
+	<select id="userlist" parameterType="Map" resultType="Map">
+		select *
+		from (SELECT
+		a.id AS user_id,
+		a.NAME,
+		GROUP_CONCAT( c.role_name ORDER BY c.role_name DESC)
+		AS a_role,
+		a.telephone,
+		'' AS coop,
+		'' AS HELP,
+		'' AS integral,
+		'' AS
+		supply,
+		'' AS purchase,
+		STATUS
+		FROM
+		common_user a,
+		common_user_role_rel b,
+		common_role c
+		WHERE
+		a.id = b.user_id
+		AND b.role_id = c.id
+		AND a.telephone
+		LIKE CONCAT( '%', #{tel}, '%' )
+		AND
+		str_to_date(#{startTime},'%Y-%m-%d') <![CDATA[ < ]]>
+		log_time
+		AND str_to_date(#{endTime},'%Y-%m-%d') <![CDATA[ > ]]>
+		log_time
+		GROUP BY
+		a.id
+		ORDER BY
+		b.role_id) as temp where a_role like '%%'
+		
+	</select>
+
+	<select id="coop_hrlp_list" resultType="Map">
+		select a.user_id , b.name , a.assistant from field_coop_member a left join field_coop b on a.coop_id = b.id 
+	</select>
+
+	<select id="integrallist" resultType="Map">
+		select user_id,current_integral from common_integral
+	</select>
+
+	<select id="supplylist" resultType="Map">
+		select seller_id as user_id,count(1) as supply from mall_supply where state = '0' and is_audit = '1' and carriage_status = '1'  GROUP BY (seller_id)
+	</select>
+
+	<select id="purchaselist" resultType="Map">
+		select user_id,count(1) as purchase from mall_purchase where state = '1' and is_aduit = '1' group by user_id
+	</select>
+
+</mapper>

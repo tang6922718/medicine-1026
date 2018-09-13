@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.mall.DyanimicMapper">
+
+	<!--添加动态-->
+	<insert id="insertDyanimic" parameterType="com.bonc.medicine.entity.mall.Dyanimic">
+		insert into comm_dyanimic
+		(dyn_cat_id,desciption,img_url,video_url,telephone,publish_user_id,publish_time,effect_flag,fail_opinion,update_time)
+		values
+		(#{dyn_cat_id},#{desciption},#{img_url},#{video_url},#{telephone},#{publish_user_id},now(),#{effect_flag},#{fail_opinion},now())
+    </insert>
+
+
+	<!-- 查询所有种类动态 -->
+	<select id="selectAllDyanimic" resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name
+		FROM
+		comm_dyanimic a
+	left join common_user b on a.publish_user_id = b.id
+	WHERE a.effect_flag = '0'
+	ORDER by a.update_time DESC
+</select>
+
+	<!--查询某一类型的动态(除供求)-->
+	<select id="selectOneDyanimic"  resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name
+		FROM
+		comm_dyanimic a
+		left join common_user b on a.publish_user_id = b.id
+		WHERE a.effect_flag = '0'  and a.dyn_cat_id = #{id}
+		ORDER by a.update_time DESC
+	</select>
+
+	<!--查询 供求 类型的动态-->
+	<select id="selectTwoDyanimic" resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name
+		FROM
+		comm_dyanimic a
+		left join common_user b on a.publish_user_id = b.id
+		WHERE a.effect_flag = '0'  and a.dyn_cat_id in (3,4)
+		ORDER by a.update_time DESC
+	</select>
+
+
+
+	<!--查询某一用户  某一类型(除供求)的动态-->
+	<select id="selectUserOneDyanimic" resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name
+		FROM
+		comm_dyanimic a
+		left join common_user b on a.publish_user_id = b.id
+		WHERE a.effect_flag = '0'  and a.dyn_cat_id = #{id}  and a.publish_user_id = #{publish_user_id}
+		ORDER by a.update_time DESC
+	</select>
+
+
+	<!--查询某一用户 供求类型的动态-->
+	<select id="selectUserTwoDyanimic" resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name
+		FROM
+		comm_dyanimic a
+		left join common_user b on a.publish_user_id = b.id
+		WHERE a.effect_flag = '0'  and a.dyn_cat_id in (3,4) and a.publish_user_id = #{publish_user_id}
+		ORDER by a.update_time DESC
+	</select>
+
+
+
+	<!--查询某一条具体的动态-->
+	<select id="selectDetailOneDyanimic" resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name
+		FROM
+		comm_dyanimic a
+		left join common_user b on a.publish_user_id = b.id
+		WHERE a.id = #{id} and a.effect_flag = '0'
+	</select>
+
+    
+
+</mapper>

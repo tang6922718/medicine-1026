@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.thumb.LogsMapper">
+
+
+    <insert id="addLoginLogs" parameterType="Map">
+        insert into
+          common_logon_log
+        values
+          (0, #{userId}, now(), #{ip}, null, #{status} )
+    </insert>
+
+
+    <insert id="addLogoutLogs" parameterType="Map">
+        insert into
+          common_logon_log
+        values
+          (0, #{userId}, null, #{ip}, now(), #{status} )
+    </insert>
+
+    <update id="updateOperLogsNormal" parameterType="String">
+        update
+          common_logon_log
+        set
+          status = 1
+        where
+          id = #{logId}
+    </update>
+
+    <update id="updateOperLogsUnnormal" parameterType="String">
+        update
+          common_logon_log
+        set
+          status = 0
+        where
+          id = #{logId}
+    </update>
+
+    <select id="queryLoginOutLogs" parameterType="Map" resultType="Map">
+        select
+        clo.id, DATE_FORMAT(clo.login_time, '%Y-%m-%d') as login_time, clo.ip, clo.status, cu.name,
+        DATE_FORMAT(clo.logout_time, '%Y-%m-%d') as logout_time,
+        case when clo.login_time is not null and clo.logout_time is null then '登入'
+        when clo.logout_time is not null and clo.login_time is null then '登出' end as operation
+        from
+        common_logon_log clo
+        left join common_user cu
+        on
+        clo.user_id = cu.id
+        where
+        1 =1
+        <if test="userName != '' and userName != null">
+            and cd.name like CONCAT('%',#{userName},'%')
+        </if>
+        <if test="starTime != '' and starTime != null">
+            and clo.login_time &gt;= #{starTime}
+        </if>
+
+        <if test="endTime != '' and endTime != null">
+            and clo.login_time &lt;= #{endTime}
+        </if>
+        <if test="ip != '' and ip != null">
+            and clo.ip like CONCAT('%',#{ip},'%')
+        </if>
+        <if test="onlyLogin != '' and onlyLogin != null">
+            and clo.logout_time is null
+        </if>
+        <if test="onlyLogout!= '' and onlyLogout != null">
+            and clo.logout_time is null
+        </if>
+    </select>
+
+    <select id="queryOperLogs" parameterType="Map" resultType="Map">
+        select
+        log.id, log.user_id, log.op_type, log.op_resource, log.op_module,
+        DATE_FORMAT( log.op_time, '%Y-%m-%d %H:%i:%S') as op_time,log.op_status,
+        cu.name
+        from
+        common_log log
+        left join
+        common_user cu
+        on
+        log.user_id = cu.id
+        where
+        1 = 1
+        <if test="userName != '' and userName != null">
+            and cd.name like CONCAT('%',#{userName},'%')
+        </if>
+
+        <if test="starTime != '' and starTime != null">
+            and log.login_time &gt;= #{starTime}
+        </if>
+
+        <if test="endTime != '' and endTime != null">
+            and log.login_time &lt;= #{endTime}
+        </if>
+
+        <if test="status != '' and status != null">
+            and log.status = #{status}
+        </if>
+    </select>
+
+    <insert id="addOperLogs" parameterType="Map">
+        insert into
+          common_log
+        values
+          (0, #{userId}, #{opeType}, #{opeResource}, #{opModule}, now(), #{status})
+    </insert>
+
+
+    <select id="queryUserLoginTimes" parameterType="Map" resultType="Map">
+        select
+        DATE_FORMAT(clo.login_time, '%Y-%m-%d') as login_time,
+        count(1) as loginTimes
+        from
+        common_logon_log clo
+        left join
+        common_user cu
+        on
+        clo.user_id = cu.id
+        where
+        1 = 1
+
+        <if test="starTime != '' and starTime != null">
+            and clo.login_time &gt;= #{starTime}
+        </if>
+
+        <if test="endTime != '' and endTime != null">
+            and clo.login_time &lt;= #{endTime}
+        </if>
+        and
+        clo.login_time is not null
+        group by
+        login_time
+    </select>
+
+</mapper>

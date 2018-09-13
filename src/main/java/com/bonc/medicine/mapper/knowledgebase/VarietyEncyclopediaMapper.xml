@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.knowledgebase.VarietyEncyclopediaMapper">
+	<insert id="insertVarietyEncyclopedia" parameterType="com.bonc.medicine.entity.knowledgebase.VarietyEncyclopedia">
+		insert into km_variety_encyclopedia (id,variety_id,codex_status,record_time,record_status,
+		variety_name,variety_alias,product_time,property_flavor,distribution_area,effect,fail_opinion,update_time)
+		values(#{id},#{variety_id},#{codex_status},#{record_time},#{record_status},#{variety_name},#{variety_alias},
+		#{product_time},#{property_flavor},#{distribution_area},#{effect},#{fail_opinion},#{update_time})
+	</insert>
+
+	<insert id="addBreed" parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO km_variety_encyclopedia (
+			variety_id,
+			variety_alias,
+			property_flavor,
+			product_time,
+			distribution_area,
+			effect
+		)
+		VALUES
+			(#{variety_id},
+			#{variety_alias},
+			#{property_flavor},
+			#{product_time},
+			#{distribution_area},
+			#{effect}
+			)
+	</insert>
+
+	<update id="updateBreedInfo" parameterType="java.util.Map">
+		UPDATE km_variety_encyclopedia
+		<set>
+			<if test="synopsis != null and synopsis != ''">`synopsis`=#{synopsis},</if>
+			<if test="chinese_name != null and chinese_name != ''">chinese_name=#{chinese_name},</if>
+			<if test="latin_name != null and latin_name != ''">latin_name=#{latin_name},</if>
+			<if test="alias != null and alias != ''">alias=#{alias},</if>
+			<if test="two_law != null and two_law != ''">two_law=#{two_law},</if>
+			<if test="circles != null and circles != ''">`circles`=#{circles},</if>
+			<if test="door != null and door != ''">door=#{door},</if>
+			<if test="outline != null and outline != ''">outline=#{outline},</if>
+			<if test="item != null and item != ''">item=#{item},</if>
+			<if test="suborder != null and suborder != ''">suborder=#{suborder},</if>
+			<if test="section != null and section != ''">`section`=#{section},</if>
+			<if test="family != null and family != ''">family=#{family},</if>
+			<if test="genus != null and genus != ''">genus=#{genus},</if>
+			<if test="speices != null and speices != ''">speices=#{speices},</if>
+			<if test="subspecies != null and subspecies != ''">subspecies=#{subspecies},</if>
+			<if test="distribution_area != null and distribution_area != ''">`distribution_area`=#{distribution_area},</if>
+			<if test="graph_url != null and graph_url != ''">graph_url=#{graph_url},</if>
+			<if test="feature != null and feature != ''">feature=#{feature},</if>
+			<if test="habit != null and habit != ''">habit=#{habit},</if>
+			<if test="distrubtion_range != null and distrubtion_range != ''">distrubtion_range=#{distrubtion_range},</if>
+			<if test="variety != null and variety != ''">variety=#{variety},</if>
+			<if test="cultivation_tech != null and cultivation_tech != ''">cultivation_tech=#{cultivation_tech},</if>
+			<if test="main_value != null and main_value != ''">main_value=#{main_value},</if>
+			<if test="composition != null and composition != ''">composition=#{composition},</if>
+			upload_time= now()
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="undoBreedStatus" parameterType="String">
+		UPDATE km_variety_encyclopedia SET  record_status = 5 WHERE id = #{id}
+	</update>
+
+	<select id="selectBreed" parameterType="java.util.Map" resultType="Map">
+		SELECT
+		a.id,
+		a.chinese_name,
+		a.variety_id,
+		a.codex_status,
+		a.record_status,
+		a.record_time,
+		CASE WHEN a.codex_status = 1 THEN '药典'
+		ELSE '百科' END AS type
+		FROM
+		km_variety_encyclopedia a
+		INNER JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code
+		WHERE
+		1 = 1
+		<if test="search_name != null and search_name != ''">
+			and a.chinese_name = #{search_name}
+		</if>
+		<if test="type_code != null and type_code != ''">
+			and codex_status = #{codex_status}
+		</if>
+		<if test="record_status != null and record_status != ''">
+			and record_status = #{record_status}
+		</if>
+		ORDER BY
+		update_time DESC
+	</select>
+
+	<select id="selectBreedDetail" parameterType="String" resultType="Map">
+		SELECT
+			synopsis,
+			chinese_name,
+			latin_name,
+			alias,
+			two_law,
+			circles,
+			door,
+			outline,
+			item,
+			suborder,
+			section,
+			family,
+			genus,
+			speices,
+			subspecies,
+			distribution_area,
+			graph_url,
+			feature,
+			habit,
+			distrubtion_range,
+			variety,
+			cultivation_tech,
+			main_value,
+			composition
+		FROM km_variety_encyclopedia
+		WHERE
+		 	id = #{id}
+	</select>
+
+	<select id="showHotBreed" resultType="Map">
+		SELECT variety_code,variety_name FROM common_medicine_variety
+	</select>
+
+	<select id="kmAuditList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+		a.object_id,
+		CONCAT_WS('',b.chinese_name,c.title,d.title,e.step_name,f.title) AS title,
+		a.km_type,
+		CASE WHEN a.km_type = 1 THEN '品种百科'
+		WHEN a.km_type = 2 THEN '资讯类'
+		WHEN a.km_type = 3 THEN '文章类'
+		WHEN a.km_type = 4 THEN '品种SOP'
+		WHEN a.km_type = 5 THEN '品种药典'
+		END AS type_name,
+		a.publish_time,
+		a.`status`,
+		CASE WHEN a.`status` = 0 THEN '未通过'
+		WHEN a.`status` = 1 THEN '通过'
+		WHEN a.`status` = 2 THEN '待审核'
+		END AS status_name
+		FROM
+		km_audit a
+		LEFT JOIN km_variety_encyclopedia b ON a.object_id = b.id AND a.km_type = 1
+		LEFT JOIN info_basic c ON a.object_id = c.id AND a.km_type = 2
+		LEFT JOIN spec_article d ON a.object_id = d.id AND a.km_type = 3
+		LEFT JOIN km_sop_step e ON a.object_id = e.id AND a.km_type = 4
+		LEFT JOIN train_video_course f ON a.object_id = f.id AND a.km_type = 5
+		WHERE 1=1
+		<if test="keyword != null and keyword != ''">
+			and (b.chinese_name LIKE CONCAT('%',#{keyword},'%') or c.title LIKE CONCAT('%',#{keyword},'%') or d.title LIKE CONCAT('%',#{keyword},'%') OR e.step_name LIKE CONCAT('%',#{keyword},'%') OR f.title LIKE CONCAT('%',#{keyword},'%'))
+		</if>
+		<if test="type_code != null and type_code != ''">
+			AND a.km_type = #{type_code}
+		</if>
+		ORDER BY a.`status` DESC
+	</select>
+
+	<update id="kmAudit" parameterType="java.util.Map">
+		UPDATE km_audit
+		<set>
+			<if test="status != null and status != ''">status=#{status},</if>
+			<if test="fail_opinion != null and fail_opinion != ''">fail_opinion=#{fail_opinion},</if>
+		</set>
+		WHERE
+		km_type = #{km_type} AND  object_id = #{object_id}
+	</update>
+
+</mapper>

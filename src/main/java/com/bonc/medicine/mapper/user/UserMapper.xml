@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.user.UserMapper">
+
+	<select id="getAllUser" resultType="Map">
+		select * from user
+	</select>
+
+	<!--用户注册:用户基本信息完善 -->
+	<insert id="completeUserInfo" parameterType="com.bonc.medicine.entity.user.User">
+		insert into common_user values(
+			#{id},#{name},#{wetchat},#{password},#{telephone},#{email},#{sex},#{birthDate},#{address},
+			#{status},#{updateTime},#{headPortrait}
+		)
+	</insert>
+
+
+	<insert id="signUp" parameterType="Map">
+		insert into
+		  common_user
+		    (telephone, password, status, update_time)
+		values
+		    (#{phone}, #{password}, '1', #{updateTime})
+	</insert>
+
+    <select id="getIdByPhone" parameterType="String" resultType="Map">
+       select id from common_user where telephone = #{phone}
+    </select>
+
+    <update id="updatePassword" parameterType="Map">
+        update
+          ${tableName}
+        set
+          password = #{password},
+          update_time = #{updateTime}
+        where
+          telephone = #{phone}
+    </update>
+
+    <select id="getTableByPhone" parameterType="Map" resultType="Map">
+        SELECT
+	      'common_user' AS table_name,
+	      telephone
+        FROM
+	      common_user
+        WHERE
+	      telephone = #{phone}
+        UNION
+	    SELECT
+		  'common_backend_user' AS table_name,
+		  telephone
+	    FROM
+		  common_backend_user
+	    WHERE
+		  telephone = #{phone}
+    </select>
+
+	<select id="login" parameterType="Map" resultType="Map">
+		select
+			id,telephone, name, address, head_portrait
+		from
+			 ${tableName}
+		where
+			 telephone = #{phone}
+			 and password = #{password}
+
+	</select>
+</mapper>

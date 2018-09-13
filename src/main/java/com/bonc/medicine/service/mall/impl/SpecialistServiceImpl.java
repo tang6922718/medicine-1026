@@ -1,0 +1,136 @@
+package com.bonc.medicine.service.mall.impl;
+
+import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.entity.mall.Issue;
+import com.bonc.medicine.entity.mall.Specialist;
+import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.mapper.mall.SpecialistMapper;
+import com.bonc.medicine.service.mall.SpecialistService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class SpecialistServiceImpl implements SpecialistService {
+	@Autowired
+	SpecialistMapper specialistMapper;
+	
+	@Override
+	public int craeteCharactor(Specialist specialist) {
+		return specialistMapper.insertSpecialist(specialist);
+	}
+
+	@Override
+	public int updateInfo(Specialist specialist) {
+		return specialistMapper.updateSpecialist(specialist);
+	}
+
+	@Override
+	public List<Map> catalogList() {
+		return specialistMapper.catalogList();
+	}
+
+	@Override
+	public List<Map> subjectList() {
+		return specialistMapper.subjectList();
+	}
+
+	@Override
+	public List<Map> specialList(Map param) {
+		return specialistMapper.specialList(param);
+	}
+
+	@Override
+	public Map specDetail(String spec_id) {
+		List<Map> result = specialistMapper.specDetail(spec_id);
+		if (result.size() != 1) {
+			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+		}
+		return result.get(0);
+	}
+
+	@Override
+	public List<Map> articleList(String spec_id) {
+		return specialistMapper.articleList(spec_id);
+	}
+
+	@Override
+	public Map articleDetail(String id) {
+		List<Map> result = specialistMapper.articleDetail(id);
+		if (result.size() != 1) {
+			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+		}
+		return result.get(0);
+	}
+
+	@Override
+	public List<Map> caseList(String spec_id) {
+		return specialistMapper.caseList(spec_id);
+	}
+
+	@Override
+	public Map caseDetail(String id) {
+		List<Map> result = specialistMapper.caseDetail(id);
+		if (result.size() != 1) {
+			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+		}
+		return result.get(0);
+	}
+
+	@Override
+	public int releaseIssue(Issue issue) {
+		return specialistMapper.insertIssue(issue);
+	}
+
+	@Override
+	public List<Map> myIssues(String user_id) {
+		return specialistMapper.myIssues(user_id);
+	}
+
+	@Override
+	public Map issueDetail(String issue_id) {
+		List<Map> result = specialistMapper.issueDetail(issue_id);
+		if (result.size() != 1) {
+			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+		}
+		return result.get(0);
+	}
+
+	@Override
+	public int uploadFile(Map param) {
+		return specialistMapper.uploadFile(param);
+	}
+
+	@Override
+	public List<Map> videoList(String spec_id) {
+		return specialistMapper.videoList(spec_id);
+	}
+
+	@Override
+	public int insertSubSpec(Map param) {
+		return specialistMapper.insertSubSpec(param);
+	}
+
+	@Override
+	public int insertCatSpec(Map param) {
+		return specialistMapper.insertCatSpec(param);
+	}
+
+	@Override
+	public int delSubSpec(String spec_id) {
+		return specialistMapper.delSubSpec(spec_id);
+	}
+
+	@Override
+	public int delCatSpec(String spec_id) {
+		return specialistMapper.delCatSpec(spec_id);
+	}
+	
+	@Override
+	public List<Map> uploadRecord(Integer spec_id) {
+		return specialistMapper.uploadRecord(spec_id);
+	}
+
+}

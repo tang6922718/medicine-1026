@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.knowledgebase.AuditMapper">
+	<insert id="insertAudit" parameterType="com.bonc.medicine.entity.knowledgebase.Audit">
+		insert into km_audit (id,title,km_type,object_id,publish_time,
+		status,fail_opinion,audit_time)
+		values(#{id},#{title},#{km_type},#{object_id},#{publish_time},#{status},#{fail_opinion},#{audit_time})
+	</insert>
+
+	<insert id="addAudit"  parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO km_audit (
+			title,
+			km_type,
+			object_id,
+			publish_time,
+			status
+		)
+		VALUES
+			(#{title},
+			#{km_type},
+			#{object_id},
+			#{publish_time},
+			#{status})
+	</insert>
+
+</mapper>

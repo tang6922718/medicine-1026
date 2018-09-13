@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.management.CollectionMapper">
+	
+	<insert id="collect" parameterType="Map" useGeneratedKeys="true">
+		INSERT INTO common_collection (
+			user_id,
+			collect_type,
+			collect_object_id,
+			collect_url,
+			collect_time
+		)
+		VALUES
+			(
+			#{user_id},
+			#{collect_type},
+			#{collect_object_id},
+			#{collect_url},
+			now()
+			);
+	</insert>
+	
+	<select id="searchInfoByCollect" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.cat_code,
+			b.cat_name,
+			a.publish_date
+		FROM
+			info_basic a
+		LEFT JOIN info_category b ON a.cat_code = b.cat_code
+		ORDER BY
+			a.publish_date DESC
+	</select>
+
+	<select id="searchSupplyByCollect" resultType="java.util.Map">
+		SELECT
+			goods_name,
+			img_url,
+			specification,
+			price,
+			price_unit,
+		    produce_area,
+		    inventory,
+	        inventory_unit,
+			public_time
+		FROM
+			mall_supply
+		ORDER BY
+			public_time DESC
+	</select>
+
+	<select id="searchVideoByCollect">
+		SELECT
+			id,
+			title,
+			video_url,
+			duration,
+			img_url,
+			STATUS
+		FROM
+			train_video_course
+		ORDER BY
+			publish_time DESC
+	</select>
+
+</mapper>

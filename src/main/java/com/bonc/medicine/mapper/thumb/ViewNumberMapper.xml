@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.thumb.ViewNumberMapper">
+
+    <select id="queryViewNumber" parameterType="Map" resultType="Map">
+        select
+        view_num
+        from
+        common_view
+        where
+        1 = 1
+        <if test="objectType != null and objectType != null">
+            and object_type = #{objectType}
+        </if>
+
+        <if test="objectId != null and objectId != null">
+            and object_id = #{objectId}
+        </if>
+    </select>
+
+    <select id="queryExistsObject" parameterType="Map" resultType="Map">
+        select
+         id
+        from
+          common_view
+        where
+            object_type = #{objectType}
+            and object_id = #{objectId}
+    </select>
+
+    <insert id="addViewNumberCord" parameterType="Map">
+      insert
+        into common_view
+      values
+        (0, #{objectType}, #{objectId}, #{viewNumber})
+    </insert>
+
+    <update id="updateViewNumber" parameterType="Map">
+      update
+      common_view
+      set view_num = view_num + #{viewNumber}
+
+      where object_type = #{objectType}
+        and object_id =  #{objectId}
+    </update>
+
+
+</mapper>

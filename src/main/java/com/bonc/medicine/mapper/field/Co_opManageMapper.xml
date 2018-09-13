@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.medicine.mapper.field.Co_opManageMapper">
+
+	<insert id="insertCo_op" parameterType="com.bonc.medicine.entity.field.Co_op">
+		INSERT INTO field_coop
+		(name,introduce,total_area,img_url,portrait,cultivar,
+		age,telephone,address,official_user_id,official_user_name,establish_date,photo_url,state,is_audit,comment)
+		VALUES
+		(#{name},#{introduce},#{total_area},#{img_url},#{portrait},#{cultivar},
+		#{age},#{telephone},#{address},#{official_user_id},#{official_user_name},#{establish_date},#{photo_url},#{state},#{is_audit},#{comment})
+	</insert>
+
+	<insert id="insertCo_opMember" parameterType="com.bonc.medicine.entity.field.Co_op_Member">
+		INSERT INTO
+		field_coop_member
+		(name,img_url,sex,age,telephone,address,plant_age,plant_cat_id,plant_area,
+		coop_id,user_id,assistant,state)
+		VALUES
+		(#{name},#{img_url},#{sex},#{age},#{telephone},#{address},#{plant_age},
+		#{plant_cat_id},#{plant_area},#{coop_id},#{user_id},#{assistant},#{state})
+	</insert>
+
+
+
+	<select id="queryCo_opInfo" resultType="Map" parameterType="Integer">
+		SELECT id,name,official_user_name,img_url FROM field_coop WHERE state
+		= '0' AND is_audit = '0' AND id = #{ID}
+	</select>
+
+	<select id="queryPlantNum" resultType="Map" parameterType="Integer">
+		SELECT count(*) AS PlantNUM FROM field_coop_member A ,field_info B
+		WHERE A.coop_id= #{coop_id} AND A.state='0' AND (A.user_id =B.user_id)
+	</select>
+
+	<select id="queryAssistantNum" resultType="Map" parameterType="Integer">
+		SELECT count(*) AS AssistantNum FROM field_coop_member
+		WHERE assistant
+		='0' AND state='0' AND coop_id = #{coop_id}
+	</select>
+
+	<select id="queryCo_opMemberNum" resultType="Map" parameterType="Integer">
+		SELECT count(*) AS Co_opMemberNum FROM field_coop_member
+		WHERE
+		state='0' AND coop_id = #{coop_id}
+	</select>
+
+	<select id="queryUserID" resultType="Map">
+
+		SELECT
+		'common' AS
+		table_name,id,name
+		FROM
+		common_user
+		WHERE
+		telephone = #{tel}
+		UNION
+		SELECT
+		'admin' AS table_name,id,name
+		FROM
+		common_backend_user
+		WHERE
+		telephone =
+		#{tel}
+
+	</select>
+
+	<select id="queryCo_opMember" resultType="Map">
+		SELECT * FROM
+		field_coop_member WHERE state = '0' AND id = #{ID}
+	</select>
+
+	<select id="queryAssistant" resultType="Map" parameterType="Integer">
+		SELECT id,name,img_url FROM field_coop_member
+		WHERE assistant ='0' AND
+		state='0' AND coop_id = #{coop_id}
+	</select>
+
+	<select id="queryNotAssistant" resultType="Map" parameterType="Integer">
+		SELECT id,name,img_url FROM field_coop_member
+		WHERE (assistant ='1' OR
+		assistant IS NULL) AND state='0' AND coop_id =
+		#{coop_id}
+	</select>
+
+	<select id="queryCoopMemberList" resultType="Map" parameterType="Integer">
+		SELECT A.user_id,A.name,A.img_url,count(*) AS PlantNUM FROM
+		field_coop_member A,field_info B
+		WHERE A.coop_id=#{coop_id} AND
+		A.state='0' AND A.user_id = B.user_id
+		GROUP BY
+		A.name,A.img_url,A.user_id
+	</select>
+
+	<select id="affiliatedCo_op" resultType="Map" parameterType="Integer">
+		select coop_id,name,img_url,assistant,0 as total from
+		field_coop_member where user_id = #{user_id}
+	</select>
+
+	<select id="co_opTotal" resultType="Map" parameterType="Integer">
+		select
+		count(1) as total from field_coop_member where coop_id = #{coop_id}
+	</select>
+
+	<update id="updateCo_op" parameterType="com.bonc.medicine.entity.field.Co_op">
+		UPDATE field_coop SET state = #{state}
+		<if test="name != null and name != ''">
+			,name = #{name}
+		</if>
+
+		<if test="total_num != null and total_num != ''">
+			,total_num = #{total_num}
+		</if>
+
+		<if test="address != null and address != ''">
+			,address = #{address}
+		</if>
+
+		<if test="img_url != null and img_url != ''">
+			,img_url = #{img_url}
+		</if>
+
+		<if test="is_audit != null and is_audit != ''">
+			,is_audit = #{is_audit}
+		</if>
+
+		<if test="comment != null and comment != ''">
+			,comment = #{comment}
+		</if>
+
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="updateCo_opMember" parameterType="com.bonc.medicine.entity.field.Co_op_Member">
+		UPDATE field_coop_member SET state = #{state}
+		<if test="name != null and name != ''">
+			,name = #{name}
+		</if>
+		<if test="img_url != null and img_url != ''">
+			,img_url = #{img_url}
+		</if>
+		<if test="sex != null and sex != ''">
+			,sex = #{sex}
+		</if>
+		<if test="age != null and age != ''">
+			,age = #{age}
+		</if>
+		<if test="telephone != null and telephone != ''">
+			,telephone = #{telephone}
+		</if>
+		<if test="address != null and address != ''">
+			,address = #{address}
+		</if>
+
+		<if test="plant_age != null and plant_age != ''">
+			,plant_age = #{plant_age}
+		</if>
+
+		<if test="plant_cat_id != null and plant_cat_id != ''">
+			,plant_cat_id = #{plant_cat_id}
+		</if>
+		<if test="plant_area != null and plant_area != ''">
+			,plant_area = #{plant_area}
+		</if>
+		<if test="assistant != null and assistant != ''">
+			,assistant = #{assistant}
+		</if>
+		WHERE id = #{id}
+	</update>
+
+	<select id="findAllMember" resultType="Map" parameterType="Map">
+		SELECT
+		GROUP_CONCAT( b.user_id ) AS all_user_id
+		FROM
+		field_coop a
+		LEFT
+		JOIN field_coop_member b ON a.id = b.coop_id
+		WHERE
+		a.official_user_id =
+		#{user_id}
+		AND b.state = '0'
+	</select>
+
+	<insert id="addNotice" parameterType="Map">
+		insert
+		into common_notice
+		(notice_type,notice_content,notice_receiver,publish_time,status,state)
+		values('2',#{msg},#{allUserId},#{time},'1','1')
+	</insert>
+
+	<update id="noticeState" parameterType="Map">
+		update common_notice set
+		state = #{state} where id = #{id}
+	</update>
+
+	<update id="deleteNotice" parameterType="Map">
+		update common_notice set
+		status = '0' where id = #{id}
+	</update>
+
+	<select id="noticeDetail" parameterType="Map" resultType="Map">
+		select
+		* from common_notice where id = #{id}
+	</select>
+
+	<update id="updateNotice" parameterType="Map">
+		update common_notice set
+		notice_content = #{msg} where id = #{id}
+	</update>
+
+	<insert id="addRoleNotice" parameterType="com.bonc.medicine.entity.field.Notice">
+		insert
+		into
+		common_notice
+		(notice_type,notice_content,notice_role_type,publish_time,status,state)
+		values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1')
+	</insert>
+
+	<select id="noticelist" parameterType="Map" resultType="Map">
+		select * from common_notice where 1 = 1
+		<if test="msg != null and msg != ''">
+			AND notice_content LIKE
+			CONCAT(CONCAT('%',#{notice_content}),'%')
+		</if>
+		<if test="role != null and role != ''">
+			AND notice_role_type = #{notice_role_type}
+		</if>
+		<if test="start_time != null and start_time != ''">
+			AND publish_time <![CDATA[ >= ]]>
+			#{start_time}
+		</if>
+		<if test="end_time != null and end_time != ''">
+			AND publish_time <![CDATA[ <= ]]>
+			#{end_time}
+		</if>
+	</select>
+
+</mapper>

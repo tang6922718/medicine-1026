@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.mall.ViewTheDataMapper">
+
+    <select id="interaction" parameterType="Map" resultType="Map">
+        select
+        interact_count,stats_time from spec_interact_stats where spec_id
+        = #{user_id}
+        and stats_time <![CDATA[ >= ]]>
+        #{start_time} and stats_time <![CDATA[ <= ]]>
+        #{end_time}
+    </select>
+
+    <select id="problemStatistics" parameterType="Map" resultType="Map">
+        SELECT
+        (
+        SELECT
+        count( 1 )
+        FROM
+        spec_issue a
+        LEFT JOIN
+        spec_issue_association b ON a.id = b.issueid
+        LEFT JOIN spec_info c ON
+        b.specid = c.spec_id
+        WHERE
+        b.specid = #{user_id}
+        AND issue_time <![CDATA[ >= ]]>
+        #{start_time}
+        AND issue_time <![CDATA[ <= ]]>
+        #{end_time}
+        ) AS askme,
+        (
+        SELECT
+        count( 1 )
+        FROM
+        spec_issue a
+        LEFT JOIN
+        spec_issue_association b ON a.id = b.issueid
+        LEFT JOIN spec_info c ON
+        b.specid = c.spec_id
+        WHERE
+        b.specid = #{user_id}
+        AND ( issue_status = '2'
+        OR issue_status = '3' )
+        AND issue_time <![CDATA[ >= ]]>
+        #{start_time}
+        AND issue_time <![CDATA[ <= ]]>
+        #{end_time}
+        ) AS solve,
+        (
+        SELECT
+        count( 1 )
+        FROM
+        spec_issue a
+        LEFT JOIN
+        spec_issue_association b ON a.id = b.issueid
+        LEFT JOIN spec_info c ON
+        b.specid = c.spec_id
+        WHERE
+        b.specid = #{user_id}
+        AND ( is_public = '1' )
+        AND issue_time <![CDATA[ >= ]]>
+        #{start_time}
+        AND issue_time <![CDATA[ <= ]]>
+        #{end_time}
+        ) AS public
+    </select>
+
+</mapper>

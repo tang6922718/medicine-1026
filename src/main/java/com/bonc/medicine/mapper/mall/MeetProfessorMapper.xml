@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.mall.MeetProfessorMapper">
+
+	<select id="queslist" parameterType="Map" resultType="Map">
+		SELECT
+		a.id,
+		d.loginid,
+		d.NAME,
+		a.issue_time,
+		a.issue_desc,
+		c.NAME as
+		expert,
+		'' AS assit,
+		a.issue_status,
+		a.score,
+		a.follow_days,
+		a.is_revisited,
+		a.is_public
+		FROM
+		spec_issue a,
+		spec_issue_association b,
+		spec_info c,
+		common_user d
+		WHERE
+		a.id = b.issueid
+		AND b.specid = c.spec_id
+		AND b.is_assigned = '0'
+		AND d.id = a.issue_user_id
+		<if test="msg != null and msg != '全部'">
+			AND issue_desc LIKE
+			CONCAT(CONCAT('%',#{msg,jdbcType=VARCHAR}),'%')
+		</if>
+		<if test="revisited != null and revisited != '全部'">
+			AND is_revisited LIKE CONCAT(CONCAT('%',#{revisited
+			,jdbcType=VARCHAR}),'%')
+		</if>
+	</select>
+
+	<select id="assistlist" parameterType="Map" resultType="Map">
+		SELECT
+		a.issueid,
+		GROUP_CONCAT( b.NAME ) AS assit
+		FROM
+		spec_issue_association a
+		LEFT JOIN spec_info b ON a.specid = b.spec_id
+		WHERE
+		a.is_assigned = '1'
+		GROUP BY
+		a.issueid
+	</select>
+
+	<update id="revisited" parameterType="Map">
+		update spec_issue set revisited_mark = #{comment}
+		<if test="close != null and close != '1'">
+			,issue_status = '3'
+		</if>
+		where id = #{id}
+	</update>
+	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case">
+		insert into
+		spec_case(tittle,content,issue_id,img_url,publish_time)
+		values(#{tittle},#{content},#{issue_id},#{img_url},#{publish_time})
+	</insert>
+
+	<select id="untreated" parameterType="Map" resultType="Map">
+		SELECT
+		a.id,
+		b.NAME,
+		a.issue_desc,
+		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) )
+		AS time
+		FROM
+		spec_issue a,
+		common_user b,
+		spec_issue_association c
+		WHERE
+		a.issue_user_id = b.id
+		AND a.issue_status = '0'
+		AND c.issueid = a.id
+		AND
+		is_assigned = '0'
+		AND c.specid = #{spec_id} UNION ALL
+		SELECT
+		a.id,
+		'邀请我的'
+		AS NAME,
+		a.issue_desc,
+		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) ) AS
+		time
+		FROM
+		spec_issue a,
+		common_user b,
+		spec_issue_association c
+		WHERE
+		a.issue_user_id = b.id
+		AND a.issue_status = '0'
+		AND c.issueid = a.id
+		AND
+		c.is_assigned = '1'
+		AND c.specid = #{spec_id}
+	</select>
+
+	<select id="expert" parameterType="Map" resultType="Map">
+		select specid
+		from spec_issue_association where is_assigned = '1' and issueid =
+		#{id}
+	</select>
+
+	<delete id="deleteInvitation" parameterType="Map">
+		delete from
+		spec_issue_association where is_assigned = '1' and issueid = #{id}
+	</delete>
+
+	<insert id="Invitation" parameterType="Map">
+		insert into
+		spec_issue_association(issueid,specid,is_assigned)
+		values(#{id},#{expert_id},'1');
+	</insert>
+
+	<update id="end" parameterType="Map">
+		update spec_issue set
+		issue_status = '2' , score = #{score} where id = #{id}
+	</update>
+
+	<select id="articlelist" parameterType="Map" resultType="Map">
+		select
+		id,title,publish_time,img_url from spec_article where spec_id = #{id}
+	</select>
+
+	<select id="fileManage" parameterType="Map" resultType="Map">
+		select id,title,file_size,upload_time,status,file_url from
+		spec_upload_file where 1 = 1
+		<if test="title != null and title != ''">
+			AND title = #{title}
+		</if>
+		<if test="starttime != null and starttime != ''">
+			AND starttime = #{starttime}
+		</if>
+		<if test="endtime != null and endtime != ''">
+			AND endtime = #{endtime}
+		</if>
+		<if test="status != null and status == '未审阅'">
+			AND status = '0'
+		</if>
+		<if test="status != null and status == '已审阅'">
+			AND status <![CDATA[ <> ]]>
+			'0'
+		</if>
+	</select>
+
+	<update id="articleStatus" parameterType="Map">
+		update spec_article set
+		status = #{status} where id = #{id}
+	</update>
+
+	<update id="aduitArticle" parameterType="Map">
+		update spec_article set
+		is_audit = #{is_audit} , fail_opinion = #{fail_opinion} where id =
+		#{id}
+	</update>
+
+	<insert id="addArticle" parameterType="com.bonc.medicine.entity.mall.Article">
+		insert into
+		spec_article(title,article_type,author,label,spec_id,publish_time,content,effect_flag,img_url,status,fail_opinion,update_time,is_audit)
+		values(#{title},#{article_type},#{author},#{label},#{spec_id},#{publish_time},#{content},#{effect_flag},#{img_url},#{status},#{fail_opinion},#{update_time},#{is_audit});
+	</insert>
+
+	<update id="updateArticle" parameterType="com.bonc.medicine.entity.mall.Article">
+		update
+		spec_article set
+		title = #{title},article_type = #{article_type},author =
+		#{author},label = #{label},spec_id = #{spec_id},publish_time =
+		#{publish_time},content = #{content},effect_flag =
+		#{effect_flag},img_url = #{img_url},status = #{status},fail_opinion =
+		#{fail_opinion},update_time = #{update_time},is_audit = #{is_audit};
+	</update>
+
+</mapper>

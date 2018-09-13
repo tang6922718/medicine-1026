@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.mall.PriceMapper">
+
+	<select id="hotword" parameterType="Map" resultType="Map">
+		select
+		hotword from common_hotword ORDER BY total desc limit 0,5
+	</select>
+
+	<select id="queryHotwordByName" parameterType="Map" resultType="Map">
+		select hotword from common_hotword where hotword like #{name}
+	</select>
+
+	<update id="increase" parameterType="Map">
+		update common_hotword set
+		total = (total+1) where hotword = #{hotword}
+	</update>
+
+	<insert id="addHotword" parameterType="Map">
+		insert into
+		common_hotword(hotword,total) values(#{hotword},0)
+	</insert>
+
+	<select id="market" parameterType="Map" resultType="Map">
+		select id,cat_name,specifaction,product_name,market_name,price from
+		common_price where price_date = #{time}
+		<if test="hotword != null and hotword != ''">
+			AND cat_name like CONCAT('%',#{hotword},'%')
+		</if>
+		<if test="market != null and market != ''">
+			AND market_name like CONCAT('%',#{market},'%')
+		</if>
+	</select>
+
+	<select id="product" parameterType="Map" resultType="Map">
+		select id,cat_name,specifaction,product_name,market_name,price from
+		common_price where price_date = #{time}
+		<if test="hotword != null and hotword != ''">
+			AND cat_name like CONCAT('%',#{hotword},'%')
+		</if>
+		<if test="product != null and product != ''">
+			AND product_name like CONCAT('%',#{product},'%')
+		</if>
+	</select>
+
+	<select id="trend" parameterType="Map" resultType="Map">
+		select id,cat_name,price from
+		common_price where price_date <![CDATA[ <= ]]>
+		#{end_time} and price_date <![CDATA[ >= ]]>
+		#{start_time} and cat_name like #{cat_name}
+	</select>
+
+	<select id="detail" parameterType="Map" resultType="Map">
+		SELECT
+		substring( price_date, 1, 4 ) AS time,
+		( SUM( price ) / count( 1 ) ) AS
+		price
+		FROM
+		common_price
+		WHERE
+		cat_name = #{hotword}
+		GROUP BY
+		time
+	</select>
+</mapper>

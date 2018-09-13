@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.management.BroadcastMapper">
+	<select id="searchBroadcast" parameterType="java.util.Map" resultType="Map">
+		SELECT
+		a.id,
+		a.NAME,
+		a.img_url,
+		a.site,
+		b.site_name,
+		a.link_url,
+		case WHEN a.`status` = 1 THEN '正常'
+		ELSE '已停用' END AS status
+		FROM
+		common_broadcast a INNER JOIN common_broadcast_site b ON a.site = b.id
+		WHERE 1 = 1
+		<if test="id != null and id != ''">
+			and a.id = #{id}
+		</if>
+		<if test="search_name != null and search_name != ''">
+			and a.NAME LIKE CONCAT("%",#{search_name},"%")
+		</if>
+		<if test="site != null and site != ''">
+			and a.site=#{site}
+		</if>
+		<if test="start_time != null and start_time != '' and end_time != null and end_time != ''">
+			and a.upload_time BETWEEN #{start_time} and  #{end_time}
+		</if>
+		<if test="start_time == null or start_time == '' and end_time != null and end_time != ''">
+			and a.upload_time &lt;= #{end_time}
+		</if>
+		<if test="start_time != null and start_time == '' and end_time == null or end_time == ''">
+			and a.upload_time &gt;= #{start_time}
+		</if>
+		ORDER BY a.upload_time
+	</select>
+
+	<insert id="addBroadcast" parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO common_broadcast (
+			`name`,
+			img_url,
+			site,
+			link_url,
+			`status`,
+			upload_time
+		)
+		VALUES
+			(
+			#{name},
+			#{img_url},
+			#{site},
+			#{link_url},
+			#{status},
+			now()
+			)
+	</insert>
+
+	<update id="editBroadcast" parameterType="java.util.Map">
+		UPDATE common_broadcast
+		<set>
+			<if test="name != null and name != ''">`name`=#{name},</if>
+			<if test="img_url != null and img_url != ''">img_url=#{img_url},</if>
+			<if test="site != null and site != ''">site=#{site},</if>
+			<if test="link_url != null and link_url != ''">link_url=#{link_url},</if>
+			<if test="status != null and status != ''">status=#{status},</if>
+			upload_time= now()
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="enableBroadcast" parameterType="String">
+		UPDATE common_broadcast SET `status` = 1 WHERE id = #{id}
+	</update>
+
+	<update id="stopBroadcast" parameterType="String">
+		UPDATE common_broadcast SET `status` = 0 WHERE id = #{id}
+	</update>
+
+	<delete id="deleteBroadcast" parameterType="String">
+		DELETE FROM common_broadcast WHERE id = #{id}
+	</delete>
+
+</mapper>

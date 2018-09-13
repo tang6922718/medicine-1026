@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.knowledgebase.PharmacopoeiaInfoMapper">
+	<insert id="insertPharmacopoeiaInfo" parameterType="com.bonc.medicine.entity.knowledgebase.PharmacopoeiaInfo">
+		insert into km_pharmacopoeia_information (id,cat_code,atlas,variety_desc,feature,
+		difference,other_aspect)
+		values(#{id},#{cat_code},#{atlas},#{variety_desc},#{feature},#{difference},#{other_aspect})
+	</insert>
+
+	<insert id="addPharma" parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO km_pharmacopoeia_information (
+			cat_code,
+			atlas,
+			variety_desc,
+			feature,
+			difference,
+			other_aspect
+		)
+		VALUES
+			(#{cat_code},
+			#{atlas},
+			#{variety_desc},
+			#{feature},
+			#{difference},
+			#{other_aspect}
+			)
+	</insert>
+
+	<update id="updatePhara" parameterType="java.util.Map">
+		UPDATE  km_pharmacopoeia_information SET atlas = #{atlas},variety_desc = #{variety_desc},feature = #{feature},
+		difference = #{difference}, other_aspect = #{other_aspect} WHERE cat_code = #{variety_id}
+	</update>
+
+	<select id="pharaDetail" parameterType="String" resultType="java.util.Map">
+		SELECT id,cat_code,name,source,variety,detailed_content FROM km_pharmacopoeia_information WHERE id = #{id}
+	</select>
+
+	<update id="updatePharaDetail" parameterType="java.util.Map">
+		UPDATE  km_pharmacopoeia_information
+		<set>
+			<if test="cat_code != null and cat_code != ''">`cat_code`=#{cat_code},</if>
+			<if test="name != null and name != ''">name=#{name},</if>
+			<if test="source != null and source != ''">source=#{source},</if>
+			<if test="variety != null and variety != ''">variety=#{variety},</if>
+			<if test="detailed_content != null and detailed_content != ''">detailed_content=#{detailed_content},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+</mapper>

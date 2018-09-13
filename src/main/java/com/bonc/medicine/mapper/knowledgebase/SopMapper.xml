@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.knowledgebase.SopMapper">
+	<select id="getSopStandards" parameterType="java.util.Map" resultType="Map">
+		SELECT
+			kvs.variety_id,kve.variety_name,kvs.record_time,kvs.sop_type,kvs.record_status
+		FROM
+			km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.variety_id
+		WHERE 1=1
+		<if test="sop_type != null and sop_type != ''">
+			AND kvs.sop_type = #{sop_type}
+		</if>
+		<if test="record_status != null and record_status != ''">
+			AND kvs.record_status = #{record_status}
+		</if>
+	</select>
+
+    <select id="getSopPlants" parameterType="java.util.Map" resultType="Map">
+        SELECT
+            kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation
+        FROM
+            km_sop_step kss
+        WHERE 1=1
+        <if test="variety_id != null and variety_id != ''">
+            AND kss.sop_id = ${id}
+        </if>
+        ORDER BY
+            kss.step_order
+    </select>
+
+
+	<insert id="sopAdd" parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO km_variety_sop (
+			variety_id,
+			record_time,
+			record_user_id,
+			sop_type,
+			record_status,
+			fail_opinion,
+			update_time
+		)
+		VALUES
+			(#{variety_id},
+			#{record_time},
+			#{record_user_id},
+			#{sop_type},
+			#{record_status},
+			#{fail_opinion},
+			#{update_time}
+			)
+	</insert>
+
+	<insert id="sopStepAdd" parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO km_sop_step (
+			sop_id,
+			step_name,
+			short_desc,
+			detail_desc,
+			next_suggestion,
+			recommendation,
+			step_order
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.sop_id},
+			#{item.step_name},
+			#{item.short_desc},
+			#{item.detail_desc},
+			#{item.next_suggestion},
+			#{item.recommendation},
+			#{item.step_order}
+			)
+		</foreach>
+	</insert>
+
+
+
+	<update id="sopUpdata" parameterType="java.util.Map">
+		UPDATE km_variety_sop
+		<set>
+			<if test="sop_type != null">sop_type=#{sop_type},</if>
+			<if test="record_user_id != null">record_user_id=#{record_user_id},</if>
+			<if test="update_time != null">update_time=#{update_time},</if>
+		</set>
+		WHERE variety_id = #{variety_id}
+	</update>
+
+	<update id="sopStepUpdata"  parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=",">
+			update km_sop_step
+			<set>
+				step_name=#{item.step_name},
+				short_desc=#{item.short_desc},
+				detail_desc=#{item.detail_desc},
+				next_suggestion=#{item.next_suggestion},
+				recommendation=#{item.recommendation}
+			</set>
+			where sop_id = #{item.sop_id}
+		</foreach>
+	</update>
+
+
+
+	<delete id="sopDelete" parameterType="java.lang.Integer">
+        delete from km_variety_sop where variety_id = #{value}
+    </delete>
+
+	<delete id="sopStepDelete" parameterType="java.lang.Integer">
+		DELETE FROM km_sop_step where sop_id =#{idItem}
+	</delete>
+
+</mapper>

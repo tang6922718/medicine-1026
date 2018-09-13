@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.mall.SupplyMapper">
+
+    <insert id="insertSupply" parameterType="com.bonc.medicine.entity.mall.Supply">
+        insert into mall_supply
+        (goods_name,supply_cat_code,goods_cat_code,price,
+        price_unit,seller_id,img_url,specification,inventory,inventory_unit,sales_volumn,sales_volumn_unit,
+        produce_area,storehouse,receipt,quality_standard,send_sample,payment,packing,detail,attribute,tel,linkman,public_time,
+        carriage_status,state,is_audit,comment)
+        values(#{goods_name},#{supply_cat_code},#{goods_cat_code},#{price},#{price_unit},#{seller_id},#{img_url},
+        #{specification},#{inventory},#{inventory_unit},#{sales_volumn},#{sales_volumn_unit},#{produce_area},
+        #{storehouse},#{receipt},#{quality_standard},#{send_sample},#{payment},#{packing},#{detail},#{attribute},#{tel},#{linkman},
+        #{public_time},#{carriage_status},#{state},#{is_audit},#{comment})
+    </insert>
+
+    <select id="queryRecommend" resultType="Map" parameterType="Map">
+        SELECT A.* FROM mall_supply A,mall_recommend B
+        WHERE A.id = B.supply_id
+        AND B.state = '0' AND A.state = '0'
+        AND A.is_audit = '1' AND B.site =
+        #{site}
+    </select>
+
+    <select id="queryDetails" resultType="Map" parameterType="String">
+        SELECT
+        *
+        FROM mall_supply WHERE state = '0' AND carriage_status = '1' AND 1=1
+        AND id= #{id}
+    </select>
+
+
+    <select id="queryOtherSupply" resultType="Map">
+        SELECT * FROM
+        mall_supply WHERE state = '0' AND carriage_status = '1' AND
+        is_audit =
+        '1'
+        AND seller_id = #{sellerID} AND id != #{ID}
+        ORDER BY public_time
+        DESC
+        LIMIT 0,#{NUM}
+    </select>
+
+    <select id="querySupplyByCondition" resultType="Map"
+            parameterType="Map">
+        SELECT * FROM mall_supply WHERE state = '0'
+
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+
+        <if test="seller_id != null and seller_id != ''">
+            AND seller_id = #{seller_id}
+        </if>
+
+        <if test="specification != null and specification != ''">
+            AND specification = #{specification}
+        </if>
+
+        <if test="produce_area != null and produce_area != ''">
+            AND produce_area LIKE
+            CONCAT(CONCAT('%',#{produce_area}),'%')
+        </if>
+
+        <if test="storehouse != null and storehouse != ''">
+            AND storehouse LIKE CONCAT(CONCAT('%',#{storehouse}),'%')
+        </if>
+
+        <if test="receipt != null and receipt != ''">
+            AND receipt = #{receipt}
+        </if>
+
+        <if test="quality_standard != null and quality_standard != ''">
+            AND quality_standard = #{quality_standard}
+        </if>
+
+        <if test="send_sample != null and send_sample != ''">
+            AND send_sample = #{send_sample}
+        </if>
+
+        <if test="payment != null and payment != ''">
+            AND payment = #{payment}
+        </if>
+
+        <if test="img_url != null and img_url != ''">
+            <if test="img_url == 0">
+                AND img_url IS NULL
+            </if>
+            <if test="img_url == 1">
+                AND img_url IS NOT NULL
+            </if>
+        </if>
+
+        <if test="carriage_status != null and carriage_status != ''">
+            AND carriage_status = #{carriage_status}
+        </if>
+
+
+        <if test="is_audit != null and is_audit != ''">
+            AND is_audit = #{is_audit}
+        </if>
+
+
+        ORDER BY public_time DESC
+
+        <if test="NUM != null and NUM != ''">
+            LIMIT #{NUM}
+        </if>
+    </select>
+
+
+    <update id="deleteData" parameterType="Integer">
+        UPDATE mall_supply SET
+        state = '1' WHERE id = #{ID}
+    </update>
+
+    <select id="queryCheckedSupply" resultType="Map" parameterType="Integer">
+        SELECT * FROM mall_supply WHERE state = '0' AND is_audit = '1' AND 1=1
+        AND seller_id = #{sellerID}
+    </select>
+
+    <select id="queryMark" resultType="Map" parameterType="Integer">
+        SELECT *
+        FROM mall_business_marks WHERE business_id = #{sellerID};
+    </select>
+
+    <select id="inReview" resultType="Map" parameterType="Integer">
+        SELECT
+        id,goods_name,specification,produce_area,public_time,price,price_unit
+        FROM mall_supply WHERE is_audit = '0' and state = '0' and seller_id =
+        #{sellerID};
+    </select>
+
+    <update id="againSupply" parameterType="com.bonc.medicine.entity.mall.Supply">
+        UPDATE mall_supply SET
+        goods_name = #{goods_name},
+        supply_cat_code = #{supply_cat_code},
+        goods_cat_code = #{goods_cat_code},
+        price = #{price},
+        price_unit =
+        #{price_unit},
+        seller_id = #{seller_id},
+        img_url = #{img_url},
+        specification = #{specification},
+        inventory = #{inventory},
+        inventory_unit = #{inventory_unit},
+        sales_volumn = #{sales_volumn},
+        sales_volumn_unit = #{sales_volumn_unit},
+        produce_area =
+        #{produce_area},
+        storehouse = #{storehouse},
+        receipt = #{receipt},
+        quality_standard = #{quality_standard},
+        send_sample = #{send_sample},
+        payment = #{payment},
+        packing = #{packing},
+        detail = #{detail},
+        attribute = #{attribute},
+        tel = #{tel},
+        linkman = #{linkman},
+        public_time = #{public_time},
+        carriage_status = #{carriage_status},
+        state = #{state},
+        is_audit = {is_audit},
+        comment = #{comment}
+        WHERE id =
+        #{id}
+    </update>
+
+    <select id="querySupplyById" resultType="Map" parameterType="Integer">
+		select * from mall_supply where id = #{id}
+	</select>
+
+    <select id="myOffer" resultType="Map" parameterType="Integer">
+        SELECT
+        a.goods_name,
+        a.specification,
+        a.purchase_quantity,
+        a.publish_time
+        FROM
+        mall_purchase a
+        LEFT JOIN mall_offer b ON a.id = b.purchase_id
+        WHERE
+        b.user_id = #{user_id}
+        order by a.publish_time desc
+    </select>
+
+    <select id="queryOffer" resultType="Map" parameterType="Integer">
+        select * from mall_offer where user_id = #{user_id}
+    </select>
+
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.medicine.mapper.mall.CommentReplyMapper">
+	<insert id="insertComment" parameterType="java.util.Map">
+		insert into common_comment (object_type,object_id,from_uid,reply_time,content) 
+		values (#{object_type},#{object_id},#{from_uid},#{reply_time},#{content})
+	</insert>
+	
+	<insert id="insertReply" parameterType="java.util.Map">
+		insert into common_comment (comment_id,reply_oid,reply_type,content,from_uid,to_uid,reply_time) 
+		values (#{comment_id},#{reply_oid},#{reply_type},#{content},#{from_uid},#{to_uid},#{reply_time)
+	</insert>
+	
+	<select id="queryComments" parameterType="java.util.Map">
+		select cc.*, cu1.name as fname, cu1.head_portrait, cu2.name AS tname from common_comment cc 
+		left join common_user cu1 ON cc.from_uid = cu1.id
+		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
+		where cc.object_type = #{object_type} and cc.object_id = #{object_id}
+		
+	</select>
+		
+	<select id="queryReplies" parameterType="java.util.Map">
+		SELECT cr.*, cu1.name AS fname, cu2.name AS tname  
+		FROM common_reply cr
+		LEFT JOIN common_user cu1 ON cu1.id = cr.from_uid
+		LEFT JOIN common_user cu2 ON cu2.id = cr.to_uid
+		WHERE cr.comment_id IN 
+		<foreach collection="array" open="(" item="comment_id" separator="," close=")">
+			#{comment_id}
+		</foreach>
+		ORDER BY cr.comment_id ASC, cr.reply_time DESC
+	</select>
+</mapper>

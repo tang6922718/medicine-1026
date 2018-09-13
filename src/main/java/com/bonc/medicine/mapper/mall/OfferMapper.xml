@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.medicine.mapper.mall.OfferMapper">
+	<insert id="insertOffer" parameterType="com.bonc.medicine.mapper.mall.OfferMapper">
+		insert into mall_offer 
+			(purchase_id,price,publish_time,supply_quantity,inventory,produce_area,
+			quality_standard,img_url,receipt,qualification_standard,
+			send_sample,payment,packing,goods_source,linkman,telephone,
+			state,user_id) 
+		values (#{purchase_id},#{price},#{publish_time},#{supply_quantity},#{inventory},
+			#{produce_area},#{quality_standard},#{img_url},#{receipt},
+			#{qualification_standard},#{send_sample},#{payment},#{packing},
+			#{goods_source},#{linkman},#{telephone},#{state},#{user_id})
+	</insert>
+	
+	<select id="offerList" parameterType="java.util.Map">
+		SELECT
+			mp.goods_name,
+			mp.specification,
+			mp.purchase_quantity,
+			mo.publish_time,
+			mo.purchase_id,
+			mo.id
+		FROM
+			mall_offer mo
+			LEFT JOIN mall_purchase mp ON mo.purchase_id = mp.id 
+		WHERE
+			mo.state = 1 AND mp.state = 1
+		<if test="user_id != null and user_id != ''">
+			and mo.user_id = #{user_id} 
+		</if>
+		ORDER BY
+			mo.publish_time DESC
+	</select>
+	
+	<select id="offerDetail" parameterType="java.lang.String">
+		SELECT * FROM mall_offer WHERE id = #{id}
+	</select>
+	
+	<select id="countOffers" parameterType="java.util.List">
+		SELECT
+			purchase_id,
+			COUNT( 1 ) AS count 
+		FROM
+			mall_offer 
+		WHERE
+			purchase_id IN 
+			<foreach collection="array" item="id"  open="(" separator="," close=")"> #{id} </foreach>
+		GROUP BY
+			purchase_id 
+	</select>
+	
+	<select id="offerToMe" parameterType="java.lang.String">
+		SELECT
+			mo.id,
+			mp.goods_name,
+			mo.price,
+			mo.supply_quantity,
+			mo.publish_time,
+			mo.linkman 
+		FROM
+			mall_purchase mp
+		RIGHT JOIN mall_offer mo ON mp.id = mo.purchase_id
+		WHERE mp.user_id = #{user_id}
+		ORDER BY mo.publish_time DESC
+	</select>
+
+</mapper>
