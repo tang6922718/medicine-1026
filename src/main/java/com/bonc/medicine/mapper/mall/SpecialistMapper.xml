@@ -53,7 +53,8 @@
 			si.employment_age,
 			si.expertise_field,
 			IFNULL( sis.interact_count, 0 ) AS interact_count ,
-			count(cf.id) as follow
+			count(cf.id) as follow ,
+			0 as is_follow
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
@@ -77,6 +78,10 @@
 		</if>
 		group by(si.spec_id)
 		ORDER BY si.employment_age DESC
+	</select>
+	
+	<select id="specialIsFollow" parameterType="java.util.Map" resultType="Map">
+		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '1'
 	</select>
 	
 	<select id="specDetail" parameterType="java.lang.String">

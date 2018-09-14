@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -69,13 +71,28 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/spec_list")
-	public Result specList(String name, String cat_code, String subject_code) {
+	public Result specList(String name, String cat_code, String subject_code,String user_id) {
 		Map param = new HashMap<>();
 		param.put("name", name);
 		param.put("cat_code", cat_code);
 		param.put("subject_code", subject_code);
-		
-		return ResultUtil.success(specialistService.specialList(param));
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+		list = specialistService.specialList(param);
+		if(user_id!=null)
+		{
+			Map param1 = new HashMap<>();
+			param1.put("user_id", user_id);
+			list1 = specialistService.specialIsFollow(param1);
+			for(int i=0;i<list.size();i++){
+				for(int j=0;j<list1.size();j++){
+					if(list.get(i).get("spec_id").toString().equals(list1.get(j).get("object_id").toString())){
+						list.get(i).put("is_follow", 1);
+					}
+				}
+			}
+		}
+		return ResultUtil.success(list);
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
