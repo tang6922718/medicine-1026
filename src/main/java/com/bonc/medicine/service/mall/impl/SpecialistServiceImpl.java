@@ -48,12 +48,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public Map specDetail(String spec_id) {
-		List<Map> result = specialistMapper.specDetail(spec_id);
-		if (result.size() != 1) {
-			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
-		}
-		return result.get(0);
+	public List<Map<String, Object>> specDetail(Map param) {
+		return specialistMapper.specDetail(param);
 	}
 
 	@Override

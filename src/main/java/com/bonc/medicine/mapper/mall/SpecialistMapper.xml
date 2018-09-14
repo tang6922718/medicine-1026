@@ -85,10 +85,19 @@
 	</select>
 	
 	<select id="specDetail" parameterType="java.lang.String" resultType="Map">
-		SELECT  si.*, sis.interact_count
-		FROM spec_info si LEFT JOIN spec_interact_stats sis 
-		ON si.spec_id = sis.spec_id 
-		WHERE si.spec_id = #{spec_id}
+		SELECT
+			si.*,
+			IFNULL( sis.interact_count, 0 ) AS interact_count,
+			count( cf.id ) AS follow,
+			0 AS is_follow 
+		FROM
+			spec_info si
+			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
+			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id 
+			AND cf.object_type = '1' 
+			AND cf.follow_flag = '1' 
+		WHERE
+			si.spec_id = #{spec_id}
 	</select>
 	
 	<select id="articleList" parameterType="java.lang.String" resultType="Map">
@@ -108,7 +117,7 @@
 		FROM
 			spec_case sc
 			LEFT JOIN spec_issue si ON sc.issue_id = si.id
-			LEFT JOIN spec_issue_association sia ON sia.issueid = si.id
+			LEFT JOIN spec_issue_association sia ON si.spec_id = sia.specid
 		WHERE  sia.specid = #{spec_id}
     </select>
     <select id="caseDetail" parameterType="java.lang.String" resultType="Map">
