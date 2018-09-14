@@ -42,6 +42,12 @@ public class HbaseUploadFileController {
         return  uploadFile.readImgByByte(key);
     }
 
+    /**
+     * Hbase存储文件下载
+     * @param key
+     * @param res
+     * @throws Exception
+     */
     @GetMapping("/downloadFile")
     public void downloadFile(@RequestParam String key,HttpServletResponse res) throws Exception{
         res.setHeader("content-type", "application/octet-stream");

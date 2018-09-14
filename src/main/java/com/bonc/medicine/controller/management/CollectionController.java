@@ -83,6 +83,7 @@ public class CollectionController {
     * 收藏夹—视频搜索详情
     * (知识库：视频分类详情一致)
     * */
+    @GetMapping("/videoCourseDetail")
     public Result<Object> videoCourseDetail(String id){
         return ResultUtil.success(collectionService.videoCourseDetail(id));
     }
