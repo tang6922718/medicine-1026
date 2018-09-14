@@ -171,4 +171,8 @@
 		km_type = #{km_type} AND  object_id = #{object_id}
 	</update>
 
+	<select id="sourceDistribution">
+		SELECT id,produce_area,GROUP_CONCAT(goods_name) from mall_supply GROUP BY produce_area
+	</select>
+
 </mapper>

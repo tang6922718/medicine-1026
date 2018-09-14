@@ -68,5 +68,10 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
         return varietyEncyclopediaMapper.kmAudit(map);
     }
 
+    @Override
+    public List<Map<String, Object>> sourceDistribution() {
+        return varietyEncyclopediaMapper.sourceDistribution();
+    }
+
 
 }

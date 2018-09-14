@@ -174,4 +174,11 @@ public class VarietyEncyclopediaController {
         return ResultUtil.success(varietyEncyclopediaService.showHotBreed());
     }
 
+    /*
+    * 门户资源分布
+    * */
+    public Result<Object> sourceDistribution(){
+        return ResultUtil.success(varietyEncyclopediaService.sourceDistribution());
+    }
+
 }
