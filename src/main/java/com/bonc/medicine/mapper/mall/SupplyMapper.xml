@@ -26,7 +26,7 @@
     <select id="queryDetails" resultType="Map" parameterType="String">
         SELECT
         *
-        FROM mall_supply WHERE state = '0' AND carriage_status = '1' AND 1=1
+        FROM mall_supply WHERE state = '0' AND 1=1
         AND id= #{id}
     </select>
 
