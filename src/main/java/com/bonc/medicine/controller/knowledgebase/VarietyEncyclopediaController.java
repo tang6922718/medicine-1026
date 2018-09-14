@@ -177,6 +177,7 @@ public class VarietyEncyclopediaController {
     /*
     * 门户资源分布
     * */
+    @GetMapping("/sourceDistribution")
     public Result<Object> sourceDistribution(){
         return ResultUtil.success(varietyEncyclopediaService.sourceDistribution());
     }
