@@ -130,13 +130,14 @@
 	<select id="kmAuditList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 		a.object_id,
-		CONCAT_WS('',b.chinese_name,c.title,d.title,e.step_name,f.title) AS title,
+		CONCAT_WS('',b.chinese_name,c.title,d.title,e.step_name,f.title,g.name) AS title,
 		a.km_type,
 		CASE WHEN a.km_type = 1 THEN '品种百科'
 		WHEN a.km_type = 2 THEN '资讯类'
 		WHEN a.km_type = 3 THEN '文章类'
 		WHEN a.km_type = 4 THEN '品种SOP'
-		WHEN a.km_type = 5 THEN '品种药典'
+		WHEN a.km_type = 5 THEN '培训'
+		WHEN a.km_type = 6 THEN '品种药典'
 		END AS type_name,
 		a.publish_time,
 		a.`status`,
@@ -151,9 +152,10 @@
 		LEFT JOIN spec_article d ON a.object_id = d.id AND a.km_type = 3
 		LEFT JOIN km_sop_step e ON a.object_id = e.id AND a.km_type = 4
 		LEFT JOIN train_video_course f ON a.object_id = f.id AND a.km_type = 5
+		LEFT JOIN km_pharmacopoeia_information g ON a.object_id = g.id AND a.km_type = 6
 		WHERE 1=1
 		<if test="keyword != null and keyword != ''">
-			and (b.chinese_name LIKE CONCAT('%',#{keyword},'%') or c.title LIKE CONCAT('%',#{keyword},'%') or d.title LIKE CONCAT('%',#{keyword},'%') OR e.step_name LIKE CONCAT('%',#{keyword},'%') OR f.title LIKE CONCAT('%',#{keyword},'%'))
+			and (b.chinese_name LIKE CONCAT('%',#{keyword},'%') or c.title LIKE CONCAT('%',#{keyword},'%') or d.title LIKE CONCAT('%',#{keyword},'%') OR e.step_name LIKE CONCAT('%',#{keyword},'%') OR f.title LIKE CONCAT('%',#{keyword},'%') OR g.name LIKE CONCAT('%',#{keyword},'%'))
 		</if>
 		<if test="type_code != null and type_code != ''">
 			AND a.km_type = #{type_code}

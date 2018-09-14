@@ -139,7 +139,7 @@ public class VarietyEncyclopediaController {
      * @return
      */
     @GetMapping("/kmAuditList")
-    public Result<Object> kmAuditList(@RequestBody(required = false) String searchJson){
+    public Result<Object> kmAuditList(@RequestParam(required = false) String searchJson){
         if(null == searchJson || "" == searchJson){
             searchJson = "{\"keyword\": \"\", \"type_code\": \"\"}";
         }
