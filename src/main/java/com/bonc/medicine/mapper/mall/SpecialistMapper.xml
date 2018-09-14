@@ -38,11 +38,11 @@
 	</update>
 	
 	<select id="subjectList" resultType="Map">
-		SELECT * FROM dict_subject
+		SELECT subject_code as id , subject_name as name FROM dict_subject
 	</select>
 	
 	<select id="catalogList" resultType="Map">
-		SELECT variety_code, variety_name FROM common_medicine_variety
+		SELECT variety_code as id, variety_name as name FROM common_medicine_variety
 	</select>
 	
 	<select id="specialList" parameterType="java.util.Map" resultType="Map">
