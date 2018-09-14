@@ -84,7 +84,7 @@ public class CollectionController {
     * (知识库：视频分类详情一致)
     * */
     @GetMapping("/videoCourseDetail")
-    public Result<Object> videoCourseDetail(String id){
+    public Result<Object> videoCourseDetail(@RequestParam String id){
         return ResultUtil.success(collectionService.videoCourseDetail(id));
     }
 
