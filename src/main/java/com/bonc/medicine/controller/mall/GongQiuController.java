@@ -140,8 +140,8 @@ public class GongQiuController {
 	 * 后台查询审核商品的列表
 	 */
 	@GetMapping("/gongQiuSystem/supplylist")
-	public Result<Object> supplylist(String goods_name, String goodType) {
-		return gongQiuSystemService.supplylist(goods_name, goodType);
+	public Result<Object> supplylist(String goods_name, String goodType, String tel, String name) {
+		return gongQiuSystemService.supplylist(goods_name, goodType, tel, name);
 	}
 
 }

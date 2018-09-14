@@ -131,6 +131,12 @@
 		<if test="goodType != null and goodType != ''">
             AND a.supply_cat_code = #{goodType}
         </if>
+		<if test="tel != null and tel != ''">
+            AND b.telephone like CONCAT('%',#{tel},'%')
+        </if>
+		<if test="name != null and name != ''">
+            AND b.NAME like CONCAT('%',#{name},'%')
+        </if>
 	</select>
 
 </mapper>

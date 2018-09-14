@@ -1,6 +1,5 @@
 package com.bonc.medicine.service.mall;
 
-
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Marks;
 import com.bonc.medicine.entity.mall.Recommend;
@@ -33,9 +32,9 @@ public interface GongQiuSystemService {
 	public Result<Object> marks(Marks marks);
 
 	public Result<Object> reply(Reply reply);
-	
+
 	public Result<Object> msglist(Integer id);
-	
-	public Result<Object> supplylist(String SupplyName, String goodType);
+
+	public Result<Object> supplylist(String goods_name, String goodType, String tel, String name);
 
 }
