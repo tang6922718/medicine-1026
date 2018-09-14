@@ -57,19 +57,11 @@
 		) AS role_name,
 		a.head_portrait
 		FROM
-		common_user a,
-		common_user_care_varieties_r b,
-		km_variety_encyclopedia c,
-		common_user_role_rel d,
-		common_role e
-		WHERE
-		a.id = b.user_id
-		AND
-		b.variety_code = c.id
-		AND a.id = d.user_id
-		AND d.role_id = e.id
-		AND a.id
-		= #{id}
+		common_user a left join 
+		common_user_care_varieties_r b on a.id = b.user_id left join 
+		km_variety_encyclopedia c on b.variety_code = c.id left join 
+		common_user_role_rel d on a.id = d.user_id left join 
+		common_role e on d.role_id = e.id where a.id = #{id}
 	</select>
 
 	<update id="userStatus" parameterType="Map">
