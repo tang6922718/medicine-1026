@@ -35,5 +35,7 @@ public interface GongQiuSystemService {
 	public Result<Object> reply(Reply reply);
 	
 	public Result<Object> msglist(Integer id);
+	
+	public Result<Object> supplylist(String SupplyName, String goodType);
 
 }

@@ -19,7 +19,7 @@ public class GongQiuController {
 	 */
 	@GetMapping("/gongQiuSystem/auditSupply/{supplyId}/{result}/{comment}")
 	public Result<Object> auditSupply(@PathVariable Integer supplyId, @PathVariable String result,
-									  @PathVariable String comment) {
+			@PathVariable String comment) {
 		if ("1".equals(result)) {
 			return gongQiuSystemService.auditSSupply(supplyId, result, comment);// 通过
 		} else {
@@ -32,7 +32,7 @@ public class GongQiuController {
 	 */
 	@GetMapping("/gongQiuSystem/auditPurchase/{purchaseId}/{result}/{comment}")
 	public Result<Object> auditPurchase(@PathVariable Integer purchaseId, @PathVariable String result,
-                                        @PathVariable String comment) {
+			@PathVariable String comment) {
 		if ("1".equals(result)) {
 			return gongQiuSystemService.auditSPurchase(purchaseId, result, comment);// 通过
 		} else {
@@ -127,13 +127,21 @@ public class GongQiuController {
 	public Result<Object> reply(@RequestBody Reply reply) {
 		return gongQiuSystemService.reply(reply);
 	}
-	
+
 	/*
 	 * 留言详情
 	 */
 	@GetMapping("/gongQiuSystem/msglist")
 	public Result<Object> msglist(@PathVariable Integer id) {
 		return gongQiuSystemService.msglist(id);
+	}
+
+	/*
+	 * 后台查询审核商品的列表
+	 */
+	@GetMapping("/gongQiuSystem/supplylist")
+	public Result<Object> supplylist(String goods_name, String goodType) {
+		return gongQiuSystemService.supplylist(goods_name, goodType);
 	}
 
 }

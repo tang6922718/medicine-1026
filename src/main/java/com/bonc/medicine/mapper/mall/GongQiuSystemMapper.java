@@ -39,4 +39,6 @@ public interface GongQiuSystemMapper {
 	public int reply(Reply reply);
 	
 	public List<Map> msglist(Map map);
+	
+	public List<Map> supplylist(Map map);
 }

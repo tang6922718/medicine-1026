@@ -4,82 +4,133 @@
 <mapper namespace="com.bonc.medicine.mapper.mall.GongQiuSystemMapper">
 
 	<update id="auditSSupply" parameterType="Map">
-		update mall_supply set is_audit = #{result},carriage_status = '1',comment = #{comment} where id = #{supplyId}
+		update mall_supply set
+		is_audit = #{result},carriage_status = '1',comment = #{comment} where
+		id = #{supplyId}
 	</update>
-	
+
 	<update id="auditFSupply" parameterType="Map">
-		update mall_supply set is_audit = #{result},comment = #{comment} where id = #{supplyId}
+		update mall_supply set
+		is_audit = #{result},comment = #{comment} where id = #{supplyId}
 	</update>
 
 	<update id="auditSPurchase" parameterType="Map">
-		update mall_purchase set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
+		update mall_purchase
+		set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
 	</update>
-	
+
 	<update id="auditFPurchase" parameterType="Map">
-		update mall_purchase set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
+		update mall_purchase
+		set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
 	</update>
-	
+
 	<insert id="recommend" parameterType="com.bonc.medicine.entity.mall.Recommend">
-		insert into mall_recommend(supply_id,site,img_url,state) values(#{supply_id},#{site},#{img_url},#{state})
+		insert into
+		mall_recommend(supply_id,site,img_url,state)
+		values(#{supply_id},#{site},#{img_url},#{state})
 	</insert>
-	
+
 	<update id="delGoods" parameterType="Map">
-		update mall_supply set state = #{result} where id = #{supplyId}
+		update mall_supply set state
+		= #{result} where id = #{supplyId}
 	</update>
-	
+
 	<update id="goodsOn" parameterType="Map">
-		update mall_supply set carriage_status = '1' where id = #{supplyId}
+		update mall_supply set
+		carriage_status = '1' where id = #{supplyId}
 	</update>
-	
+
 	<update id="goodsOff" parameterType="Map">
-		update mall_supply set carriage_status = '2' where id = #{supplyId}
+		update mall_supply set
+		carriage_status = '2' where id = #{supplyId}
 	</update>
-	
+
 	<select id="goodsRatio" parameterType="Map" resultType="Map">
 		SELECT
-	( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND carriage_status = '1' AND is_audit = '1' AND state = '0' ) AS shangjia,
-	( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND carriage_status = '2' AND is_audit = '1' AND state = '0' ) AS xiajia,
-	( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND carriage_status = '0' AND is_audit = '0' AND state = '0' ) AS weishenhe
+		( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
+		carriage_status = '1' AND is_audit = '1' AND state = '0' ) AS
+		shangjia,
+		( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
+		carriage_status = '2' AND is_audit = '1' AND state = '0' ) AS xiajia,
+		( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
+		carriage_status = '0' AND is_audit = '0' AND state = '0' ) AS
+		weishenhe
 	</select>
-	
+
 	<update id="log" parameterType="Map">
-		update common_user set is_allowed = #{result} where id = #{user_id}
+		update common_user set is_allowed
+		= #{result} where id = #{user_id}
 	</update>
-	
+
 	<select id="range" parameterType="Map" resultType="Map">
-		select distinct(supply_cat_code) from mall_supply where seller_id = #{sellerId} and is_audit = 1 and state = 0 and carriage_status = 1
+		select
+		distinct(supply_cat_code) from mall_supply where seller_id =
+		#{sellerId} and is_audit = 1 and state = 0 and carriage_status = 1
 	</select>
-	
+
 	<insert id="marks" parameterType="com.bonc.medicine.entity.mall.Marks">
-		insert into mall_business_marks(supply_id,owner_user_id,leave_user_id,mark_message,leave_time) values(#{supply_id},#{owner_user_id},#{leave_user_id},#{mark_message},#{leave_time})
-    </insert>
-    
+		insert into
+		mall_business_marks(supply_id,owner_user_id,leave_user_id,mark_message,leave_time)
+		values(#{supply_id},#{owner_user_id},#{leave_user_id},#{mark_message},#{leave_time})
+	</insert>
+
 	<insert id="reply" parameterType="com.bonc.medicine.entity.mall.Reply">
-		insert into mall_business_marks_reply(leave_user_id,mark_message_r,mark_time,is_read,mark_id) values(#{leave_user_id},#{mark_message_r},#{mark_time},#{is_read},#{mark_id})
-    </insert>
-    
-    <select id="msglist" parameterType="Map" resultType="Map">
+		insert into
+		mall_business_marks_reply(leave_user_id,mark_message_r,mark_time,is_read,mark_id)
+		values(#{leave_user_id},#{mark_message_r},#{mark_time},#{is_read},#{mark_id})
+	</insert>
+
+	<select id="msglist" parameterType="Map" resultType="Map">
 		SELECT
-	d.* 
-FROM
-	(
-	SELECT
+		d.*
+		FROM
+		(
+		SELECT
 		b.mark_message_r,
 		b.mark_time AS time,
-		b.reply_user_id AS id 
-	FROM
+		b.reply_user_id AS id
+		FROM
 		mall_business_marks a
-		LEFT JOIN mall_business_marks_reply b ON a.id = b.mark_id 
-	WHERE
+		LEFT JOIN mall_business_marks_reply b ON a.id =
+		b.mark_id
+		WHERE
 		a.id = #{id} UNION ALL
-	SELECT
+		SELECT
 		c.mark_message,
 		c.leave_time AS time,
-		c.leave_user_id AS id 
-	FROM
-		mall_business_marks c 
-	) d 
-ORDER BY
-	d.time
+		c.leave_user_id AS id
+		FROM
+		mall_business_marks c
+		) d
+		ORDER BY
+		d.time
 	</select>
+
+	<select id="supplylist" parameterType="Map" resultType="Map">
+		SELECT
+		a.id,
+		a.goods_name,
+		b.NAME,
+		a.supply_cat_code,
+		b.telephone,
+		a.specification,
+		a.inventory,
+		a.inventory_unit,
+		a.price,
+		a.price_unit,
+		a.img_url,
+		a.carriage_status,
+		a.is_audit
+		FROM
+		mall_supply a
+		LEFT JOIN common_user b ON a.seller_id = b.id
+		where a.state = '0' and a.is_audit = '0'
+		<if test="goods_name != null and goods_name != ''">
+            AND a.goods_name = #{goods_name}
+        </if>
+		<if test="goodType != null and goodType != ''">
+            AND a.supply_cat_code = #{goodType}
+        </if>
+	</select>
+
 </mapper>
