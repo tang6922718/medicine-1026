@@ -151,4 +151,15 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 		map.put("id", id);
 		return ResultUtil.success(gongQiuSystemMapper.msglist(map));
 	}
+	
+	@Override
+	public Result<Object> supplylist(String goods_name, String goodType, String tel, String name) {
+		
+		Map map = new HashMap<>();
+		map.put("goods_name", goods_name);
+		map.put("goodType", goodType);
+		map.put("tel", tel);
+		map.put("name", name);
+		return ResultUtil.success(gongQiuSystemMapper.supplylist(map));
+	}
 }

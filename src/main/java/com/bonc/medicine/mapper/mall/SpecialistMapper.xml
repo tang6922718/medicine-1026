@@ -38,11 +38,11 @@
 	</update>
 	
 	<select id="subjectList" resultType="Map">
-		SELECT * FROM dict_subject
+		SELECT subject_code as id , subject_name as name FROM dict_subject
 	</select>
 	
 	<select id="catalogList" resultType="Map">
-		SELECT variety_code, variety_name FROM common_medicine_variety
+		SELECT variety_code as id, variety_name as name FROM common_medicine_variety
 	</select>
 	
 	<select id="specialList" parameterType="java.util.Map" resultType="Map">
@@ -53,7 +53,8 @@
 			si.employment_age,
 			si.expertise_field,
 			IFNULL( sis.interact_count, 0 ) AS interact_count ,
-			count(cf.id) as follow
+			count(cf.id) as follow ,
+			0 as is_follow
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
@@ -79,14 +80,18 @@
 		ORDER BY si.employment_age DESC
 	</select>
 	
-	<select id="specDetail" parameterType="java.lang.String">
+	<select id="specialIsFollow" parameterType="java.util.Map" resultType="Map">
+		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '1'
+	</select>
+	
+	<select id="specDetail" parameterType="java.lang.String" resultType="Map">
 		SELECT  si.*, sis.interact_count
 		FROM spec_info si LEFT JOIN spec_interact_stats sis 
 		ON si.spec_id = sis.spec_id 
 		WHERE si.spec_id = #{spec_id}
 	</select>
 	
-	<select id="articleList" parameterType="java.lang.String" >
+	<select id="articleList" parameterType="java.lang.String" resultType="Map">
 		SELECT id, title, publish_time, img_url FROM spec_article WHERE spec_id = #{spec_id}
 	</select>
 	
@@ -94,7 +99,7 @@
 		select * from spec_article where id = #{id}
 	</select>
 	
-    <select id="caseList" parameterType="java.lang.String">
+    <select id="caseList" parameterType="java.lang.String" resultType="Map">
     	SELECT
 			sc.id,
 			sc.tittle,
@@ -106,7 +111,7 @@
 			LEFT JOIN spec_issue_association sia ON si.spec_id = sia.specid 
 		WHERE  sia.specid = #{spec_id}
     </select>
-    <select id="caseDetail" parameterType="java.lang.String">
+    <select id="caseDetail" parameterType="java.lang.String" resultType="Map">
     	SELECT
 			sc.tittle,
 			sc.content,
@@ -132,7 +137,7 @@
 		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{field_ids})
 	</insert>
 	
-	<select id="myIssues" parameterType="java.lang.String">
+	<select id="myIssues" parameterType="java.lang.String" resultType="Map">
 		SELECT
 			si.id,
 			si.issue_desc,
@@ -147,7 +152,7 @@
 			si.issue_user_id = #{user_id}
 	</select>
 	
-	<select id="issueDetail" parameterType="java.lang.String">
+	<select id="issueDetail" parameterType="java.lang.String" resultType="Map">
 		SELECT
 			si.id,
 			si.issue_desc,
@@ -171,7 +176,7 @@
 			( #{title},#{spec_id},#{file_size},#{file_url},#{upload_time},#{status} )
 	</insert>
 	
-	<select id="videoList" parameterType="java.lang.String">
+	<select id="videoList" parameterType="java.lang.String" resultType="Map">
 		select id, title, img_url, publish_time, status from train_video_course WHERE spec_id = #{spec_id}
 		ORDER BY publish_time DESC
 	</select>

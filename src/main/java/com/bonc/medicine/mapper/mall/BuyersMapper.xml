@@ -14,7 +14,7 @@
 
     <select id="latestPurchaseList" parameterType="java.util.Map" resultType="java.util.Map">
     	SELECT
-			mp.id,mp.goods_name,mp.specification,mp.purchase_quantity,mp.publish_time,COUNT(mo.purchase_id) as offer
+			mp.id,mp.goods_name,mp.specification,mp.purchase_quantity,mp.publish_time,COUNT(mo.purchase_id) as offer ,mp.produce_area ,mo.price
 		FROM
 			mall_purchase mp 	LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
 		WHERE mp.state = 1

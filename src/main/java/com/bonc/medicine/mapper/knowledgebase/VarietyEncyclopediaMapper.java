@@ -27,4 +27,6 @@ public interface VarietyEncyclopediaMapper {
     public List<Map<String,Object>> kmAuditList(Map map);
 
     public int kmAudit(Map map);
+
+    public List<Map<String,Object>> sourceDistribution();
 }

@@ -171,4 +171,8 @@
 		km_type = #{km_type} AND  object_id = #{object_id}
 	</update>
 
+	<select id="sourceDistribution" resultType="java.util.Map">
+		SELECT id,produce_area,GROUP_CONCAT(goods_name) AS goods_names from mall_supply GROUP BY produce_area
+	</select>
+
 </mapper>

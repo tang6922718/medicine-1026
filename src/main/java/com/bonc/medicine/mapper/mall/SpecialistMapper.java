@@ -17,7 +17,8 @@ public interface SpecialistMapper {
 	
 	
 	public int updateSpecialist(Specialist specialist);
-	public List<Map> specialList(Map param);
+	public List<Map<String, Object>> specialList(Map param);
+	public List<Map<String, Object>> specialIsFollow(Map param);
 	public List<Map> specDetail(String spec_id);
 	public List<Map> articleList(String spec_id);
 	public List<Map> articleDetail(String id);

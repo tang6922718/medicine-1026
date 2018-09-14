@@ -90,7 +90,7 @@ public class VarietyEncyclopediaController {
     public Result<Object> editVarietyEncyclopedia(@RequestBody String addJson) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
         int count = varietyEncyclopediaService.updateBreedInfo(map);
-        count += pharmacopoeiaInfoService.updatePhara(map);
+//        count += pharmacopoeiaInfoService.updatePhara(map);
         return ResultUtil.success(count);
     }
     /*
@@ -172,6 +172,14 @@ public class VarietyEncyclopediaController {
     @GetMapping("/hotBreed")
     public Result<Object> showHotBreed(){
         return ResultUtil.success(varietyEncyclopediaService.showHotBreed());
+    }
+
+    /*
+    * 门户资源分布
+    * */
+    @GetMapping("/sourceDistribution")
+    public Result<Object> sourceDistribution(){
+        return ResultUtil.success(varietyEncyclopediaService.sourceDistribution());
     }
 
 }

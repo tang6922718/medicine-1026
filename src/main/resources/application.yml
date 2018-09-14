@@ -53,7 +53,7 @@ mybatis:
   mapper-locations: classpath*:mapper/*.xml
   #type-aliases-package: com.bonc.parent.chineseherbalmedicine.entity
 hbase:
-  master: 192.168.1.24:6000
+  master: 192.168.1.24
   zookeeper:
     quorum: hadoop003,hadoop004,hadoop005,hadoop006,hadoop007
     property:
