@@ -30,7 +30,7 @@ public class HbaseUploadFile {
     Configuration conf = new Configuration();
 
     private Configuration getConf(){
-        conf.set(zkQuorum,hBaseMaster);
+        conf.set("hbase.zookeeper.quorum",hBaseMaster);
         return conf;
     }
 
