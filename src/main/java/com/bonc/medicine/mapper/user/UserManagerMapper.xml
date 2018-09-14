@@ -49,6 +49,7 @@
 		a.id,
 		a.NAME,
 		a.age,
+		a.sex,
 		a.address,
 		a.log_time,
 		GROUP_CONCAT( DISTINCT (
@@ -130,11 +131,15 @@
 		AND b.role_id = c.id
 		AND a.telephone
 		LIKE CONCAT( '%', #{tel}, '%' )
-		AND
-		str_to_date(#{startTime},'%Y-%m-%d') <![CDATA[ < ]]>
-		log_time
-		AND str_to_date(#{endTime},'%Y-%m-%d') <![CDATA[ > ]]>
-		log_time
+		<if test="startTime != '' and startTime != null">
+			AND
+			str_to_date(#{startTime},'%Y-%m-%d') <![CDATA[ < ]]>
+			log_time
+		</if>
+		<if test="endTime !='' and endTime != null">
+			AND str_to_date(#{endTime},'%Y-%m-%d') <![CDATA[ > ]]>
+			log_time
+		</if>
 		GROUP BY
 		a.id
 		ORDER BY
