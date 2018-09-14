@@ -71,6 +71,10 @@
             AND receipt = #{receipt}
         </if>
 
+		<if test="qualifications != null and qualifications != ''">
+            AND qualifications = #{qualifications}
+        </if>
+
         <if test="quality_standard != null and quality_standard != ''">
             AND quality_standard = #{quality_standard}
         </if>
