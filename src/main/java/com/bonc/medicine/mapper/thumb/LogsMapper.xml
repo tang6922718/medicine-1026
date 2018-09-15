@@ -23,7 +23,7 @@
         update
           common_log
         set
-          status = 1
+          op_status = 1
         where
           id = #{logId}
     </update>
@@ -32,7 +32,7 @@
         update
           common_log
         set
-          status = 0
+          op_status = 0
         where
           id = #{logId}
     </update>
