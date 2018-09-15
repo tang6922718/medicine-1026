@@ -71,66 +71,63 @@
 	</update>
 
 	<select id="fans" parameterType="Map" resultType="Map">
-		select count(1)
-		as fans from common_follow where object_id = #{id}
+		select IFNULL(count(1),0) as fans from common_follow where object_id = #{id}
 	</select>
 
 	<select id="care" parameterType="Map" resultType="Map">
-		select count(1)
+		select IFNULL(count(1),0)
 		s care from common_follow where follow_user_id = #{id}
 	</select>
 
 	<select id="integral" parameterType="Map" resultType="Map">
 		select
-		current_integral from common_integral where user_id = #{id}
+		IFNULL(current_integral,0) as current_integral from common_integral where user_id = #{id}
 	</select>
 
 	<select id="issue" parameterType="Map" resultType="Map">
 		select
-		count(1) as issue from spec_issue where issue_user_id = #{id}
+		IFNULL(count(1),0) as issue from spec_issue where issue_user_id = #{id}
 	</select>
 
 	<select id="supply" parameterType="Map" resultType="Map">
 		select
-		count(1) as supply from mall_supply where state ='0' and seller_id =
+		IFNULL(count(1),0) as supply from mall_supply where state ='0' and seller_id =
 		#{id}
 	</select>
 
 	<select id="purchase" parameterType="Map" resultType="Map">
 		select
-		count(1) as purchase from mall_purchase where state ='1' and user_id =
+		IFNULL(count(1),0) as purchase from mall_purchase where state ='1' and user_id =
 		#{id}
 	</select>
 
 	<select id="field" parameterType="Map" resultType="Map">
 		select
-		count(1) as field from field_info where state ='1' and user_id = #{id}
+		IFNULL(count(1),0) as field from field_info where state ='1' and user_id = #{id}
 	</select>
 
 	<select id="userlist" parameterType="Map" resultType="Map">
-		select *
-		from (SELECT
-		a.id AS user_id,
-		a.NAME,
-		GROUP_CONCAT( c.role_name ORDER BY c.role_name DESC)
-		AS a_role,
-		a.telephone,
-		'' AS coop,
-		'' AS HELP,
-		'' AS integral,
-		'' AS
-		supply,
-		'' AS purchase,
-		STATUS
+		SELECT
+			* 
 		FROM
-		common_user a,
-		common_user_role_rel b,
-		common_role c
-		WHERE
-		a.id = b.user_id
-		AND b.role_id = c.id
-		AND a.telephone
-		LIKE CONCAT( '%', #{tel}, '%' )
+			(
+			SELECT
+				a.id AS user_id,
+				a.NAME,
+				IFNULL( GROUP_CONCAT( c.role_name ORDER BY c.role_name DESC ), '' ) AS a_role,
+				a.telephone,
+				'' AS coop,
+				'' AS HELP,
+				'' AS integral,
+				'' AS supply,
+				'' AS purchase,
+			STATUS 
+				FROM
+				common_user a
+				LEFT JOIN common_user_role_rel b ON a.id = b.user_id
+				LEFT JOIN common_role c ON b.role_id = c.id 
+				where a.telephone
+				LIKE CONCAT( '%', #{tel}, '%' )
 		<if test="startTime != '' and startTime != null">
 			AND
 			str_to_date(#{startTime},'%Y-%m-%d') <![CDATA[ < ]]>
@@ -140,11 +137,13 @@
 			AND str_to_date(#{endTime},'%Y-%m-%d') <![CDATA[ > ]]>
 			log_time
 		</if>
-		GROUP BY
-		a.id
-		ORDER BY
-		b.role_id) as temp where a_role like '%%'
-		
+			GROUP BY
+				a.id 
+			) AS temp 
+			WHERE
+				a_role LIKE '%%' 
+			ORDER BY
+				user_id
 	</select>
 
 	<select id="coop_hrlp_list" resultType="Map">
