@@ -76,7 +76,7 @@
 
 	<select id="care" parameterType="Map" resultType="Map">
 		select IFNULL(count(1),0)
-		s care from common_follow where follow_user_id = #{id}
+		as care from common_follow where follow_user_id = #{id}
 	</select>
 
 	<select id="integral" parameterType="Map" resultType="Map">
