@@ -51,6 +51,16 @@ public class SpecialistServiceImpl implements SpecialistService {
 	public List<Map<String, Object>> specDetail(Map param) {
 		return specialistMapper.specDetail(param);
 	}
+	
+	@Override
+	public List<Map<String, Object>> sub(Map param) {
+		return specialistMapper.sub(param);
+	}
+	
+	@Override
+	public List<Map<String, Object>> cat(Map param) {
+		return specialistMapper.cat(param);
+	}
 
 	@Override
 	public List<Map> articleList(String spec_id) {

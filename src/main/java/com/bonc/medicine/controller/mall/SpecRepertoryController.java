@@ -101,7 +101,9 @@ public class SpecRepertoryController {
 	@GetMapping("/detail")
 	public Result specDetail(String spec_id,String user_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();//返回关注数据
+		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();//返回专家学科数据数据
+		List<Map<String, Object>> list3 = new ArrayList<Map<String, Object>>();//返回专家品类数据
 		Map param = new HashMap<>();
 		param.put("spec_id", spec_id);
 		list= specialistService.specDetail(param);
@@ -117,6 +119,14 @@ public class SpecRepertoryController {
 					}
 				}
 			}
+		}
+		list2 = specialistService.sub(param);
+		if(list2.size()!=0 && list2!=null){
+			list.get(0).put("sub", list2.get(0).get("sub").toString());
+		}
+		list3 = specialistService.cat(param);
+		if(list3.size()!=0 && list3!=null){
+			list.get(0).put("cat", list3.get(0).get("cat").toString());
 		}
 		return ResultUtil.success(list);
 	}

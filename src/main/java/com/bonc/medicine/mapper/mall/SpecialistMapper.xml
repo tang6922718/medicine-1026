@@ -92,7 +92,9 @@
 			si.*,
 			IFNULL( sis.interact_count, 0 ) AS interact_count,
 			count( cf.id ) AS follow,
-			0 AS is_follow 
+			0 AS is_follow ,
+			'' as sub,
+			'' as cat
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
@@ -101,6 +103,16 @@
 			AND cf.follow_flag = '1' 
 		WHERE
 			si.spec_id = #{spec_id}
+	</select>
+	
+	<select id="sub" parameterType="Map" resultType="Map">
+		select IFNULL(GROUP_CONCAT(ds.subject_name),'') as sub from spec_subject_rel ssr left join dict_subject ds 
+		on ssr.subject_id = ds.subject_code where ssr.spec_id = #{spec_id}
+	</select>
+	
+	<select id="cat" parameterType="Map" resultType="Map">
+		SELECT IFNULL(GROUP_CONCAT(cmv.variety_name),'') as cat from spec_cat_rel scr left join common_medicine_variety cmv 
+		on scr.cat_id = cmv.variety_code where scr.spec_id = #{spec_id}
 	</select>
 	
 	<select id="articleList" parameterType="java.lang.String" resultType="Map">
