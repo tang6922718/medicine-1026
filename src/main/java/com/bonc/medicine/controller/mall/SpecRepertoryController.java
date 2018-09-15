@@ -79,7 +79,7 @@ public class SpecRepertoryController {
 		param.put("cat_code", cat_code);
 		param.put("subject_code", subject_code);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();//存关注数据
 		list = specialistService.specialList(param);
 		if(user_id!=null)
 		{
@@ -93,6 +93,12 @@ public class SpecRepertoryController {
 					}
 				}
 			}
+		}
+		for(int i=0;i<list.size();i++){
+			Map param1 = new HashMap<>();
+			param1.put("spec_id", list.get(i).get("spec_id").toString());
+			list.get(i).put("sub", specialistService.sub(param1).toString());
+			list.get(i).put("cat", specialistService.cat(param1).toString());
 		}
 		return ResultUtil.success(list);
 	}
