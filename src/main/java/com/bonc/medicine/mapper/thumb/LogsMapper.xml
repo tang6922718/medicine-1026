@@ -51,7 +51,7 @@
         where
         1 =1
         <if test="userName != '' and userName != null">
-            and cd.name like CONCAT('%',#{userName},'%')
+            and cu.name like CONCAT('%',#{userName},'%')
         </if>
         <if test="starTime != '' and starTime != null">
             and clo.login_time &gt;= #{starTime}
