@@ -15,7 +15,7 @@ public interface SpecialistService {
 	public int delCatSpec(String spec_id);
 	
 	public int updateInfo(Specialist specialist);
-	public List<Map> catalogList();
+	public List<Map> catalogList(Map param);
 	public List<Map> subjectList();
 	public List<Map<String, Object>> specialList(Map param);
 	public List<Map<String, Object>> specialIsFollow(Map param);

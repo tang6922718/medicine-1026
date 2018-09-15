@@ -28,8 +28,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public List<Map> catalogList() {
-		return specialistMapper.catalogList();
+	public List<Map> catalogList(Map param) {
+		return specialistMapper.catalogList(param);
 	}
 
 	@Override

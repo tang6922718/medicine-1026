@@ -126,8 +126,10 @@
 				common_user a
 				LEFT JOIN common_user_role_rel b ON a.id = b.user_id
 				LEFT JOIN common_role c ON b.role_id = c.id 
-				where a.telephone
-				LIKE CONCAT( '%', #{tel}, '%' )
+				where 1 = 1
+		<if test="tel != '' and tel != null">
+			and a.telephone LIKE CONCAT( '%', #{tel}, '%' )
+		</if>
 		<if test="startTime != '' and startTime != null">
 			AND
 			str_to_date(#{startTime},'%Y-%m-%d') <![CDATA[ < ]]>
@@ -140,8 +142,10 @@
 			GROUP BY
 				a.id 
 			) AS temp 
-			WHERE
-				a_role LIKE '%%' 
+			WHERE 1 = 1 
+		<if test="role !='' and role != null">
+			AND a_role LIKE CONCAT( '%', #{role}, '%' )
+		</if>
 			ORDER BY
 				user_id
 	</select>

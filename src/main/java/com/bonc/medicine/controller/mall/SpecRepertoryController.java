@@ -61,9 +61,11 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/cat_sub")
-	public Result cat_subList() {
+	public Result cat_subList(int limit) {
 		Map result = new HashMap();
-		result.put("catList", specialistService.catalogList());
+		Map param = new HashMap<>();
+		param.put("limit", limit);
+		result.put("catList", specialistService.catalogList(param));
 		result.put("subList", specialistService.subjectList());
 		
 		return ResultUtil.success(result);
