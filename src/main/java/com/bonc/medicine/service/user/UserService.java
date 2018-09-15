@@ -70,6 +70,9 @@ public interface UserService {
 
     public void deleteToken(String token) throws Exception;
 
+    public Map changePassword(Map<String, String> map);
+
+
 
 
 }

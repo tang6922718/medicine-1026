@@ -14,6 +14,7 @@ import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnJava;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -202,6 +203,40 @@ public class UserServiceImpl implements UserService {
         redisService.del(RedisKeyUtil.getUserInfoKey(token));
     }
 
+    @Override
+    public Map changePassword(Map<String, String> map) {
+        //keys:oldPassword;newPassword,secNewPassword,telephone
+        if (StringUtils.isEmpty(map.get("oldPassword")) || StringUtils.isEmpty(map.get("newPassword")) ||
+                StringUtils.isEmpty(map.get("secNewPassword"))){
+            throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+        }
+
+        if(!StringUtils.equals(map.get("newPassword"), map.get("secNewPassword"))){
+            throw new MedicineRuntimeException(ResultEnum.PERMISSION);
+        }
+
+        Map paramMap = new HashMap();
+        paramMap.put("tableName", getTableByPhone(map.get("telephone")));
+        paramMap.put("phone", map.get("telephone"));
+        paramMap.put("password", DigestUtils.md5Hex(map.get("oldPassword")));
+        List<Map<String, Object>> reList = userMapper.login(paramMap);
+
+        if (reList.size() == 0 || reList.get(0).get("telephone") == null) {
+            throw  new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+        }
+        paramMap.put("password", DigestUtils.md5Hex(map.get("secNewPassword")));
+        int rows =  updatePassword(paramMap);
+
+        Map<String, Object> reMap = new HashMap<>();
+
+        if (rows < 1 ){
+            throw  new MedicineRuntimeException(ResultEnum.NET_ERROR);
+        }
+        reMap.put("succeed", 1);
+
+
+        return reMap;
+    }
 
 
 }

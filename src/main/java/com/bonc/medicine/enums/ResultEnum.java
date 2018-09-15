@@ -16,7 +16,8 @@ public enum ResultEnum {
     MISSING_PARA(201, "参数不全"),
     ERROR_VERIFI(202, "验证码错误"),
     ERROR_PHONE(203, "无此手机号"),
-    UN_USE_PHONE(206,"账户无效，或者已经被注册")
+    UN_USE_PHONE(206,"账户无效，或者已经被注册"),
+    NET_ERROR(405,"网络错误，请稍后再试")
     ;
 
     private Integer code;
