@@ -30,5 +30,5 @@ public interface SpecialistService {
 	public List<Map> myIssues(String user_id);
 	public Map issueDetail(String issue_id);
 	public int uploadFile(Map param);
-	public List<Map> uploadRecord(Integer user_id);
+	public List<Map> uploadRecord(Map param);
 }

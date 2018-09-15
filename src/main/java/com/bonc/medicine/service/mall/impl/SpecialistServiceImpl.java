@@ -130,8 +130,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 	
 	@Override
-	public List<Map> uploadRecord(Integer spec_id) {
-		return specialistMapper.uploadRecord(spec_id);
+	public List<Map> uploadRecord(Map param) {
+		return specialistMapper.uploadRecord(param);
 	}
 
 }

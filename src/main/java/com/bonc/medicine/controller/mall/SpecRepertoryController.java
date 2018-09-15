@@ -185,8 +185,14 @@ public class SpecRepertoryController {
 	/*
 	 * 资源上传记录
 	 */
-	@GetMapping("/uploadRecord/{spec_id}")
-	public Result uploadRecord(@PathVariable Integer spec_id) {
-		return ResultUtil.success(specialistService.uploadRecord(spec_id));
+	@GetMapping("/uploadRecord")
+	public Result uploadRecord(Integer spec_id, String title, String status, String start, String end) {
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		param.put("title", title);
+		param.put("status", status);
+		param.put("start", start);
+		param.put("end", end);
+		return ResultUtil.success(specialistService.uploadRecord(param));
 	}
 }

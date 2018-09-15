@@ -193,8 +193,25 @@
 		ORDER BY publish_time DESC
 	</select>
 	
-	<select id="uploadRecord" parameterType="Integer" resultType="Map">
-		select upload_time,title,file_url,status from spec_upload_file where spec_id = #{spec_id}
+	<select id="uploadRecord" parameterType="java.util.Map" resultType="Map">
+		select * from spec_upload_file 
+		where 1=1
+		<if test="spec_id != null and spec_id != ''">
+			and spec_id = #{spec_id}
+		</if>
+		<if test="title != null and title != ''">
+			and title LIKE CONCAT('%',#{title},'%')
+		</if>
+		<if test="status != null and status != '' and status != '-1'">
+			AND status = #{status}
+		</if>
+		<if test="start != null and start != ''">
+			AND upload_time &gt; #{start}
+		</if>
+		<if test="end != null and end != ''">
+			AND upload_time &lt; #{end}
+		</if>
+		order by upload_time desc
 	</select>
 	
 </mapper>
