@@ -57,7 +57,9 @@
 			si.expertise_field,
 			IFNULL( sis.interact_count, 0 ) AS interact_count ,
 			count(cf.id) as follow ,
-			0 as is_follow
+			0 as is_follow,
+			'' as sub,
+			'' as cat,
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
