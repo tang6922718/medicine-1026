@@ -105,6 +105,14 @@
             AND is_audit = #{is_audit}
         </if>
 
+        <if test="supply_cat_code != null and supply_cat_code != ''">
+            AND supply_cat_code = #{supply_cat_code}
+        </if>
+
+        <if test="goods_cat_code != null and goods_cat_code != ''">
+            AND goods_cat_code = #{goods_cat_code}
+        </if>
+
 
         ORDER BY public_time DESC
 
