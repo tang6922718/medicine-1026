@@ -60,7 +60,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope> <!--本地用-->
+            <!--<scope>provided</scope>--> <!--d打包用-->
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>

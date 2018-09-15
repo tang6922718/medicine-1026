@@ -36,7 +36,7 @@
 		ORDER BY a.upload_time
 	</select>
 
-	<insert id="addBroadcast" parameterType="java.util.Map" useGeneratedKeys="true">
+	<insert id="addBroadcast" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO common_broadcast (
 			`name`,
 			img_url,

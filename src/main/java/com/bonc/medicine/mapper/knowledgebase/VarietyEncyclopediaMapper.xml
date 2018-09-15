@@ -9,7 +9,7 @@
 		#{product_time},#{property_flavor},#{distribution_area},#{effect},#{fail_opinion},#{update_time})
 	</insert>
 
-	<insert id="addBreed" parameterType="java.util.Map" useGeneratedKeys="true">
+	<insert id="addBreed" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO km_variety_encyclopedia (
 			variety_id,
 			variety_alias,
@@ -131,6 +131,7 @@
 		SELECT
 		a.object_id,
 		CONCAT_WS('',b.chinese_name,c.title,d.title,e.step_name,f.title,g.name) AS title,
+		CONCAT_WS('',b.variety_id,e.sop_id) AS variety_id,
 		a.km_type,
 		CASE WHEN a.km_type = 1 THEN '品种百科'
 		WHEN a.km_type = 2 THEN '资讯类'
@@ -139,11 +140,11 @@
 		WHEN a.km_type = 5 THEN '培训'
 		WHEN a.km_type = 6 THEN '品种药典'
 		END AS type_name,
-		a.publish_time,
+		date_format(a.publish_time,'%Y-%c-%d %H:%i:%s') AS publish_time,
 		a.`status`,
 		CASE WHEN a.`status` = 0 THEN '未通过'
 		WHEN a.`status` = 1 THEN '通过'
-		WHEN a.`status` = 2 THEN '待审核'
+		ELSE '待审核'
 		END AS status_name
 		FROM
 		km_audit a
@@ -168,6 +169,7 @@
 		<set>
 			<if test="status != null and status != ''">status=#{status},</if>
 			<if test="fail_opinion != null and fail_opinion != ''">fail_opinion=#{fail_opinion},</if>
+			audit_time = now()
 		</set>
 		WHERE
 		km_type = #{km_type} AND  object_id = #{object_id}

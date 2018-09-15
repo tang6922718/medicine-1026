@@ -8,7 +8,7 @@
 		values(#{id},#{cat_code},#{atlas},#{variety_desc},#{feature},#{difference},#{other_aspect})
 	</insert>
 
-	<insert id="addPharma" parameterType="java.util.Map" useGeneratedKeys="true">
+	<insert id="addPharma" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO km_pharmacopoeia_information (
 			cat_code,
 			atlas,

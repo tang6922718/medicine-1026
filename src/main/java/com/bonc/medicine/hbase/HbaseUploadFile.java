@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -41,8 +42,13 @@ public class HbaseUploadFile {
         String tableName = "image_audio_vedio";
         String family="cf";
         //产生一个UUID字符串，理论上绝对不会重复
-        String uuid = UUID.randomUUID().toString();
-        String key = myfile.getName()+"_"+uuid;//图片存储获取对应key值
+//        String uuid = UUID.randomUUID().toString();
+//        String key = myfile.getName()+"_"+uuid;//图片存储获取对应key值
+
+        Long times = new Date().getTime();
+        Integer ran = (int)(Math.random()*900)+100;
+        String key = times.toString()+ran.toString();//时间戳+3位随机数作为key
+
         conf = getConf();
         HBaseAdmin hBaseAdmin = new HBaseAdmin(conf);
 
