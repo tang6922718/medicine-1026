@@ -3,9 +3,7 @@
 
 <mapper namespace="com.bonc.medicine.mapper.user.UserMapper">
 
-	<select id="getAllUser" resultType="Map">
-		select * from user
-	</select>
+
 
 	<!--用户注册:用户基本信息完善 -->
 	<insert id="completeUserInfo" parameterType="com.bonc.medicine.entity.user.User">

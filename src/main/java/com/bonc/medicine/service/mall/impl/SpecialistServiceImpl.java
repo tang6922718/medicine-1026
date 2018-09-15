@@ -28,8 +28,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public List<Map> catalogList() {
-		return specialistMapper.catalogList();
+	public List<Map> catalogList(Map param) {
+		return specialistMapper.catalogList(param);
 	}
 
 	@Override
@@ -48,12 +48,18 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public Map specDetail(String spec_id) {
-		List<Map> result = specialistMapper.specDetail(spec_id);
-		if (result.size() != 1) {
-			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
-		}
-		return result.get(0);
+	public List<Map<String, Object>> specDetail(Map param) {
+		return specialistMapper.specDetail(param);
+	}
+	
+	@Override
+	public List<Map<String, Object>> sub(Map param) {
+		return specialistMapper.sub(param);
+	}
+	
+	@Override
+	public List<Map<String, Object>> cat(Map param) {
+		return specialistMapper.cat(param);
 	}
 
 	@Override
@@ -134,8 +140,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 	
 	@Override
-	public List<Map> uploadRecord(Integer spec_id) {
-		return specialistMapper.uploadRecord(spec_id);
+	public List<Map> uploadRecord(Map param) {
+		return specialistMapper.uploadRecord(param);
 	}
 
 }

@@ -5,6 +5,8 @@ import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
 import com.bonc.medicine.service.user.UserManagerService;
+import com.bonc.medicine.utils.ResultUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,81 +68,80 @@ public class UserManagerController {
 	/*
 	 * 用户详情-基本信息
 	 */
-	@GetMapping("/userManager/get/basicInfo/{id}")
-	public Result<Object> basicInfo(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/basicInfo")
+	public Result<Object> basicInfo(Integer id) {
 		return userManagerService.basicInfo(id);
 	}
 
 	/*
 	 * 账号解冻和激活 1：有效。0：冻结
 	 */
-	@PutMapping("/userManager/userStatus/{id}/{status}")
-	public Result<Object> userStatus(@PathVariable Integer id, @PathVariable String status) {
-		return userManagerService.userStatus(id, status);
+	@PutMapping("/userManager/userStatus")
+	public Result<Object> userStatus(@RequestBody Map param) {
+		return userManagerService.userStatus(Integer.parseInt(param.get("id")+""), param.get("status")+"");
 	}
 
 	/*
 	 * 粉丝数
 	 */
-	@GetMapping("/userManager/get/fans/{id}")
-	public Result<Object> fans(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/fans")
+	public Result<Object> fans(Integer id) {
 		return userManagerService.fans(id);
 	}
 
 	/*
 	 * 关注数
 	 */
-	@GetMapping("/userManager/get/care/{id}")
-	public Result<Object> care(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/care")
+	public Result<Object> care(Integer id) {
 		return userManagerService.care(id);
 	}
 
 	/*
 	 * 积分
 	 */
-	@GetMapping("/userManager/get/integral/{id}")
-	public Result<Object> integral(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/integral")
+	public Result<Object> integral(Integer id) {
 		return userManagerService.integral(id);
 	}
 
 	/*
 	 * 专家提问
 	 */
-	@GetMapping("/userManager/get/issue/{id}")
-	public Result<Object> issue(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/issue")
+	public Result<Object> issue(Integer id) {
 		return userManagerService.issue(id);
 	}
 
 	/*
 	 * 供应信息
 	 */
-	@GetMapping("/userManager/get/supply/{id}")
-	public Result<Object> supply(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/supply")
+	public Result<Object> supply(Integer id) {
 		return userManagerService.supply(id);
 	}
 
 	/*
 	 * 求购信息
 	 */
-	@GetMapping("/userManager/get/purchase/{id}")
-	public Result<Object> purchase(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/purchase")
+	public Result<Object> purchase(Integer id) {
 		return userManagerService.purchase(id);
 	}
 
 	/*
 	 * 田间管理
 	 */
-	@GetMapping("/userManager/get/field/{id}")
-	public Result<Object> field(@PathVariable Integer id) {
+	@GetMapping("/userManager/get/field")
+	public Result<Object> field(Integer id) {
 		return userManagerService.field(id);
 	}
 
 	/*
 	 * 用户管理列表
 	 */
-	@GetMapping("/userManager/get/userlist/{tel}/{role}/{startTime}/{endTime}")
-	public Result<Object> userlist(@PathVariable String tel, @PathVariable String role, @PathVariable String startTime,
-                                   @PathVariable String endTime) {
+	@GetMapping("/userManager/get/userlist")
+	public Result<Object> userlist(String tel,  String role, String startTime, String endTime) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();// 保存1，2，3，4，10列数据
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();// 保存5,6列数据
 		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();// 保存7列数据
@@ -180,8 +181,6 @@ public class UserManagerController {
 				}
 			}
 		}
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(list);
 	}
 }

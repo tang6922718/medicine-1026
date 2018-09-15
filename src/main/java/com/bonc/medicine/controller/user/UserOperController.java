@@ -90,12 +90,12 @@ public class UserOperController {
     }
 
     /**
-    * @Description:修改密码或者忘记密码接口
-    * @Param: [paramMap] keys:phone;verification;password
-    * @return: com.bonc.user.entity.Result
-    * @Author: hejiajun
-    * @Date: 2018/9/1 
-    */ 
+     * @Description:修改密码或者忘记密码接口
+     * @Param: [paramMap] keys:phone;verification;password
+     * @return: com.bonc.user.entity.Result
+     * @Author: hejiajun
+     * @Date: 2018/9/1
+     */
     @PutMapping("/password/forget/v1.0")
     public Result forgetPassword(@RequestBody Map<String, String> paramMap) {
         if (null == paramMap) {
@@ -114,7 +114,7 @@ public class UserOperController {
         reMap.put("succeed", succesNum);
 
         return ResultUtil.success(reMap);
-        
+
     }
 
     @DeleteMapping("/user/logout/v1.0")
@@ -133,6 +133,26 @@ public class UserOperController {
     @GetMapping("/testt")
     public String test() {
         return "chenggong";
+    }
+
+    /**
+     * @Description:用户通过旧密码修改新密码
+     * @Param: [paramMap] keys:oldPassword;newPassword,secNewPassword,telephone
+     * @return: com.bonc.user.entity.Result
+     * @Author: hejiajun
+     * @Date: 2018/9/1
+     */
+    @PutMapping("/password/update/v1.0")
+    public Result changePassword(@RequestBody Map<String, String> paramMap) {
+        if (null == paramMap) {
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+        // TODO 校验账号是不是有效获取用户电话号码
+
+        Map map = userService.changePassword(paramMap);
+
+        return ResultUtil.success(map);
+
     }
 
 

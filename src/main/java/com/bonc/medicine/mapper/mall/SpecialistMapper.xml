@@ -43,6 +43,9 @@
 	
 	<select id="catalogList" resultType="Map">
 		SELECT variety_code as id, variety_name as name FROM common_medicine_variety
+		<if test="limit != null and limit != ''">
+			limit 0,#{limit}
+		</if>
 	</select>
 	
 	<select id="specialList" parameterType="java.util.Map" resultType="Map">
@@ -84,22 +87,43 @@
 		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '1'
 	</select>
 	
-	<select id="specDetail" parameterType="java.lang.String">
-		SELECT  si.*, sis.interact_count
-		FROM spec_info si LEFT JOIN spec_interact_stats sis 
-		ON si.spec_id = sis.spec_id 
-		WHERE si.spec_id = #{spec_id}
+	<select id="specDetail" parameterType="java.lang.String" resultType="Map">
+		SELECT
+			si.*,
+			IFNULL( sis.interact_count, 0 ) AS interact_count,
+			count( cf.id ) AS follow,
+			0 AS is_follow ,
+			'' as sub,
+			'' as cat
+		FROM
+			spec_info si
+			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
+			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id 
+			AND cf.object_type = '1' 
+			AND cf.follow_flag = '1' 
+		WHERE
+			si.spec_id = #{spec_id}
 	</select>
 	
-	<select id="articleList" parameterType="java.lang.String" >
+	<select id="sub" parameterType="Map" resultType="Map">
+		select IFNULL(GROUP_CONCAT(ds.subject_name),'') as sub from spec_subject_rel ssr left join dict_subject ds 
+		on ssr.subject_id = ds.subject_code where ssr.spec_id = #{spec_id}
+	</select>
+	
+	<select id="cat" parameterType="Map" resultType="Map">
+		SELECT IFNULL(GROUP_CONCAT(cmv.variety_name),'') as cat from spec_cat_rel scr left join common_medicine_variety cmv 
+		on scr.cat_id = cmv.variety_code where scr.spec_id = #{spec_id}
+	</select>
+	
+	<select id="articleList" parameterType="java.lang.String" resultType="Map">
 		SELECT id, title, publish_time, img_url FROM spec_article WHERE spec_id = #{spec_id}
 	</select>
 	
-	<select id="articleDetail">
+	<select id="articleDetail" parameterType="String" resultType="Map">
 		select * from spec_article where id = #{id}
 	</select>
 	
-    <select id="caseList" parameterType="java.lang.String">
+    <select id="caseList" parameterType="java.lang.String" resultType="Map">
     	SELECT
 			sc.id,
 			sc.tittle,
@@ -108,10 +132,10 @@
 		FROM
 			spec_case sc
 			LEFT JOIN spec_issue si ON sc.issue_id = si.id
-			LEFT JOIN spec_issue_association sia ON si.spec_id = sia.specid 
+			LEFT JOIN spec_issue_association sia ON sia.issueid = si.id
 		WHERE  sia.specid = #{spec_id}
     </select>
-    <select id="caseDetail" parameterType="java.lang.String">
+    <select id="caseDetail" parameterType="java.lang.String" resultType="Map">
     	SELECT
 			sc.tittle,
 			sc.content,
@@ -137,7 +161,7 @@
 		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{field_ids})
 	</insert>
 	
-	<select id="myIssues" parameterType="java.lang.String">
+	<select id="myIssues" parameterType="java.lang.String" resultType="Map">
 		SELECT
 			si.id,
 			si.issue_desc,
@@ -152,7 +176,7 @@
 			si.issue_user_id = #{user_id}
 	</select>
 	
-	<select id="issueDetail" parameterType="java.lang.String">
+	<select id="issueDetail" parameterType="java.lang.String" resultType="Map">
 		SELECT
 			si.id,
 			si.issue_desc,
@@ -176,13 +200,30 @@
 			( #{title},#{spec_id},#{file_size},#{file_url},#{upload_time},#{status} )
 	</insert>
 	
-	<select id="videoList" parameterType="java.lang.String">
+	<select id="videoList" parameterType="java.lang.String" resultType="Map">
 		select id, title, img_url, publish_time, status from train_video_course WHERE spec_id = #{spec_id}
 		ORDER BY publish_time DESC
 	</select>
 	
-	<select id="uploadRecord" parameterType="Integer" resultType="Map">
-		select upload_time,title,file_url,status from spec_upload_file where spec_id = #{spec_id}
+	<select id="uploadRecord" parameterType="java.util.Map" resultType="Map">
+		select * from spec_upload_file 
+		where 1=1
+		<if test="spec_id != null and spec_id != ''">
+			and spec_id = #{spec_id}
+		</if>
+		<if test="title != null and title != ''">
+			and title LIKE CONCAT('%',#{title},'%')
+		</if>
+		<if test="status != null and status != '' and status != '-1'">
+			AND status = #{status}
+		</if>
+		<if test="start != null and start != ''">
+			AND upload_time &gt; #{start}
+		</if>
+		<if test="end != null and end != ''">
+			AND upload_time &lt; #{end}
+		</if>
+		order by upload_time desc
 	</select>
 	
 </mapper>

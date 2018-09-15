@@ -18,12 +18,12 @@
 
     <select id="getSopPlants" parameterType="java.util.Map" resultType="Map">
         SELECT
-            kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation
+			kss.sop_id,kss.step_order,kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation
         FROM
             km_sop_step kss
         WHERE 1=1
         <if test="variety_id != null and variety_id != ''">
-            AND kss.sop_id = ${id}
+            AND kss.sop_id = ${variety_id}
         </if>
         ORDER BY
             kss.step_order

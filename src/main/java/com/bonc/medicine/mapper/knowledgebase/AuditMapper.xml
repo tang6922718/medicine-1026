@@ -8,7 +8,7 @@
 		values(#{id},#{title},#{km_type},#{object_id},#{publish_time},#{status},#{fail_opinion},#{audit_time})
 	</insert>
 
-	<insert id="addAudit"  parameterType="java.util.Map" useGeneratedKeys="true">
+	<insert id="addAudit"  parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO km_audit (
 			title,
 			km_type,

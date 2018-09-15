@@ -20,6 +20,7 @@ public class Supply {
     private String produce_area; //商品产地
     private String storehouse; //库存地
     private Character receipt; //票据    票据:  0 提供票据    1 不提供票据
+    private String qualifications;//资质标准
     private Character quality_standard; //质量标准   质量标准：  0 无     1 GMP证书      2  GSP证书
     private Character send_sample; //是否寄样   寄样：  0 提供寄样    1 不提供寄样
     private Character payment; //付款方式   付款方式：  0  先付款   1  货到付款   3 可协调
@@ -164,7 +165,16 @@ public class Supply {
         this.receipt = receipt;
     }
 
-    public Character getQuality_standard() {
+    
+    public String getQualifications() {
+		return qualifications;
+	}
+
+	public void setQualifications(String qualifications) {
+		this.qualifications = qualifications;
+	}
+
+	public Character getQuality_standard() {
         return quality_standard;
     }
 

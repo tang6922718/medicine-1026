@@ -19,18 +19,20 @@ public interface SpecialistMapper {
 	public int updateSpecialist(Specialist specialist);
 	public List<Map<String, Object>> specialList(Map param);
 	public List<Map<String, Object>> specialIsFollow(Map param);
-	public List<Map> specDetail(String spec_id);
+	public List<Map<String, Object>> specDetail(Map param);
+	public List<Map<String, Object>> sub(Map param);
+	public List<Map<String, Object>> cat(Map param);
 	public List<Map> articleList(String spec_id);
 	public List<Map> articleDetail(String id);
 	public List<Map> caseList(String spec_id);
 	public List<Map> caseDetail(String id);
 	public List<Map> subjectList();
-	public List<Map> catalogList();
+	public List<Map> catalogList(Map param);
 	public List<Map> videoList(String spec_id);
 	
 	public int insertIssue(Issue issue);
 	public List<Map> myIssues(String user_id);
 	public List<Map> issueDetail(String issue_id);
 	public int uploadFile(Map param);
-	public List<Map> uploadRecord(Integer issue_id);
+	public List<Map> uploadRecord(Map param);
 }

@@ -49,9 +49,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         //如果验证token失败，并且方法注明了Authorization，返回401错误
         if (method.getAnnotation(Authorization.class) != null) {
             throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
-            //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            //return false;
         }
+
         return true;
     }
 }

@@ -23,6 +23,13 @@ public class ViewNumberController {
     @Autowired
     private ViewNumberService viewNumberService;
 
+    /**
+    * @Description: 查询浏览数
+    * @Param: [objectType, objectId]
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/15 
+    */ 
     @GetMapping("/view/number/v1.0")
     public Result queryViewNumber(@RequestParam String objectType,
                                   @RequestParam String objectId) {
@@ -38,6 +45,13 @@ public class ViewNumberController {
         return ResultUtil.success(viewNumberService.queryViewNumber(map));
     }
 
+    /**
+    * @Description: 增加浏览数
+    * @Param: [paramMap]
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/15 
+    */ 
     @PostMapping("/view/number/v1.0")
     public Result addOrUpdateViewNumberCord(@RequestBody Map<String, String> paramMap) {
         // viewNumber;objectType;objectId

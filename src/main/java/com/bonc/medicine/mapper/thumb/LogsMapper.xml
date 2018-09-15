@@ -21,18 +21,18 @@
 
     <update id="updateOperLogsNormal" parameterType="String">
         update
-          common_logon_log
+          common_log
         set
-          status = 1
+          op_status = 1
         where
           id = #{logId}
     </update>
 
     <update id="updateOperLogsUnnormal" parameterType="String">
         update
-          common_logon_log
+          common_log
         set
-          status = 0
+          op_status = 0
         where
           id = #{logId}
     </update>
@@ -51,7 +51,7 @@
         where
         1 =1
         <if test="userName != '' and userName != null">
-            and cd.name like CONCAT('%',#{userName},'%')
+            and cu.name like CONCAT('%',#{userName},'%')
         </if>
         <if test="starTime != '' and starTime != null">
             and clo.login_time &gt;= #{starTime}
@@ -85,7 +85,7 @@
         where
         1 = 1
         <if test="userName != '' and userName != null">
-            and cd.name like CONCAT('%',#{userName},'%')
+            and cu.name like CONCAT('%',#{userName},'%')
         </if>
 
         <if test="starTime != '' and starTime != null">

@@ -20,7 +20,7 @@ public class OfferController {
 	OfferService offerService;
 	
 	@SuppressWarnings("unchecked")
-	@PostMapping("/")
+	@PostMapping("/offer")
 	public Result<Object> realseOffer(@RequestBody Offer offer) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String publish_time = sdf.format(new Date());

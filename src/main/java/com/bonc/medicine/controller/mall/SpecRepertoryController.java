@@ -61,9 +61,11 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/cat_sub")
-	public Result cat_subList() {
+	public Result cat_subList(int limit) {
 		Map result = new HashMap();
-		result.put("catList", specialistService.catalogList());
+		Map param = new HashMap<>();
+		param.put("limit", limit);
+		result.put("catList", specialistService.catalogList(param));
 		result.put("subList", specialistService.subjectList());
 		
 		return ResultUtil.success(result);
@@ -97,8 +99,36 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/detail")
-	public Result specDetail(String spec_id) {
-		return ResultUtil.success(specialistService.specDetail(spec_id));
+	public Result specDetail(String spec_id,String user_id) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();//返回关注数据
+		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();//返回专家学科数据数据
+		List<Map<String, Object>> list3 = new ArrayList<Map<String, Object>>();//返回专家品类数据
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		list= specialistService.specDetail(param);
+		if(user_id!=null)
+		{
+			Map param1 = new HashMap<>();
+			param1.put("user_id", user_id);
+			list1 = specialistService.specialIsFollow(param1);
+			for(int i=0;i<list.size();i++){
+				for(int j=0;j<list1.size();j++){
+					if(list.get(i).get("spec_id").toString().equals(list1.get(j).get("object_id").toString())){
+						list.get(i).put("is_follow", 1);
+					}
+				}
+			}
+		}
+		list2 = specialistService.sub(param);
+		if(list2.size()!=0 && list2!=null){
+			list.get(0).put("sub", list2.get(0).get("sub").toString());
+		}
+		list3 = specialistService.cat(param);
+		if(list3.size()!=0 && list3!=null){
+			list.get(0).put("cat", list3.get(0).get("cat").toString());
+		}
+		return ResultUtil.success(list);
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
@@ -165,8 +195,14 @@ public class SpecRepertoryController {
 	/*
 	 * 资源上传记录
 	 */
-	@GetMapping("/uploadRecord/{spec_id}")
-	public Result uploadRecord(@PathVariable Integer spec_id) {
-		return ResultUtil.success(specialistService.uploadRecord(spec_id));
+	@GetMapping("/uploadRecord")
+	public Result uploadRecord(Integer spec_id, String title, String status, String start, String end) {
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		param.put("title", title);
+		param.put("status", status);
+		param.put("start", start);
+		param.put("end", end);
+		return ResultUtil.success(specialistService.uploadRecord(param));
 	}
 }

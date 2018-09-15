@@ -26,7 +26,7 @@
     <select id="queryDetails" resultType="Map" parameterType="String">
         SELECT
         *
-        FROM mall_supply WHERE state = '0' AND carriage_status = '1' AND 1=1
+        FROM mall_supply WHERE state = '0' AND 1=1
         AND id= #{id}
     </select>
 
@@ -71,6 +71,10 @@
             AND receipt = #{receipt}
         </if>
 
+		<if test="qualifications != null and qualifications != ''">
+            AND qualifications = #{qualifications}
+        </if>
+
         <if test="quality_standard != null and quality_standard != ''">
             AND quality_standard = #{quality_standard}
         </if>
@@ -99,6 +103,14 @@
 
         <if test="is_audit != null and is_audit != ''">
             AND is_audit = #{is_audit}
+        </if>
+
+        <if test="supply_cat_code != null and supply_cat_code != ''">
+            AND supply_cat_code = #{supply_cat_code}
+        </if>
+
+        <if test="goods_cat_code != null and goods_cat_code != ''">
+            AND goods_cat_code = #{goods_cat_code}
         </if>
 
 
