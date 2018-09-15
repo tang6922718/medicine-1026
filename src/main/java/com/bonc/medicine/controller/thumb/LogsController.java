@@ -181,7 +181,7 @@ public class LogsController {
      * @Date: 2018/9/9
      */
     @PostMapping("/logs/operation/v1.0")
-    public Result addOperLogs(Map<String, String> paramMap) {
+    public Result addOperLogs(@RequestBody Map<String, String> paramMap) {
         //userId;opeType;opeResource;opModule;status,这些是paramMap的key
         //如果没有用户的userId参数就返回缺失参数的错误；
         if (StringUtils.isEmpty(paramMap.get("userId"))) {
