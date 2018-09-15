@@ -104,7 +104,7 @@
 		SELECT id, title, publish_time, img_url FROM spec_article WHERE spec_id = #{spec_id}
 	</select>
 	
-	<select id="articleDetail" resultType="Map">
+	<select id="articleDetail" parameterType="String" resultType="Map">
 		select * from spec_article where id = #{id}
 	</select>
 	
@@ -117,7 +117,7 @@
 		FROM
 			spec_case sc
 			LEFT JOIN spec_issue si ON sc.issue_id = si.id
-			LEFT JOIN spec_issue_association sia ON si.spec_id = sia.specid
+			LEFT JOIN spec_issue_association sia ON sia.issueid = si.id
 		WHERE  sia.specid = #{spec_id}
     </select>
     <select id="caseDetail" parameterType="java.lang.String" resultType="Map">
