@@ -44,12 +44,12 @@ public class LiveController {
      * @description 获取所有直播（直播课堂列表）（包含为直播未开启的）
      */
     @RequestMapping("/selectLive")
-    public Result selectLive() {
+    public Result selectLive(@RequestBody Map<String, Object> map) {
         List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
-        for (Map<String, String> map : lists) {
-            liveService.updateLiveStatus(map.get("id"), map.get("status"));
+        for (Map<String, String> map1: lists) {
+            liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
-        return ResultUtil.success(liveService.selectAllLive());
+        return ResultUtil.success(liveService.selectAllLive(map));
     }
 
     /**

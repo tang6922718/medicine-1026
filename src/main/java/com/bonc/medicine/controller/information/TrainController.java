@@ -41,9 +41,6 @@ public class TrainController {
     }
 
 
-
-
-
     /**
      * @param map
      * @return
@@ -135,11 +132,6 @@ public class TrainController {
     public Result delOfflineTrain(@RequestBody(required = false)  Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrain(map));
     }
-
-
-
-
-
     /**
      * @return
      * @description 获取腾讯点播上传密钥

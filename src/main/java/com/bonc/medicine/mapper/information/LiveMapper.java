@@ -6,6 +6,7 @@ import org.apache.ibatis.jdbc.SQL;
 import java.util.List;
 import java.util.Map;
 
+
 public interface LiveMapper {
 
     @InsertProvider(type = LiveDynaSqlProvider.class,
@@ -17,9 +18,11 @@ public interface LiveMapper {
     int updateLiveStatus(@Param("room_id") String room_id, @Param("status") String status);
 
 
-    @Select("select * from train_live")
+    @SelectProvider(type = LiveDynaSqlProvider.class,
+            method = "selectLive")
     @ResultType(List.class)
-    List<Map<String, Object>> selectAllLive();
+//    "select * from train_live"
+    List<Map<String, Object>> selectAllLive(Map<String, Object> map);
 
     @Update({
             "<script>",
@@ -65,18 +68,23 @@ public interface LiveMapper {
                 if (map.get("pull_rtmp_url") != null) {
                     VALUES("pull_rtmp_url", "#{pull_rtmp_url}");
                 }
-
                 if (map.get("live_type") != null) {
                     VALUES("live_type", "#{live_type}");
                 }
                 if (map.get("lecture_name") != null) {
                     VALUES("lecture_name", "#{lecture_name}");
                 }
-                if (map.get("live_time") != null) {
-                    VALUES("live_time", "#{live_time}");
+                if (map.get("live_start") != null) {
+                    VALUES("live_start", "#{live_start}");
                 }
-                if (map.get("fail_opinion") != null) {
-                    VALUES("fail_opinion", "#{fail_opinion}");
+                if (map.get("live_end") != null) {
+                    VALUES("live_end", "#{live_end}");
+                }
+                if (map.get("user_id") != null) {
+                    VALUES("user_id", "#{user_id}");
+                }
+                if (map.get("img_url") != null) {
+                    VALUES("img_url", "#{img_url}");
                 }
             }}.toString();
         }
@@ -115,6 +123,33 @@ public interface LiveMapper {
                 WHERE("id=#{id}");
             }}.toString();
         }
+
+        public String selectLive(final Map<String, Object> map) {
+
+            int start= (Integer.parseInt(String.valueOf(map.get("pageNum")))-1)*Integer.parseInt(String.valueOf(map.get("pageSize")));
+            int end=Integer.parseInt(String.valueOf(map.get("pageSize")));
+
+            String sql=new SQL() {{
+                SELECT("*");
+                FROM("train_live");
+                if(map.get("live_start") != null && map.get("live_start") != ""){
+                    WHERE("live_start>#{live_start}");
+                }
+                if(map.get("room_title") != null && map.get("room_title") != ""){
+                    WHERE("room_title  like '%#{live_start}%'");
+                }
+                if(map.get("id") != null && map.get("id") != ""){
+                    WHERE("id=#{id}");
+                }
+
+            }}.toString()+"  limit "+start+","+end;
+
+
+            System.out.println(sql);
+            return sql;
+
+        }
+
 
     }
 }
