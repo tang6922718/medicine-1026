@@ -81,7 +81,7 @@
 
 	<select id="integral" parameterType="Map" resultType="Map">
 		select
-		IFNULL(current_integral,0) as current_integral from common_integral where user_id = #{id}
+		IFNULL(sum(current_integral),0) as current_integral from common_integral where user_id = #{id}
 	</select>
 
 	<select id="issue" parameterType="Map" resultType="Map">
