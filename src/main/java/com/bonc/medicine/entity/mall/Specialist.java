@@ -3,7 +3,7 @@ package com.bonc.medicine.entity.mall;
 import java.util.Date;
 
 public class Specialist {
-	private int spec_id; // 专家编号
+	private int spec_id; // 专家编号，创建时缺省
 	private String name; // 姓名
 	private String head_portrait; // 头像
 	private String education; // 学历
@@ -14,7 +14,7 @@ public class Specialist {
 	private int employment_age; // 从业时间
 	private String[] cat_code; // 品类编码
 	private String[] subject_code; // 学科编码
-	private Date registration_date; // 注册日期
+	private String registration_date; // 注册日期
 	private String detail; // 详细介绍 
 	
 	public String[] getCat_code() {
@@ -23,10 +23,10 @@ public class Specialist {
 	public String[] getSubject_code() {
 		return subject_code;
 	}
-	public Date getRegistration_date() {
+	public String getRegistration_date() {
 		return registration_date;
 	}
-	public void setRegistration_date(Date registration_date) {
+	public void setRegistration_date(String registration_date) {
 		this.registration_date = registration_date;
 	}
 	public void setCat_code(String[] cat_code) {

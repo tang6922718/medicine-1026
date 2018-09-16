@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,12 @@ public class SpecRepertoryController {
 	@Autowired
 	SpecialistService specialistService;
 	
+	
+	/**
+	 * 新建专家角色
+	 * @param specialist
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/new")
 	@Transactional
@@ -38,6 +46,11 @@ public class SpecRepertoryController {
 		return ResultUtil.success();
 	}
 	
+	/**
+	 * 修改专家信息
+	 * @param specialist
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/info")
 	@Transactional
@@ -59,6 +72,11 @@ public class SpecRepertoryController {
 		return ResultUtil.success();
 	}
 	
+	/**
+	 * 获取品类和学科列表
+	 * @param limit
+	 * @return
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/cat_sub")
 	public Result cat_subList(int limit) {
@@ -71,6 +89,14 @@ public class SpecRepertoryController {
 		return ResultUtil.success(result);
 	}
 	
+	/**
+	 * 专家列表
+	 * @param name 按名字查
+	 * @param cat_code 按品类查
+	 * @param subject_code 按学科查
+	 * @param user_id 当前用户
+	 * @return
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/spec_list")
 	public Result specList(String name, String cat_code, String subject_code,String user_id) {
@@ -103,6 +129,12 @@ public class SpecRepertoryController {
 		return ResultUtil.success(list);
 	}
 	
+	/**
+	 * 专家详情
+	 * @param spec_id 专家编号
+	 * @param user_id
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/detail")
 	public Result specDetail(String spec_id,String user_id) {
@@ -137,42 +169,77 @@ public class SpecRepertoryController {
 		return ResultUtil.success(list);
 	}
 	
+	/**
+	 * 专家文章列表
+	 * @param spec_id
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/articles")
 	public Result articleList(String spec_id) {
 		return ResultUtil.success(specialistService.articleList(spec_id));
 	}
 	
+	/**
+	 * 文章详情
+	 * @param id 文章编号
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/articles/detail")
 	public Result articleDetail(String id) {
 		return ResultUtil.success(specialistService.articleDetail(id));
 	}
 	
+	/**
+	 * 专家案例列表
+	 * @param spec_id 专家编号
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/cases")
 	public Result caseList(String spec_id) {
 		return ResultUtil.success(specialistService.caseList(spec_id));
 	}
 	
+	/**
+	 * 案例详情
+	 * @param id 案例编号
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/cases/detail")
 	public Result caseDetail(String id) {
 		return ResultUtil.success(specialistService.caseDetail(id));
 	}
 	
+	/**
+	 * 向专家提问
+	 * @param issue
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	@PostMapping("/issue")
 	public Result releaseIssue(Issue issue) {
 		return ResultUtil.success(specialistService.releaseIssue(issue));
 	}
 	
+	/**
+	 * 我的提问
+	 * @param user_id 用户编号
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/my_issue")
 	public Result myIssueList(String user_id) {
 		return ResultUtil.success(specialistService.myIssues(user_id));
 	}
 	
+	/**
+	 * 提问详情
+	 * @param issue_id 问题编号
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/issue/detail")
 	public Result issueDetail(String issue_id) {
@@ -181,13 +248,14 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/file")
-	public Result uploadFile(String title, String spec_id, String file_size, String file_url, String upload_time, String status) {
+	public Result uploadFile(String title, String spec_id, String file_size, String file_url, String status) {
 		Map param = new HashMap();
 		param.put("title", title);
 		param.put("spec_id", spec_id);
 		param.put("file_size", file_size);
 		param.put("file_url", file_url);
-		param.put("upload_time", upload_time);
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+		param.put("upload_time", sdf.format(new Date()));
 		param.put("status", status);
 		
 		return ResultUtil.success(specialistService.uploadFile(param));
