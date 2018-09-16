@@ -202,4 +202,16 @@ public class MeetProfessorController {
 		result.setData("更新完毕");
 		return result;
 	}
+	
+	/*
+	 * 审核文章查询列表
+	 */
+	@GetMapping("/meetProfessor/get/articlelist")
+	public Result<Object> getArticlelist(String key) {
+		Result<Object> result = new Result<Object>();
+		result.setCode(200);
+		result.setMsg("成功");
+		result.setData(meetProfessorService.getArticlelist(key));
+		return result;
+	}
 }

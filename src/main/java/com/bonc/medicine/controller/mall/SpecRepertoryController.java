@@ -287,4 +287,5 @@ public class SpecRepertoryController {
 		param.put("end", end);
 		return ResultUtil.success(specialistService.uploadRecord(param));
 	}
+
 }

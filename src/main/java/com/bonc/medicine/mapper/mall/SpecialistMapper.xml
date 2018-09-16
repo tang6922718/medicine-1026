@@ -118,11 +118,12 @@
 	</select>
 	
 	<select id="articleList" parameterType="java.lang.String" resultType="Map">
-		SELECT id, title, publish_time, img_url FROM spec_article WHERE spec_id = #{spec_id}
+		SELECT * FROM spec_article WHERE spec_id = #{spec_id}
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select * from spec_article where id = #{id}
+		select a.id,a.title,b.name,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		a.spec_id = b.id where a.id = #{id}
 	</select>
 	
     <select id="caseList" parameterType="java.lang.String" resultType="Map">
