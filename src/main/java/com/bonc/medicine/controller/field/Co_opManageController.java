@@ -248,8 +248,8 @@ public class Co_opManageController {
 	/*
 	 * 公告启用-停用
 	 */
-	@PutMapping("/Co_op/noticeState/{id}/{state}")
-	public Result<Object> noticeState(@PathVariable int id, @PathVariable String state) {
+	@GetMapping("/Co_op/noticeState")
+	public Result<Object> noticeState(int id, String state) {
 		co_opManageService.noticeState(id, state);
 		Result result = new Result();
 		result.setData("更新完毕");
@@ -261,8 +261,8 @@ public class Co_opManageController {
 	/*
 	 * 公告删除
 	 */
-	@DeleteMapping("/Co_op/dalete/notice/{id}/{state}")
-	public Result<Object> deleteNotice(@PathVariable int id) {
+	@GetMapping("/Co_op/dalete/notice")
+	public Result<Object> deleteNotice(int id) {
 		co_opManageService.deleteNotice(id);
 		Result result = new Result();
 		result.setData("更新完毕");
@@ -274,16 +274,16 @@ public class Co_opManageController {
 	/*
 	 * 公告详情
 	 */
-	@GetMapping("/Co_op/noticeDetail/{id}")
-	public Result<Object> noticeDetail(@PathVariable int id) {
+	@GetMapping("/Co_op/noticeDetail")
+	public Result<Object> noticeDetail(int id) {
 		return co_opManageService.noticeDetail(id);
 	}
 
 	/*
 	 * 更新公告
 	 */
-	@PutMapping("/Co_op/update/notice/{id}/{msg}")
-	public Result<Object> updateNotice(@PathVariable int id, @PathVariable String msg) {
+	@GetMapping("/Co_op/update/notice")
+	public Result<Object> updateNotice(int id, String msg) {
 		return co_opManageService.updateNotice(id, msg);
 	}
 
