@@ -298,9 +298,9 @@ public class Co_opManageController {
 	/*
 	 * 查询公告列表
 	 */
-	@GetMapping("/Co_op/noticelist/{msg}/{role}/{start_time}/{end_time}")
-	public Result<Object> noticelist(@PathVariable String msg, @PathVariable String role,
-			@PathVariable String start_time, @PathVariable String end_time) {
+	@GetMapping("/Co_op/noticelist")
+	public Result<Object> noticelist( String msg,  String role,
+			 String start_time,  String end_time) {
 		return co_opManageService.noticelist(msg, role, start_time, end_time);
 	}
 
