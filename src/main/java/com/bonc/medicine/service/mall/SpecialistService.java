@@ -26,7 +26,7 @@ public interface SpecialistService {
 	public List<Map> caseList(String spec_id);
 	public Map articleDetail(String id);
 	public Map caseDetail(String id);
-	public List<Map> videoList(String spec_id);
+	public List<Map> videoList(Map param);
 	
 	public int releaseIssue(Issue issue);
 	public List<Map> myIssues(String user_id);
