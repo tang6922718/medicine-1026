@@ -59,7 +59,7 @@
 			count(cf.id) as follow ,
 			0 as is_follow,
 			'' as sub,
-			'' as cat,
+			'' as cat
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
@@ -203,7 +203,15 @@
 	</insert>
 	
 	<select id="videoList" parameterType="java.lang.String" resultType="Map">
-		select id, title, img_url, publish_time, status from train_video_course WHERE spec_id = #{spec_id}
+		select id, title, img_url, publish_time, status from train_video_course 
+		WHERE 1=1
+		where 1=1
+		<if test="spec_id != null and spec_id != ''">
+			and spec_id = #{spec_id}
+		</if>
+		<if test="title != null and title != ''">
+			and title LIKE CONCAT('%',#{title},'%')
+		</if>
 		ORDER BY publish_time DESC
 	</select>
 	

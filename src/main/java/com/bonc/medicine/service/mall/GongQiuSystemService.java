@@ -36,5 +36,7 @@ public interface GongQiuSystemService {
 	public Result<Object> msglist(Integer id);
 
 	public Result<Object> supplylist(String key, String goodType);
+	
+	public Result<Object> purchaselist(String key, String goodType);
 
 }

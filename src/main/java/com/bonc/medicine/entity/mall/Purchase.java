@@ -10,6 +10,7 @@ public class Purchase {
 	private String publish_time; // 发布时间
 	private char effect_flag; // 生效标识
 	private int purchase_quantity; // 求购数量
+	private char unit; // 求购数量的单位
 	private String linkman; // 联系人
 	private String linkman_phone; // 联系人电话
 	private String storehouse; // 库存地
@@ -23,6 +24,15 @@ public class Purchase {
 	private char state; // 数据状态:0失效1能用
 	private char is_aduit; // 审核状态:0未审核 1审核通过 2审核未通过
 	private String comment; // 审核不通过的留言
+	
+	
+	
+	public char getUnit() {
+		return unit;
+	}
+	public void setUnit(char unit) {
+		this.unit = unit;
+	}
 	public int getId() {
 		return id;
 	}
