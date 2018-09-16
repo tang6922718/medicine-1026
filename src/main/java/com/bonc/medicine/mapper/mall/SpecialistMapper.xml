@@ -59,7 +59,7 @@
 			count(cf.id) as follow ,
 			0 as is_follow,
 			'' as sub,
-			'' as cat,
+			'' as cat
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
