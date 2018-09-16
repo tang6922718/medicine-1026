@@ -79,10 +79,12 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/cat_sub")
-	public Result cat_subList(int limit) {
+	public Result cat_subList(String limit) {
 		Map result = new HashMap();
 		Map param = new HashMap<>();
-		param.put("limit", limit);
+		if(limit!=null   && !"".equals(limit.toString())){
+			param.put("limit", Integer.parseInt(limit));
+		}
 		result.put("catList", specialistService.catalogList(param));
 		result.put("subList", specialistService.subjectList());
 		
