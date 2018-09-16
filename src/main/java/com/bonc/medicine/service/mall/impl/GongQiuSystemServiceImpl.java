@@ -160,4 +160,13 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 		map.put("goodType", goodType);
 		return ResultUtil.success(gongQiuSystemMapper.supplylist(map));
 	}
+	
+	@Override
+	public Result<Object> purchaselist(String key, String goodType) {
+		
+		Map map = new HashMap<>();
+		map.put("key", key);
+		map.put("goodType", goodType);
+		return ResultUtil.success(gongQiuSystemMapper.purchaselist(map));
+	}
 }

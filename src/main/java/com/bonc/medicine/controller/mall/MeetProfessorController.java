@@ -128,7 +128,7 @@ public class MeetProfessorController {
 	/*
 	 * 关闭问题
 	 */
-	@PostMapping("/meetProfessor/end/{id}/{score}")
+	@PutMapping("/meetProfessor/end/{id}/{score}")
 	public Result<Object> end(@PathVariable Integer id, @PathVariable Integer score) {
 		return meetProfessorService.end(id, score);
 	}
@@ -164,7 +164,7 @@ public class MeetProfessorController {
 	}
 
 	/*
-	 * 文章审核status:0 可用 1 不可用
+	 * 文章审核is_audit:0 可用 1 不可用
 	 */
 	@PutMapping("/meetProfessor/aduitArticle/{id}/{is_audit}/{fail_opinion}")
 	public Result<Object> aduitArticle(@PathVariable Integer id, @PathVariable String is_audit,

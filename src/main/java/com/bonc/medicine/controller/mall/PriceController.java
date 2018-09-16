@@ -29,7 +29,7 @@ public class PriceController {
 	}
 
 	/*
-	 * 获取热词接口
+	 * 增加热词接口
 	 */
 	@GetMapping("/price/add/hotword/{hotword}")
 	public Result<Object> addHotword(@PathVariable String hotword) {

@@ -132,5 +132,31 @@
             AND a.supply_cat_code = #{goodType}
         </if>
 	</select>
+	
+	<select id="purchaselist" parameterType="Map" resultType="Map">
+		SELECT
+			a.id,
+			a.goods_name,
+			b.NAME,
+			a.purchase_cat_code,
+			b.telephone,
+			a.specification,
+			a.purchase_quantity,
+			a.unit,
+			a.img_url,
+			a.is_aduit 
+		FROM
+			mall_purchase a
+			LEFT JOIN common_user b ON a.user_id = b.id 
+		WHERE
+			a.state = '1' 
+			AND a.is_aduit = '0'
+		<if test="key != null and key != ''">
+            AND (a.goods_name like CONCAT('%',#{key},'%') OR b.telephone like CONCAT('%',#{key},'%') OR b.NAME like CONCAT('%',#{key},'%'))
+        </if>
+		<if test="goodType != null and goodType != ''">
+            AND a.purchase_cat_code = #{goodType}
+        </if>
+	</select>
 
 </mapper>

@@ -274,7 +274,7 @@ public class Co_opManageController {
 	/*
 	 * 公告详情
 	 */
-	@GetMapping("/Co_op/noticeDetail/{id}/{state}")
+	@GetMapping("/Co_op/noticeDetail/{id}")
 	public Result<Object> noticeDetail(@PathVariable int id) {
 		return co_opManageService.noticeDetail(id);
 	}
@@ -282,7 +282,7 @@ public class Co_opManageController {
 	/*
 	 * 更新公告
 	 */
-	@GetMapping("/Co_op/update/notice/{id}/{msg}")
+	@PutMapping("/Co_op/update/notice/{id}/{msg}")
 	public Result<Object> updateNotice(@PathVariable int id, @PathVariable String msg) {
 		return co_opManageService.updateNotice(id, msg);
 	}

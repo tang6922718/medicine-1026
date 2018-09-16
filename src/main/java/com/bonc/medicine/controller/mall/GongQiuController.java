@@ -17,9 +17,9 @@ public class GongQiuController {
 	/*
 	 * 审核供应通过后改为审核通过且上架，未通过字段为未上架审核不通过result=1通过2不通过
 	 */
-	@GetMapping("/gongQiuSystem/auditSupply/{supplyId}/{result}/{comment}")
-	public Result<Object> auditSupply(@PathVariable Integer supplyId, @PathVariable String result,
-			@PathVariable String comment) {
+	@GetMapping("/gongQiuSystem/auditSupply")
+	public Result<Object> auditSupply( Integer supplyId,  String result,
+			 String comment) {
 		if ("1".equals(result)) {
 			return gongQiuSystemService.auditSSupply(supplyId, result, comment);// 通过
 		} else {
@@ -30,9 +30,9 @@ public class GongQiuController {
 	/*
 	 * 审核求购通过后改为审核通过，未通过字段为未上架审核不通过result=1通过2不通过
 	 */
-	@GetMapping("/gongQiuSystem/auditPurchase/{purchaseId}/{result}/{comment}")
-	public Result<Object> auditPurchase(@PathVariable Integer purchaseId, @PathVariable String result,
-			@PathVariable String comment) {
+	@GetMapping("/gongQiuSystem/auditPurchase")
+	public Result<Object> auditPurchase( Integer purchaseId,  String result,
+			 String comment) {
 		if ("1".equals(result)) {
 			return gongQiuSystemService.auditSPurchase(purchaseId, result, comment);// 通过
 		} else {
@@ -137,11 +137,19 @@ public class GongQiuController {
 	}
 
 	/*
-	 * 后台查询审核商品的列表
+	 * 后台查询审核商品审核的列表
 	 */
 	@GetMapping("/gongQiuSystem/supplylist")
 	public Result<Object> supplylist(String key, String goodType) {
 		return gongQiuSystemService.supplylist(key, goodType);
+	}
+	
+	/*
+	 * 后台查询求购审核的列表
+	 */
+	@GetMapping("/gongQiuSystem/purchaselist")
+	public Result<Object> purchaselist(String key, String goodType) {
+		return gongQiuSystemService.purchaselist(key, goodType);
 	}
 
 }
