@@ -224,7 +224,7 @@
 			CONCAT(CONCAT('%',#{notice_content}),'%')
 		</if>
 		<if test="role != null and role != ''">
-			AND notice_role_type = #{notice_role_type}
+			AND notice_role_type = #{role}
 		</if>
 		<if test="start_time != null and start_time != ''">
 			AND publish_time <![CDATA[ >= ]]>

@@ -4,7 +4,7 @@ public class Notice {
 	private int id;
 	private String notice_type;
 	private int object_id;
-	private String idnotice_content;
+	private String notice_content;
 	private int publish_user_id;
 	private int notice_role_type;
 	private String notice_receiver;
@@ -36,12 +36,12 @@ public class Notice {
 		this.object_id = object_id;
 	}
 
-	public String getIdnotice_content() {
-		return idnotice_content;
+	public String getNotice_content() {
+		return notice_content;
 	}
 
-	public void setIdnotice_content(String idnotice_content) {
-		this.idnotice_content = idnotice_content;
+	public void setNotice_content(String notice_content) {
+		this.notice_content = notice_content;
 	}
 
 	public int getPublish_user_id() {
