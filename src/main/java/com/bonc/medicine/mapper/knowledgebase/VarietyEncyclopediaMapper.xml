@@ -76,20 +76,20 @@
 		ELSE '百科' END AS type
 		FROM
 		km_variety_encyclopedia a
-		INNER JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code
+		LEFT JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code
 		WHERE
 		1 = 1
 		<if test="search_name != null and search_name != ''">
-			and a.chinese_name = #{search_name}
+			and a.chinese_name LIKE concat('%',#{search_name},'%')
 		</if>
 		<if test="type_code != null and type_code != ''">
-			and codex_status = #{codex_status}
+			and record_status = #{type_code}
 		</if>
 		<if test="record_status != null and record_status != ''">
-			and record_status = #{record_status}
+			and codex_status= #{record_status}
 		</if>
 		ORDER BY
-		update_time DESC
+		record_time DESC
 	</select>
 
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">

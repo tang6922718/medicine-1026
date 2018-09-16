@@ -16,12 +16,12 @@
 
 	<update id="auditSPurchase" parameterType="Map">
 		update mall_purchase
-		set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
+		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}
 	</update>
 
 	<update id="auditFPurchase" parameterType="Map">
 		update mall_purchase
-		set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
+		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}
 	</update>
 
 	<insert id="recommend" parameterType="com.bonc.medicine.entity.mall.Recommend">

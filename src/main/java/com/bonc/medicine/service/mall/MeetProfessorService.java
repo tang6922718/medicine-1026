@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface MeetProfessorService {
 
-	public List<Map<String, Object>> queslist(String msg, String revisited);
+	public List<Map<String, Object>> queslist(String issue_status, String revisited);
 
 	public List<Map<String, Object>> assistlist();
 
@@ -39,5 +39,7 @@ public interface MeetProfessorService {
 	public void addArticle(Article article);
 	
 	public void updateArticle(Article article);
+	
+	public List<Map<String, Object>> getArticlelist(String key);
 
 }

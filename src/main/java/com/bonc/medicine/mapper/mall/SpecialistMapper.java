@@ -28,7 +28,7 @@ public interface SpecialistMapper {
 	public List<Map> caseDetail(String id);
 	public List<Map> subjectList();
 	public List<Map> catalogList(Map param);
-	public List<Map> videoList(String spec_id);
+	public List<Map> videoList(Map param);
 	
 	public int insertIssue(Issue issue);
 	public List<Map> myIssues(String user_id);

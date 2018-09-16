@@ -118,11 +118,12 @@
 	</select>
 	
 	<select id="articleList" parameterType="java.lang.String" resultType="Map">
-		SELECT id, title, publish_time, img_url FROM spec_article WHERE spec_id = #{spec_id}
+		SELECT * FROM spec_article WHERE spec_id = #{spec_id}
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select * from spec_article where id = #{id}
+		select a.id,a.title,b.name,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		a.spec_id = b.id where a.id = #{id}
 	</select>
 	
     <select id="caseList" parameterType="java.lang.String" resultType="Map">
@@ -202,15 +203,24 @@
 			( #{title},#{spec_id},#{file_size},#{file_url},#{upload_time},#{status} )
 	</insert>
 	
-	<select id="videoList" parameterType="java.lang.String" resultType="Map">
-		select id, title, img_url, publish_time, status from train_video_course 
+	<select id="videoList" parameterType="java.util.Map" resultType="Map">
+		select tvc.*, cu.telephone from train_video_course tvc
+		left join common_user cu on tvc.spec_id = cu.id
 		WHERE 1=1
-		where 1=1
 		<if test="spec_id != null and spec_id != ''">
-			and spec_id = #{spec_id}
+			and tvc.spec_id = #{spec_id}
 		</if>
 		<if test="title != null and title != ''">
-			and title LIKE CONCAT('%',#{title},'%')
+			and (tvc.title LIKE CONCAT('%',#{title},'%') or tvc.lecturer_name LIKE CONCAT('%',#{title},'%'))
+		</if>
+		<if test="status != null and status != '' and status != '-1'">
+			AND tvc.is_audit = #{status}
+		</if>
+		<if test="start != null and start != ''">
+			AND tvc.publish_time &gt; #{start}
+		</if>
+		<if test="end != null and end != ''">
+			AND tvc.publish_time &lt; #{end}
 		</if>
 		ORDER BY publish_time DESC
 	</select>

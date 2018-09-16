@@ -115,8 +115,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public List<Map> videoList(String spec_id) {
-		return specialistMapper.videoList(spec_id);
+	public List<Map> videoList(Map param) {
+		return specialistMapper.videoList(param);
 	}
 
 	@Override

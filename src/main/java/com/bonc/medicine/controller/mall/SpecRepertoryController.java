@@ -265,8 +265,14 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/videos")
-	public Result videoList(String spec_id) {
-		return ResultUtil.success(specialistService.videoList(spec_id));
+	public Result videoList(String spec_id,String title, String status, String start, String end) {
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		param.put("title", title);
+		param.put("status", status);
+		param.put("start", start);
+		param.put("end", end);
+		return ResultUtil.success(specialistService.videoList(param));
 	}
 	/*
 	 * 资源上传记录
@@ -281,4 +287,5 @@ public class SpecRepertoryController {
 		param.put("end", end);
 		return ResultUtil.success(specialistService.uploadRecord(param));
 	}
+
 }
