@@ -133,4 +133,11 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	public void updateArticle(Article article) {
 		ResultUtil.success(meetProfessorMapper.updateArticle(article));
 	}
+	
+	@Override
+	public List<Map<String, Object>> getArticlelist(String key) {
+		Map map = new HashMap<>();
+		map.put("key", key);
+		return meetProfessorMapper.getArticlelist(map);
+	}
 }

@@ -39,5 +39,7 @@ public interface MeetProfessorService {
 	public void addArticle(Article article);
 	
 	public void updateArticle(Article article);
+	
+	public List<Map<String, Object>> getArticlelist(String key);
 
 }
