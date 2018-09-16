@@ -22,10 +22,10 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	private MeetProfessorMapper meetProfessorMapper;
 
 	@Override
-	public List<Map<String, Object>> queslist(String msg, String revisited) {
+	public List<Map<String, Object>> queslist(String issue_status, String revisited) {
 
 		Map map = new HashMap<>();
-		map.put("msg", msg);
+		map.put("issue_status", issue_status);
 		map.put("revisited", revisited);
 		return meetProfessorMapper.queslist(map);
 	}

@@ -6,7 +6,7 @@
 	<select id="queslist" parameterType="Map" resultType="Map">
 		SELECT
 		a.id,
-		d.loginid,
+		d.id as man_id,
 		d.NAME,
 		a.issue_time,
 		a.issue_desc,
@@ -28,9 +28,9 @@
 		AND b.specid = c.spec_id
 		AND b.is_assigned = '0'
 		AND d.id = a.issue_user_id
-		<if test="msg != null and msg != '全部'">
-			AND issue_desc LIKE
-			CONCAT(CONCAT('%',#{msg,jdbcType=VARCHAR}),'%')
+		<if test="issue_status != null and issue_status != '全部'">
+			AND issue_status LIKE
+			CONCAT(CONCAT('%',#{issue_status,jdbcType=VARCHAR}),'%')
 		</if>
 		<if test="revisited != null and revisited != '全部'">
 			AND is_revisited LIKE CONCAT(CONCAT('%',#{revisited
@@ -179,7 +179,7 @@
 	<select id="getArticlelist" parameterType="Map" resultType="Map">
 			select id,title,'文章类型' as type,publish_time from spec_article where status = '0' and is_audit = '0'
 			<if test="key != null and key != ''">
-				where title like CONCAT(CONCAT('%',#{key},'%')
+				and title like CONCAT(CONCAT('%',#{key}),'%')
 			</if>
 	</select>
 </mapper>

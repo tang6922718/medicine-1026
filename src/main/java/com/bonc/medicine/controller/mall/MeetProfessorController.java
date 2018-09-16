@@ -20,11 +20,11 @@ public class MeetProfessorController {
 	/*
 	 * 答疑管理 疑问列表msg是内容recisited是否回访0否1是
 	 */
-	@GetMapping("/meetProfessor/queslist/{msg}/{revisited}")
-	public Result<Object> queslist(@PathVariable String msg, @PathVariable String revisited) {
+	@GetMapping("/meetProfessor/queslist")
+	public Result<Object> queslist( String issue_status, String revisited) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
-		list = meetProfessorService.queslist(msg, revisited);
+		list = meetProfessorService.queslist(issue_status, revisited);
 		list1 = meetProfessorService.assistlist();
 		if (list != null && list.size() != 0) {
 			if (list1 != null && list1.size() != 0) {
@@ -56,9 +56,9 @@ public class MeetProfessorController {
 	/*
 	 * 设置回访
 	 */
-	@GetMapping("/meetProfessor/revisited/{id}/{comment}/{close}")
-	public Result<Object> revisited(@PathVariable Integer id, @PathVariable String comment,
-                                    @PathVariable String close) {
+	@GetMapping("/meetProfessor/revisited")
+	public Result<Object> revisited( Integer id,  String comment,
+			 String close) {
 		return meetProfessorService.revisited(id, comment, close);
 	}
 
@@ -146,7 +146,7 @@ public class MeetProfessorController {
 	 */
 	@GetMapping("/meetProfessor/fileManage/{key}/{starttime}/{entime}/{status}")
 	public Result<Object> fileManage(@PathVariable String key, @PathVariable String starttime,
-                                     @PathVariable String endtime, @PathVariable String status) {
+			@PathVariable String endtime, @PathVariable String status) {
 		return meetProfessorService.fileManage(key, starttime, endtime, status);
 	}
 
@@ -164,11 +164,10 @@ public class MeetProfessorController {
 	}
 
 	/*
-	 * 文章审核is_audit:0 可用 1 不可用
+	 * 文章审核is_audit:
 	 */
-	@PutMapping("/meetProfessor/aduitArticle/{id}/{is_audit}/{fail_opinion}")
-	public Result<Object> aduitArticle(@PathVariable Integer id, @PathVariable String is_audit,
-                                       @PathVariable String fail_opinion) {
+	@GetMapping("/meetProfessor/aduitArticle")
+	public Result<Object> aduitArticle(Integer id, String is_audit, String fail_opinion) {
 		meetProfessorService.aduitArticle(id, is_audit, fail_opinion);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);
@@ -189,7 +188,7 @@ public class MeetProfessorController {
 		result.setData("更新完毕");
 		return result;
 	}
-	
+
 	/*
 	 * 修改文章
 	 */
@@ -202,7 +201,7 @@ public class MeetProfessorController {
 		result.setData("更新完毕");
 		return result;
 	}
-	
+
 	/*
 	 * 审核文章查询列表
 	 */
