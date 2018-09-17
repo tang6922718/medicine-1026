@@ -117,8 +117,30 @@
 		on scr.cat_id = cmv.variety_code where scr.spec_id = #{spec_id}
 	</select>
 	
-	<select id="articleList" parameterType="java.lang.String" resultType="Map">
-		SELECT * FROM spec_article WHERE spec_id = #{spec_id}
+	<update id="revokeArt" parameterType="String" >
+		UPDATE spec_article SET is_audit = 3 WHERE id = #{id}
+	</update>
+	
+	<select id="articleList" parameterType="Map" resultType="Map">
+		SELECT sa.*, cu.telephone FROM spec_article sa
+		left join common_user cu on sa.spec_id = cu.id
+		WHERE 1=1
+		<if test="spec_id != null and spec_id != ''">
+			and sa.spec_id = #{spec_id}
+		</if>
+		<if test="title != null and title != ''">
+			and (sa.title LIKE CONCAT('%',#{title},'%') or sa.author LIKE CONCAT('%',#{title},'%'))
+		</if>
+		<if test="status != null and status != '' and status != '-1'">
+			AND sa.is_audit = #{status}
+		</if>
+		<if test="start != null and start != ''">
+			AND sa.publish_time &gt; #{start}
+		</if>
+		<if test="end != null and end != ''">
+			AND sa.publish_time &lt; #{end}
+		</if>
+		ORDER BY publish_time DESC
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">

@@ -178,8 +178,19 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/articles")
-	public Result articleList(String spec_id) {
-		return ResultUtil.success(specialistService.articleList(spec_id));
+	public Result articleList(String spec_id, String title, String status, String start, String end) {
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		param.put("title", title);
+		param.put("status", status);
+		param.put("start", start);
+		param.put("end", end);
+		return ResultUtil.success(specialistService.articleList(param));
+	}
+	
+	@PutMapping("/revokeArt")
+	public Result revokeArticle(@RequestBody Map param) {
+		return ResultUtil.success(specialistService.revokeArt(param.get("id")+""));
 	}
 	
 	/**
@@ -265,7 +276,7 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/videos")
-	public Result videoList(String spec_id,String title, String status, String start, String end) {
+	public Result videoList(String spec_id, String title, String status, String start, String end) {
 		Map param = new HashMap<>();
 		param.put("spec_id", spec_id);
 		param.put("title", title);

@@ -63,8 +63,8 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public List<Map> articleList(String spec_id) {
-		return specialistMapper.articleList(spec_id);
+	public List<Map> articleList(Map param) {
+		return specialistMapper.articleList(param);
 	}
 
 	@Override
@@ -142,6 +142,11 @@ public class SpecialistServiceImpl implements SpecialistService {
 	@Override
 	public List<Map> uploadRecord(Map param) {
 		return specialistMapper.uploadRecord(param);
+	}
+
+	@Override
+	public int revokeArt(String id) {
+		return specialistMapper.revokeArt(id);
 	}
 
 }

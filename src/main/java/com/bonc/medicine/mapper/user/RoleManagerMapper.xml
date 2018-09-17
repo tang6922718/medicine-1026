@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bonc.medicine.mapper.user.RoleManagerMapper">
+
+    <insert id="createNewRole" parameterType="Map">
+        insert into
+          common_backend_user_role
+        values
+          (0, #{roleName}, #{createUserId}, now(), #{isWork})
+    </insert>
+
+    <select id="getRolesByCondition" parameterType="Map" resultType="Map">
+        SELECT
+            sec.name,
+            fir.create_time,
+            fir.id,
+            fir.is_work,
+            fir.number,
+            fir.role_name
+        FROM
+            (
+                SELECT
+                    abc.role_name,
+                    abc.id,
+                    abc.create_time,
+                    abc.is_work,
+                    count(cdr.backend_user_id) AS number,
+                    abc.create_user_id
+                FROM
+                    common_backend_user cda
+                INNER JOIN common_backend_user_role_r cdr ON cda.id = cdr.backend_user_id
+                RIGHT JOIN common_backend_user_role abc ON cdr.backend_role_id = abc.id
+              where 1 =1
+                <if test="roleName != null and roleName != '' ">
+                    and abc.role_name like CONCAT( '%', #{roleName}, '%' )
+                </if>
+
+              GROUP BY
+               abc.id
+            ) fir
+        LEFT JOIN
+          common_backend_user sec
+          ON fir.create_user_id = sec.id
+
+    </select>
+
+    <update id="removeRole" parameterType="String">
+      DELETE
+        FROM
+            common_backend_user_role
+        WHERE
+            id = #{id}
+    </update>
+
+    <update id="updateRoleInfo" parameterType="Map">
+        update
+          common_backend_user_role
+        set role_name = #{roleName}
+
+        <if test="isWork != '' and isWork != null ">
+          , is_work = #{isWork}
+        </if>
+
+        where id = #{id}
+    </update>
+
+
+    <insert id="updateRolePermissions" parameterType="Map">
+
+
+    </insert>
+
+    <delete id="deleteRoleMeunRelation" parameterType="String">
+
+
+    </delete>
+
+</mapper>
