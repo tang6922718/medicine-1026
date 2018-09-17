@@ -28,9 +28,10 @@ public class BuyersController {
 		tempData.setIs_aduit('0');
         return ResultUtil.success(buyersService.releasePurchase(tempData));
     }
+	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
-	@GetMapping("/deletePurchase")
+	@DeleteMapping("/purchase")
 	public Result<Object> deletePurchase(String id) {
 		return ResultUtil.success(buyersService.deletePurchase(id));
 	}

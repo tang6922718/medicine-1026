@@ -11,15 +11,21 @@
 		values (#{comment_id},#{reply_oid},#{reply_type},#{content},#{from_uid},#{to_uid},#{reply_time)
 	</insert>
 	
-	<select id="queryComments" parameterType="java.util.Map">
+	<select id="queryComments" parameterType="java.util.Map" resultType="java.util.Map">
 		select cc.*, cu1.name as fname, cu1.head_portrait, cu2.name AS tname from common_comment cc 
 		left join common_user cu1 ON cc.from_uid = cu1.id
 		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
 		where cc.object_type = #{object_type} and cc.object_id = #{object_id}
 		
 	</select>
+	
+	<select id="commentsCount" parameterType="java.util.Map" resultType="java.util.Map">
+		select count(1) as count from common_comment 
+		where object_type = #{object_type} and object_id = #{object_id}
 		
-	<select id="queryReplies" parameterType="java.util.Map">
+	</select>
+		
+	<select id="queryReplies" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT cr.*, cu1.name AS fname, cu2.name AS tname  
 		FROM common_reply cr
 		LEFT JOIN common_user cu1 ON cu1.id = cr.from_uid

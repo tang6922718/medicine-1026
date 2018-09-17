@@ -233,8 +233,32 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@PostMapping("/issue")
+	@Transactional
 	public Result releaseIssue(Issue issue) {
-		return ResultUtil.success(specialistService.releaseIssue(issue));
+		specialistService.releaseIssue(issue);
+		Map param = new HashMap<>();
+		param.put("specid", issue.getSpec_id()+"");
+		param.put("issueid", issue.getId()+"");
+		param.put("is_assigned", "0");
+		List params = new ArrayList<>();
+		params.add(param);
+		specialistService.insertIssueRel(params);
+		return ResultUtil.success();
+	}
+	@SuppressWarnings({ "rawtypes" })
+	@PutMapping("/invite")
+	public Result inviteOtherSpec(@RequestBody Map params) {
+		String issueid = params.get("issueid")+"";
+		List specids = (List)params.get("specids");
+		List list = new ArrayList<>();
+		for (int i = 0; i < specids.size(); i++) {
+			Map one = new HashMap<>();
+			one.put("specid", specids.get(i)+"");
+			one.put("issueid", issueid);
+			one.put("is_assigned", "1");
+			list.add(one);
+		}
+		return ResultUtil.success(specialistService.insertIssueRel(list));
 	}
 	
 	/**

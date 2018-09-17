@@ -33,6 +33,15 @@ public class CommentReplyController {
 		return ResultUtil.success(commentReplyService.queryComments(param));
 	}
 	
+	@GetMapping("/count")
+	public Result commentsCount(String object_type, String object_id) {
+		Map param = new HashMap<>();
+		param.put("object_type", object_type);
+		param.put("object_id", object_id);
+		return ResultUtil.success(commentReplyService.commentsCount(param));
+	}
+	
+	
 	
 	
 }

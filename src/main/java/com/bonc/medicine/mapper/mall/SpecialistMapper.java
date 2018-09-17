@@ -32,6 +32,8 @@ public interface SpecialistMapper {
 	public List<Map> videoList(Map param);
 	
 	public int insertIssue(Issue issue);
+	public int insertIssueRel(List param);
+	
 	public List<Map> myIssues(String user_id);
 	public List<Map> issueDetail(String issue_id);
 	public int uploadFile(Map param);

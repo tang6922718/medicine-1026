@@ -7,5 +7,6 @@ public interface CommentReplyService {
 	public int insertComment(Map param);
 	public int insertReply(Map param);
 	public List<Map> queryComments(Map param);
+	public int commentsCount(Map param);
 	public List<Map> queryReplies(String[] comment_ids);
 }
