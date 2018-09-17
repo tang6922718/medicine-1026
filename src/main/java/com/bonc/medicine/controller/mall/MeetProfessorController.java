@@ -66,8 +66,8 @@ public class MeetProfessorController {
 	/*
 	 * 答疑未开始列表
 	 */
-	@GetMapping("/meetProfessor/untreated/{spec_id}")
-	public Result<Object> untreated(@PathVariable Integer spec_id) {
+	@GetMapping("/meetProfessor/untreated")
+	public Result<Object> untreated( Integer spec_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = meetProfessorService.untreated(spec_id);
 		String time = null;
@@ -112,8 +112,8 @@ public class MeetProfessorController {
 	/*
 	 * 邀请专家解答问题传入问题id,专家expert格式为1,2,3,4
 	 */
-	@PostMapping("/meetProfessor/add/Invitation/{id}/{expert}")
-	public Result<Object> Invitation(@PathVariable Integer id, @PathVariable String expert) {
+	@GetMapping("/meetProfessor/add/Invitation")
+	public Result<Object> Invitation( Integer id,  String expert) {
 		meetProfessorService.deleteInvitation(id);
 		String[] a = expert.split(",");
 		for (int i = 0; i < a.length; i++) {
@@ -129,8 +129,8 @@ public class MeetProfessorController {
 	/*
 	 * 关闭问题
 	 */
-	@PutMapping("/meetProfessor/end/{id}/{score}")
-	public Result<Object> end(@PathVariable Integer id, @PathVariable Integer score) {
+	@GetMapping("/meetProfessor/end")
+	public Result<Object> end( Integer id,  Integer score) {
 		return meetProfessorService.end(id, score);
 	}
 

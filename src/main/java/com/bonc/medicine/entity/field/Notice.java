@@ -8,6 +8,7 @@ public class Notice {
 	private int publish_user_id;
 	private int notice_role_type;
 	private String notice_receiver;
+	private String img_url;
 	private String publish_time;
 	private String status;
 	private String state;
@@ -66,6 +67,15 @@ public class Notice {
 
 	public void setNotice_receiver(String notice_receiver) {
 		this.notice_receiver = notice_receiver;
+	}
+
+	
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
 	}
 
 	public String getPublish_time() {

@@ -115,7 +115,7 @@ public class GongQiuController {
 	/*
 	 * 留言功能
 	 */
-	@GetMapping("/gongQiuSystem/marks")
+	@PostMapping("/gongQiuSystem/marks")
 	public Result<Object> marks(@RequestBody Marks marks) {
 		return gongQiuSystemService.marks(marks);
 	}
