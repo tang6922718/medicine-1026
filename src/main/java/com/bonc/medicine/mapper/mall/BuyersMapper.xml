@@ -39,7 +39,11 @@
     
 	<!-- 逻辑上删除，数据库只做修改 -->
     <update id="deletePurchase" parameterType="java.lang.String">
-    	update mall_purchase SET state = 0 WHERE id = #{id}
+    	update mall_purchase SET state = '0' WHERE id = #{id}
+    </update>
+    
+    <update id="revokePurchase" parameterType="java.lang.String">
+    	update mall_purchase SET is_aduit = '3' WHERE id = #{id}
     </update>
     
     

@@ -72,4 +72,9 @@ public class BuyersServiceImpl implements BuyersService {
 		return buyersMapper.deletePurchase(id);
 	}
 	
+	@Override
+	public int revokePurchase(String id) {
+		return buyersMapper.revokePurchase(id);
+	}
+	
 }

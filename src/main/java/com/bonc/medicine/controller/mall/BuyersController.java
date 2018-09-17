@@ -28,11 +28,19 @@ public class BuyersController {
 		tempData.setIs_aduit('0');
         return ResultUtil.success(buyersService.releasePurchase(tempData));
     }
+	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@DeleteMapping("/purchase")
 	public Result<Object> deletePurchase(String id) {
 		return ResultUtil.success(buyersService.deletePurchase(id));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("/revokePurchase")
+	public Result<Object> revokePurchase(String id) {
+		return ResultUtil.success(buyersService.revokePurchase(id));
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -65,13 +65,13 @@ public class Co_opManageController {
 	 * 
 	 * @Date 14:45 2018/8/28
 	 * 
-	 * @Param [ID]
-	 * 
+	 * @Param []
+	 *
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
-	@GetMapping("/co_op/{id}")
-	public Result<Object> getCo_opInfo(@PathVariable int id) {
-		return co_opManageService.getCo_opInfo(id);
+	@GetMapping("/co_op")
+	public Result<Object> getCo_opInfo(@RequestParam Map<String,String> param) {
+		return co_opManageService.getCo_opInfo(param);
 	}
 
 	/*
@@ -218,6 +218,20 @@ public class Co_opManageController {
 		return co_opManageService.getCoopMemberList(coop_id);
 	}
 
+
+	/* *
+	 * @Description 查询合作社的通知列表
+	 * @Date 17:32 2018/9/17
+	 * @Param [coopID]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/coopNoticeList/{coopID}")
+	public Result<Object> getCoopNoticeList(@PathVariable int coopID){
+		return co_opManageService.getCoopNoticeList(coopID);
+	}
+
+
+
 	/*
 	 * 我的-所属合作社
 	 */
@@ -229,8 +243,8 @@ public class Co_opManageController {
 	/*
 	 * 给该合作社下所有人发通知
 	 */
-	@PutMapping("/Co_op/sendMsg/{user_id}/{msg}")
-	public Result<Object> affiliatedCo_op(@PathVariable int user_id, @PathVariable String msg) {
+	@GetMapping("/Co_op/sendMsg")
+	public Result<Object> affiliatedCo_op( int user_id,  String msg) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = co_opManageService.findAllMember(user_id);
 		String allUserId = null;
@@ -248,8 +262,8 @@ public class Co_opManageController {
 	/*
 	 * 公告启用-停用
 	 */
-	@PutMapping("/Co_op/noticeState/{id}/{state}")
-	public Result<Object> noticeState(@PathVariable int id, @PathVariable String state) {
+	@GetMapping("/Co_op/noticeState")
+	public Result<Object> noticeState(int id, String state) {
 		co_opManageService.noticeState(id, state);
 		Result result = new Result();
 		result.setData("更新完毕");
@@ -261,8 +275,8 @@ public class Co_opManageController {
 	/*
 	 * 公告删除
 	 */
-	@DeleteMapping("/Co_op/dalete/notice/{id}/{state}")
-	public Result<Object> deleteNotice(@PathVariable int id) {
+	@GetMapping("/Co_op/dalete/notice")
+	public Result<Object> deleteNotice(int id) {
 		co_opManageService.deleteNotice(id);
 		Result result = new Result();
 		result.setData("更新完毕");
@@ -274,16 +288,16 @@ public class Co_opManageController {
 	/*
 	 * 公告详情
 	 */
-	@GetMapping("/Co_op/noticeDetail/{id}")
-	public Result<Object> noticeDetail(@PathVariable int id) {
+	@GetMapping("/Co_op/noticeDetail")
+	public Result<Object> noticeDetail(int id) {
 		return co_opManageService.noticeDetail(id);
 	}
 
 	/*
 	 * 更新公告
 	 */
-	@PutMapping("/Co_op/update/notice/{id}/{msg}")
-	public Result<Object> updateNotice(@PathVariable int id, @PathVariable String msg) {
+	@GetMapping("/Co_op/update/notice")
+	public Result<Object> updateNotice(int id, String msg) {
 		return co_opManageService.updateNotice(id, msg);
 	}
 
@@ -298,10 +312,11 @@ public class Co_opManageController {
 	/*
 	 * 查询公告列表
 	 */
-	@GetMapping("/Co_op/noticelist/{msg}/{role}/{start_time}/{end_time}")
-	public Result<Object> noticelist(@PathVariable String msg, @PathVariable String role,
-			@PathVariable String start_time, @PathVariable String end_time) {
+	@GetMapping("/Co_op/noticelist")
+	public Result<Object> noticelist( String msg,  String role,
+			 String start_time,  String end_time) {
 		return co_opManageService.noticelist(msg, role, start_time, end_time);
 	}
+
 
 }

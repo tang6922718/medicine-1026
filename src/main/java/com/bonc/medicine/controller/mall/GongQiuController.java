@@ -51,7 +51,7 @@ public class GongQiuController {
 	/*
 	 * 商品激活与删除 0删除1激活
 	 */
-	@GetMapping("/gongQiuSystem/goods/{supplyId}/{result}")
+	@GetMapping("/gongQiuSystem/delGoods/{supplyId}/{result}")
 	public Result<Object> delGoods(@PathVariable Integer supplyId, @PathVariable String result) {
 		return gongQiuSystemService.delGoods(supplyId, result);
 	}
@@ -115,7 +115,7 @@ public class GongQiuController {
 	/*
 	 * 留言功能
 	 */
-	@GetMapping("/gongQiuSystem/marks")
+	@PostMapping("/gongQiuSystem/marks")
 	public Result<Object> marks(@RequestBody Marks marks) {
 		return gongQiuSystemService.marks(marks);
 	}

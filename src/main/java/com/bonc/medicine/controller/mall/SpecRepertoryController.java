@@ -178,8 +178,19 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/articles")
-	public Result articleList(String spec_id) {
-		return ResultUtil.success(specialistService.articleList(spec_id));
+	public Result articleList(String spec_id, String title, String status, String start, String end) {
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		param.put("title", title);
+		param.put("status", status);
+		param.put("start", start);
+		param.put("end", end);
+		return ResultUtil.success(specialistService.articleList(param));
+	}
+	
+	@PutMapping("/revokeArt")
+	public Result revokeArticle(@RequestBody Map param) {
+		return ResultUtil.success(specialistService.revokeArt(param.get("id")+""));
 	}
 	
 	/**
@@ -222,8 +233,32 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@PostMapping("/issue")
+	@Transactional
 	public Result releaseIssue(Issue issue) {
-		return ResultUtil.success(specialistService.releaseIssue(issue));
+		specialistService.releaseIssue(issue);
+		Map param = new HashMap<>();
+		param.put("specid", issue.getSpec_id()+"");
+		param.put("issueid", issue.getId()+"");
+		param.put("is_assigned", "0");
+		List params = new ArrayList<>();
+		params.add(param);
+		specialistService.insertIssueRel(params);
+		return ResultUtil.success();
+	}
+	@SuppressWarnings({ "rawtypes" })
+	@PutMapping("/invite")
+	public Result inviteOtherSpec(@RequestBody Map params) {
+		String issueid = params.get("issueid")+"";
+		List specids = (List)params.get("specids");
+		List list = new ArrayList<>();
+		for (int i = 0; i < specids.size(); i++) {
+			Map one = new HashMap<>();
+			one.put("specid", specids.get(i)+"");
+			one.put("issueid", issueid);
+			one.put("is_assigned", "1");
+			list.add(one);
+		}
+		return ResultUtil.success(specialistService.insertIssueRel(list));
 	}
 	
 	/**
@@ -265,8 +300,14 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/videos")
-	public Result videoList(String spec_id) {
-		return ResultUtil.success(specialistService.videoList(spec_id));
+	public Result videoList(String spec_id, String title, String status, String start, String end) {
+		Map param = new HashMap<>();
+		param.put("spec_id", spec_id);
+		param.put("title", title);
+		param.put("status", status);
+		param.put("start", start);
+		param.put("end", end);
+		return ResultUtil.success(specialistService.videoList(param));
 	}
 	/*
 	 * 资源上传记录
@@ -281,4 +322,5 @@ public class SpecRepertoryController {
 		param.put("end", end);
 		return ResultUtil.success(specialistService.uploadRecord(param));
 	}
+
 }

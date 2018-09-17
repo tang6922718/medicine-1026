@@ -4,10 +4,11 @@ public class Notice {
 	private int id;
 	private String notice_type;
 	private int object_id;
-	private String idnotice_content;
+	private String notice_content;
 	private int publish_user_id;
 	private int notice_role_type;
 	private String notice_receiver;
+	private String img_url;
 	private String publish_time;
 	private String status;
 	private String state;
@@ -36,12 +37,12 @@ public class Notice {
 		this.object_id = object_id;
 	}
 
-	public String getIdnotice_content() {
-		return idnotice_content;
+	public String getNotice_content() {
+		return notice_content;
 	}
 
-	public void setIdnotice_content(String idnotice_content) {
-		this.idnotice_content = idnotice_content;
+	public void setNotice_content(String notice_content) {
+		this.notice_content = notice_content;
 	}
 
 	public int getPublish_user_id() {
@@ -66,6 +67,15 @@ public class Notice {
 
 	public void setNotice_receiver(String notice_receiver) {
 		this.notice_receiver = notice_receiver;
+	}
+
+	
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
 	}
 
 	public String getPublish_time() {

@@ -36,4 +36,24 @@ public class MallRecommendServiceImpl implements MallRecommendService {
     public int deleteMallRecommend(String id) {
         return mallRecommendMapper.deleteMallRecommend(id);
     }
+
+    @Override
+    public Map<String, Object> showGoodsById(String id) {
+        return mallRecommendMapper.showGoodsById(id);
+    }
+
+    @Override
+    public int mallRecommend(List list){
+        return mallRecommendMapper.mallRecommend(list);
+    }
+
+    @Override
+    public int editMallRecommend(Map map) {
+        return mallRecommendMapper.editMallRecommend(map);
+    }
+
+    @Override
+    public Map<String, Object> showMallRecommend(String id) {
+        return mallRecommendMapper.showMallRecommend(id);
+    }
 }

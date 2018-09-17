@@ -1,5 +1,7 @@
 package com.bonc.medicine.service.mall.impl;
 
+import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.mall.CommentReplyMapper;
 import com.bonc.medicine.service.mall.CommentReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,15 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 	@Override
 	public List<Map> queryReplies(String[] comment_ids) {
 		return commentReplyMapper.queryReplies(comment_ids);
+	}
+
+	@Override
+	public int commentsCount(Map param) {
+		List<Map> result = commentReplyMapper.commentsCount(param);
+		if (result.size() != 1) {
+			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+		}
+		return Integer.parseInt(result.get(0).get("count")+"");
 	}
 
 }

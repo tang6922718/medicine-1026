@@ -29,4 +29,8 @@ public interface VarietyEncyclopediaMapper {
     public int kmAudit(Map map);
 
     public List<Map<String,Object>> sourceDistribution();
+
+    public int addHistoryText(String search_text);
+
+    public List<Map<String,Object>> searchHistoryText();
 }

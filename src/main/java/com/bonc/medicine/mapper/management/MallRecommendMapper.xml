@@ -50,4 +50,36 @@
 		DELETE FROM mall_recommend WHERE id = #{id}
 	</delete>
 
+	<select id="showGoodsById" parameterType="String" resultType="Map">
+		SELECT id,goods_name,linkman,img_url,detail FROM mall_supply WHERE id=#{id}
+	</select>
+
+	<insert id="mallRecommend" parameterType="java.util.Map" useGeneratedKeys="true">
+		INSERT INTO mall_recommend(supply_id,site,img_url,state,upload_time)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.supply_id},
+			#{item.site},
+			#{item.img_url},
+			0,
+			now()
+			)
+		</foreach>
+	</insert>
+
+	<update id="editMallRecommend"  parameterType="java.util.Map">
+		update mall_recommend
+		<set>
+			supply_id=#{supply_id},
+			site=#{site},
+			img_url=#{img_url},
+			upload_time=now()
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="showMallRecommend" parameterType="String" resultType="Map">
+		SELECT id,supply_id,site,img_url,state,upload_time FROM mall_recommend WHERE id=#{id}
+	</select>
+
 </mapper>

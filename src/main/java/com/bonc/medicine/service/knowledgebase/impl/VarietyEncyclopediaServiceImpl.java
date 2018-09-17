@@ -73,5 +73,15 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
         return varietyEncyclopediaMapper.sourceDistribution();
     }
 
+    @Override
+    public int addHistoryText(String search_text) {
+        return varietyEncyclopediaMapper.addHistoryText(search_text);
+    }
+
+    @Override
+    public List<Map<String, Object>> searchHistoryText() {
+        return varietyEncyclopediaMapper.searchHistoryText();
+    }
+
 
 }

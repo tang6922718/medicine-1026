@@ -20,8 +20,8 @@ public class ViewTheDataController {
     /*
      * 最近7日互动总数
      */
-    @GetMapping("/viewTheData/interaction/{user_id}")
-    public Result<Object> interaction(@PathVariable Integer user_id) {
+    @GetMapping("/viewTheData/interaction")
+    public Result<Object> interaction( Integer user_id) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         list = viewTheDataService.interaction(user_id);
         Result result = new Result();
@@ -34,8 +34,8 @@ public class ViewTheDataController {
     /*
      * 问题统计
      */
-    @GetMapping("/viewTheData/problemStatistics/{user_id}")
-    public Result<Object> problemStatistics(@PathVariable Integer user_id) {
+    @GetMapping("/viewTheData/problemStatistics")
+    public Result<Object> problemStatistics( Integer user_id) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         list = viewTheDataService.problemStatistics(user_id);
         Result result = new Result();

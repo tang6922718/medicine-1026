@@ -15,4 +15,12 @@ public interface MallRecommendService {
 
     public int deleteMallRecommend(String id);
 
+    public Map<String,Object> showGoodsById(String id);
+
+    public int mallRecommend(List list);
+
+    public int editMallRecommend(Map map);
+
+    public Map<String,Object> showMallRecommend(String id);
+
 }

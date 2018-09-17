@@ -9,6 +9,7 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.utils.IntegralKeyUtil;
 import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

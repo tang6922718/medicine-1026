@@ -4,6 +4,7 @@ package com.bonc.medicine.mapper.field;
 import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
 import com.bonc.medicine.entity.field.Notice;
+import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 
 import java.util.List;
 import java.util.Map;
@@ -22,13 +23,15 @@ public interface Co_opManageMapper {
     public int insertCo_opMember(Co_op_Member tempData); // 新增合作社成员
 
 
-    public Map queryCo_opInfo(int ID); // 合作社信息查询
+    public List<Map> queryCo_opByCondition(Map params); // 按条件查询合作社信息
 
     public Map queryPlantNum(int coop_id); // 合作社登记种植总数查询
 
     public Map queryAssistantNum(int coop_id);// 合作社助手数量查询
 
     public Map queryCo_opMemberNum(int coop_id); //合作社总人数查询
+
+    public Map queryCo_opNoticeNum(int coop_id); //合作社总通知数查询
 
 
     public Map queryUserID(String tel); // 去user表查询是否存在 并返回信息
@@ -64,4 +67,6 @@ public interface Co_opManageMapper {
     public int addRoleNotice(Notice notice);
     
     public List<Map<String, Object>> noticelist(Map map);
+
+    public List<Map> getCoopNoticeList(int coopID);
 }
