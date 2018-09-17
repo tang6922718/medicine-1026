@@ -13,12 +13,12 @@ public class TimeFormatUtils {
 
 
     /**
-    * @Description:（秒）时间戳转换成yyyy-MM-dd格式的时间
-    * @Param: [imestamp] like : 1537151321
+    * @description:（秒）时间戳转换成yyyy-MM-dd格式的时间
+    * @param: [imestamp] like : 1537151321
     * @return: java.lang.String ： 2018-09-17
-    * @Author: hejiajun
-    * @Date: 2018/9/17
-    */
+    * @author: hejiajun
+    * @date: 2018/9/17
+    **/
     public static String secendsToDate(String imestamp){
 
         Long millTime = Long.parseLong(imestamp) * 1000; //把秒转换成毫秒
