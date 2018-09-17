@@ -8,7 +8,7 @@
 		insert into comm_dyanimic
 		(dyn_cat_id,desciption,img_url,video_url,telephone,publish_user_id,publish_time,effect_flag,fail_opinion,update_time)
 		values
-		(#{dyn_cat_id},#{desciption},#{img_url},#{video_url},#{telephone},#{publish_user_id},now(),#{effect_flag},#{fail_opinion},now())
+		(#{dyn_cat_id},#{desciption},#{img_url},#{video_url},#{telephone},#{publish_user_id},now(),'2',#{fail_opinion},now())
     </insert>
 
 
@@ -16,78 +16,99 @@
 	<select id="selectAllDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name
-		FROM
-		comm_dyanimic a
-	left join common_user b on a.publish_user_id = b.id
-	WHERE a.effect_flag = '0'
-	ORDER by a.update_time DESC
-</select>
-
-	<!--查询某一类型的动态(除供求)-->
-	<select id="selectOneDyanimic"  resultType="java.util.Map">
-		SELECT
-		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name
+		,b.name,b.address,b.head_portrait,c.cat_name
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
-		WHERE a.effect_flag = '0'  and a.dyn_cat_id = #{id}
-		ORDER by a.update_time DESC
-	</select>
+		left join comm_dynamic_category c on a.dyn_cat_id = c.cat_code
+		WHERE a.effect_flag = '0'
+		<if test="dyn_cat_id != null and dyn_cat_id != 0 ">   /*全部的时候dyn_cat_id=0？*/
+			and  a.dyn_cat_id = #{dyn_cat_id}
+		</if>
+		<if test="publish_time != null and publish_time != '' ">
+			and  #{publish_time} = date(a.publish_time)
+		</if>
 
-	<!--查询 供求 类型的动态-->
-	<select id="selectTwoDyanimic" resultType="java.util.Map">
-		SELECT
-		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name
-		FROM
-		comm_dyanimic a
-		left join common_user b on a.publish_user_id = b.id
-		WHERE a.effect_flag = '0'  and a.dyn_cat_id in (3,4)
-		ORDER by a.update_time DESC
-	</select>
-
-
-
-	<!--查询某一用户  某一类型(除供求)的动态-->
-	<select id="selectUserOneDyanimic" resultType="java.util.Map">
-		SELECT
-		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name
-		FROM
-		comm_dyanimic a
-		left join common_user b on a.publish_user_id = b.id
-		WHERE a.effect_flag = '0'  and a.dyn_cat_id = #{id}  and a.publish_user_id = #{publish_user_id}
 		ORDER by a.update_time DESC
 	</select>
 
 
 	<!--查询某一用户 供求类型的动态-->
-	<select id="selectUserTwoDyanimic" resultType="java.util.Map">
+	<select id="selectUserDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name
+		,b.name,b.address,b.head_portrait,c.cat_name
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
-		WHERE a.effect_flag = '0'  and a.dyn_cat_id in (3,4) and a.publish_user_id = #{publish_user_id}
+		left join comm_dynamic_category c on a.dyn_cat_id = c.cat_code
+		WHERE a.effect_flag = '0'  and a.publish_user_id = #{publish_user_id}
+		<if test="dyn_cat_id != null and dyn_cat_id != 0 ">   /*全部的时候dyn_cat_id=0*/
+			and  a.dyn_cat_id = #{dyn_cat_id}
+		</if>
 		ORDER by a.update_time DESC
 	</select>
-
 
 
 	<!--查询某一条具体的动态-->
 	<select id="selectDetailOneDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name
+		,b.name,b.address,b.head_portrait
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
 		WHERE a.id = #{id} and a.effect_flag = '0'
 	</select>
 
-    
+	<!--删除某一条动态-->
+	<delete id="delOneDyanimic">
+		delete from comm_dyanimic where id = #{id}
+	</delete>
+
+	<!--查询动态分类-->
+	<select id="selectDyanimicCategory" resultType="java.util.Map">
+		SELECT * FROM  comm_dynamic_category
+	</select>
+
+	<!--查询待审核的动态-->
+	<select id="selectUncheckDyanimic" resultType="java.util.Map">
+		SELECT * FROM  comm_dyanimic where effect_flag = '2'
+  	</select>
+
+	<!--审核 动态，批准0或不批准1-->
+	<update id="updateOneDyanimic">
+		update comm_dyanimic
+		<set>
+			<if test="effect_flag != null">
+				effect_flag = #{effect_flag},
+			</if>
+			<if test="fail_opinion != null">
+				fail_opinion = #{fail_opinion},
+			</if>
+				update_time = now()
+		</set>
+		where id = #{id}
+	</update>
+
+	<!--查询待审核的动态-->
+	<select id="selectJoinDyanimic" resultType="java.util.Map">
+
+		select distinct a.* from (
+			select DISTINCT a.*,b.praise_time as joinTime from
+			comm_dyanimic a
+			left join common_praise b on a.id = b.object_id
+			where a.effect_flag = '0' and b.object_type = '0' and b.praise_user_id = #{user_id}  and a.publish_user_id !=  #{user_id}
+			union all
+			select distinct a.*,c.reply_time as joinTime from
+			comm_dyanimic a
+			left join common_comment c on a.id = c.object_id
+			where a.effect_flag = '0' and c.object_type = '2' and c.from_uid = #{user_id} and a.publish_user_id != #{user_id}
+			) a
+		group by id
+		order by joinTime desc
+
+	</select>
+
 
 </mapper>

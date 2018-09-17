@@ -21,28 +21,13 @@ public class DyanimicServiceImpl implements DyanimicService {
 	}
 
 	@Override
-	public List<Map> selectAllDyanimic() {
-		return dyanimicMapper.selectAllDyanimic();
+	public List<Map> selectAllDyanimic(int dyn_cat_id, String publish_time) {
+		return dyanimicMapper.selectAllDyanimic( dyn_cat_id,  publish_time);
 	}
 
 	@Override
-	public List<Map> selectOneDyanimic(int id) {
-		return dyanimicMapper.selectOneDyanimic(id);
-	}
-
-	@Override
-	public List<Map> selectTwoDyanimic() {
-		return dyanimicMapper.selectTwoDyanimic();
-	}
-
-	@Override
-	public List<Map> selectUserOneDyanimic(int publish_user_id, int id) {
-		return dyanimicMapper.selectUserOneDyanimic(publish_user_id,id);
-	}
-
-	@Override
-	public List<Map> selectUserTwoDyanimic(int publish_user_id) {
-		return dyanimicMapper.selectUserTwoDyanimic(publish_user_id);
+	public List<Map> selectUserDyanimic(int publish_user_id,int dyn_cat_id) {
+		return dyanimicMapper.selectUserDyanimic(publish_user_id,dyn_cat_id);
 	}
 
 	@Override
@@ -50,5 +35,29 @@ public class DyanimicServiceImpl implements DyanimicService {
 		return dyanimicMapper.selectDetailOneDyanimic(id);
 	}
 
+	@Override
+	public int delOneDyanimic(int id) {
+		return dyanimicMapper.delOneDyanimic(id);
+	}
+
+	@Override
+	public List<Map> selectDyanimicCategory() {
+		return dyanimicMapper.selectDyanimicCategory();
+	}
+
+	@Override
+	public List<Map> selectUncheckDyanimic() {
+		return dyanimicMapper.selectUncheckDyanimic();
+	}
+
+	@Override
+	public int updateOneDyanimic(char effect_flag, String fail_opinion,int id) {
+		return dyanimicMapper.updateOneDyanimic(effect_flag, fail_opinion,id);
+	}
+
+	@Override
+	public List<Map> selectJoinDyanimic(int user_id) {
+		return dyanimicMapper.selectJoinDyanimic(user_id);
+	}
 
 }
