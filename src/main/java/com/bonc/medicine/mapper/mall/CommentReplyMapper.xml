@@ -16,7 +16,7 @@
 		left join common_user cu1 ON cc.from_uid = cu1.id
 		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
 		where cc.object_type = #{object_type} and cc.object_id = #{object_id}
-		
+		order by cc.reply_time desc
 	</select>
 	
 	<select id="commentsCount" parameterType="java.util.Map" resultType="java.util.Map">

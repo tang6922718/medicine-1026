@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/buyers")
@@ -49,6 +51,18 @@ public class BuyersController {
 	public Result<Object> latestPurchaseList(int limit) {
 		return ResultUtil.success(buyersService.latestPurchaseList(limit));
 	} 
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("/purchase/manage")
+	public Result<Object> purchaseList(String name, String cat, String is_aduit) {
+		Map params = new HashMap<>();
+		params.put("goods_name", name);
+		params.put("cat_code", cat);
+		params.put("is_aduit", is_aduit);
+		return ResultUtil.success(buyersService.purchaseList(params));
+	} 
+	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@GetMapping("/purchase/detail")
