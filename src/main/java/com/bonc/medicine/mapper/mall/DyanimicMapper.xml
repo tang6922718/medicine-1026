@@ -61,10 +61,12 @@
 		WHERE a.id = #{id} and a.effect_flag = '0'
 	</select>
 
-	<!--删除某一条动态-->
-	<delete id="delOneDyanimic">
-		delete from comm_dyanimic where id = #{id}
-	</delete>
+	<!--逻辑删除某一条动态-->
+	<update id="delOneDyanimic">
+		update comm_dyanimic
+		set effect_flag = '3'
+		where id = #{id}
+	</update>
 
 	<!--查询动态分类-->
 	<select id="selectDyanimicCategory" resultType="java.util.Map">
