@@ -14,9 +14,11 @@
 
     <select id="latestPurchaseList" parameterType="java.util.Map" resultType="java.util.Map">
     	SELECT
-			mp.*,COUNT(mo.purchase_id) as offer ,mo.price
+			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,cu.name,cu.telephone
 		FROM
-			mall_purchase mp 	LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
+			mall_purchase mp 	
+			LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
+			Left join common_user cu ON cu.id = mp.user_id
 		WHERE mp.state = 1
 		<if test="is_aduit != null and is_aduit != ''">
 			and mp.is_aduit = #{is_aduit}
@@ -28,7 +30,7 @@
 			and mp.purchase_cat_code = #{cat_code}
 		</if>
 		<if test="goods_name != null and goods_name != ''">
-			and mp.goods_name like CONCAT('%',#{goods_name},'%')
+			and (mp.goods_name like CONCAT('%',#{goods_name},'%') or cu.name like CONCAT('%',#{goods_name},'%') )
 		</if>
 		GROUP BY mp.id,mp.goods_name,mp.specification,mp.purchase_quantity,mp.publish_time
 		ORDER by mp.publish_time DESC 

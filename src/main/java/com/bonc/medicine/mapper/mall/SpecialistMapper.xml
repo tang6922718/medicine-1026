@@ -217,12 +217,22 @@
 			si.video_url,
 			si.issue_time,
 			si.issue_address,
-			si.cat_code,
+			cmv.variety_name,
+			ds.subject_name,
+			si.field_ids,
+			(CASE si.issue_status WHEN 0 THEN '未处理'
+				WHEN 1 THEN '进行中'
+				WHEN 2 THEN '已解决'
+				WHEN 3 THEN '已关闭'
+			END ) status,
+
 			cu.name,
 			cu.head_portrait
 		FROM
 			spec_issue si
 			LEFT JOIN common_user cu ON si.issue_user_id = cu.id
+			Left join dict_subject ds ON si.sub_code = ds.subject_code
+			left join common_medicine_variety cmv ON cmv.variety_code = si.cat_code
 		WHERE
 			si.id = #{issue_id}
 	</select>
