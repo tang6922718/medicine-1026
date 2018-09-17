@@ -222,4 +222,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		return ResultUtil.success(co_opManageMapper.noticelist(map));
 	}
 
+	@Override
+	public Result<Object> getCoopNoticeList(int coopID) {
+		return ResultUtil.success(co_opManageMapper.getCoopNoticeList(coopID));
+	}
+
 }

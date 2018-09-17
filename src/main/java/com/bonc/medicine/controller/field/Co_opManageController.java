@@ -218,6 +218,20 @@ public class Co_opManageController {
 		return co_opManageService.getCoopMemberList(coop_id);
 	}
 
+
+	/* *
+	 * @Description 查询合作社的通知列表
+	 * @Date 17:32 2018/9/17
+	 * @Param [coopID]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/coopNoticeList/{coopID}")
+	public Result<Object> getCoopNoticeList(@PathVariable int coopID){
+		return co_opManageService.getCoopNoticeList(coopID);
+	}
+
+
+
 	/*
 	 * 我的-所属合作社
 	 */
@@ -303,5 +317,6 @@ public class Co_opManageController {
 			 String start_time,  String end_time) {
 		return co_opManageService.noticelist(msg, role, start_time, end_time);
 	}
+
 
 }

@@ -60,4 +60,6 @@ public interface Co_opManageService {
 
 	public Result<Object> noticelist(String msg, String role, String start_time, String end_time);
 
+	public Result<Object> getCoopNoticeList(int coopID);
+
 }

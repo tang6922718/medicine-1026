@@ -264,4 +264,11 @@
 		</if>
 	</select>
 
+
+	<select id="getCoopNoticeList" parameterType="Integer" resultType="Map">
+		SELECT notice_content,picture_url,publish_time  FROM common_notice
+		WHERE notice_type='2' AND status='1' AND object_id = #{coopID}
+		ORDER BY publish_time DESC
+	</select>
+
 </mapper>

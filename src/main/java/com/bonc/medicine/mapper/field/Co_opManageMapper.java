@@ -4,6 +4,7 @@ package com.bonc.medicine.mapper.field;
 import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
 import com.bonc.medicine.entity.field.Notice;
+import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 
 import java.util.List;
 import java.util.Map;
@@ -66,4 +67,6 @@ public interface Co_opManageMapper {
     public int addRoleNotice(Notice notice);
     
     public List<Map<String, Object>> noticelist(Map map);
+
+    public List<Map> getCoopNoticeList(int coopID);
 }
