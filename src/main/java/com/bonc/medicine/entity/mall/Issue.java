@@ -17,10 +17,17 @@ public class Issue {
 	private char is_revisited; // 是否回访0否1是
 	private String revisited_mark; // 回访结论
 	private int cat_code; // 涉及品类id
+	private int sub_code; // 涉及学科id
 	private String field_ids; // 关联地块编号（1个）
 	private String spec_id; // 专家编号
 	
 	
+	public int getSub_code() {
+		return sub_code;
+	}
+	public void setSub_code(int sub_code) {
+		this.sub_code = sub_code;
+	}
 	public String getSpec_id() {
 		return spec_id;
 	}

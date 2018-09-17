@@ -149,4 +149,9 @@ public class SpecialistServiceImpl implements SpecialistService {
 		return specialistMapper.revokeArt(id);
 	}
 
+	@Override
+	public int insertIssueRel(List param) {
+		return specialistMapper.insertIssueRel(param);
+	}
+
 }
