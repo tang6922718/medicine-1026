@@ -214,7 +214,7 @@
 	</insert>
 
 	<select id="noticelist" parameterType="Map" resultType="Map">
-		select * from common_notice where 1 = 1
+		select * from common_notice where 1 = 1 and status='1'
 		<if test="msg != null and msg != ''">
 			AND notice_content LIKE
 			CONCAT(CONCAT('%',#{notice_content}),'%')
