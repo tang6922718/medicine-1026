@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,11 +27,11 @@ public class HbaseUploadFile {
     private String zkQuorum;
 
     @Value("${hbase.master}")
-    private String hBaseMaster;
+    private static  String hBaseMaster;
 
-    Configuration conf = new Configuration();
+    private static  Configuration conf = new Configuration();
 
-    private Configuration getConf(){
+    private static Configuration getConf(){
         conf.set("hbase.zookeeper.quorum",hBaseMaster);
         return conf;
     }
@@ -38,7 +39,7 @@ public class HbaseUploadFile {
     /*
      * 文件保存至Hbase
      * */
-    public String uploadFileToHbase( MultipartFile myfile) throws IOException{
+    public static String uploadFileToHbase( MultipartFile myfile) throws IOException{
         String tableName = "image_audio_vedio";
         String family="cf";
         //产生一个UUID字符串，理论上绝对不会重复
@@ -74,7 +75,7 @@ public class HbaseUploadFile {
     /*
      * 从hbase读取文件
      * */
-    public String readFileFromHbase(String key,String dirPath) throws Exception{
+    public static String readFileFromHbase(String key,String dirPath) throws Exception{
         conf = getConf();
         HTable table = new HTable(conf,"image_audio_vedio");
 //        Get get = new Get(key.getBytes());
@@ -97,7 +98,7 @@ public class HbaseUploadFile {
      * @return 将二进制转成base64返回
      * @throws Exception
      */
-    public String readImgByByte(String key) throws Exception{
+    public static String readImgByByte(String key) throws Exception{
         return Base64.encodeBase64String(downloadFile(key));
     }
 
@@ -107,7 +108,7 @@ public class HbaseUploadFile {
      * @return
      * @throws Exception
      */
-    public byte[] downloadFile(String key) throws Exception{
+    public static byte[] downloadFile(String key) throws Exception{
         conf = getConf();
         HTable table = new HTable(conf,"image_audio_vedio");
         Get get = new Get(key.getBytes());

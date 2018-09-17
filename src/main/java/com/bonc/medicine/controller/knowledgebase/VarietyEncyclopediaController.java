@@ -1,6 +1,7 @@
 package com.bonc.medicine.controller.knowledgebase;
 
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.hbase.HbaseUploadFile;
 import com.bonc.medicine.service.knowledgebase.AuditService;
 import com.bonc.medicine.service.knowledgebase.PharmacopoeiaInfoService;
 import com.bonc.medicine.service.knowledgebase.VarietyEncyclopediaService;
@@ -12,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 2018/8/29.
@@ -31,6 +30,9 @@ public class VarietyEncyclopediaController {
 
     @Autowired
     private AuditService auditService;
+
+    @Autowired
+    private HbaseUploadFile file;
 
 
     @SuppressWarnings("unchecked")
@@ -128,8 +130,16 @@ public class VarietyEncyclopediaController {
      * 品种管理-品种百科详情
      * */
     @GetMapping("/breedInfo/{id}")
-    public Result<Object> selectBreedDetail(@PathVariable String id){
-        return ResultUtil.success(varietyEncyclopediaService.selectBreedDetail(id));
+    public Result<Object> selectBreedDetail(@PathVariable String id) throws Exception{
+        Map map = varietyEncyclopediaService.selectBreedDetail(id);
+        String keys = (String) map.get("graph_url");
+        String[] keyList = keys.split(",");
+        List imgList = new ArrayList();
+        for (String key:keyList) {
+            imgList.add(file.readImgByByte(key));
+        }
+        map.put("graph_url",imgList);
+        return ResultUtil.success(map);
     }
 
 
@@ -181,5 +191,22 @@ public class VarietyEncyclopediaController {
     public Result<Object> sourceDistribution(){
         return ResultUtil.success(varietyEncyclopediaService.sourceDistribution());
     }
+
+    /*
+    * 历史搜索-插入
+    * */
+    @GetMapping("/addHistoryText")
+    public Result<Object> addHistoryText(@RequestParam String search_text){
+        return ResultUtil.success(varietyEncyclopediaService.addHistoryText(search_text));
+    }
+
+    /*
+    * 历史搜索-返回历史搜索文本
+    * */
+    @GetMapping("/searchHistoryText")
+    public Result<Object> searchHistoryText(){
+        return ResultUtil.success(varietyEncyclopediaService.searchHistoryText());
+    }
+
 
 }
