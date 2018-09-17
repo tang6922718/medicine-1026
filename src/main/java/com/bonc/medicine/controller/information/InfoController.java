@@ -21,7 +21,7 @@ public class InfoController {
      * @return
      */
     @RequestMapping("/infoList")
-    public Result infoList(@RequestParam int catCode) {
+    public Result infoList(@RequestParam(required = false) String catCode) {
         return  ResultUtil.success(infoService.getAllInfo(catCode));
     }
 
@@ -47,14 +47,16 @@ public class InfoController {
 
     /**
      * @description 咨讯详情
-     * @param map
+     * @param id
      * @return
      */
     @RequestMapping("/infoDetail")
-    public Result infoDetail(@RequestBody Map<String,Object>  map) {
-            String id = (String) map.get("id");
+    public Result infoDetail(@RequestParam String  id) {
             return  ResultUtil.success(infoService.infoDetailById(id));
     }
+
+
+
 
     /**
      * @description 咨讯编辑
@@ -65,8 +67,6 @@ public class InfoController {
     public Result infoEdit (@RequestBody Map<String,Object>  map) {
         return  ResultUtil.success(infoService.infoEditById(map));
     }
-
-
 
     /**
      * @description 相关咨讯
@@ -88,9 +88,8 @@ public class InfoController {
         return  ResultUtil.success(infoService.infoReadCount(map));
     }
 
-
     /**
-     * @description 资讯浏览数
+     * @description 删除资讯
      * @param map
      * @return
      */

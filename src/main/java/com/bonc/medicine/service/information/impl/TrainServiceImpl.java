@@ -70,4 +70,14 @@ public class TrainServiceImpl implements TrainService {
     public int delOfflineTrainVideo(Map<String, Object> map) {
         return trainMapper.delOfflineTrainVideo(map);
     }
+
+    @Override
+    public List<Map> selectCourseClass() {
+        return trainMapper.selectCourseClass();
+    }
+
+    @Override
+    public List<Map> selectTrainApply(Map<String, Object> map) {
+        return trainMapper.selectTrainApply(map);
+    }
 }

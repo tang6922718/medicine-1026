@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface InfoService {
 
-    List<Map> getAllInfo(int catCode);
+    List<Map> getAllInfo(String catCode);
 
     int addInfo(Map<String, Object> map);
 
@@ -18,7 +18,7 @@ public interface InfoService {
 
     List<Map> infoClass(Map<String, Object> map);
 
-    Map infoReadCount(Map<String, Object> map);
+    Map infoReadCount(Map map);
 
     int delInfo(Map<String, Object> map);
 }

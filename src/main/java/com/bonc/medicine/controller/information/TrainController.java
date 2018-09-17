@@ -44,7 +44,7 @@ public class TrainController {
     /**
      * @param map
      * @return
-     * @description 新建视频(视频课程分类)
+     * @description 新建视频
      */
     @RequestMapping("/createVideo")
     public Result createVideo(@RequestBody Map<String, Object> map) {
@@ -70,6 +70,16 @@ public class TrainController {
         return ResultUtil.success(trainService.selectComment(map));
     }
 
+
+    /**
+     * @return
+     * @description 视频课程列表（有哪些类别）
+     */
+    @RequestMapping("/selectCourseClass")
+    public Result selectCourseClass() {
+        return ResultUtil.success(trainService.selectCourseClass());
+    }
+
     /**
      * @param map
      * @return
@@ -89,6 +99,19 @@ public class TrainController {
     public Result addTrainApply(@RequestBody(required = false)  Map<String, Object> map) {
         return ResultUtil.success(trainService.addTrainApply(map));
     }
+
+
+    /**
+     * @param map
+     * @return
+     * @description 我的培训(查询预约报名的直播和线下培训列表)
+     */
+    @RequestMapping("/selectTrainApply")
+    public Result selectTrainApply(@RequestBody  Map<String, Object> map) {
+        return ResultUtil.success(trainService.selectTrainApply(map));
+    }
+
+
 
     /**
      * @param map
@@ -132,6 +155,7 @@ public class TrainController {
     public Result delOfflineTrain(@RequestBody(required = false)  Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrain(map));
     }
+
     /**
      * @return
      * @description 获取腾讯点播上传密钥

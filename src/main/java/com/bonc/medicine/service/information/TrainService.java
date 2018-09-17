@@ -26,4 +26,8 @@ public interface TrainService {
     int delOfflineTrain(Map<String, Object> map);
 
     int delOfflineTrainVideo(Map<String, Object> map);
+
+    List<Map> selectCourseClass();
+
+    List<Map> selectTrainApply(Map<String,Object> map);
 }

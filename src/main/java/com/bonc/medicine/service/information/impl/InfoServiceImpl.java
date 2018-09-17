@@ -15,13 +15,13 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 public class InfoServiceImpl implements InfoService {
 
-    @Autowired
+    @Autowired(required = false)
     private InfoMapper infoMapper;
 
 
 
     @Override
-    public List<Map> getAllInfo(int catCode) {
+    public List<Map> getAllInfo(String catCode) {
         return infoMapper.getAllInfo(catCode);
     }
 
@@ -37,7 +37,6 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int infoEditById(Map<String, Object> map) {
-        map.put("update_date", new Date());
         return infoMapper.infoEditById(map);
     }
 
@@ -60,7 +59,8 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public Map infoReadCount(Map<String, Object> map) {
+    public Map infoReadCount(Map map) {
+        infoMapper.updateReadCount(map);
         return infoMapper.infoReadCount(map);
     }
 

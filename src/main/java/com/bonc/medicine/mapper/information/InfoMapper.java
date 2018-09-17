@@ -7,11 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 public interface InfoMapper {
-
-
-    @Select("SELECT * FROM `info_basic` where cat_code=#{catCode}")
+/*
+    {"<script>",
+            "SELECT * FROM `info_basic`",
+            "WHERE 1=1",
+            "<when test='cat_code!=null'>",
+            "AND cat_code = #{cat_code}",
+            "</when>",
+            "</script>"}*/
+    @Select({"<script>",
+            "SELECT * FROM `info_basic`",
+            "WHERE 1=1",
+            "<when test='catCode!=null' >",
+            "AND cat_code = #{catCode}",
+            "</when>",
+            "</script>"})
     @ResultType(List.class)
-    List<Map> getAllInfo(int catCode);
+    List<Map> getAllInfo(@Param("catCode") String catCode);
 
 
     @InsertProvider(type=InfoDynaSqlProvider.class,
@@ -34,9 +46,14 @@ public interface InfoMapper {
     @Select("select * from info_basic where cat_code=#{cat_code}")
     List<Map> infoClass(Map<String, Object> map);
 
-
+    //更新阅读量+1，并返回阅读量
     @Select("select read_count from info_basic where id=#{id}")
-    Map infoReadCount(Map<String, Object> map);
+    Map infoReadCount(Map map);
+
+    @Update("update info_basic set read_count=read_count+1 where id =#{id}")
+    int updateReadCount(Map map);
+
+
 
 
     @Update("update info_basic  set  is_display='0' where id =#{id}")
