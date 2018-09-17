@@ -22,11 +22,37 @@
 	</insert>
 
 
+	<select id="queryCo_opByCondition" resultType="Map" parameterType="Map">
+		SELECT id AS coopID,official_user_id AS adminID,official_user_name AS adminName,name AS coopName,img_url,address
+		FROM field_coop WHERE 	state= '0' AND is_audit = '0'
+		<if test="coopID != null and coopID != ''">
+		  AND id = #{coopID}
+		</if>
 
-	<select id="queryCo_opInfo" resultType="Map" parameterType="Integer">
-		SELECT id,name,official_user_name,img_url,address FROM field_coop WHERE state
-		= '0' AND is_audit = '0' AND official_user_id = #{userID}
+		<if test="coopName != null and coopName != ''">
+			AND name LIKE CONCAT('%',#{coopName}, '%')
+		</if>
+
+		<if test="tel != null and tel != ''">
+			AND telephone LIKE CONCAT('%',#{tel}, '%')
+		</if>
+
+		<if test="userID != null and userID != ''">
+			AND official_user_id = #{userID}
+		</if>
+
+		<if test="userName != null and userName != ''">
+			AND official_user_name LIKE CONCAT('%',#{userName}, '%')
+		</if>
+
+		<if test="keyWord != null and keyWord != ''">
+			AND (
+			name LIKE CONCAT('%',#{keyWord}, '%') OR official_user_name LIKE CONCAT('%',#{keyWord}, '%')
+			)
+		</if>
+
 	</select>
+
 
 	<select id="queryPlantNum" resultType="Map" parameterType="Integer">
 		SELECT count(*) AS PlantNUM FROM field_coop_member A ,field_info B
@@ -43,6 +69,12 @@
 		SELECT count(*) AS Co_opMemberNum FROM field_coop_member
 		WHERE
 		state='0' AND coop_id = #{coop_id}
+	</select>
+
+	<select id="queryCo_opNoticeNum" resultType="Map" parameterType="Integer">
+		SELECT count(*) AS Co_opNoticeNum FROM field_coop A , common_notice B
+		WHERE
+		A.state='0' AND B.status= '1' AND B.notice_type='2' AND A.id = B.object_id  AND A.id = #{coop_id}
 	</select>
 
 	<select id="queryUserID" resultType="Map">

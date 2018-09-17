@@ -65,13 +65,13 @@ public class Co_opManageController {
 	 * 
 	 * @Date 14:45 2018/8/28
 	 * 
-	 * @Param [ID]   这里的ID是指合作社管理员的userID
+	 * @Param []
 	 *
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
-	@GetMapping("/co_op/{userID}")
-	public Result<Object> getCo_opInfo(@PathVariable int userID) {
-		return co_opManageService.getCo_opInfo(userID);
+	@GetMapping("/co_op")
+	public Result<Object> getCo_opInfo(@RequestParam Map<String,String> param) {
+		return co_opManageService.getCo_opInfo(param);
 	}
 
 	/*

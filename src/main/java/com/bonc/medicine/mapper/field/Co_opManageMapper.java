@@ -22,13 +22,15 @@ public interface Co_opManageMapper {
     public int insertCo_opMember(Co_op_Member tempData); // 新增合作社成员
 
 
-    public Map queryCo_opInfo(int ID); // 合作社信息查询
+    public List<Map> queryCo_opByCondition(Map params); // 按条件查询合作社信息
 
     public Map queryPlantNum(int coop_id); // 合作社登记种植总数查询
 
     public Map queryAssistantNum(int coop_id);// 合作社助手数量查询
 
     public Map queryCo_opMemberNum(int coop_id); //合作社总人数查询
+
+    public Map queryCo_opNoticeNum(int coop_id); //合作社总通知数查询
 
 
     public Map queryUserID(String tel); // 去user表查询是否存在 并返回信息

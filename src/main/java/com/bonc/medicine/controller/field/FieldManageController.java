@@ -58,5 +58,30 @@ public class FieldManageController {
 	public Result<Object> guideRecordNum( Integer user_id){		
 		return fieldManageService.guideRecordNum(user_id);
 	}
+
+
+	/* *
+* @Description 获取该品种的所有农事操作步骤
+* @Date 14:43 2018/9/16
+* @Param [categroyID]
+* @return com.bonc.medicine.entity.Result<java.lang.Object>
+*/
+	@GetMapping("/farm/opreation/{categroyID}")
+	public Result<Object> getFarmOpreationByCategroy(@PathVariable int categroyID){
+		return fieldManageService.getFarmOpreationByCategroy(categroyID);
+	}
+
+
+	/* *
+	 * @Description 获取该品种的某步骤的SOP信息
+	 * @Date 15:43 2018/9/16
+	 * @Param [categroyID, stepID]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/farm/SOPinfo/{categroyID}/{stepID}")
+	public Result<Object> getCategroySOPInfo(@PathVariable int categroyID,
+											 @PathVariable int stepID){
+		return fieldManageService.getCategroySOPInfo(categroyID,stepID);
+	}
 	
 }
