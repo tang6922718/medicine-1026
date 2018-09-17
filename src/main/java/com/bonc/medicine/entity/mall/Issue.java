@@ -15,6 +15,8 @@ public class Issue {
 	private int score; // 评分
 	private int follow_days; // 跟踪天数
 	private char is_revisited; // 是否回访0否1是
+	private String revisit_url; // 回访图片
+	private String revisited_advice; // 回访建议(专家)
 	private String revisited_mark; // 回访结论
 	private int cat_code; // 涉及品类id
 	private int sub_code; // 涉及学科id
@@ -117,6 +119,18 @@ public class Issue {
 	}
 	public void setIs_revisited(char is_revisited) {
 		this.is_revisited = is_revisited;
+	}
+	public String getRevisit_url() {
+		return revisit_url;
+	}
+	public void setRevisit_url(String revisit_url) {
+		this.revisit_url = revisit_url;
+	}
+	public String getRevisited_advice() {
+		return revisited_advice;
+	}
+	public void setRevisited_advice(String revisited_advice) {
+		this.revisited_advice = revisited_advice;
 	}
 	public String getRevisited_mark() {
 		return revisited_mark;

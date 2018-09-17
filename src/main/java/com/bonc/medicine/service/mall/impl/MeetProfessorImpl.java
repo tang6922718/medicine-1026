@@ -61,6 +61,54 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
+	public List<Map<String, Object>> solving(Integer spec_id) {
+		Map map = new HashMap<>();
+		map.put("spec_id", spec_id);
+		return meetProfessorMapper.solving(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> solved(Integer spec_id) {
+		Map map = new HashMap<>();
+		map.put("spec_id", spec_id);
+		return meetProfessorMapper.solved(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> issue_statistics_untreated(Integer spec_id) {
+		Map map = new HashMap<>();
+		map.put("spec_id", spec_id);
+		return meetProfessorMapper.issue_statistics_untreated(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> issue_statistics_solving(Integer spec_id) {
+		Map map = new HashMap<>();
+		map.put("spec_id", spec_id);
+		return meetProfessorMapper.issue_statistics_solving(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> setRevisit(Integer id, Integer follow_days, String revisit_url,
+			String revisited_advice) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		map.put("follow_days", follow_days);
+		map.put("revisit_url", revisit_url);
+		map.put("revisited_advice", revisited_advice);
+		return meetProfessorMapper.setRevisit(map);
+	}
+	
+	@Override
+	public List<Map<String, Object>> eddIssue(Integer id, String revisited_mark, String issue_status) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		map.put("revisited_mark", revisited_mark);
+		map.put("issue_status", issue_status);
+		return meetProfessorMapper.eddIssue(map);
+	}
+
+	@Override
 	public Result<Object> expert(Integer id) {
 		Map map = new HashMap<>();
 		map.put("id", id);
@@ -123,17 +171,17 @@ public class MeetProfessorImpl implements MeetProfessorService {
 		map.put("fail_opinion", fail_opinion);
 		ResultUtil.success(meetProfessorMapper.aduitArticle(map));
 	}
-	
+
 	@Override
 	public void addArticle(Article article) {
 		ResultUtil.success(meetProfessorMapper.addArticle(article));
 	}
-	
+
 	@Override
 	public void updateArticle(Article article) {
 		ResultUtil.success(meetProfessorMapper.updateArticle(article));
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> getArticlelist(String key) {
 		Map map = new HashMap<>();

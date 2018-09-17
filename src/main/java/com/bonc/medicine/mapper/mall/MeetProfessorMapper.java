@@ -20,6 +20,18 @@ public interface MeetProfessorMapper {
 	public int anli(Case anli);
 
 	public List<Map<String, Object>> untreated(Map map);
+	
+	public List<Map<String, Object>> solved(Map map);
+	
+	public List<Map<String, Object>> solving(Map map);
+	
+	public List<Map<String, Object>> issue_statistics_untreated(Map map);
+	
+	public List<Map<String, Object>> issue_statistics_solving(Map map);
+	
+	public List<Map<String, Object>> setRevisit(Map map);
+	
+	public List<Map<String, Object>> eddIssue(Map map);
 
 	public List<Map<String, Object>> expert(Map map);
 

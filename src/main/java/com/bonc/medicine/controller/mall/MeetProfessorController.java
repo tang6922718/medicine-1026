@@ -67,7 +67,7 @@ public class MeetProfessorController {
 	 * 答疑未开始列表
 	 */
 	@GetMapping("/meetProfessor/untreated")
-	public Result<Object> untreated( Integer spec_id) {
+	public Result<Object> untreated(Integer spec_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = meetProfessorService.untreated(spec_id);
 		String time = null;
@@ -102,6 +102,79 @@ public class MeetProfessorController {
 	}
 
 	/*
+	 * 答疑进行中列表
+	 */
+	@GetMapping("/meetProfessor/solving")
+	public Result<Object> solving(Integer spec_id) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list = meetProfessorService.solving(spec_id);
+		Result<Object> result = new Result<Object>();
+		result.setCode(200);
+		result.setMsg("成功");
+		result.setData(list);
+		return result;
+	}
+
+	/*
+	 * 答疑已解决列表
+	 */
+	@GetMapping("/meetProfessor/solved")
+	public Result<Object> solved(Integer spec_id) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list = meetProfessorService.solved(spec_id);
+		Result<Object> result = new Result<Object>();
+		result.setCode(200);
+		result.setMsg("成功");
+		result.setData(list);
+		return result;
+	}
+
+	/*
+	 * 设置回访
+	 */
+	@GetMapping("/meetProfessor/setRevisit")
+	public Result<Object> setRevisit(Integer id, Integer follow_days, String revisit_url, String revisited_advice) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list = meetProfessorService.setRevisit(id, follow_days, revisit_url, revisited_advice);
+		Result<Object> result = new Result<Object>();
+		result.setCode(200);
+		result.setMsg("成功");
+		result.setData(list);
+		return result;
+	}
+
+	/*
+	 * 管理员关闭问题issue_status关闭传3否则不传
+	 */
+	@GetMapping("/meetProfessor/eddIssue")
+	public Result<Object> eddIssue(Integer id, String revisited_mark, String issue_status) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list = meetProfessorService.eddIssue(id, revisited_mark, issue_status);
+		Result<Object> result = new Result<Object>();
+		result.setCode(200);
+		result.setMsg("成功");
+		result.setData(list);
+		return result;
+	}
+
+	/*
+	 * 答疑状态数据统计
+	 */
+	@GetMapping("/meetProfessor/issue_statistics")
+	public Result<Object> issue_statistics(Integer spec_id) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();// 未处理
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();// 进行中
+		list = meetProfessorService.issue_statistics_untreated(spec_id);
+		list1 = meetProfessorService.issue_statistics_solving(spec_id);
+		list.addAll(list1);
+		Result<Object> result = new Result<Object>();
+		result.setCode(200);
+		result.setMsg("成功");
+		result.setData(list);
+		return result;
+	}
+
+	/*
 	 * 查询此问题已经被协助的专家id,传入问题id
 	 */
 	@GetMapping("/meetProfessor/expert/{id}")
@@ -113,7 +186,7 @@ public class MeetProfessorController {
 	 * 邀请专家解答问题传入问题id,专家expert格式为1,2,3,4
 	 */
 	@GetMapping("/meetProfessor/add/Invitation")
-	public Result<Object> Invitation( Integer id,  String expert) {
+	public Result<Object> Invitation(Integer id, String expert) {
 		meetProfessorService.deleteInvitation(id);
 		String[] a = expert.split(",");
 		for (int i = 0; i < a.length; i++) {
@@ -127,10 +200,10 @@ public class MeetProfessorController {
 	}
 
 	/*
-	 * 关闭问题
+	 * 用户关闭问题
 	 */
 	@GetMapping("/meetProfessor/end")
-	public Result<Object> end( Integer id,  Integer score) {
+	public Result<Object> end(Integer id, Integer score) {
 		return meetProfessorService.end(id, score);
 	}
 

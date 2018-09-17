@@ -102,6 +102,182 @@
 		AND c.specid = #{spec_id}
 	</select>
 
+	<select id="solved" parameterType="Map" resultType="Map">
+		SELECT
+		d.name,
+		d.address,
+		d.head_portrait,
+		c.issue_status,
+		c.issue_time,
+		c.issue_desc,
+		c.score,
+		c.id as issue_id
+		FROM
+		spec_info a
+		LEFT JOIN
+		spec_issue_association b ON a.spec_id = b.specid
+		AND ( b.is_assigned =
+		'0' OR b.is_assigned = '1' )
+		LEFT JOIN spec_issue c ON b.issueid = c.id
+		AND ( c.issue_status = '2' OR c.issue_status = '3' )
+		LEFT JOIN
+		common_user d ON c.issue_user_id = d.id
+		WHERE
+		a.spec_id = #{spec_id} and
+		c.id is not null
+	</select>
+
+	<select id="solving" parameterType="Map" resultType="Map">
+		SELECT
+		temp.issue_desc,
+		temp.id,
+		temp.from_uid,
+		temp.to_uid,
+		temp.reply_time,
+		temp.content,
+		cu.NAME,
+		cu.head_portrait,
+		cu.address
+		FROM
+		(
+		SELECT
+		b.*,
+		p.from_uid,
+		p.to_uid,
+		p.reply_time,
+		p.content
+		FROM
+		(
+		SELECT
+		issue_desc,
+		(
+		SELECT
+		cc.id AS issue_id
+		FROM
+		common_comment cc
+		WHERE
+		cc.object_id = a.id
+		AND cc.object_type = '1'
+		ORDER BY
+		cc.reply_time DESC
+		LIMIT 1
+		) id
+		FROM
+		spec_issue a
+		WHERE
+		EXISTS ( SELECT 1 FROM common_comment t WHERE
+		t.object_id = a.id AND
+		t.object_type = '1' )
+		) b
+		INNER JOIN
+		common_comment p ON p.id = b.id
+		) temp
+		LEFT JOIN common_user cu ON
+		temp.from_uid = cu.id
+		WHERE
+		temp.to_uid = #{spec_id}
+	</select>
+
+	<select id="issue_statistics_solving" parameterType="Map"
+		resultType="Map">
+		select count(1) as jxz from (SELECT
+		temp.issue_desc,
+		temp.id,
+		temp.from_uid,
+		temp.to_uid,
+		temp.reply_time,
+		temp.content,
+		cu.NAME,
+		cu.head_portrait,
+		cu.address
+		FROM
+		(
+		SELECT
+		b.*,
+		p.from_uid,
+		p.to_uid,
+		p.reply_time,
+		p.content
+		FROM
+		(
+		SELECT
+		issue_desc,
+		(
+		SELECT
+		cc.id AS
+		issue_id
+		FROM
+		common_comment cc
+		WHERE
+		cc.object_id = a.id
+		AND
+		cc.object_type = '1'
+		ORDER BY
+		cc.reply_time DESC
+		LIMIT 1
+		) id
+		FROM
+		spec_issue a
+		WHERE
+		EXISTS ( SELECT 1 FROM common_comment t WHERE
+		t.object_id = a.id AND
+		t.object_type = '1' )
+		) b
+		INNER JOIN
+		common_comment p ON p.id = b.id
+		) temp
+		LEFT JOIN common_user cu ON
+		temp.from_uid = cu.id
+		WHERE
+		temp.to_uid = #{spec_id}) as temp
+	</select>
+
+
+	<select id="issue_statistics_untreated" parameterType="Map"
+		resultType="Map">
+		SELECT
+		count( 1 ) AS wcl
+		FROM
+		(
+		SELECT
+		a.id,
+		b.NAME,
+		a.issue_desc,
+		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) )
+		AS time
+		FROM
+		spec_issue a,
+		common_user b,
+		spec_issue_association c
+		WHERE
+		a.issue_user_id = b.id
+		AND a.issue_status = '0'
+		AND c.issueid = a.id
+		AND
+		is_assigned = '0'
+		AND c.specid = #{spec_id} UNION ALL
+		SELECT
+		a.id,
+		'邀请我的'
+		AS NAME,
+		a.issue_desc,
+		TIMESTAMPDIFF( SECOND, a.issue_time,
+		now( ) ) AS
+		time
+		FROM
+		spec_issue a,
+		common_user b,
+		spec_issue_association c
+		WHERE
+		a.issue_user_id = b.id
+		AND a.issue_status = '0'
+		AND c.issueid = a.id
+		AND
+		c.is_assigned = '1'
+		AND c.specid = #{spec_id}
+		) AS wcl
+	</select>
+
 	<select id="expert" parameterType="Map" resultType="Map">
 		select specid
 		from spec_issue_association where is_assigned = '1' and issueid =
@@ -112,6 +288,22 @@
 		delete from
 		spec_issue_association where is_assigned = '1' and issueid = #{id}
 	</delete>
+
+	<update id="setRevisit" parameterType="Map">
+		update spec_issue set
+		follow_days = #{follow_days},revisit_url =
+		#{revisit_url},revisited_advice = #{revisited_advice}
+		where id = #{id}
+	</update>
+
+	<update id="eddIssue" parameterType="Map">
+		update spec_issue set
+		revisited_mark = #{revisited_mark} ,is_revisited = '1'
+		<if test="issue_status != null and issue_status != ''">
+			, issue_status =#{issue_status}
+		</if>
+		where id = #{id}
+	</update>
 
 	<insert id="Invitation" parameterType="Map">
 		insert into
@@ -177,9 +369,10 @@
 		#{fail_opinion},update_time = #{update_time},is_audit = #{is_audit};
 	</update>
 	<select id="getArticlelist" parameterType="Map" resultType="Map">
-			select id,title,'文章类型' as type,publish_time from spec_article where status = '0' and is_audit = '0'
-			<if test="key != null and key != ''">
-				and title like CONCAT(CONCAT('%',#{key}),'%')
-			</if>
+		select id,title,'文章类型' as type,publish_time from spec_article where
+		status = '0' and is_audit = '0'
+		<if test="key != null and key != ''">
+			and title like CONCAT(CONCAT('%',#{key}),'%')
+		</if>
 	</select>
 </mapper>
