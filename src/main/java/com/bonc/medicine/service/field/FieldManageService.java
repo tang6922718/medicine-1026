@@ -19,6 +19,10 @@ public interface FieldManageService {
 	
 	public Result<Object> guideRecord(Integer user_id);	
 	
-	public Result<Object> guideRecordNum(Integer user_id);	
+	public Result<Object> guideRecordNum(Integer user_id);
+
+	public Result<Object> getFarmOpreationByCategroy(int categroyID);
+
+	public Result<Object> getCategroySOPInfo(int categroyID,int stepID);
 	
 }

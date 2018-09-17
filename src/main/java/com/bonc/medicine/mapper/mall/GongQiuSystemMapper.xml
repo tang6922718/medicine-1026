@@ -16,12 +16,12 @@
 
 	<update id="auditSPurchase" parameterType="Map">
 		update mall_purchase
-		set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
+		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}
 	</update>
 
 	<update id="auditFPurchase" parameterType="Map">
 		update mall_purchase
-		set is_audit = #{result},comment = #{comment} where id = #{purchaseId}
+		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}
 	</update>
 
 	<insert id="recommend" parameterType="com.bonc.medicine.entity.mall.Recommend">
@@ -126,10 +126,36 @@
 		LEFT JOIN common_user b ON a.seller_id = b.id
 		where a.state = '0' and a.is_audit = '0'
 		<if test="key != null and key != ''">
-            AND (a.goods_name = #{key} OR b.telephone like CONCAT('%',#{key},'%') OR b.NAME like CONCAT('%',#{key},'%'))
+            AND (a.goods_name like CONCAT('%',#{key},'%') OR b.telephone like CONCAT('%',#{key},'%') OR b.NAME like CONCAT('%',#{key},'%'))
         </if>
 		<if test="goodType != null and goodType != ''">
             AND a.supply_cat_code = #{goodType}
+        </if>
+	</select>
+	
+	<select id="purchaselist" parameterType="Map" resultType="Map">
+		SELECT
+			a.id,
+			a.goods_name,
+			b.NAME,
+			a.purchase_cat_code,
+			b.telephone,
+			a.specification,
+			a.purchase_quantity,
+			a.unit,
+			a.img_url,
+			a.is_aduit 
+		FROM
+			mall_purchase a
+			LEFT JOIN common_user b ON a.user_id = b.id 
+		WHERE
+			a.state = '1' 
+			AND a.is_aduit = '0'
+		<if test="key != null and key != ''">
+            AND (a.goods_name like CONCAT('%',#{key},'%') OR b.telephone like CONCAT('%',#{key},'%') OR b.NAME like CONCAT('%',#{key},'%'))
+        </if>
+		<if test="goodType != null and goodType != ''">
+            AND a.purchase_cat_code = #{goodType}
         </if>
 	</select>
 

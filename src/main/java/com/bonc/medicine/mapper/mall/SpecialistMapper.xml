@@ -59,7 +59,7 @@
 			count(cf.id) as follow ,
 			0 as is_follow,
 			'' as sub,
-			'' as cat,
+			'' as cat
 		FROM
 			spec_info si
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
@@ -117,12 +117,35 @@
 		on scr.cat_id = cmv.variety_code where scr.spec_id = #{spec_id}
 	</select>
 	
-	<select id="articleList" parameterType="java.lang.String" resultType="Map">
-		SELECT id, title, publish_time, img_url FROM spec_article WHERE spec_id = #{spec_id}
+	<update id="revokeArt" parameterType="String" >
+		UPDATE spec_article SET is_audit = 3 WHERE id = #{id}
+	</update>
+	
+	<select id="articleList" parameterType="Map" resultType="Map">
+		SELECT sa.*, cu.telephone FROM spec_article sa
+		left join common_user cu on sa.spec_id = cu.id
+		WHERE 1=1
+		<if test="spec_id != null and spec_id != ''">
+			and sa.spec_id = #{spec_id}
+		</if>
+		<if test="title != null and title != ''">
+			and (sa.title LIKE CONCAT('%',#{title},'%') or sa.author LIKE CONCAT('%',#{title},'%'))
+		</if>
+		<if test="status != null and status != '' and status != '-1'">
+			AND sa.is_audit = #{status}
+		</if>
+		<if test="start != null and start != ''">
+			AND sa.publish_time &gt; #{start}
+		</if>
+		<if test="end != null and end != ''">
+			AND sa.publish_time &lt; #{end}
+		</if>
+		ORDER BY publish_time DESC
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select * from spec_article where id = #{id}
+		select a.id,a.title,b.name,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		a.spec_id = b.id where a.id = #{id}
 	</select>
 	
     <select id="caseList" parameterType="java.lang.String" resultType="Map">
@@ -156,11 +179,19 @@
     </select>
     
     
-    <insert id="insertIssue" parameterType="com.bonc.medicine.entity.mall.Issue">
+    <insert id="insertIssue" parameterType="com.bonc.medicine.entity.mall.Issue" useGeneratedKeys="true" keyProperty="id">
 		insert into spec_issue (issue_desc,img_url,video_url,is_public,issue_time,issue_address,issue_user_id,
-		issue_status,score,follow_days,is_revisited,revisited_mark,cat_code,field_ids) 
+		issue_status,score,follow_days,is_revisited,revisited_mark,cat_code,sub_code,field_ids) 
 		values (#{issue_desc},#{img_url},#{video_url},#{is_public},#{issue_time},#{issue_address},#{issue_user_id},
-		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{field_ids})
+		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids})
+	</insert>
+	
+	<insert id="insertIssueRel" parameterType="Map">
+		insert into spec_issue_association (specid, issueid, is_assigned) 
+			values 
+			<foreach collection="list" separator="," item="item" >
+				(#{item.specid},#{item.issueid},#{item.is_assigned})
+			</foreach>
 	</insert>
 	
 	<select id="myIssues" parameterType="java.lang.String" resultType="Map">
@@ -202,8 +233,25 @@
 			( #{title},#{spec_id},#{file_size},#{file_url},#{upload_time},#{status} )
 	</insert>
 	
-	<select id="videoList" parameterType="java.lang.String" resultType="Map">
-		select id, title, img_url, publish_time, status from train_video_course WHERE spec_id = #{spec_id}
+	<select id="videoList" parameterType="java.util.Map" resultType="Map">
+		select tvc.*, cu.telephone from train_video_course tvc
+		left join common_user cu on tvc.spec_id = cu.id
+		WHERE 1=1
+		<if test="spec_id != null and spec_id != ''">
+			and tvc.spec_id = #{spec_id}
+		</if>
+		<if test="title != null and title != ''">
+			and (tvc.title LIKE CONCAT('%',#{title},'%') or tvc.lecturer_name LIKE CONCAT('%',#{title},'%'))
+		</if>
+		<if test="status != null and status != '' and status != '-1'">
+			AND tvc.is_audit = #{status}
+		</if>
+		<if test="start != null and start != ''">
+			AND tvc.publish_time &gt; #{start}
+		</if>
+		<if test="end != null and end != ''">
+			AND tvc.publish_time &lt; #{end}
+		</if>
 		ORDER BY publish_time DESC
 	</select>
 	

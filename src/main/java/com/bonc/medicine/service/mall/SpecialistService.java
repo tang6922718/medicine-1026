@@ -22,13 +22,15 @@ public interface SpecialistService {
 	public List<Map<String, Object>> specDetail(Map param);
 	public List<Map<String, Object>> sub(Map param);
 	public List<Map<String, Object>> cat(Map param);
-	public List<Map> articleList(String spec_id);
+	public List<Map> articleList(Map param);
+	public int revokeArt(String id);
 	public List<Map> caseList(String spec_id);
 	public Map articleDetail(String id);
 	public Map caseDetail(String id);
-	public List<Map> videoList(String spec_id);
+	public List<Map> videoList(Map param);
 	
 	public int releaseIssue(Issue issue);
+	public int insertIssueRel(List param);
 	public List<Map> myIssues(String user_id);
 	public Map issueDetail(String issue_id);
 	public int uploadFile(Map param);

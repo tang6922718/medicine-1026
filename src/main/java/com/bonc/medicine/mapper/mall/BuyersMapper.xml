@@ -3,10 +3,10 @@
 <mapper namespace="com.bonc.medicine.mapper.mall.BuyersMapper">
 	<insert id="insertPurchase" parameterType="com.bonc.medicine.entity.mall.Purchase">
         insert into mall_purchase (goods_name,purchase_cat_code,specification,user_id,img_url,
-        publish_time,effect_flag,purchase_quantity,linkman,linkman_phone,storehouse,produce_area,
+        publish_time,effect_flag,purchase_quantity,unit,linkman,linkman_phone,storehouse,produce_area,
         receipt,quality_standard,send_sample,payment,packing,qualification_standard,state,is_aduit,comment)
         values(#{goods_name},#{purchase_cat_code},#{specification},
-        #{user_id},#{img_url},#{publish_time},#{effect_flag},#{purchase_quantity},
+        #{user_id},#{img_url},#{publish_time},#{effect_flag},#{purchase_quantity},#{unit}
         #{linkman},#{linkman_phone},#{storehouse},#{produce_area},#{receipt},#{quality_standard},
         #{send_sample},#{payment},#{packing},#{qualification_standard},#{state},#{is_aduit},#{comment})
     </insert>
@@ -39,7 +39,11 @@
     
 	<!-- 逻辑上删除，数据库只做修改 -->
     <update id="deletePurchase" parameterType="java.lang.String">
-    	update mall_purchase SET state = 0 WHERE id = #{id}
+    	update mall_purchase SET state = '0' WHERE id = #{id}
+    </update>
+    
+    <update id="revokePurchase" parameterType="java.lang.String">
+    	update mall_purchase SET is_aduit = '3' WHERE id = #{id}
     </update>
     
     

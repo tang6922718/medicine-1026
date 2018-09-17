@@ -52,11 +52,12 @@
 			public_time DESC
 	</select>
 
-	<select id="searchVideoByCollect">
+	<select id="searchVideoByCollect" resultType="Map">
 		SELECT
 			id,
 			title,
 			video_url,
+			lecturer_name,
 			duration,
 			img_url,
 			STATUS

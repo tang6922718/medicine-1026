@@ -7,6 +7,7 @@ import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,5 +56,51 @@ public class MallRecommendController {
     public Result<Object> deleteMallRecommend(@PathVariable String id){
         return ResultUtil.success(mallRecommendService.deleteMallRecommend(id));
     }
+
+    /**
+     *新建商品推荐
+     * @param addJson  {"addJson":[{"supply_id":6,"site":"2","img_url":"/img/url111"},{"supply_id":7,"site":"3","img_url":"/img/url111"},{"supply_id":8,"site":"4","img_url":"/img/url111"}]}
+     * @return
+     */
+    @PostMapping("/mallRecommend")
+    public Result<Object> mallRecommend(@RequestBody String addJson){
+        Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
+        List list = (List) map.get("addJson");
+        return ResultUtil.success(mallRecommendService.mallRecommend(list));
+    }
+
+
+    /**
+     * 修改商品推荐
+     * @param editJson {"supply_id":1,"site":"2","img_url":"/img/url111","id":1}
+     * @return
+     */
+    @PostMapping("/editMallRecommend")
+    public Result<Object> editMallRecommend(@RequestBody String editJson){
+        Map map = JacksonMapper.INSTANCE.readJsonToMap(editJson);
+        return ResultUtil.success(mallRecommendService.editMallRecommend(map));
+    }
+
+    /**
+     * 商品推荐详情
+     * @param id
+     * @return {"code":200,"msg":"成功","data":{"supply_id":1,"upload_time":1537176130000,"site":"2","img_url":"/img/url111","id":1,"state":"0"}}
+     */
+    @GetMapping("/showMallRecommend/{id}")
+    public Result<Object> showMallRecommend(@PathVariable String id){
+        return ResultUtil.success(mallRecommendService.showMallRecommend(id));
+    }
+
+
+    /**
+     * 根据供应编号显示 商品提供用户 商品名称 商品简介 图片
+     * @param id
+     * @return {"code":200,"msg":"成功","data":{"goods_name":"枸杞","img_url":"https://pro.modao.cc/uploads3/images/2060/20603852/raw_1527144746.png","id":1,"detail":"好药无价，谁吃谁知道！","linkman":"彭XX"}}
+     */
+    @GetMapping("/showGoodsById/{id}")
+    public Result<Object> showGoodsById(@PathVariable String id){
+        return ResultUtil.success(mallRecommendService.showGoodsById(id));
+    }
+
 
 }

@@ -76,20 +76,20 @@
 		ELSE '百科' END AS type
 		FROM
 		km_variety_encyclopedia a
-		INNER JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code
+		LEFT JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code
 		WHERE
 		1 = 1
 		<if test="search_name != null and search_name != ''">
-			and a.chinese_name = #{search_name}
+			and a.chinese_name LIKE concat('%',#{search_name},'%')
 		</if>
 		<if test="type_code != null and type_code != ''">
-			and codex_status = #{codex_status}
+			and record_status = #{type_code}
 		</if>
 		<if test="record_status != null and record_status != ''">
-			and record_status = #{record_status}
-		</if>
+			and codex_status= #{record_status}
+		</if>q
 		ORDER BY
-		update_time DESC
+		record_time DESC
 	</select>
 
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">
@@ -177,6 +177,14 @@
 
 	<select id="sourceDistribution" resultType="java.util.Map">
 		SELECT id,produce_area,GROUP_CONCAT(goods_name) AS goods_names from mall_supply GROUP BY produce_area
+	</select>
+
+	<insert id="addHistoryText" parameterType="String">
+		INSERT INTO history_search_text(search_text,search_date) VALUES(#{search_text},now());
+	</insert>
+
+	<select id="searchHistoryText" resultType="Map">
+		SELECT id,search_text,search_date FROM history_search_text ORDER BY search_date DESC LIMIT 20
 	</select>
 
 </mapper>

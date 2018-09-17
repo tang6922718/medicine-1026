@@ -52,15 +52,39 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 	}
 
+//	@Override
+//	public Result<Object> getCo_opInfo(int userID) {
+//		Map map = new HashMap();
+//		map = co_opManageMapper.queryCo_opInfo(userID); // 合作社基本信息
+//		int coop_ID=(int)map.get("id");
+//		map.putAll(co_opManageMapper.queryCo_opMemberNum(coop_ID)); // 合作社总人数
+//		map.putAll(co_opManageMapper.queryPlantNum(coop_ID)); // 合作社登记种植总数
+//		map.putAll(co_opManageMapper.queryAssistantNum(coop_ID)); // 合作社助手总数
+//		map.putAll(co_opManageMapper.queryCo_opNoticeNum(coop_ID));
+//		return ResultUtil.success(map);
+//	}
+
+
 	@Override
-	public Result<Object> getCo_opInfo(int ID) {
-		Map map = new HashMap();
-		map = co_opManageMapper.queryCo_opInfo(ID); // 合作社基本信息
-		map.putAll(co_opManageMapper.queryCo_opMemberNum(ID)); // 合作社总人数
-		map.putAll(co_opManageMapper.queryPlantNum(ID)); // 合作社登记种植总数
-		map.putAll(co_opManageMapper.queryAssistantNum(ID)); // 合作社助手总数
-		return ResultUtil.success(map);
+	public Result<Object> getCo_opInfo(Map params) {
+
+		List<Map> list=new ArrayList<Map>();
+		list=co_opManageMapper.queryCo_opByCondition(params);
+		if (list.size()>0){
+			for (Map obj:list
+					) {
+				obj.putAll(co_opManageMapper.queryCo_opMemberNum((int)obj.get("coopID")));
+				obj.putAll(co_opManageMapper.queryPlantNum((int)obj.get("coopID")));
+				obj.putAll(co_opManageMapper.queryAssistantNum((int)obj.get("coopID")));
+				obj.putAll(co_opManageMapper.queryCo_opNoticeNum((int)obj.get("coopID")));
+			}
+			return ResultUtil.success(list);
+		}else {
+			return ResultUtil.error(404,"数据为空");
+		}
+
 	}
+
 
 	@Override
 	public Result<Object> updateCo_op(Co_op tempData) {
@@ -77,6 +101,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			tempData.setUser_id(String.valueOf(map.get("id")));
 		}
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
+		tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
 		return ResultUtil.success(co_opManageMapper.insertCo_opMember(tempData));
 	}
 
@@ -106,7 +131,10 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> queryAssistant(int coop_id) {
-		return ResultUtil.success(co_opManageMapper.queryAssistant(coop_id));
+		List<Map> list1=new ArrayList<Map>();
+		list1.addAll(co_opManageMapper.queryAssistant(coop_id));
+		list1.addAll(co_opManageMapper.queryNotAssistant(coop_id));
+		return ResultUtil.success(list1);
 	}
 
 	@Override
@@ -192,6 +220,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		map.put("start_time", start_time);
 		map.put("end_time", end_time);
 		return ResultUtil.success(co_opManageMapper.noticelist(map));
+	}
+
+	@Override
+	public Result<Object> getCoopNoticeList(int coopID) {
+		return ResultUtil.success(co_opManageMapper.getCoopNoticeList(coopID));
 	}
 
 }

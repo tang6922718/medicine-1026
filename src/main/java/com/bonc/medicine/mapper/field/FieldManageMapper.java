@@ -30,4 +30,10 @@ public interface FieldManageMapper {
 
     public List<Map> guideRecordNum(Map param);
 
+    public List<Map> queryFarmOpreationByCategroy(int categroyID);
+
+    public Map querySOP(Map param);
+
+    public List<Map> queryAllCategroy();
+
 }

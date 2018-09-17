@@ -10,5 +10,6 @@ public interface CommentReplyMapper {
 	public int insertComment(Map param);
 	public int insertReply(Map param);
 	public List<Map> queryComments(Map param);
+	public List<Map> commentsCount(Map param);
 	public List<Map> queryReplies(String[] comment_ids);
 }

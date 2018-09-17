@@ -46,17 +46,42 @@ public class FieldManageController {
 	/*
 	 * 获取指导记录详情
 	 */
-	@GetMapping("/guideRecord/{user_id}")
-	public Result<Object> guideRecord(@PathVariable Integer user_id) {
+	@GetMapping("/guideRecord")
+	public Result<Object> guideRecord( Integer user_id) {
 		return fieldManageService.guideRecord(user_id);
 	}
 	
 	/*
 	 * 获取指导记录总数
 	 */
-	@GetMapping("/guideRecordNum/{user_id}")
-	public Result<Object> guideRecordNum(@PathVariable Integer user_id){		
+	@GetMapping("/guideRecordNum")
+	public Result<Object> guideRecordNum( Integer user_id){		
 		return fieldManageService.guideRecordNum(user_id);
+	}
+
+
+	/* *
+* @Description 获取该品种的所有农事操作步骤
+* @Date 14:43 2018/9/16
+* @Param [categroyID]
+* @return com.bonc.medicine.entity.Result<java.lang.Object>
+*/
+	@GetMapping("/farm/opreation/{categroyID}")
+	public Result<Object> getFarmOpreationByCategroy(@PathVariable int categroyID){
+		return fieldManageService.getFarmOpreationByCategroy(categroyID);
+	}
+
+
+	/* *
+	 * @Description 获取该品种的某步骤的SOP信息
+	 * @Date 15:43 2018/9/16
+	 * @Param [categroyID, stepID]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/farm/SOPinfo/{categroyID}/{stepID}")
+	public Result<Object> getCategroySOPInfo(@PathVariable int categroyID,
+											 @PathVariable int stepID){
+		return fieldManageService.getCategroySOPInfo(categroyID,stepID);
 	}
 	
 }

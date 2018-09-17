@@ -66,6 +66,17 @@
 		<if test='guide_flag != null and guide_flag != ""'>
 			AND guide_flag = #{guide_flag}
 		</if>
+
+		<if test='key_word != null and key_word != ""'>
+			AND (
+			user_name LIKE CONCAT('%',#{key_word}, '%')  or coop_name LIKE CONCAT('%',#{key_word}, '%') OR
+			user_tel LIKE CONCAT('%',#{key_word}, '%')
+			)
+		</if>
+
+		<if test='start_time != null and start_time != "" and end_time != null and end_time != "" '>
+			AND registation_time >= #{start_time}  AND #{end_time} >= registation_time
+		</if>
 		ORDER BY registation_time DESC
     </select>
 
@@ -209,6 +220,27 @@
 				AND a.user_id = #{user_id} 
 			)		
 		) as d
+	</select>
+
+
+	<select id="queryFarmOpreationByCategroy" resultType="Map" parameterType="Integer">
+		SELECT id,step_name FROM km_sop_step WHERE sop_id = #{categroyID} ORDER BY step_order ASC
+	</select>
+
+	<select id="querySOP" resultType="Map" parameterType="Map">
+		SELECT short_desc AS briefly,detail_desc AS detail,next_suggestion,
+		recommendation,audio_url,example_url FROM km_sop_step WHERE 1=1
+		<if test='sop_id != null and sop_id != ""'>
+			AND sop_id = #{sop_id}
+		</if>
+		<if test='id != null and id != ""'>
+			AND id = #{id}
+		</if>
+	</select>
+
+
+	<select id="queryAllCategroy" resultType="Map" >
+		SELECT variety_code AS id,variety_name AS name,variety_alias AS othername FROM common_medicine_variety
 	</select>
 	
 </mapper>

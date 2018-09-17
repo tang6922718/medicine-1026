@@ -13,7 +13,7 @@ public class Co_op {
     private int id; //合作社编号 (新增时不传ID  修改时传ID)
     private String name;  //合作社名称
     private String introduce;  //合作社介绍
-//    private int total_num; // 合作社总人数
+    private int total_num; // 合作社总人数
     private float total_area; //合作社种植总面积
     private String img_url;  //合作社图片
     private String portrait; // 合作社头像
@@ -51,6 +51,14 @@ public class Co_op {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public int getTotal_num() {
+        return total_num;
+    }
+
+    public void setTotal_num(int total_num) {
+        this.total_num = total_num;
     }
 
     public float getTotal_area() {

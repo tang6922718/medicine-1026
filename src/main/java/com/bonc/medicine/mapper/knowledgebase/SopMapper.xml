@@ -18,12 +18,12 @@
 
     <select id="getSopPlants" parameterType="java.util.Map" resultType="Map">
         SELECT
-			kss.sop_id,kss.step_order,kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation
+		kss.sop_id,kss.step_order,kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation,kss.audio_url
         FROM
             km_sop_step kss
         WHERE 1=1
         <if test="variety_id != null and variety_id != ''">
-            AND kss.sop_id = ${variety_id}
+			AND kss.sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = ${variety_id})
         </if>
         ORDER BY
             kss.step_order
@@ -59,7 +59,9 @@
 			detail_desc,
 			next_suggestion,
 			recommendation,
-			step_order
+		step_order,
+		audio_url,
+		example_url
 		)
 		VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
@@ -69,7 +71,9 @@
 			#{item.detail_desc},
 			#{item.next_suggestion},
 			#{item.recommendation},
-			#{item.step_order}
+			#{item.step_order},
+			#{item.audio_url},
+			#{item.example_url}
 			)
 		</foreach>
 	</insert>
@@ -94,7 +98,9 @@
 				short_desc=#{item.short_desc},
 				detail_desc=#{item.detail_desc},
 				next_suggestion=#{item.next_suggestion},
-				recommendation=#{item.recommendation}
+				recommendation=#{item.recommendation},
+				audio_url=#{item.audio_url},
+				example_url=#{item.example_url}
 			</set>
 			where sop_id = #{item.sop_id}
 		</foreach>

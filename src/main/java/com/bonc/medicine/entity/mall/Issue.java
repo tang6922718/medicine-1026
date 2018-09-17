@@ -3,7 +3,7 @@ package com.bonc.medicine.entity.mall;
 import java.util.Date;
 
 public class Issue {
-	private String id; // 编号
+	private String id; // 编号，提问时缺省
 	private String issue_desc; // 问题描述
 	private String img_url; // 图片url
 	private String video_url; // 视频url
@@ -17,9 +17,23 @@ public class Issue {
 	private char is_revisited; // 是否回访0否1是
 	private String revisited_mark; // 回访结论
 	private int cat_code; // 涉及品类id
-	private String field_ids; // 关联地块（逗号连接的字符串）
+	private int sub_code; // 涉及学科id
+	private String field_ids; // 关联地块编号（1个）
+	private String spec_id; // 专家编号
 	
 	
+	public int getSub_code() {
+		return sub_code;
+	}
+	public void setSub_code(int sub_code) {
+		this.sub_code = sub_code;
+	}
+	public String getSpec_id() {
+		return spec_id;
+	}
+	public void setSpec_id(String spec_id) {
+		this.spec_id = spec_id;
+	}
 	public String getField_ids() {
 		return field_ids;
 	}

@@ -22,7 +22,7 @@ public interface Co_opManageService {
 
 	public Result<Object> deleteCo_op(int ID); // 删除合作社
 
-	public Result<Object> getCo_opInfo(int ID); // 合作社信息查询
+	public Result<Object> getCo_opInfo(Map param); // 合作社信息查询
 
 	public Result<Object> updateCo_op(Co_op tempData); // 合作社信息修改
 
@@ -59,5 +59,7 @@ public interface Co_opManageService {
 	public Result<Object> addRoleNotice(Notice notice);
 
 	public Result<Object> noticelist(String msg, String role, String start_time, String end_time);
+
+	public Result<Object> getCoopNoticeList(int coopID);
 
 }

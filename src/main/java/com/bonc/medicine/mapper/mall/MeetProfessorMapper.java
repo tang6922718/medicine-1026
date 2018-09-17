@@ -40,5 +40,7 @@ public interface MeetProfessorMapper {
 	public int addArticle(Article article);
 	
 	public int updateArticle(Article article);
+	
+	public List<Map<String, Object>> getArticlelist(Map map);
 
 }

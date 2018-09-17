@@ -41,4 +41,6 @@ public interface GongQiuSystemMapper {
 	public List<Map> msglist(Map map);
 	
 	public List<Map> supplylist(Map map);
+	
+	public List<Map> purchaselist(Map map);
 }

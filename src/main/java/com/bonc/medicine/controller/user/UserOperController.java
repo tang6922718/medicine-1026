@@ -137,7 +137,7 @@ public class UserOperController {
 
     /**
      * @Description:用户通过旧密码修改新密码
-     * @Param: [paramMap] keys:oldPassword;newPassword,secNewPassword,telephone
+     * @Param: [paramMap] keys:newPassword;oldPassword,secNewPassword,telephone
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/1
