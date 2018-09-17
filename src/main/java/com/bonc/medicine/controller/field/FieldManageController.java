@@ -46,16 +46,16 @@ public class FieldManageController {
 	/*
 	 * 获取指导记录详情
 	 */
-	@GetMapping("/guideRecord/{user_id}")
-	public Result<Object> guideRecord(@PathVariable Integer user_id) {
+	@GetMapping("/guideRecord")
+	public Result<Object> guideRecord( Integer user_id) {
 		return fieldManageService.guideRecord(user_id);
 	}
 	
 	/*
 	 * 获取指导记录总数
 	 */
-	@GetMapping("/guideRecordNum/{user_id}")
-	public Result<Object> guideRecordNum(@PathVariable Integer user_id){		
+	@GetMapping("/guideRecordNum")
+	public Result<Object> guideRecordNum( Integer user_id){		
 		return fieldManageService.guideRecordNum(user_id);
 	}
 	

@@ -229,8 +229,8 @@ public class Co_opManageController {
 	/*
 	 * 给该合作社下所有人发通知
 	 */
-	@PutMapping("/Co_op/sendMsg/{user_id}/{msg}")
-	public Result<Object> affiliatedCo_op(@PathVariable int user_id, @PathVariable String msg) {
+	@GetMapping("/Co_op/sendMsg")
+	public Result<Object> affiliatedCo_op( int user_id,  String msg) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = co_opManageService.findAllMember(user_id);
 		String allUserId = null;

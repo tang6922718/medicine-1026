@@ -145,17 +145,16 @@ public class MeetProfessorController {
 	/*
 	 * 上传文件管理
 	 */
-	@GetMapping("/meetProfessor/fileManage/{key}/{starttime}/{entime}/{status}")
-	public Result<Object> fileManage(@PathVariable String key, @PathVariable String starttime,
-			@PathVariable String endtime, @PathVariable String status) {
+	@GetMapping("/meetProfessor/fileManage")
+	public Result<Object> fileManage(String key, String starttime, String endtime, String status) {
 		return meetProfessorService.fileManage(key, starttime, endtime, status);
 	}
 
 	/*
 	 * 文章撤销status:0 可用 1 不可用
 	 */
-	@PutMapping("/meetProfessor/update/articleStatus/{id}/{status}")
-	public Result<Object> articleStatus(@PathVariable Integer id, @PathVariable String status) {
+	@GetMapping("/meetProfessor/update/articleStatus")
+	public Result<Object> articleStatus(Integer id, String status) {
 		meetProfessorService.articleStatus(id, status);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);
