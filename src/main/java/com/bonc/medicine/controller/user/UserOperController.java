@@ -1,8 +1,10 @@
 package com.bonc.medicine.controller.user;
 
 import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.constants.Constants;
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.entity.user.TokenModel;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -11,11 +13,15 @@ import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,10 +37,17 @@ public class UserOperController {
     @Autowired
     private UserService userService;
 
+  /*  @InitBinder
+    public void bindingPreparation(WebDataBinder binder) {
+       // DateFormat dateFormat = new SimpleDateFormat("MM ,DD, YYYY");
+        //CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
+        binder.registerCustomEditor(TokenModel.class, orderDateEditor);
+    }
+*/
 
-   /**
+    /**
    * @Description: 
-   * @Param: [username, password, request, response]
+   * @Param: [phone, password, request, response]
    * @return: com.bonc.user.entity.Result
    * @Author: hejiajun
    * @Date: 2018/8/30 
@@ -131,7 +144,8 @@ public class UserOperController {
 
     @Authorization
     @GetMapping("/testt")
-    public String test() {
+    public String test(@CurrentUser String userid) {
+        System.out.println("$$$$$$$$$$$" + userid);
         return "chenggong";
     }
 

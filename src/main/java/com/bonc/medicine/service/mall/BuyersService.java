@@ -9,6 +9,7 @@ import java.util.Map;
 public interface BuyersService {
 	public int releasePurchase(Purchase tempData);
 	public List<Map<String,Object>> latestPurchaseList(int limit);
+	public List<Map<String,Object>> purchaseList(Map params);
 	public Map<String,Object> purchasepDetail(String id);
 	public int deletePurchase(String id);
 	public int revokePurchase(String id);

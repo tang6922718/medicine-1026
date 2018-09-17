@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     public Result getUserByToken(String token) throws  Exception{
         // 2、根据token查询redis。
-        String json = redisService.get("USER_INFO" + ":" + token);
+        String json = redisService.get(RedisKeyUtil.getUserInfoKey(token));
         if (StringUtils.isBlank(json)) {
             // 3、如果查询不到数据。返回用户已经过期。
             return ResultUtil.error(400, "用户登录已经过期，请重新登录。");

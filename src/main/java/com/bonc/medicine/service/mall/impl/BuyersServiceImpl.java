@@ -31,6 +31,8 @@ public class BuyersServiceImpl implements BuyersService {
 		params.put("is_aduit", 1);
 		return buyersMapper.latestPurchaseList(params);
 	}
+	
+	
 
 	@Override
 	public Map<String,Object> purchasepDetail(String id) {
@@ -75,6 +77,11 @@ public class BuyersServiceImpl implements BuyersService {
 	@Override
 	public int revokePurchase(String id) {
 		return buyersMapper.revokePurchase(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> purchaseList(Map params) {
+		return buyersMapper.latestPurchaseList(params);
 	}
 	
 }
