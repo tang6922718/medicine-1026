@@ -30,9 +30,16 @@ public class BuyersController {
     }
 	@SuppressWarnings("unchecked")
 	@ResponseBody
-	@DeleteMapping("/purchase")
+	@GetMapping("/deletePurchase")
 	public Result<Object> deletePurchase(String id) {
 		return ResultUtil.success(buyersService.deletePurchase(id));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("/revokePurchase")
+	public Result<Object> revokePurchase(String id) {
+		return ResultUtil.success(buyersService.revokePurchase(id));
 	}
 	
 	@SuppressWarnings("unchecked")
