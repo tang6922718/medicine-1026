@@ -1,8 +1,10 @@
 package com.bonc.medicine.controller.mall;
 
+import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
+import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,7 @@ public class MeetProfessorController {
 	 * 答疑管理 疑问列表msg是内容recisited是否回访0否1是
 	 */
 	@GetMapping("/meetProfessor/queslist")
-	public Result<Object> queslist( String issue_status, String revisited) {
+	public Result<Object> queslist(String issue_status, String revisited) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
 		list = meetProfessorService.queslist(issue_status, revisited);
@@ -30,8 +32,8 @@ public class MeetProfessorController {
 			if (list1 != null && list1.size() != 0) {
 				for (int i = 0; i < list1.size(); i++) {
 					for (int j = 0; j < list.size(); j++) {
-						if (list.get(i).get("id").equals(list1.get(i).get("issueid"))) {
-							list.get(i).put("assit", list1.get(i).get("assit"));
+						if (list.get(j).get("id").equals(list1.get(i).get("issueid"))) {
+							list.get(j).put("assit", list1.get(i).get("assit"));
 						}
 					}
 				}
@@ -42,7 +44,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;// 通过
+		throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
 	}
 
 	/*
@@ -57,8 +59,7 @@ public class MeetProfessorController {
 	 * 设置回访
 	 */
 	@GetMapping("/meetProfessor/revisited")
-	public Result<Object> revisited( Integer id,  String comment,
-			 String close) {
+	public Result<Object> revisited(Integer id, String comment, String close) {
 		return meetProfessorService.revisited(id, comment, close);
 	}
 
