@@ -4,14 +4,14 @@ import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.user.RoleManagerMapper;
 import com.bonc.medicine.service.user.RoleManagerService;
+import com.bonc.medicine.utils.TimeFormatUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @program: medicine
@@ -53,6 +53,15 @@ public class RoleManagerServiceImpl implements RoleManagerService {
             throw  new MedicineRuntimeException(ResultEnum.NO_CONTENT);
         }
 
+        for (Map<String, Object> inMap: reList) {
+            if(null != inMap.get("create_time")){
+                SimpleDateFormat adf = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date dd = new Date(Long.parseLong(inMap.get("create_time")  + "") * 1000);
+                String sec = inMap.get("create_time") + "";
+                inMap.put("create_time", TimeFormatUtils.secendsToDate(sec));
+            }
+        }
         return reList;
     }
 
@@ -95,4 +104,28 @@ public class RoleManagerServiceImpl implements RoleManagerService {
     public Map<String, Object> updateRolePermissions() {
         return null;
     }
+
+
+   /* public static void main(String[] args) throws Exception{
+        List<Map<String, Object>> reList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++){
+            Map map = new HashMap();
+            map.put("create_time", "1537150610");
+            reList.add(map);
+
+        }
+        System.out.println(reList.toString());
+
+        for (Map<String, Object> inMap: reList) {
+            if(null != inMap.get("create_time")){
+                SimpleDateFormat adf = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date dd = new Date(Long.parseLong(inMap.get("create_time")  + "") * 1000);
+                String sec = inMap.get("create_time") + "";
+                inMap.put("create_time", TimeFormatUtils.secendsToDate(sec));
+            }
+        }
+        System.out.println(reList.toString());
+    }*/
 }
