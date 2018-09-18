@@ -51,4 +51,6 @@ public interface UserManagerMapper {
 
 	public List<Map<String, Object>> purchaselist();
 
+	public Map queryUserInfo(int userID);
+
 }
