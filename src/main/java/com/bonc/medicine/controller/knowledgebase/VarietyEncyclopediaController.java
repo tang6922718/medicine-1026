@@ -132,13 +132,15 @@ public class VarietyEncyclopediaController {
     @GetMapping("/breedInfo/{id}")
     public Result<Object> selectBreedDetail(@PathVariable String id) throws Exception{
         Map map = varietyEncyclopediaService.selectBreedDetail(id);
-        String keys = (String) map.get("graph_url");
-        String[] keyList = keys.split(",");
-        List imgList = new ArrayList();
-        for (String key:keyList) {
-            imgList.add(file.readImgByByte(key));
-        }
-        map.put("graph_url",imgList);
+       /* String keys = (String) map.get("graph_url");
+        if(null!=keys && ""!=keys){
+            String[] keyList = keys.split(",");
+            List imgList = new ArrayList();
+            for (String key:keyList) {
+                imgList.add(file.readImgByByte(key));
+            }
+            map.put("graph_url",imgList);
+        }*/
         return ResultUtil.success(map);
     }
 

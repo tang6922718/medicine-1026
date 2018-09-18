@@ -60,7 +60,8 @@
 			lecturer_name,
 			duration,
 			img_url,
-			STATUS
+			STATUS,
+			publish_date
 		FROM
 			train_video_course
 		ORDER BY
