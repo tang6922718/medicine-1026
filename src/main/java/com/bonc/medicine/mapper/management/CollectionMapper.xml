@@ -92,7 +92,8 @@
 			course_introduce,
 			duration,
 			video_url,
-			img_url
+			img_url,
+			status
 		FROM
 			train_video_course
 		WHERE id = #{id}

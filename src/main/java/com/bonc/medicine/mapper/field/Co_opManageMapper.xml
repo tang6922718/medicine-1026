@@ -24,7 +24,12 @@
 
 	<select id="queryCo_opByCondition" resultType="Map" parameterType="Map">
 		SELECT id AS coopID,official_user_id AS adminID,official_user_name AS adminName,name AS coopName,img_url,address
-		FROM field_coop WHERE 	state= '0' AND is_audit = '0'
+		FROM field_coop WHERE 	state= '0'
+
+		<if test="is_audit != null and is_audit != ''">
+			AND is_audit = #{is_audit}
+		</if>
+
 		<if test="coopID != null and coopID != ''">
 		  AND id = #{coopID}
 		</if>
