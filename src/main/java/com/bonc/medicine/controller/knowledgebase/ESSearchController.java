@@ -139,6 +139,7 @@ public class ESSearchController {
         BoolQueryBuilder qbd = QueryBuilders.boolQuery();
         qbd.must(QueryBuilders.termQuery("type", type));
         qbd.must(QueryBuilders.matchQuery("artice_type", article_type));
+        qbd.mustNot(QueryBuilders.idsQuery().addIds(type+"_"+id));
 
         SearchResponse sresult = srb.setQuery(qbd).execute().actionGet();
         SearchHits hitsResult = sresult.getHits();
@@ -149,7 +150,7 @@ public class ESSearchController {
             Map sopTypes = (Map) source.get("sop_type_scores");
             article_score = (Double) sopTypes.get(article_type);
             source.put("article_score",article_score);
-            source.put("id",id);
+//            source.put("id",id);
             list.add(source);
 //            System.out.println(hit.getSourceAsString());
         }
@@ -162,7 +163,7 @@ public class ESSearchController {
                 return score2.compareTo(score1);
             }
         });
-        return ResultUtil.success(list.subList(1, len));
+        return ResultUtil.success(list.subList(0, len));
     }
 
 }
