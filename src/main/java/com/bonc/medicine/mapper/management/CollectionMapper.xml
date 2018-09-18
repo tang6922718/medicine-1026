@@ -61,7 +61,7 @@
 			duration,
 			img_url,
 			STATUS,
-			publish_date
+			publish_time
 		FROM
 			train_video_course
 		ORDER BY
