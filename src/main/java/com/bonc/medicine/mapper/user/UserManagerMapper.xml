@@ -166,4 +166,8 @@
 		select user_id,count(1) as purchase from mall_purchase where state = '1' and is_aduit = '1' group by user_id
 	</select>
 
+	<select id="queryUserInfo" resultType="Map" parameterType="Integer">
+		SELECT head_portrait,name,sex,age,address,telephone FROM common_user WHERE id= #{userID}
+	</select>
+
 </mapper>

@@ -169,4 +169,9 @@ public class UserManagerServiceImpl implements UserManagerService {
 		return userManagerMapper.purchaselist();
 	}
 
+	@Override
+	public Result<Object> queryUserInfo(int userID) {
+		return ResultUtil.success(userManagerMapper.queryUserInfo(userID));
+	}
+
 }
