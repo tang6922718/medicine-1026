@@ -340,8 +340,8 @@ public class DyanimicController {
     // 查询待审核的动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/uncheckDyanimic")
-    public Result<Object> selectUncheckDyanimic() {
-        List<Map> list = dyanimicService.selectUncheckDyanimic();
+    public Result<Object> selectUncheckDyanimic(int dyn_cat_id,String publish_time) {
+        List<Map> list = dyanimicService.selectUncheckDyanimic( dyn_cat_id, publish_time);
         return ResultUtil.success(list);
     }
 
