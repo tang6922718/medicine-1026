@@ -90,7 +90,8 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	public Result<Object> updateCo_op(Co_op tempData) {
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
 
-		if (tempData.getIs_audit().equals("0")){ // 合作社审核通过时  给用户添加合作社角色属性
+		if ( "0".equals(tempData.getIs_audit())){ // 合作社审核通过时  给用户添加合作社角色属性
+
 			int i=co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
 			if (i>0){
 				return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));

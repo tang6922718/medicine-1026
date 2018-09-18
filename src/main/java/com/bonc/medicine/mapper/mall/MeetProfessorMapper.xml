@@ -108,7 +108,8 @@
 		d.address,
 		d.head_portrait,
 		c.issue_status,
-		c.issue_time,
+		TIMESTAMPDIFF( SECOND, c.issue_time, now( ) )
+		AS issue_time,
 		c.issue_desc,
 		c.score,
 		c.id as issue_id
@@ -133,7 +134,8 @@
 		temp.id,
 		temp.from_uid,
 		temp.to_uid,
-		temp.reply_time,
+		TIMESTAMPDIFF( SECOND, temp.reply_time, now( ) )
+		AS reply_time,
 		temp.content,
 		cu.NAME,
 		cu.head_portrait,
@@ -175,7 +177,7 @@
 		LEFT JOIN common_user cu ON
 		temp.from_uid = cu.id
 		WHERE
-		temp.to_uid = #{spec_id}
+		temp.to_uid = #{spec_id} or temp.from_uid = #{spec_id}
 	</select>
 
 	<select id="issue_statistics_solving" parameterType="Map"

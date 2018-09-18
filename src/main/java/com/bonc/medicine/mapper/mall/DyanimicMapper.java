@@ -21,7 +21,8 @@ public interface DyanimicMapper {
 	public List<Map> selectDetailOneDyanimic(@Param("id") int id); //查询某一条动态
 	public int delOneDyanimic(@Param("id") int id);//删除某一条id
 	public List<Map> selectDyanimicCategory();//查询动态分类
-	public List<Map> selectUncheckDyanimic();//查询待审核的动态
+	public List<Map> selectUncheckDyanimic(@Param("dyn_cat_id") int dyn_cat_id,
+										   @Param("publish_time") String publish_time);//查询待审核的动态
 
 	public int updateOneDyanimic(@Param("effect_flag") char effect_flag,
 								 @Param("fail_opinion") String fail_opinion,
