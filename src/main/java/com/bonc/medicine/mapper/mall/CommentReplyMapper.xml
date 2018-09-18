@@ -7,8 +7,8 @@
 	</insert>
 	
 	<insert id="insertReply" parameterType="java.util.Map">
-		insert into common_comment (comment_id,reply_oid,reply_type,content,from_uid,to_uid,reply_time) 
-		values (#{comment_id},#{reply_oid},#{reply_type},#{content},#{from_uid},#{to_uid},#{reply_time)
+		insert into common_comment (comment_id,reply_oid,content,from_uid,to_uid,reply_time) 
+		values (#{comment_id},#{reply_oid},#{content},#{from_uid},#{to_uid},#{reply_time})
 	</insert>
 	
 	<select id="queryComments" parameterType="java.util.Map" resultType="java.util.Map">
@@ -26,14 +26,14 @@
 	</select>
 		
 	<select id="queryReplies" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT cr.*, cu1.name AS fname, cu2.name AS tname  
-		FROM common_reply cr
-		LEFT JOIN common_user cu1 ON cu1.id = cr.from_uid
-		LEFT JOIN common_user cu2 ON cu2.id = cr.to_uid
-		WHERE cr.comment_id IN 
-		<foreach collection="array" open="(" item="comment_id" separator="," close=")">
+		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  
+		FROM common_comment cc
+		LEFT JOIN common_user cu1 ON cu1.id = cc.from_uid
+		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
+		WHERE cc.comment_id IN 
+		<foreach collection="list" open="(" item="comment_id" separator="," close=")">
 			#{comment_id}
 		</foreach>
-		ORDER BY cr.comment_id ASC, cr.reply_time DESC
+		ORDER BY cc.comment_id ASC, cc.reply_time DESC
 	</select>
 </mapper>

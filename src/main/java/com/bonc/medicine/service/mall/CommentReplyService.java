@@ -8,5 +8,5 @@ public interface CommentReplyService {
 	public int insertReply(Map param);
 	public List<Map> queryComments(Map param);
 	public int commentsCount(Map param);
-	public List<Map> queryReplies(String[] comment_ids);
+	public List<Map> queryReplies(List comment_ids);
 }
