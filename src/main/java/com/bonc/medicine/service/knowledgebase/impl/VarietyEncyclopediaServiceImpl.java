@@ -84,8 +84,8 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
     }
 
     @Override
-    public String selectUserCare(String id) {
-        return varietyEncyclopediaMapper.selectUserCare(id);
+    public String selectUserCare(String user_id) {
+        return varietyEncyclopediaMapper.selectUserCare(user_id);
     }
 
 

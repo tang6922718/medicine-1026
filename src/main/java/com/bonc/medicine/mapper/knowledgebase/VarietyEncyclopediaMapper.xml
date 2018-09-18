@@ -195,7 +195,8 @@
 		FROM
 			common_user_care_varieties_r a
 		LEFT JOIN common_medicine_variety b ON a.variety_code = b.variety_code
-		WHERE a.user_id = #{user_id}
+		WHERE 1=1
+	    and a.user_id = #{user_id}
 	</select>
 
 </mapper>

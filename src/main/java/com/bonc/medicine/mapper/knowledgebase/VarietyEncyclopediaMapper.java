@@ -34,5 +34,5 @@ public interface VarietyEncyclopediaMapper {
 
     public List<Map<String,Object>> searchHistoryText();
 
-    public String selectUserCare(String id);
+    public String selectUserCare(String user_id);
 }
