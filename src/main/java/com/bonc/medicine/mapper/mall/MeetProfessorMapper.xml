@@ -108,19 +108,24 @@
 		d.address,
 		d.head_portrait,
 		c.issue_status,
-		TIMESTAMPDIFF( SECOND, c.issue_time, now( ) )
+		TIMESTAMPDIFF( SECOND,
+		c.issue_time, now( ) )
 		AS issue_time,
 		c.issue_desc,
 		c.score,
-		c.id as issue_id
+		c.id as
+		issue_id
 		FROM
 		spec_info a
 		LEFT JOIN
-		spec_issue_association b ON a.spec_id = b.specid
+		spec_issue_association b ON a.spec_id
+		= b.specid
 		AND ( b.is_assigned =
 		'0' OR b.is_assigned = '1' )
-		LEFT JOIN spec_issue c ON b.issueid = c.id
-		AND ( c.issue_status = '2' OR c.issue_status = '3' )
+		LEFT JOIN
+		spec_issue c ON b.issueid = c.id
+		AND ( c.issue_status = '2' OR
+		c.issue_status = '3' )
 		LEFT JOIN
 		common_user d ON c.issue_user_id = d.id
 		WHERE
@@ -134,7 +139,8 @@
 		temp.id,
 		temp.from_uid,
 		temp.to_uid,
-		TIMESTAMPDIFF( SECOND, temp.reply_time, now( ) )
+		TIMESTAMPDIFF(
+		SECOND, temp.reply_time, now( ) )
 		AS reply_time,
 		temp.content,
 		cu.NAME,
@@ -167,17 +173,20 @@
 		FROM
 		spec_issue a
 		WHERE
-		EXISTS ( SELECT 1 FROM common_comment t WHERE
+		EXISTS (
+		SELECT 1 FROM common_comment t WHERE
 		t.object_id = a.id AND
 		t.object_type = '1' )
 		) b
 		INNER JOIN
 		common_comment p ON p.id = b.id
-		) temp
+		)
+		temp
 		LEFT JOIN common_user cu ON
 		temp.from_uid = cu.id
 		WHERE
-		temp.to_uid = #{spec_id} or temp.from_uid = #{spec_id}
+		temp.to_uid =
+		#{spec_id} or temp.from_uid = #{spec_id}
 	</select>
 
 	<select id="issue_statistics_solving" parameterType="Map"
@@ -298,9 +307,16 @@
 		where id = #{id}
 	</update>
 
+	<update id="setCase" parameterType="Map">
+		update spec_issue set
+		case_detail = #{case_detail} ,case_title = #{case_title} , case_varieties = #{case_varieties}
+		where id = #{id}
+	</update>
+
 	<update id="eddIssue" parameterType="Map">
 		update spec_issue set
-		revisited_mark = #{revisited_mark} ,is_revisited = '1'
+		revisited_mark = #{revisited_mark} ,is_revisited
+		= '1'
 		<if test="issue_status != null and issue_status != ''">
 			, issue_status =#{issue_status}
 		</if>
