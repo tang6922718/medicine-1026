@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Dyanimic;
 import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.mall.DyanimicService;
+import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -29,6 +30,8 @@ public class DyanimicController {
     ViewNumberService viewNumberService; // 浏览
     @Autowired
     CommentReplyService commentReplyService; // 回复
+    @Autowired
+    AttentionService attentionService; //关注
 
 
     //新增一条动态
@@ -66,17 +69,31 @@ public class DyanimicController {
                 param.put("object_id", dyanimicId+"");
                 int messageNumber = commentReplyService.commentsCount(param);
 
+                //此处引用 当前用户是否关注 动态发布者
+//                param.clear();
+//                int attedUserId = (int) amap.get("publish_user_id");
+//                int user_id = 1;   //当前用户id，暂时假数据
+//                param.put("userId", user_id+"");
+//                param.put("attedUserId", attedUserId+"");
+//                Map attention = attentionService.attentionRelation(map);
+//                Object attentionTF = attention.get("followed");
+
+                // 此处引用 当前用户是否对该条动态点赞
+
+
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
+//                map.put("attention",attentionTF); //1-关注 0-未关注
+                map.put("praise",1);
                 returnList.add(map);
             }
         }
         return ResultUtil.success(returnList);
     }
 
-    // 查询某一用户发布的动态
+    // 查询某一用户(不是当前用户)发布的动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/user")
     public Result<Object> selectUserDyanimic(int publish_user_id,int dyn_cat_id) {
@@ -106,10 +123,24 @@ public class DyanimicController {
                 param.put("object_id", dyanimicId+"");
                 int messageNumber = commentReplyService.commentsCount(param);
 
+                //此处引用 当前用户是否关注 动态发布者
+//                param.clear();
+//                int attedUserId = (int) amap.get("publish_user_id");
+//                int user_id = 1;
+//                param.put("userId", user_id+"");
+//                param.put("attedUserId", attedUserId+"");
+//                Map attention = attentionService.attentionRelation(map);
+//                Object attentionTF = attention.get("followed");
+
+                // 此处引用 当前用户是否对该条动态点赞
+
+
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
+//                map.put("attention",attentionTF); //1-关注 0-未关注
+                map.put("praise",1);
                 returnList.add(map);
             }
         }
@@ -117,11 +148,69 @@ public class DyanimicController {
     }
 
 
-    // 查询某一用户参与过（不包含发布）的动态
+
+    // 查询当前用户发布的动态
     @SuppressWarnings("unchecked")
-    @GetMapping("/select/join")
-    public Result<Object> selectJoinDyanimic(int user_id) {
+    @GetMapping("/select/mine")
+    public Result<Object> selectMineDyanimic(int dyn_cat_id) {
         List returnList = new ArrayList();
+        int publish_user_id = 1; // publish_user_id 是 当前用户id
+        List<Map> list = dyanimicService.selectUserDyanimic( publish_user_id, dyn_cat_id);
+        if(list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                Map map = new HashMap();
+
+                Map amap = list.get(i);
+                int dyanimicId = (int)amap.get("id");
+                // 此处引用 点赞 的接口
+                Map<String, String> param = new HashMap<>();
+                param.put("type", "0");
+                param.put("acceptThumbId", dyanimicId+"");
+                Map<String, Object> dianzan = thumbService.thumbNumber(param);
+                Object thumbNumber = dianzan.get("thumbNumber");
+                // 此处引用 浏览数 的接口
+                param.clear();
+                param.put("objectType", "0");
+                param.put("objectId", dyanimicId+"");
+                Map<String, Object> liulan = viewNumberService.queryViewNumber(param);
+                Object viewNumber = liulan.get("viewNumber");
+                // 此处引用 回复消息数 的接口
+                param.clear();
+                param.put("object_type", "2");
+                param.put("object_id", dyanimicId+"");
+                int messageNumber = commentReplyService.commentsCount(param);
+
+                //此处引用 当前用户是否关注 动态发布者
+//                param.clear();
+//                int attedUserId = (int) amap.get("publish_user_id");
+//                int user_id = 1;
+//                param.put("userId", user_id+"");
+//                param.put("attedUserId", attedUserId+"");
+//                Map attention = attentionService.attentionRelation(map);
+//                Object attentionTF = attention.get("followed");
+
+                // 此处引用 当前用户是否对该条动态点赞
+
+
+                map.put("dyanimic",amap);
+                map.put("thumb",thumbNumber);
+                map.put("message",messageNumber);
+                map.put("view",viewNumber);
+//                map.put("attention",attentionTF); //1-关注 0-未关注
+                map.put("praise",1);
+                returnList.add(map);
+            }
+        }
+        return ResultUtil.success(returnList);
+    }
+
+
+    // 查询当前用户参与过（不包含发布）的动态
+    @SuppressWarnings("unchecked")
+    @GetMapping("/select/mineJoin")
+    public Result<Object> selectMineJoinDyanimic() {
+        List returnList = new ArrayList();
+        int user_id = 1; // 当前用户id
         List<Map> list = dyanimicService.selectJoinDyanimic(user_id);
         if(list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
@@ -147,15 +236,30 @@ public class DyanimicController {
                 param.put("object_id", dyanimicId+"");
                 int messageNumber = commentReplyService.commentsCount(param);
 
+                //此处引用 当前用户是否关注 动态发布者
+//                param.clear();
+//                int attedUserId = (int) amap.get("publish_user_id");
+////                int user_id = 1;
+//                param.put("userId", user_id+"");
+//                param.put("attedUserId", attedUserId+"");
+//                Map attention = attentionService.attentionRelation(map);
+//                Object attentionTF = attention.get("followed");
+
+                // 此处引用 当前用户是否对该条动态点赞
+
+
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
+//                map.put("attention",attentionTF); //1-关注 0-未关注
+                map.put("praise",1);
                 returnList.add(map);
             }
         }
         return ResultUtil.success(returnList);
     }
+
 
 
     // 查询具体的一条动态
@@ -187,11 +291,27 @@ public class DyanimicController {
                 param.put("object_type", "2");
                 param.put("object_id", dyanimicId+"");
                 int messageNumber = commentReplyService.commentsCount(param);
+/*
+
+                //此处引用 当前用户是否关注 动态发布者
+                param.clear();
+                int attedUserId = (int) amap.get("publish_user_id");
+                int user_id = 1;
+                param.put("userId", user_id+"");
+                param.put("attedUserId", attedUserId+"");
+                Map attention = attentionService.attentionRelation(map);
+                Object attentionTF = attention.get("followed");
+
+                // 此处引用 当前用户是否对该条动态点赞
+
+*/
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
+//                map.put("attention",attentionTF); //1-关注 0-未关注
+                map.put("praise",1);
                 returnList.add(map);
             }
         }
