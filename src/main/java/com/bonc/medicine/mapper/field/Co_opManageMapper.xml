@@ -271,4 +271,18 @@
 		ORDER BY publish_time DESC
 	</select>
 
+	<update id="updateCoopTotalAreaAdd" parameterType="Integer">
+		UPDATE field_coop SET total_area = total_area + #{area} WHERE id = #{coopID}
+	</update>
+
+	<update id="updateCoopTotalAreaReduce" parameterType="Integer">
+		UPDATE field_coop SET total_area = total_area - (SELECT plant_area FROM field_coop_member WHERE id=#{ID})
+        WHERE id = (SELECT coop_id FROM field_coop_member WHERE id=#{ID})
+	</update>
+
+	<insert id="insertCommon_user_role_rel" parameterType="Integer">
+		INSERT common_user_role_rel (user_id,role_id)
+		VALUES (( SELECT official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
+	</insert>
+
 </mapper>

@@ -89,7 +89,17 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Override
 	public Result<Object> updateCo_op(Co_op tempData) {
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
-		return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
+
+		if (tempData.getIs_audit().equals("0")){ // 合作社审核通过时  给用户添加合作社角色属性
+			int i=co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
+			if (i>0){
+				return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
+			}else {
+				return ResultUtil.error(500,"添加角色属性属性失败");
+			}
+		}else {
+			return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
+		}
 	}
 
 	@Override
@@ -102,7 +112,12 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		}
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
-		return ResultUtil.success(co_opManageMapper.insertCo_opMember(tempData));
+
+		int i=co_opManageMapper.insertCo_opMember(tempData);
+		if (i>0){
+			co_opManageMapper.updateCoopTotalAreaAdd(tempData.getCoop_id(),tempData.getPlant_area());
+		}
+		return ResultUtil.success(i);
 	}
 
 	@Override
@@ -115,6 +130,10 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		Co_op_Member tempData = new Co_op_Member();
 		tempData.setId(id);
 		tempData.setState("1"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
+		int i = co_opManageMapper.updateCo_opMember(tempData);
+		if (i>0){
+			co_opManageMapper.updateCoopTotalAreaReduce(id);
+		}
 		return ResultUtil.success(co_opManageMapper.updateCo_opMember(tempData));
 	}
 

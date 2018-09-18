@@ -14,14 +14,25 @@ public class ExchangeCategroyNameID {
 
     public static String NameToId(String name,List<Map> categroylist){
         String ID="";
-        String[] token=name.split(",");
-        for (int i = 0; i < token.length; i++) {
+
+        if (name.contains(",")){
+            String[] token=name.split(",");
+            for (int i = 0; i < token.length; i++) {
+                for (Map temp: categroylist) {
+                    if (token[i].equals(temp.get("name").toString()) || temp.get("othername").toString().contains(token[i])){
+                        ID+=(temp.get("id").toString()+",");
+                    }
+                }
+            }
+        }else {
             for (Map temp: categroylist) {
-                if (token[i].equals(temp.get("name").toString()) || temp.get("othername").toString().contains(token[i])){
-                    ID+=(temp.get("id").toString()+",");
+                if (temp.get("name").toString().equals(name)){
+                    ID=temp.get("id").toString()+",";
+                    break;
                 }
             }
         }
+
 
         if (ID.length()>0) return ID.substring(0,ID.length()-1);
         else return "";
@@ -29,11 +40,21 @@ public class ExchangeCategroyNameID {
 
     public static String IDToName(String ID,List<Map> categroylist){
         String name="";
-        String[] token=ID.split(",");
-        for (int i = 0; i < token.length; i++) {
+
+        if (ID.contains(",")){
+            String[] token=ID.split(",");
+            for (int i = 0; i < token.length; i++) {
+                for (Map temp: categroylist) {
+                    if (token[i].equals(temp.get("id").toString())){
+                        name+=(temp.get("name")+",");
+                    }
+                }
+            }
+        }else {
             for (Map temp: categroylist) {
-                if (token[i].equals(temp.get("id").toString())){
-                    name+=(temp.get("name")+",");
+                if (temp.get("id").toString().equals(ID)){
+                    name=temp.get("name").toString()+",";
+                    break;
                 }
             }
         }

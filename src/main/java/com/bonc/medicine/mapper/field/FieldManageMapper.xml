@@ -89,7 +89,8 @@
 							   video_url,
 							   record_time,
 							   guide_flag,
-							   record_user_id
+							   record_user_id,
+							   categroyID
 							)
 							VALUES(
 							   #{field_id},
@@ -98,26 +99,30 @@
 							   #{video_url},
 							   #{record_time},
 							   #{guide_flag},
-							   #{record_user_id}
+							   #{record_user_id},
+							   #{categroyID}
 							)
     </insert>
 
 
 	<select id="getOperation" resultType="hashMap" parameterType="map">
-    	select *
-		from field_record
-		where 1 = 1
+		select A.*,B.variety_name AS categroyName ,C.name,D.step_name,D.next_suggestion
+		from field_record A , common_medicine_variety B , common_user C, km_sop_step D
+		where A.categroyID = B.variety_code AND A.record_user_id = C.id AND A.segment_id = D.id
 		<if test='field_id != null and field_id != ""'>
-			AND field_id = #{field_id}
+			AND A.field_id = #{field_id}
 		</if>
 		<if test='record_user_id != null and record_user_id != ""'>
-			AND record_user_id = #{record_user_id}
+			AND A.record_user_id = #{record_user_id}
 		</if>
 		<if test='guide_flag != null and guide_flag != ""'>
-			AND guide_flag = #{guide_flag}
+			AND A.guide_flag = #{guide_flag}
 		</if>
 		<if test='segment_id != null and segment_id != ""'>
-			AND segment_id = #{segment_id}
+			AND A.segment_id = #{segment_id}
+		</if>
+		<if test='categroyID != null and categroyID != ""'>
+			AND A.categroyID = #{categroyID}
 		</if>
 		order by record_time ASC
     </select>

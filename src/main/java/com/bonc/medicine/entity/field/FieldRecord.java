@@ -18,6 +18,7 @@ public class FieldRecord {
     private Date record_time; // 记录时间
     private String guide_flag; // 技术指导标识   0 是     1  不是
     private int record_user_id;  // 记录用户编号
+    private int categroyID;
 
     public int getId() {
         return id;
@@ -81,5 +82,13 @@ public class FieldRecord {
 
     public void setRecord_user_id(int record_user_id) {
         this.record_user_id = record_user_id;
+    }
+
+    public int getCategroyID() {
+        return categroyID;
+    }
+
+    public void setCategroyID(int categroyID) {
+        this.categroyID = categroyID;
     }
 }

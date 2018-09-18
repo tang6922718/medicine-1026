@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
 import com.bonc.medicine.entity.field.Notice;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -69,4 +70,10 @@ public interface Co_opManageMapper {
     public List<Map<String, Object>> noticelist(Map map);
 
     public List<Map> getCoopNoticeList(int coopID);
+
+    public int updateCoopTotalAreaAdd(@Param("coopID") int coopID, @Param("area") float area);
+
+    public int updateCoopTotalAreaReduce(int ID);
+
+    public int insertCommon_user_role_rel(int coopID);
 }
