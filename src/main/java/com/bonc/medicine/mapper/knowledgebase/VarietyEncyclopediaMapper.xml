@@ -189,7 +189,7 @@
 		SELECT id,search_text,search_date FROM history_search_text ORDER BY search_date DESC LIMIT 20
 	</select>
 
-	<select id="selectUserCare" parameterType="String" resultMap="String">
+	<select id="selectUserCare" parameterType="String" resultType="String">
 		SELECT
 			GROUP_CONCAT(CONCAT_WS(",",variety_name,variety_alias)) AS care_names
 		FROM
