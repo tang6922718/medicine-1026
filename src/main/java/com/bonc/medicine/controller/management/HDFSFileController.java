@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bonc.medicine.hdfs.HdfsFileSystem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
+//import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,9 +43,9 @@ public class HDFSFileController {
                 MultipartFile file = multiRequest.getFile((String)iter.next());
                 if(file != null) {
                     CommonsMultipartFile cf= (CommonsMultipartFile)file;
-                    DiskFileItem fi = (DiskFileItem)cf.getFileItem();
-                    File inputFile = fi.getStoreLocation();
-                    HdfsFileSystem.createFile(inputFile, "hdfs://192.168.241.149:9000/upload/1.mp4");
+//                    DiskFileItem fi = (DiskFileItem)cf.getFileItem();
+//                    File inputFile = fi.getStoreLocation();
+//                    HdfsFileSystem.createFile(inputFile, "hdfs://192.168.241.149:9000/upload/1.mp4");
                 }
             }
         }
