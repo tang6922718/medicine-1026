@@ -234,7 +234,9 @@ public class SpecRepertoryController {
 	@SuppressWarnings({ "rawtypes" })
 	@PostMapping("/issue")
 	@Transactional
-	public Result releaseIssue(Issue issue) {
+	public Result releaseIssue(@RequestBody Issue issue) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		issue.setIssue_time(sdf.format(new Date().getTime())); 
 		specialistService.releaseIssue(issue);
 		Map param = new HashMap<>();
 		param.put("specid", issue.getSpec_id()+"");

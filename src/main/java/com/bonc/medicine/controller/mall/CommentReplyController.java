@@ -6,6 +6,8 @@ import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,11 +19,15 @@ public class CommentReplyController {
 	
 	@PostMapping("/comment")
 	public Result releaseComment(@RequestBody Map param) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		param.put("reply_time", sdf.format(new Date().getTime()));
 		return ResultUtil.success(commentReplyService.insertComment(param));
 	}
 	
 	@PostMapping("/reply")
 	public Result releaseReply(@RequestBody Map param) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		param.put("reply_time", sdf.format(new Date().getTime()));
 		return ResultUtil.success(commentReplyService.insertReply(param));
 	}
 	

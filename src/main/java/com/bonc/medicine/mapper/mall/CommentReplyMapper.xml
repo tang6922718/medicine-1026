@@ -7,8 +7,8 @@
 	</insert>
 	
 	<insert id="insertReply" parameterType="java.util.Map">
-		insert into common_comment (comment_id,reply_oid,reply_type,content,from_uid,to_uid,reply_time) 
-		values (#{comment_id},#{reply_oid},#{reply_type},#{content},#{from_uid},#{to_uid},#{reply_time)
+		insert into common_comment (comment_id,reply_oid,content,from_uid,to_uid,reply_time) 
+		values (#{comment_id},#{reply_oid},#{content},#{from_uid},#{to_uid},#{reply_time})
 	</insert>
 	
 	<select id="queryComments" parameterType="java.util.Map" resultType="java.util.Map">

@@ -8,7 +8,7 @@ public class Issue {
 	private String img_url; // 图片url
 	private String video_url; // 视频url
 	private char is_public; // 是否为案例（公开）
-	private Date issue_time; // 提问时间
+	private String issue_time; // 提问时间
 	private String issue_address; // 提问地址
 	private int issue_user_id; // 提问人id
 	private char issue_status; // 问题状态0未处理1进行中2已结束3已关闭
@@ -78,10 +78,10 @@ public class Issue {
 	public void setIs_public(char is_public) {
 		this.is_public = is_public;
 	}
-	public Date getIssue_time() {
+	public String getIssue_time() {
 		return issue_time;
 	}
-	public void setIssue_time(Date issue_time) {
+	public void setIssue_time(String issue_time) {
 		this.issue_time = issue_time;
 	}
 	public String getIssue_address() {
