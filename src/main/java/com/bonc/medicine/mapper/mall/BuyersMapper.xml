@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bonc.medicine.mapper.mall.BuyersMapper">
 	<insert id="insertPurchase" parameterType="com.bonc.medicine.entity.mall.Purchase">
-        insert into mall_purchase (goods_name,purchase_cat_code,specification,user_id,img_url,
+        insert into mall_purchase (goods_name,purchase_cat_code,goods_cat_code,specification,user_id,img_url,
         publish_time,effect_flag,purchase_quantity,unit,linkman,linkman_phone,storehouse,produce_area,
         receipt,quality_standard,send_sample,payment,packing,qualification_standard,state,is_aduit,comment)
-        values(#{goods_name},#{purchase_cat_code},#{specification},
+        values(#{goods_name},#{purchase_cat_code},,#{goods_cat_code},#{specification},
         #{user_id},#{img_url},#{publish_time},#{effect_flag},#{purchase_quantity},#{unit}
         #{linkman},#{linkman_phone},#{storehouse},#{produce_area},#{receipt},#{quality_standard},
         #{send_sample},#{payment},#{packing},#{qualification_standard},#{state},#{is_aduit},#{comment})
@@ -28,6 +28,9 @@
 		</if>
 		<if test="cat_code != null and cat_code != ''">
 			and mp.purchase_cat_code = #{cat_code}
+		</if>
+		<if test="goods_cat_code != null and goods_cat_code != ''">
+			and mp.goods_cat_code = #{goods_cat_code}
 		</if>
 		<if test="goods_name != null and goods_name != ''">
 			and (mp.goods_name like CONCAT('%',#{goods_name},'%') or cu.name like CONCAT('%',#{goods_name},'%') )

@@ -124,9 +124,15 @@
 		FROM
 		mall_supply a
 		LEFT JOIN common_user b ON a.seller_id = b.id
-		where a.state = '0' and a.is_audit = '0'
-		<if test="key != null and key != ''">
-            AND (a.goods_name like CONCAT('%',#{key},'%') OR b.telephone like CONCAT('%',#{key},'%') OR b.NAME like CONCAT('%',#{key},'%'))
+		where a.state = '0'
+		<if test="goods_name != null and goods_name != ''">
+            AND a.goods_name like CONCAT('%',#{goods_name},'%') 
+        </if>
+		<if test="is_audit != null and is_audit != ''">
+            AND a.is_audit =  #{is_audit} 
+        </if>
+		<if test="carriage_status != null and carriage_status != ''">
+            AND a.carriage_status = #{carriage_status}
         </if>
 		<if test="goodType != null and goodType != ''">
             AND a.supply_cat_code = #{goodType}

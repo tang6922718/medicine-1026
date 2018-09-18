@@ -4,6 +4,7 @@ public class Purchase {
 	private int id; // 求购编号（创建时缺省）
 	private String goods_name; // 商品名称
 	private char purchase_cat_code; // 求购分类:1,种子种苗；2，源药材；3.农资农机
+	private char goods_cat_code; // 商品品种：1肥料、2农机、3设备，4农药
 	private char specification; // 规格：1 统货、2 皮、3 切片、4 两半
 	private int user_id; // 用户编号
 	private String img_url; // 商品图片
@@ -56,6 +57,12 @@ public class Purchase {
 	}
 	public void setPurchase_cat_code(char purchase_cat_code) {
 		this.purchase_cat_code = purchase_cat_code;
+	}
+	public char getGoods_cat_code() {
+		return goods_cat_code;
+	}
+	public void setGoods_cat_code(char goods_cat_code) {
+		this.goods_cat_code = goods_cat_code;
 	}
 	public char getSpecification() {
 		return specification;

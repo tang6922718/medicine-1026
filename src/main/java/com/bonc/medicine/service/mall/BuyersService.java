@@ -14,6 +14,6 @@ public interface BuyersService {
 	public int deletePurchase(String id);
 	public int revokePurchase(String id);
 	public List<Map<String,Object>> myPurchasepList(String user_id);
-	public List<Map<String,Object>> purchasepCatList(String cat_code);
+	public List<Map<String,Object>> purchasepCatList(String cat_code,String goods_cat_code);
 	public List<Map<String,Object>> purchasepNameList(String goods_name);
 }
