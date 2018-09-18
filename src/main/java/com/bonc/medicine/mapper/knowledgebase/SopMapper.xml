@@ -4,9 +4,10 @@
 <mapper namespace="com.bonc.medicine.mapper.knowledgebase.SopMapper">
 	<select id="getSopStandards" parameterType="java.util.Map" resultType="Map">
 		SELECT
-			kvs.variety_id,kve.variety_name,kvs.record_time,kvs.sop_type,kvs.record_status
+        kvs.variety_id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name
 		FROM
-			km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.variety_id
+        km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.variety_id LEFT JOIN
+        common_backend_user cbu ON kvs.record_user_id = cbu.id
 		WHERE 1=1
 		<if test="sop_type != null and sop_type != ''">
 			AND kvs.sop_type = #{sop_type}

@@ -33,7 +33,7 @@
 	</select>
 
 
-	<!--查询某一用户 供求类型的动态-->
+	<!--查询某一用户/当前用户发布的动态-->
 	<select id="selectUserDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
@@ -58,7 +58,7 @@
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
-		WHERE a.id = #{id} and a.effect_flag = '0'
+		WHERE a.id = #{id}
 	</select>
 
 	<!--逻辑删除某一条动态-->
@@ -76,6 +76,12 @@
 	<!--查询待审核的动态-->
 	<select id="selectUncheckDyanimic" resultType="java.util.Map">
 		SELECT * FROM  comm_dyanimic where effect_flag = '2'
+		<if test="dyn_cat_id != null and dyn_cat_id != 0 ">
+			and  dyn_cat_id = #{dyn_cat_id}
+		</if>
+		<if test="publish_time != null and publish_time != '' ">
+			and  #{publish_time} = date(publish_time)
+		</if>
   	</select>
 
 	<!--审核 动态，批准0或不批准1-->
@@ -93,14 +99,14 @@
 		where id = #{id}
 	</update>
 
-	<!--查询待审核的动态-->
+	<!--查询当前用户参与（不含发布）的动态-->
 	<select id="selectJoinDyanimic" resultType="java.util.Map">
 
 		select distinct a.* from (
 			select DISTINCT a.*,b.praise_time as joinTime from
 			comm_dyanimic a
 			left join common_praise b on a.id = b.object_id
-			where a.effect_flag = '0' and b.object_type = '0' and b.praise_user_id = #{user_id}  and a.publish_user_id !=  #{user_id}
+			where a.effect_flag = '0' and b.object_type = '0' and b.praise_user_id = #{user_id}  and a.publish_user_id != #{user_id}
 			union all
 			select distinct a.*,c.reply_time as joinTime from
 			comm_dyanimic a

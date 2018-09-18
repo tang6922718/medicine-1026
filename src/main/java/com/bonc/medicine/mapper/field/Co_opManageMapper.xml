@@ -23,37 +23,49 @@
 
 
 	<select id="queryCo_opByCondition" resultType="Map" parameterType="Map">
-		SELECT id AS coopID,official_user_id AS adminID,official_user_name AS adminName,name AS coopName,img_url,address
-		FROM field_coop WHERE 	state= '0'
+		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area ,A.img_url,A.portrait,
+		       A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
+		       A.official_user_name AS adminName,A.establish_date,A.photo_url,A.is_audit,
+		       A.comment    ,D.role
+		FROM field_coop A ,
+		( SELECT B.user_id,GROUP_CONCAT(C.role_name) AS role
+		  FROM common_user_role_rel B , common_role C
+		  WHERE B.role_id = C.id GROUP BY B.user_id
+		) D
+		WHERE A.official_user_id = D.user_id  AND A.state= '0'
 
 		<if test="is_audit != null and is_audit != ''">
-			AND is_audit = #{is_audit}
+			AND A.is_audit = #{is_audit}
 		</if>
 
 		<if test="coopID != null and coopID != ''">
-		  AND id = #{coopID}
+		  AND A.id = #{coopID}
 		</if>
 
 		<if test="coopName != null and coopName != ''">
-			AND name LIKE CONCAT('%',#{coopName}, '%')
+			AND A.name LIKE CONCAT('%',#{coopName}, '%')
 		</if>
 
 		<if test="tel != null and tel != ''">
-			AND telephone LIKE CONCAT('%',#{tel}, '%')
+			AND A.telephone LIKE CONCAT('%',#{tel}, '%')
 		</if>
 
 		<if test="userID != null and userID != ''">
-			AND official_user_id = #{userID}
+			AND A.official_user_id = #{userID}
 		</if>
 
 		<if test="userName != null and userName != ''">
-			AND official_user_name LIKE CONCAT('%',#{userName}, '%')
+			AND A.official_user_name LIKE CONCAT('%',#{userName}, '%')
 		</if>
 
 		<if test="keyWord != null and keyWord != ''">
 			AND (
-			name LIKE CONCAT('%',#{keyWord}, '%') OR official_user_name LIKE CONCAT('%',#{keyWord}, '%')
+			A.name LIKE CONCAT('%',#{keyWord}, '%') OR A.official_user_name LIKE CONCAT('%',#{keyWord}, '%')
 			)
+		</if>
+
+		<if test='start_time != null and start_time != "" and end_time != null and end_time != "" '>
+			AND A.establish_date >= #{start_time}  AND #{end_time} >= A.establish_date
 		</if>
 
 	</select>
@@ -254,7 +266,7 @@
 		select * from common_notice where 1 = 1 and status='1'
 		<if test="msg != null and msg != ''">
 			AND notice_content LIKE
-			CONCAT(CONCAT('%',#{notice_content}),'%')
+			CONCAT(CONCAT('%',#{msg}),'%')
 		</if>
 		<if test="role != null and role != ''">
 			AND notice_role_type = #{role}

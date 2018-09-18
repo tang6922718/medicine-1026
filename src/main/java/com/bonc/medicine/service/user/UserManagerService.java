@@ -50,4 +50,6 @@ public interface UserManagerService {
 	public List<Map<String, Object>> supplylist();
 
 	public List<Map<String, Object>> purchaselist();
+
+	public Result<Object> queryUserInfo(int userID);
 }

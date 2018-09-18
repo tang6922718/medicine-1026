@@ -46,8 +46,8 @@ public class DyanimicServiceImpl implements DyanimicService {
 	}
 
 	@Override
-	public List<Map> selectUncheckDyanimic() {
-		return dyanimicMapper.selectUncheckDyanimic();
+	public List<Map> selectUncheckDyanimic(int dyn_cat_id,String publish_time) {
+		return dyanimicMapper.selectUncheckDyanimic( dyn_cat_id, publish_time);
 	}
 
 	@Override

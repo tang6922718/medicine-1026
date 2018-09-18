@@ -183,4 +183,16 @@ public class UserManagerController {
 		}
 		return ResultUtil.success(list);
 	}
+
+
+	/* *
+	 * @Description 查询用户的基本信息
+	 * @Date 17:51 2018/9/18
+	 * @Param [userID]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/userManager/userbaseinfo")
+	public Result<Object> queryUserInfo(@RequestParam int userID){
+		return userManagerService.queryUserInfo(userID);
+	}
 }
