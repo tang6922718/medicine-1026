@@ -100,16 +100,6 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 	
 	@Override
-	public List<Map<String, Object>> setCase(Integer id, String case_detail,String case_title,String case_varieties) {
-		Map map = new HashMap<>();
-		map.put("id", id);
-		map.put("case_detail", case_detail);
-		map.put("case_title", case_title);
-		map.put("case_varieties", case_varieties);
-		return meetProfessorMapper.setCase(map);
-	}
-	
-	@Override
 	public List<Map<String, Object>> eddIssue(Integer id, String revisited_mark, String issue_status) {
 		Map map = new HashMap<>();
 		map.put("id", id);

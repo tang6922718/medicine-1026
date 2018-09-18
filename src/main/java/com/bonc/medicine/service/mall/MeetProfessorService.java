@@ -32,8 +32,6 @@ public interface MeetProfessorService {
 	public List<Map<String, Object>> setRevisit(Integer id, Integer follow_days, String revisit_url,
 			String revisited_advice);
 	
-	public List<Map<String, Object>> setCase(Integer id, String case_detail,String case_title,String case_varieties);
-	
 	public List<Map<String, Object>> eddIssue(Integer id, String revisited_mark, String issue_status);
 
 	public void deleteInvitation(Integer id);

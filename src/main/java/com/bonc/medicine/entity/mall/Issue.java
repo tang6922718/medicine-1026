@@ -22,9 +22,6 @@ public class Issue {
 	private int sub_code; // 涉及学科id
 	private String field_ids; // 关联地块编号（1个）
 	private String spec_id; // 专家编号
-	private String case_detail; // 案例详情
-	private String case_title; // 案例标题
-	private String case_varieties; // 案例品种
 	
 	
 	public int getSub_code() {
@@ -140,23 +137,5 @@ public class Issue {
 	}
 	public void setRevisited_mark(String revisited_mark) {
 		this.revisited_mark = revisited_mark;
-	}
-	public String getCase_detail() {
-		return case_detail;
-	}
-	public void setCase_detail(String case_detail) {
-		this.case_detail = case_detail;
-	}
-	public String getCase_title() {
-		return case_title;
-	}
-	public void setCase_title(String case_title) {
-		this.case_title = case_title;
-	}
-	public String getCase_varieties() {
-		return case_varieties;
-	}
-	public void setCase_varieties(String case_varieties) {
-		this.case_varieties = case_varieties;
 	}
 }

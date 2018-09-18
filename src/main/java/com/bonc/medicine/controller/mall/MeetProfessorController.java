@@ -48,7 +48,7 @@ public class MeetProfessorController {
 	}
 
 	/*
-	 * 点评内容编辑
+	 * 设为案例
 	 */
 	@PostMapping("/meetProfessor/case")
 	public Result<Object> anli(@RequestBody Case anli) {
@@ -199,20 +199,6 @@ public class MeetProfessorController {
 		return result;
 	}
 	
-	/*
-	 * 设为案例
-	 */
-	@GetMapping("/meetProfessor/setCase")
-	public Result<Object> setCase(Integer id, String case_detail,String case_title,String case_varieties) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = meetProfessorService.setCase(id, case_detail,case_title,case_varieties);
-		Result<Object> result = new Result<Object>();
-		result.setCode(200);
-		result.setMsg("成功");
-		result.setData(list);
-		return result;
-	}
-
 	/*
 	 * 管理员关闭问题issue_status关闭传3否则不传
 	 */

@@ -60,8 +60,8 @@
 	</update>
 	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case">
 		insert into
-		spec_case(tittle,content,issue_id,img_url,publish_time)
-		values(#{tittle},#{content},#{issue_id},#{img_url},#{publish_time})
+		spec_case(title,varieties,content,issue_id,publish_time)
+		values(#{title},#{varieties},#{content},#{issue_id},#{publish_time})
 	</insert>
 
 	<select id="untreated" parameterType="Map" resultType="Map">

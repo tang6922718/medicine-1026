@@ -181,10 +181,9 @@
     
     <insert id="insertIssue" parameterType="com.bonc.medicine.entity.mall.Issue" useGeneratedKeys="true" keyProperty="id">
 		insert into spec_issue (issue_desc,img_url,video_url,is_public,issue_time,issue_address,issue_user_id,
-		issue_status,score,follow_days,is_revisited,revisited_mark,cat_code,sub_code,field_ids,case_detail,case_title,case_varieties) 
+		issue_status,score,follow_days,is_revisited,revisited_mark,cat_code,sub_code,field_ids) 
 		values (#{issue_desc},#{img_url},#{video_url},#{is_public},#{issue_time},#{issue_address},#{issue_user_id},
-		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids},#{case_detail}
-		,#{case_title},#{case_varieties})
+		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids})
 	</insert>
 	
 	<insert id="insertIssueRel" parameterType="Map">

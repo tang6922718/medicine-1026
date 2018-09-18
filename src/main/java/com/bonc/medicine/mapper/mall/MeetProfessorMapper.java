@@ -31,8 +31,6 @@ public interface MeetProfessorMapper {
 	
 	public List<Map<String, Object>> setRevisit(Map map);
 	
-	public List<Map<String, Object>> setCase(Map map);
-	
 	public List<Map<String, Object>> eddIssue(Map map);
 
 	public List<Map<String, Object>> expert(Map map);
