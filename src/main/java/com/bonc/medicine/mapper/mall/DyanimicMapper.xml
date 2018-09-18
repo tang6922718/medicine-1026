@@ -58,7 +58,7 @@
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
-		WHERE a.id = #{id} and a.effect_flag = '0'
+		WHERE a.id = #{id}
 	</select>
 
 	<!--逻辑删除某一条动态-->
