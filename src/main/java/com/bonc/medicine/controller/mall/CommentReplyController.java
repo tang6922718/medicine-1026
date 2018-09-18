@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,7 +38,14 @@ public class CommentReplyController {
 		Map param = new HashMap<>();
 		param.put("object_type", object_type);
 		param.put("object_id", object_id);
-		return ResultUtil.success(commentReplyService.queryComments(param));
+		List<Map> result = commentReplyService.queryComments(param);
+		List commentids = new ArrayList<>();
+		for (Map map : result) {
+			commentids.add(map.get("id"));
+		}
+		List<Map> replies = commentReplyService.queryReplies(commentids);
+		result.addAll(replies);
+		return ResultUtil.success(result);
 	}
 	
 	@GetMapping("/count")

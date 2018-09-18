@@ -32,7 +32,7 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 	}
 
 	@Override
-	public List<Map> queryReplies(String[] comment_ids) {
+	public List<Map> queryReplies(List comment_ids) {
 		return commentReplyMapper.queryReplies(comment_ids);
 	}
 
