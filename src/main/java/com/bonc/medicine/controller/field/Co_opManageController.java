@@ -205,7 +205,7 @@ public class Co_opManageController {
 	/*
 	 * *
 	 * 
-	 * @Description 合作社社员列表查询
+	 * @Description 合作社社员列表(都带种植数)查询
 	 * 
 	 * @Date 18:15 2018/8/31
 	 * 
@@ -216,6 +216,18 @@ public class Co_opManageController {
 	@GetMapping("/co_opmember/list/{coop_id}")
 	public Result<Object> getCoopMemberList(@PathVariable int coop_id) {
 		return co_opManageService.getCoopMemberList(coop_id);
+	}
+
+
+	/* *
+	 * @Description 合作社社员列表(部分社员带种植数)查询
+	 * @Date 14:13 2018/9/19
+	 * @Param [coop_id]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/co_opmember/list2/{coop_id}")
+	public Result<Object> getCoopMemberList2(@PathVariable int coop_id){
+		return co_opManageService.getCoopMemberList2(coop_id);
 	}
 
 

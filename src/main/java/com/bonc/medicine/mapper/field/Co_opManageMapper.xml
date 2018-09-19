@@ -133,13 +133,24 @@
 	</select>
 
 	<select id="queryCoopMemberList" resultType="Map" parameterType="Integer">
-		SELECT A.user_id,A.name,A.img_url,count(*) AS PlantNUM FROM
+		SELECT A.id, A.user_id,A.name,A.img_url,count(*) AS PlantNUM FROM
 		field_coop_member A,field_info B
 		WHERE A.coop_id=#{coop_id} AND
 		A.state='0' AND A.user_id = B.user_id
 		GROUP BY
 		A.name,A.img_url,A.user_id
 	</select>
+
+	<select id="queryCoopMemberList2" resultType="Map" parameterType="Integer">
+		SELECT A.id, A.user_id,A.name,A.img_url,
+              CASE  WHEN A.user_id IS NULL THEN 0
+              ELSE (SELECT count(*) FROM field_info B WHERE B.user_id = A.user_id) END AS PlantNUM
+        FROM field_coop_member A
+		WHERE A.coop_id=#{coop_id} AND A.state='0'
+		GROUP BY
+		A.name,A.img_url,A.user_id
+	</select>
+
 
 	<select id="affiliatedCo_op" resultType="Map" parameterType="Integer">
 		select coop_id,name,img_url,assistant,0 as total from
@@ -288,7 +299,7 @@
 		ORDER BY publish_time DESC
 	</select>
 
-	<update id="updateCoopTotalAreaAdd" parameterType="Integer">
+	<update id="updateCoopTotalAreaAdd" >
 		UPDATE field_coop SET total_area = total_area + #{area} WHERE id = #{coopID}
 	</update>
 

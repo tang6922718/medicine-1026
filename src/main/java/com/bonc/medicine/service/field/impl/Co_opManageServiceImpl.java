@@ -5,7 +5,9 @@ import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
 import com.bonc.medicine.entity.field.Notice;
 import com.bonc.medicine.mapper.field.Co_opManageMapper;
+import com.bonc.medicine.mapper.field.FieldManageMapper;
 import com.bonc.medicine.service.field.Co_opManageService;
+import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Autowired
 	Co_opManageMapper co_opManageMapper;
+
+	@Autowired
+	FieldManageMapper fieldManageMapper;
 
 	@Override
 	public Result<Object> addCo_op(Co_op tempData) {
@@ -105,14 +110,22 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> addCo_opMember(Co_op_Member tempData) {
+		// 查询所有品种信息
+		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
+
+
+		//根据tel 判断是否为平台用户
 		Map map = new HashMap();
 		String tel = tempData.getTelephone();
 		map = co_opManageMapper.queryUserID(tel);
 		if (map != null) {
 			tempData.setUser_id(String.valueOf(map.get("id")));
 		}
+
+
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
+		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(),categroyList));
 
 		int i=co_opManageMapper.insertCo_opMember(tempData);
 		if (i>0){
@@ -123,7 +136,13 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> getCo_opMember(int ID) {
-		return ResultUtil.success(co_opManageMapper.queryCo_opMember(ID));
+		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
+
+		Map temp=co_opManageMapper.queryCo_opMember(ID);
+
+		temp.put("plant_cat_id",ExchangeCategroyNameID.IDToName(temp.get("plant_cat_id").toString(),categroyList));
+
+		return ResultUtil.success(temp);
 	}
 
 	@Override
@@ -165,6 +184,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Override
 	public Result<Object> getCoopMemberList(int coop_id) {
 		return ResultUtil.success(co_opManageMapper.queryCoopMemberList(coop_id));
+	}
+
+	@Override
+	public Result<Object> getCoopMemberList2(int coop_id) {
+		return ResultUtil.success(co_opManageMapper.queryCoopMemberList2(coop_id));
 	}
 
 	@Override

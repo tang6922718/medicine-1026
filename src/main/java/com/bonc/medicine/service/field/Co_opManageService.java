@@ -40,7 +40,9 @@ public interface Co_opManageService {
 
 	public Result<Object> queryNotAssistant(int coop_id); // 合作社非助手列表查询
 
-	public Result<Object> getCoopMemberList(int coop_id); // 合作社社员列表查询
+	public Result<Object> getCoopMemberList(int coop_id); // 合作社社员列表查询(全带种植数)
+
+	public Result<Object> getCoopMemberList2(int coop_id); // 合作社社员列表查询(部分带种植数)
 
 	public Result<Object> affiliatedCo_op(int user_id);
 
