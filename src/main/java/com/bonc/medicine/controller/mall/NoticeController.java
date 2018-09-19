@@ -26,7 +26,7 @@ public class NoticeController {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list1 = noticeService.findRole(user_id);
 		String str_role_id = list1.get(0).get("role_id").toString();// 返回拥有角色的编号
-		String notice_role_type = null;// 转换一下，和common_notice的角色字段对应
+		String notice_role_type = "";// 转换一下，和common_notice的角色字段对应
 		if (str_role_id.contains("1")) {
 			notice_role_type += "2,";
 		}
@@ -40,7 +40,12 @@ public class NoticeController {
 			notice_role_type += "3,";
 		}
 		notice_role_type = notice_role_type.substring(0, notice_role_type.length() - 1);
-		list = noticeService.systemInfo(user_id,notice_role_type);
+		String []  notice_role_type_array =  notice_role_type.split(",");
+		String is_coop = null;//判断是否是合作社的人
+		if(notice_role_type.contains("3")){
+			is_coop = "1";
+		}
+		list = noticeService.systemInfo(user_id,notice_role_type_array,is_coop);
 		Result result = new Result();
 		result.setData(list);
 		return result;

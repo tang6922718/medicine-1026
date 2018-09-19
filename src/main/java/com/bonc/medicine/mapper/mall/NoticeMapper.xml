@@ -16,7 +16,7 @@
 		FROM
 		common_notice
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id}
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id}
 		), '%' )
 		AND notice_type = '2'
 		AND STATUS = '1'
@@ -29,8 +29,19 @@
 		FROM
 		common_notice
 		WHERE
-		notice_role_type IN #{notice_role_type}
-		AND notice_type = '1'
+		notice_role_type IN 
+		<foreach collection="notice_role_type_array" item="notice_role_type_one" index="index" open="(" separator="," close=")" >
+			#{notice_role_type_one}
+		</foreach>
+		
+		<if test="is_coop != null and is_coop != ''">
+			 AND (notice_type = '1' OR notice_type = '2')
+		</if>
+		
+		<if test="is_coop == null or is_coop == ''">
+			 AND notice_type = '1'
+		</if>
+		
 		AND
 		STATUS = '1'
 		AND state = '1'
@@ -42,8 +53,7 @@
 	<select id="findRole" parameterType="Map" resultType="Map">
 		select
 		GROUP_CONCAT(role_id order by role_id) as role_id from
-		common_user_role_rel where user_id = #{user_id} and STATUS = '1' and
-		state = '1'
+		common_user_role_rel where user_id = #{user_id} 
 	</select>
 
 	<select id="meetProfessor" parameterType="Map" resultType="Map">
