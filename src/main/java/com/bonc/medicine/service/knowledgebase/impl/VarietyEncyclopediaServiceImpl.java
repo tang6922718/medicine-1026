@@ -83,5 +83,10 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
         return varietyEncyclopediaMapper.searchHistoryText();
     }
 
+    @Override
+    public String selectUserCare(String user_id) {
+        return varietyEncyclopediaMapper.selectUserCare(user_id);
+    }
+
 
 }

@@ -167,7 +167,10 @@
 	</select>
 
 	<select id="queryUserInfo" resultType="Map" parameterType="Integer">
-		SELECT head_portrait,name,sex,age,address,telephone FROM common_user WHERE id= #{userID}
+        SELECT head_portrait,name,sex,age,address,telephone,
+        CASE  WHEN  LOCATE(5,GROUP_CONCAT(B.role_id))=0 THEN 0 ELSE 1 END  as isSpc,
+        CASE  WHEN  LOCATE(1,GROUP_CONCAT(B.role_id))=0 THEN 0 ELSE 1 END  as isPlant
+        FROM common_user A , common_user_role_rel B WHERE id= #{userID} AND A.id=B.user_id
 	</select>
 
 </mapper>

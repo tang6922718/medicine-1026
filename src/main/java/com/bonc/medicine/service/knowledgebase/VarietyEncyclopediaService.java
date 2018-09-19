@@ -31,4 +31,6 @@ public interface VarietyEncyclopediaService {
     public int addHistoryText(String search_text);
 
     public List<Map<String,Object>> searchHistoryText();
+
+    public String selectUserCare(String user_id);
 }

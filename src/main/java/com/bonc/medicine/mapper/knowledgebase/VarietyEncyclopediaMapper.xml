@@ -87,7 +87,7 @@
 		</if>
 		<if test="record_status != null and record_status != ''">
 			and codex_status= #{record_status}
-		</if>q
+		</if>
 		ORDER BY
 		record_time DESC
 	</select>
@@ -125,7 +125,7 @@
 	</select>
 
 	<select id="showHotBreed" resultType="Map">
-		SELECT variety_code,variety_name FROM common_medicine_variety
+		SELECT variety_code,variety_name FROM common_medicine_variety LIMIT 20
 	</select>
 
 	<select id="kmAuditList" parameterType="java.util.Map" resultType="java.util.Map">
@@ -187,6 +187,16 @@
 
 	<select id="searchHistoryText" resultType="Map">
 		SELECT id,search_text,search_date FROM history_search_text ORDER BY search_date DESC LIMIT 20
+	</select>
+
+	<select id="selectUserCare" parameterType="String" resultType="String">
+		SELECT
+			GROUP_CONCAT(CONCAT_WS(",",variety_name,variety_alias)) AS care_names
+		FROM
+			common_user_care_varieties_r a
+		LEFT JOIN common_medicine_variety b ON a.variety_code = b.variety_code
+		WHERE 1=1
+	    and a.user_id = #{user_id}
 	</select>
 
 </mapper>

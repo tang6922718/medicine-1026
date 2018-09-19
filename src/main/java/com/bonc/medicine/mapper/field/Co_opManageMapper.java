@@ -43,7 +43,9 @@ public interface Co_opManageMapper {
 
     public Map queryCo_opMember(int ID); // 合作社社员详情查询
 
-    public List<Map> queryCoopMemberList(int coop_id); // 合作社社员列表查询
+    public List<Map> queryCoopMemberList(int coop_id); // 合作社社员列表(都带种植数的)查询
+
+    public List<Map> queryCoopMemberList2(int coop_id); // 合作社社员列表查询(部分社员带种植数)
     
     public List<Map<String, Object>> affiliatedCo_op(int user_id);
     

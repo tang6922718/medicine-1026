@@ -17,6 +17,8 @@ public interface MeetProfessorMapper {
 
 	public int revisited(Map map);
 
+	public int setAnli(Map map);
+	
 	public int anli(Case anli);
 
 	public List<Map<String, Object>> untreated(Map map);

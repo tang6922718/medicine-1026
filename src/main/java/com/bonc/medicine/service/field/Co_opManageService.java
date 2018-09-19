@@ -40,13 +40,15 @@ public interface Co_opManageService {
 
 	public Result<Object> queryNotAssistant(int coop_id); // 合作社非助手列表查询
 
-	public Result<Object> getCoopMemberList(int coop_id); // 合作社社员列表查询
+	public Result<Object> getCoopMemberList(int coop_id); // 合作社社员列表查询(全带种植数)
+
+	public Result<Object> getCoopMemberList2(int coop_id); // 合作社社员列表查询(部分带种植数)
 
 	public Result<Object> affiliatedCo_op(int user_id);
 
 	public List<Map<String, Object>> findAllMember(Integer user_id);
 
-	public Result<Object> addNotice(String allUserId, String msg);
+	public Result<Object> addNotice(String allUserId, String msg,String coopID, int publishUserID,String picture_url);
 
 	public Result<Object> noticeState(Integer id, String state);
 

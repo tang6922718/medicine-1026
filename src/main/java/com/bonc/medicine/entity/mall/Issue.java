@@ -138,6 +138,4 @@ public class Issue {
 	public void setRevisited_mark(String revisited_mark) {
 		this.revisited_mark = revisited_mark;
 	}
-	
-	
 }

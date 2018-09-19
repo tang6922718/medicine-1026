@@ -48,10 +48,11 @@ public class MeetProfessorController {
 	}
 
 	/*
-	 * 点评内容编辑
+	 * 设为案例
 	 */
 	@PostMapping("/meetProfessor/case")
 	public Result<Object> anli(@RequestBody Case anli) {
+		meetProfessorService.setAnli(anli.getIssue_id());
 		return meetProfessorService.anli(anli);
 	}
 
@@ -108,11 +109,43 @@ public class MeetProfessorController {
 	public Result<Object> solving(Integer spec_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = meetProfessorService.solving(spec_id);
-		Result<Object> result = new Result<Object>();
-		result.setCode(200);
-		result.setMsg("成功");
-		result.setData(list);
-		return result;
+		String time = null;
+		Integer time1 = 0;
+		if (list != null && list.size() != 0) {
+			for (int i = 0; i < list.size(); i++) {
+				time1 = Integer.parseInt(list.get(i).get("reply_time").toString());
+				if (time1 < 0) {
+					time = "时间不正确";
+				}
+				if (time1 >= 0 && time1 <= 59) {
+					time = time + "秒前";
+				}
+				if (time1 >= 60 && time1 <= 3599) {
+					time = (time1 / 60) + "分钟前";
+				}
+				if (time1 >= 3600 && (time1 <= (24 * 60 * 60 - 1))) {
+					time = (time1 / 3600) + "小时";
+				}
+				if (time1 >= 24 * 60 * 60) {
+					time = (time1 / (24 * 60 * 60)) + "天前";
+				}
+				list.get(i).put("reply_time", time);
+			}
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).get("from_uid").toString().equals(list.get(i).get("to_uid").toString())) {
+				} else if (list.get(i).get("from_uid").toString().equals(spec_id.toString())) {
+					list.get(i).put("reply_person_msg", "我回复" + list.get(i).get("NAME").toString());
+				} else if (list.get(i).get("to_uid").toString().equals(spec_id.toString())) {
+					list.get(i).put("reply_person_msg", list.get(i).get("NAME").toString() + "回复我");
+				}
+			}
+			Result<Object> result = new Result<Object>();
+			result.setCode(200);
+			result.setMsg("成功");
+			result.setData(list);
+			return result;
+		}
+		return null;
 	}
 
 	/*
@@ -122,11 +155,35 @@ public class MeetProfessorController {
 	public Result<Object> solved(Integer spec_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = meetProfessorService.solved(spec_id);
-		Result<Object> result = new Result<Object>();
-		result.setCode(200);
-		result.setMsg("成功");
-		result.setData(list);
-		return result;
+		String time = null;
+		Integer time1 = 0;
+		if (list != null && list.size() != 0) {
+			for (int i = 0; i < list.size(); i++) {
+				time1 = Integer.parseInt(list.get(i).get("issue_time").toString());
+				if (time1 < 0) {
+					time = "时间不正确";
+				}
+				if (time1 >= 0 && time1 <= 59) {
+					time = time + "秒前";
+				}
+				if (time1 >= 60 && time1 <= 3599) {
+					time = (time1 / 60) + "分钟前";
+				}
+				if (time1 >= 3600 && (time1 <= (24 * 60 * 60 - 1))) {
+					time = (time1 / 3600) + "小时";
+				}
+				if (time1 >= 24 * 60 * 60) {
+					time = (time1 / (24 * 60 * 60)) + "天前";
+				}
+				list.get(i).put("issue_time", time);
+			}
+			Result<Object> result = new Result<Object>();
+			result.setCode(200);
+			result.setMsg("成功");
+			result.setData(list);
+			return result;
+		}
+		return null;
 	}
 
 	/*
@@ -142,7 +199,7 @@ public class MeetProfessorController {
 		result.setData(list);
 		return result;
 	}
-
+	
 	/*
 	 * 管理员关闭问题issue_status关闭传3否则不传
 	 */
