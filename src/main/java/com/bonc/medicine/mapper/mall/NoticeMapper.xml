@@ -54,6 +54,7 @@
 		b.head_portrait,
 		a.notice_type,
 		a.notice_content,
+		a.object_id,
 		a.publish_time,
 		c.issue_desc
 		FROM
@@ -63,7 +64,7 @@
 		LEFT JOIN spec_issue c ON a.object_id =
 		c.id
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND notice_type = '3' and STATUS = '1' and state = '1'
 	</select>
 
@@ -74,6 +75,7 @@
 		b.head_portrait,
 		a.notice_type,
 		a.notice_content,
+		a.object_id,
 		a.publish_time,
 		c.desciption
 		FROM
@@ -83,7 +85,7 @@
 		LEFT JOIN comm_dyanimic c ON a.object_id =
 		c.id
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND notice_type = '4' and STATUS = '1' and state = '1'
 	</select>
 
@@ -94,6 +96,7 @@
 		b.head_portrait,
 		a.notice_type,
 		a.notice_content,
+		a.object_id,
 		a.publish_time,
 		c.goods_name
 		FROM
@@ -102,7 +105,7 @@
 		a.publish_user_id = b.id
 		LEFT JOIN mall_supply c ON a.object_id = c.id
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND
 		notice_type = '5' and STATUS = '1' and state = '1'
 	</select>
