@@ -35,4 +35,5 @@ public interface SpecialistService {
 	public Map issueDetail(String issue_id);
 	public int uploadFile(Map param);
 	public List<Map> uploadRecord(Map param);
+	public int is_downloaded(String id);
 }

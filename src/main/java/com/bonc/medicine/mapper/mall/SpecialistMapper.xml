@@ -30,7 +30,7 @@
 		delete from spec_cat_rel where spec_id = #{spec_id}
 	</delete>
 	
-	<update id="updateSpecialist"  parameterType="com.bonc.medicine.entity.mall.Specialist">
+	<update id="updateSpecialist" parameterType="com.bonc.medicine.entity.mall.Specialist">
 		update spec_info set name=#{name},head_portrait=#{head_portrait},education=#{education},title=#{title},
 		company=#{company},professional_direction=#{professional_direction},expertise_field=#{expertise_field},
 		employment_age=#{employment_age},registration_date=#{registration_date},detail=#{detail} 
@@ -144,7 +144,7 @@
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select a.id,a.title,b.name,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		select a.id,a.title,a.author,b.name,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
 		a.spec_id = b.id where a.id = #{id}
 	</select>
 	
@@ -285,5 +285,9 @@
 		</if>
 		order by upload_time desc
 	</select>
+	
+	<update id="is_downloaded" parameterType="String" >
+		update spec_upload_file SET status = 1 WHERE id = #{id}
+	</update>
 	
 </mapper>
