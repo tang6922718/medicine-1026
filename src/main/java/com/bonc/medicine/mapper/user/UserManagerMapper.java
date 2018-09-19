@@ -55,4 +55,6 @@ public interface UserManagerMapper {
 
 	public Map getActiveAndhudong(int userID);
 
+	public Map getUserCarePinZhong(int userID);
+
 }
