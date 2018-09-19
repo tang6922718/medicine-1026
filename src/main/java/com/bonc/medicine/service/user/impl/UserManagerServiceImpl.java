@@ -183,11 +183,11 @@ public class UserManagerServiceImpl implements UserManagerService {
         Map<String, Object> fansMap = attentionService.fansNum( userId);
         queryMap.put("fansNum", fansMap.get("fansNum"));
         Map<String, Object> hudongMap = userManagerMapper.getActiveAndhudong( Integer.parseInt(userId));
-        queryMap.put("interact_count", hudongMap.get("interact_count"));
-        queryMap.put("active_count", hudongMap.get("active_count"));
+        queryMap.put("interact_count",hudongMap == null ?  "0":  hudongMap.get("interact_count") );
+        queryMap.put("active_count", hudongMap == null ?  "0": hudongMap.get("active_count"));
         Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong( Integer.parseInt(userId));
 
-        queryMap.put("loveMedicineName", pinZhongMap.get("loveMedicineName"));
+        queryMap.put("loveMedicineName", pinZhongMap == null ? "0" :pinZhongMap.get("loveMedicineName"));
 
 		return ResultUtil.success(queryMap);
 	}
