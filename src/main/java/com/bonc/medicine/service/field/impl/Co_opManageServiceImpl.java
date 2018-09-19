@@ -124,7 +124,15 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
-		tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
+
+		if (tempData.getAssistant()!=null && tempData.getAssistant()!=""){
+			;
+		}else {
+			tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
+		}
+
+
+
 		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(),categroyList));
 
 		int i=co_opManageMapper.insertCo_opMember(tempData);

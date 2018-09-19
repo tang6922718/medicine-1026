@@ -36,8 +36,8 @@ public class FieldManageServiceImpl implements FieldManageService {
 		tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));
 
 
-		String[] stringList=tempData.getCategroys();
-		System.out.println(stringList);
+		String test=tempData.getCategroysList();
+		System.out.println(test);
 
 
 		return ResultUtil.success(fieldManageMapper.insertField(tempData));
