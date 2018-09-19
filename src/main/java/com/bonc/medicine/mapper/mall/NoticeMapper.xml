@@ -33,15 +33,6 @@
 		<foreach collection="notice_role_type_array" item="notice_role_type_one" index="index" open="(" separator="," close=")" >
 			#{notice_role_type_one}
 		</foreach>
-		
-		<if test="is_coop != null and is_coop != ''">
-			 AND (notice_type = '1' OR notice_type = '2')
-		</if>
-		
-		<if test="is_coop == null or is_coop == ''">
-			 AND notice_type = '1'
-		</if>
-		
 		AND
 		STATUS = '1'
 		AND state = '1'

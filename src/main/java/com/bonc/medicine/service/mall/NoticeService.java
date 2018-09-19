@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface NoticeService {
 
-	public List<Map<String, Object>> systemInfo(Integer user_id, String [] notice_role_type_array,String is_coop);
+	public List<Map<String, Object>> systemInfo(Integer user_id, String [] notice_role_type_array);
 
 	public List<Map<String, Object>> findRole(Integer user_id);
 

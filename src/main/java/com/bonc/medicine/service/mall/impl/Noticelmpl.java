@@ -18,11 +18,10 @@ public class Noticelmpl implements NoticeService {
 	private NoticeMapper noticeMapper;
 
 	@Override
-	public List<Map<String, Object>> systemInfo(Integer user_id, String [] notice_role_type_array,String is_coop) {
+	public List<Map<String, Object>> systemInfo(Integer user_id, String [] notice_role_type_array) {
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		map.put("notice_role_type_array", notice_role_type_array);
-		map.put("is_coop", is_coop);
 		return noticeMapper.systemInfo(map);
 	}
 

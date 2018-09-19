@@ -41,11 +41,7 @@ public class NoticeController {
 		}
 		notice_role_type = notice_role_type.substring(0, notice_role_type.length() - 1);
 		String []  notice_role_type_array =  notice_role_type.split(",");
-		String is_coop = null;//判断是否是合作社的人
-		if(notice_role_type.contains("3")){
-			is_coop = "1";
-		}
-		list = noticeService.systemInfo(user_id,notice_role_type_array,is_coop);
+		list = noticeService.systemInfo(user_id,notice_role_type_array);
 		Result result = new Result();
 		result.setData(list);
 		return result;
