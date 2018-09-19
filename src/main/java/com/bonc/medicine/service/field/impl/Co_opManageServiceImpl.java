@@ -183,12 +183,22 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> getCoopMemberList(int coop_id) {
+
 		return ResultUtil.success(co_opManageMapper.queryCoopMemberList(coop_id));
 	}
 
 	@Override
 	public Result<Object> getCoopMemberList2(int coop_id) {
-		return ResultUtil.success(co_opManageMapper.queryCoopMemberList2(coop_id));
+		// 所有品种信息
+		List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
+
+		List<Map> coopMemberList=co_opManageMapper.queryCoopMemberList2(coop_id);
+		for (Map obj:coopMemberList
+			 ) {
+			obj.put("plant_cat_id",ExchangeCategroyNameID.IDToName(obj.get("plant_cat_id").toString(),allCategroyInfo));
+		}
+
+		return ResultUtil.success(coopMemberList);
 	}
 
 	@Override

@@ -20,6 +20,10 @@ public class FieldManageServiceImpl implements FieldManageService {
 	
 	@Override
 	public Result<Object> addField(Field tempData) {
+		// 所有品种信息
+		List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
+
+
 		Map map =new HashMap();
 		map=fieldManageMapper.queryUserInfo(tempData.getUser_id());
 		map.putAll(fieldManageMapper.queryCoopName(tempData.getUser_id()));
@@ -29,6 +33,13 @@ public class FieldManageServiceImpl implements FieldManageService {
 			tempData.setCoop_name((String)map.get("coop_name"));
 		}
 		tempData.setRegistation_time(new Date());
+		tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));
+
+
+		String[] stringList=tempData.getCategroys();
+		System.out.println(stringList);
+
+
 		return ResultUtil.success(fieldManageMapper.insertField(tempData));
 	}
 
