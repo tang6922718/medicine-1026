@@ -48,7 +48,7 @@ public interface Co_opManageService {
 
 	public List<Map<String, Object>> findAllMember(Integer user_id);
 
-	public Result<Object> addNotice(String allUserId, String msg);
+	public Result<Object> addNotice(String allUserId, String msg,String coopID, int publishUserID,String picture_url);
 
 	public Result<Object> noticeState(Integer id, String state);
 

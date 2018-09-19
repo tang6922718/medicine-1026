@@ -210,7 +210,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	}
 
 	@Override
-	public Result<Object> addNotice(String allUserId, String msg) {
+	public Result<Object> addNotice(String allUserId, String msg, String coopID, int publishUserID, String picture_url) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		String time = sdf.format(cal.getTime());
@@ -218,6 +218,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		map.put("allUserId", allUserId);
 		map.put("msg", msg);
 		map.put("time", time);
+		map.put("object_id", coopID);
+		map.put("publish_user_id", publishUserID);
+		map.put("picture_url", picture_url);
 		return ResultUtil.success(co_opManageMapper.addNotice(map));
 	}
 

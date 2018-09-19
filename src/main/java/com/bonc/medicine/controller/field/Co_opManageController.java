@@ -256,13 +256,15 @@ public class Co_opManageController {
 	 * 给该合作社下所有人发通知
 	 */
 	@GetMapping("/Co_op/sendMsg")
-	public Result<Object> affiliatedCo_op( int user_id,  String msg) {
+	public Result<Object> affiliatedCo_op( int user_id,  String msg , String picture_url) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = co_opManageService.findAllMember(user_id);
 		String allUserId = null;
+		String coopID="";
 		if (list != null && list.size() != 0) {
 			allUserId = list.get(0).get("all_user_id").toString();
-			co_opManageService.addNotice(allUserId, msg);
+			coopID=list.get(0).get("coop_id").toString();
+			co_opManageService.addNotice(allUserId, msg,coopID,user_id,picture_url);
 		}
 		Result result = new Result();
 		result.setData("发送完毕");
