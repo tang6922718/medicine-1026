@@ -38,8 +38,15 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
+	public Result<Object> setAnli(Integer issue_id) {
+		Map map = new HashMap<>();
+		map.put("issue_id", issue_id);
+		return ResultUtil.success(meetProfessorMapper.setAnli(map));
+	}
+	
+	@Override
 	public Result<Object> anli(Case anli) {
-
+		
 		return ResultUtil.success(meetProfessorMapper.anli(anli));
 	}
 

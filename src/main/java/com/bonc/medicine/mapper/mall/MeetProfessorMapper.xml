@@ -64,6 +64,10 @@
 		values(#{title},#{varieties},#{content},#{issue_id},#{publish_time})
 	</insert>
 
+	<update id="setAnli" parameterType="Map">
+		update spec_issue set is_public = '1' where id = #{issue_id}
+	</update>
+
 	<select id="untreated" parameterType="Map" resultType="Map">
 		SELECT
 		a.id,
