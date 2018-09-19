@@ -105,7 +105,9 @@ public class RoleManagerController {
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        if(StringUtils.isEmpty(param.get("isWork").trim()) && StringUtils.isEmpty(param.get("roleName").trim())){
+
+
+        if(StringUtils.isEmpty(param.get("isWork")) && StringUtils.isEmpty(param.get("roleName"))){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
