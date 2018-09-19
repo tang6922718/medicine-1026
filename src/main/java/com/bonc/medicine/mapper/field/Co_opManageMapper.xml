@@ -142,7 +142,7 @@
 	</select>
 
 	<select id="queryCoopMemberList2" resultType="Map" parameterType="Integer">
-		SELECT A.id, A.user_id,A.name,A.img_url,
+		SELECT A.*,
               CASE  WHEN A.user_id IS NULL THEN 0
               ELSE (SELECT count(*) FROM field_info B WHERE B.user_id = A.user_id) END AS PlantNUM
         FROM field_coop_member A

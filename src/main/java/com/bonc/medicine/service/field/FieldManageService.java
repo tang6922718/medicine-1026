@@ -24,5 +24,7 @@ public interface FieldManageService {
 	public Result<Object> getFarmOpreationByCategroy(int categroyID);
 
 	public Result<Object> getCategroySOPInfo(int categroyID,int stepID);
+
+	public Result<Object> queryAllCategroy();
 	
 }

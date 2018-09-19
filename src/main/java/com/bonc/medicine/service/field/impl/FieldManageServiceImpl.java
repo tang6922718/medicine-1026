@@ -118,4 +118,9 @@ public class FieldManageServiceImpl implements FieldManageService {
 		return ResultUtil.success(fieldManageMapper.querySOP(map));
 	}
 
+	@Override
+	public Result<Object> queryAllCategroy() {
+		return ResultUtil.success(fieldManageMapper.queryAllCategroy());
+	}
+
 }
