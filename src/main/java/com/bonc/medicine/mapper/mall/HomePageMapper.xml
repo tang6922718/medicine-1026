@@ -6,6 +6,7 @@
 	<select id="notice" parameterType="Map" resultType="Map">
 		select
 		(select count(1) from km_audit where status = '0' ) as zsk ,
+		(select count(1) from comm_dyanimic where publish_user_id = 1 and effect_flag = '2') as dt ,
 		(select count(1) from spec_upload_file where status = '0') as zy ,
 		(select count(1) from spec_article where status = '0') as zl ,
 		(select count(1) from spec_issue where issue_status <![CDATA[ <> ]]> '3' and is_revisited ='1') as hf ,
