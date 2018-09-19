@@ -142,12 +142,23 @@ public class UserOperController {
         return ResultUtil.success();
     }
 
-    @Authorization
+  /*  @Authorization
     @GetMapping("/testt")
     public String test(@CurrentUser String userid) {
+        //
         System.out.println("$$$$$$$$$$$" + userid);
         return "chenggong";
     }
+
+    @GetMapping("/testt.jpg")
+    public String testt() {
+        //
+        System.out.println("$$$$$$$$$$$");
+        return "chenggong.jpg";
+    }*/
+
+
+
 
     /**
      * @Description:用户通过旧密码修改新密码

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bonc.medicine.mapper.user.OperatorManagementMapper">
+
+
+    <!-- 查询操作员列表 create_user_id 目前设定只有一个超级管理员的角色的不是kong-->
+    <select id="queryOperaterTable" parameterType="Map" resultType="Map">
+
+        SELECT
+            ccu.id,
+            ccu.loginid,
+            ccu.name,
+            DATE_FORMAT(ccu.update_time, '%Y-%m-%d') AS create_time,
+            ccu.telephone,
+            ccu.is_allowed,
+            cro.role_name,
+        ccc.name as craete_name
+
+        FROM
+            common_backend_user ccu
+        LEFT JOIN common_backend_user_role_r crr ON ccu.id = crr.backend_user_id
+        LEFT JOIN common_backend_user_role cro ON crr.backend_role_id = cro.id
+        left join common_backend_user ccc on cro.create_user_id = ccc.id
+        where
+            cro.create_user_id is not null
+
+        <if test="roleId != null || roleId != ''">
+            and cro.id = #{roleId}
+        </if>
+
+        <if test="keyWord != null || keyWord != ''">
+            and ccu.loginid like concat( '%', #{keyWord} , '%')
+            or  ccu.name  like concat( '%', #{keyWord} , '%')
+        </if>
+
+    </select>
+
+    <!-- 查询所有的角色和对应的id，只查询管理员创建的和有效的。目前设计的是只有一个超级管理员是默认的不是被创建出来的-->
+    <select id="queryAllRoles" resultType="Map">
+       SELECT
+         id,
+         role_name
+      FROM
+          common_backend_user_role
+      WHERE
+          create_user_id IS NOT NULL
+      and is_work = 1
+    </select>
+
+    <!-- 插入用户的基本信息-->
+    <insert id="createNewOperationUserInfo" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+
+        INSERT INTO common_backend_user
+        VALUES
+	    (0, #{name}, #{loginid}, #{password}, #{telephone}, #{email}, #{age}, #{sex},
+	     #{address}, #{isAllowed}, #{status}, now(), #{isBackendUser}, #{headPortrait})
+    </insert>
+
+    <!--创建用户和角色的关系-->
+    <insert id="createUserRoleRelation" parameterType="Map">
+        INSERT INTO common_backend_user_role_r
+        VALUES
+            (#{backendUserid}, #{backendRoleid})
+    </insert>
+
+
+    <!--修改操作员的基本信息-->
+    <update id="updateOperationUserInfo" parameterType="Map">
+      UPDATE common_backend_user
+        set id = #{id}
+            <if test="loginId != null and loginId != ''">
+              , login_id = #{loginId}
+            </if>
+            <if test="password != null and password != ''">
+                , password = #{password}
+            </if>
+            <if test="name != null and name != ''">
+                , name = #{name}
+            </if>
+            <if test="telephone != null and telephone != ''">
+                , telephone = #{telephone}
+            </if>
+            <if test="isWork != null and isWork != ''">
+                , is_work = #{isWork}
+            </if>
+        where id = #{id}
+    </update>
+
+    <!--目前假设在创建操作员的时候角色是已经设定的-->
+    <update id="updateOerationRelation" parameterType="Map">
+        update common_backend_user_role_r
+          set backend_role_id = #{backendRoleid}
+
+        where backend_user_id = #{id}
+    </update>
+
+
+
+
+</mapper>
