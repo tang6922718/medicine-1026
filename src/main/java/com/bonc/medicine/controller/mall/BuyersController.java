@@ -23,7 +23,7 @@ public class BuyersController {
 	@ResponseBody
     @PostMapping("/purchase")
     public Result<Object> releasePurchase(@RequestBody Purchase tempData){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String publish_time = sdf.format(new Date());
 		tempData.setPublish_time(publish_time);
 		tempData.setState('1');

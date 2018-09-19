@@ -112,6 +112,10 @@
         <if test="goods_cat_code != null and goods_cat_code != ''">
             AND goods_cat_code = #{goods_cat_code}
         </if>
+        
+        <if test="goods_name != null and goods_name != ''">
+            AND goods_name like  CONCAT('%',#{goods_name},'%')
+        </if>
 
 
         ORDER BY public_time DESC

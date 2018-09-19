@@ -9,7 +9,9 @@ import com.bonc.medicine.service.mall.MeetProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -324,6 +326,9 @@ public class MeetProfessorController {
 	 */
 	@PutMapping("/meetProfessor/update/Article")
 	public Result<Object> updateArticle(@RequestBody Article article) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String publish_time = sdf.format(new Date());
+		article.setPublish_time(publish_time);
 		meetProfessorService.updateArticle(article);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);

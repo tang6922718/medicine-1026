@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.mall;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.entity.mall.Offer;
 import com.bonc.medicine.entity.mall.Supply;
 import com.bonc.medicine.service.mall.SupplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,4 +178,5 @@ public class SupplyController {
     public Result<Object> queryOffer(@PathVariable int id) {
         return supplyService.queryOffer(id);
     }
+    
 }

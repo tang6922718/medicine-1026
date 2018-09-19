@@ -22,7 +22,7 @@ public class OfferController {
 	@SuppressWarnings("unchecked")
 	@PostMapping("/offer")
 	public Result<Object> realseOffer(@RequestBody Offer offer) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String publish_time = sdf.format(new Date());
 		offer.setPublish_time(publish_time);
 		offer.setState('1');
