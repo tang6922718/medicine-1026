@@ -151,5 +151,37 @@ public class GongQiuController {
 	public Result<Object> purchaselist(String key, String goodType) {
 		return gongQiuSystemService.purchaselist(key, goodType);
 	}
+	
+	/*
+	 * 我的供应数据统计
+	 */
+	@GetMapping("/gongQiuSystem/my_supply_statistics/{user_id}")
+	public Result<Object> my_supply_statistics(@PathVariable Integer user_id) {
+		return gongQiuSystemService.my_supply_statistics(user_id);
+	}
+	
+	/*
+	 * 我的供应按条件查询
+	 */
+	@GetMapping("/gongQiuSystem/my_supply_type/{user_id}/{type}")
+	public Result<Object> my_supply_type(@PathVariable Integer user_id,@PathVariable String type) {
+		return gongQiuSystemService.my_supply_type(user_id,type);
+	}
+	
+	/*
+	 * 我的求购数据统计
+	 */
+	@GetMapping("/gongQiuSystem/my_purchase_statistics/{user_id}")
+	public Result<Object> my_purchase_statistics(@PathVariable Integer user_id) {
+		return gongQiuSystemService.my_purchase_statistics(user_id);
+	}
+	
+	/*
+	 * 我的求购按条件查询
+	 */
+	@GetMapping("/gongQiuSystem/my_purchase_type/{user_id}/{type}")
+	public Result<Object> my_purchase_type(@PathVariable Integer user_id,@PathVariable String type) {
+		return gongQiuSystemService.my_purchase_type(user_id,type);
+	}
 
 }

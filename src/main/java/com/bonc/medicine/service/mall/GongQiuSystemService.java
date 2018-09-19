@@ -38,5 +38,13 @@ public interface GongQiuSystemService {
 	public Result<Object> supplylist(String goods_name, String goodType,String is_audit,String carriage_status);
 	
 	public Result<Object> purchaselist(String key, String goodType);
+	
+	public Result<Object> my_supply_statistics(Integer user_id);
+	
+	public Result<Object> my_supply_type(Integer user_id,String type);
+	
+	public Result<Object> my_purchase_statistics(Integer user_id);
+	
+	public Result<Object> my_purchase_type(Integer user_id,String type);
 
 }
