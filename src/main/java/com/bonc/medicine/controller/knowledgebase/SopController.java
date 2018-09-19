@@ -19,14 +19,14 @@ public class SopController {
     private SopService sopService;
 
     @SuppressWarnings("unchecked")
-    @GetMapping("/plantStandardManage")
-    public Result<Object> getSops(@RequestParam(required = false) Integer sop_type, @RequestParam(required = false) Integer record_status){
+    @GetMapping("/plantStandardManage/{sop_type}/{record_status}")
+    public Result<Object> getSops(@PathVariable(required = false) Integer sop_type, @PathVariable(required = false) Integer record_status) {
         return  ResultUtil.success(sopService.sopStandardList(sop_type,record_status));
     }
 
     @SuppressWarnings("unchecked")
-    @GetMapping("/plantDetail")
-    public Result<Object> getSopPlants(@RequestParam(required = false) Integer variety_id){
+    @GetMapping("/plantDetail/{variety_id}")
+    public Result<Object> getSopPlants(@PathVariable(required = false) Integer variety_id) {
         return ResultUtil.success(sopService.sopPlantList(variety_id));
     }
 
@@ -60,11 +60,15 @@ public class SopController {
     }
 
     @SuppressWarnings("unchecked")
-    @PostMapping("/delSop")
-    @Transactional
-    public Result<Object> deleteSops(@RequestParam(required = false) Integer variety_id){
+    @DeleteMapping("/delSop/{variety_id}")
+    public Result<Object> deleteSops(@PathVariable(required = false) Integer variety_id) {
         int count = sopService.sopDelete(variety_id);//sop基本信息删除
-        count += sopService.sopStepDelete(variety_id);//sop步骤信息删除
+        return ResultUtil.success(count);
+    }
+
+    @GetMapping("/cancelSop/{variety_id}")
+    public Result<Object> cancelSop(@PathVariable(required = false) Integer variety_id) {
+        int count = sopService.sopCancle(variety_id);
         return ResultUtil.success(count);
     }
 
