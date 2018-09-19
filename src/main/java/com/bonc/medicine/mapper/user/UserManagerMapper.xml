@@ -50,6 +50,7 @@
 		a.NAME,
 		a.age,
 		a.sex,
+		a.telephone,
 		a.address,
 		a.log_time,
 		GROUP_CONCAT( DISTINCT (
