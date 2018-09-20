@@ -151,8 +151,8 @@
     <select id="caseList" parameterType="java.lang.String" resultType="Map">
     	SELECT
 			sc.id,
-			sc.tittle,
-			sc.img_url, 
+			sc.title,
+			si.img_url, 
 			sc.publish_time
 		FROM
 			spec_case sc
