@@ -20,8 +20,8 @@ public class FieldManageServiceImpl implements FieldManageService {
 	
 	@Override
 	public Result<Object> addField(Field tempData) {
-		// 所有品种信息
-		List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
+//		// 所有品种信息
+//		List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
 
 
 		Map map =new HashMap();
@@ -33,14 +33,46 @@ public class FieldManageServiceImpl implements FieldManageService {
 			tempData.setCoop_name((String)map.get("coop_name"));
 		}
 		tempData.setRegistation_time(new Date());
-		tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));
+//		tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));
 
+		//新建地块是否成功  成功后才往品种信息表里插入地块品种信息
+		int i=fieldManageMapper.insertField(tempData);
+		if (i>0){
+			int insertNum=0;
+			int fieldID=tempData.getId();
+			String categroyString=tempData.getCategroysList();
 
-		String test=tempData.getCategroysList();
-		System.out.println(test);
+			if (categroyString.contains(";")){ // 多品种
 
+				String[] categroyList=categroyString.split(";");
+				for (int j = 0; j < categroyList.length; j++) {
+					String[] token=categroyList[j].split(",");
+					Map param=new HashMap();
+					param.put("fieldID",fieldID);
+					param.put("categroyID",token[0]);
+					param.put("plantNum",token[1]);
+					param.put("seedAge",token[2]);
+					fieldManageMapper.insertFieldPlantCategroysInfo(param);
+					insertNum++;
+				}
 
-		return ResultUtil.success(fieldManageMapper.insertField(tempData));
+				return ResultUtil.success(insertNum);
+
+			}else { // 单品种
+				String[] token=categroyString.split(",");
+				Map param=new HashMap();
+				param.put("fieldID",fieldID);
+				param.put("categroyID",token[0]);
+				param.put("plantNum",token[1]);
+				param.put("seedAge",token[2]);
+				insertNum=fieldManageMapper.insertFieldPlantCategroysInfo(param);
+
+				return ResultUtil.success(insertNum);
+			}
+		}else {
+			return ResultUtil.error(500,"新建种植失败!!!");
+		}
+
 	}
 
 	@Override
@@ -52,6 +84,7 @@ public class FieldManageServiceImpl implements FieldManageService {
 			 ) {
 			obj.put("plant_typeID",obj.get("plant_type"));
 			obj.put("plant_type", ExchangeCategroyNameID.IDToName(obj.get("plant_type").toString(),categroy));
+			obj.put("fieldCategroyInfo",fieldManageMapper.queryFieldCategroyInfo((int)obj.get("id")));
 		}
 
 		return ResultUtil.success(temp);

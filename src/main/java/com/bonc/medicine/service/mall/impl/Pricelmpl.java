@@ -17,30 +17,31 @@ public class Pricelmpl implements PriceService {
 	private PriceMapper priceMapper;
 
 	@Override
-	public List<Map<String, Object>> hotword() {
+	public List<Map<String, Object>> getArieties() {
 
 		Map map = new HashMap<>();
-		return priceMapper.hotword(map);
+		return priceMapper.getArieties(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> queryHotwordByName(String name) {
+	public List<Map<String, Object>> getMarket() {
+
 		Map map = new HashMap<>();
-		map.put("hotword", name);
-		return priceMapper.queryHotwordByName(map);
+		return priceMapper.getMarket(map);
 	}
 
 	@Override
-	public void addHotword(String name) {
+	public List<Map<String, Object>> getSpecifaction() {
+
 		Map map = new HashMap<>();
-		map.put("hotword", name);
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = priceMapper.queryHotwordByName(map);
-		if (list != null && list.size() != 0) {
-			priceMapper.increase(map);
-		} else {
-			priceMapper.addHotword(map);
-		}
+		return priceMapper.getSpecifaction(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> getProduct() {
+
+		Map map = new HashMap<>();
+		return priceMapper.getProduct(map);
 	}
 
 	@Override
@@ -55,30 +56,62 @@ public class Pricelmpl implements PriceService {
 	}
 
 	@Override
-	public List<Map<String, Object>> product(String hotword, String product) {
+	public List<Map<String, Object>> trend(String hotword, String market, String product, String specifaction,
+			String start_time, String end_time) {
 		Map map = new HashMap<>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String time = sdf.format(new Date());
 		map.put("hotword", hotword);
+		map.put("market", market);
 		map.put("product", product);
-		map.put("time", time);
-		return priceMapper.product(map);
-	}
-
-	@Override
-	public List<Map<String, Object>> trend(String hotword, String start_time, String end_time) {
-		Map map = new HashMap<>();
-		map.put("hotword", hotword);
+		map.put("specifaction", specifaction);
 		map.put("start_time", start_time);
 		map.put("end_time", end_time);
 		return priceMapper.trend(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> detail(String hotword) {
+	public List<Map<String, Object>> detail(String hotword, String market, String product, String specifaction,
+			String start_time, String end_time) {
 		Map map = new HashMap<>();
 		map.put("hotword", hotword);
+		map.put("market", market);
+		map.put("product", product);
+		map.put("specifaction", specifaction);
+		map.put("start_time", start_time);
+		map.put("end_time", end_time);
 		return priceMapper.detail(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> todayPrice(String hotword, String market, String product, String specifaction) {
+		Map map = new HashMap<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String time = sdf.format(new Date());
+		map.put("hotword", hotword);
+		map.put("market", market);
+		map.put("product", product);
+		map.put("specifaction", specifaction);
+		map.put("time", time);
+		return priceMapper.todayPrice(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> pricelist(String hotword, String priceType, String priceState, String start_time,
+			String end_time) {
+		Map map = new HashMap<>();
+		map.put("hotword", hotword);
+		map.put("priceType", priceType);
+		map.put("priceState", priceState);
+		map.put("start_time", start_time);
+		map.put("end_time", end_time);
+		return priceMapper.pricelist(map);
+	}
+
+	@Override
+	public int priceState(Integer id, String state) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		map.put("state", state);
+		return priceMapper.priceState(map);
 	}
 
 }

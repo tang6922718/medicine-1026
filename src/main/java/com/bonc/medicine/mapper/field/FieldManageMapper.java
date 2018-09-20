@@ -36,4 +36,8 @@ public interface FieldManageMapper {
 
     public List<Map> queryAllCategroy();
 
+    public int insertFieldPlantCategroysInfo(Map param);
+
+    public List<Map> queryFieldCategroyInfo(int fieldID);
+
 }

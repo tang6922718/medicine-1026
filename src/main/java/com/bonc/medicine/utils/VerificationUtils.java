@@ -1,8 +1,13 @@
 package com.bonc.medicine.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.enums.ResultEnum;
 import org.apache.commons.lang.StringUtils;
+
+import java.io.IOException;
+import java.util.Random;
 
 /**
  * @program: medicine-hn
@@ -24,16 +29,32 @@ public class VerificationUtils {
     */
     public static String getVerifByPhone(String phone){
 
+        // TODO 可能这个正则需要改动
         String pattern = "^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[9]))\\d{8}$";
 
         if (StringUtils.isEmpty(phone) || !phone.matches(pattern)){
             throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
         }
+        int code = 0;
+        try{
+            code  = methodOfGeneratingGourDigits();
+
+            String realCode = HttpTool.sendPost(phone, code);
+
+            JSONObject json = JSON.parseObject(realCode);
+            String  status = json.getString("respstatus");
+            if (!StringUtils.equals("0", status)){
+                throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
+            }
+
+        }catch (Exception e){
+
+            throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
+        }
 
         // TODO zheli 需要进一步实现获取验证码，如果是用后端接口
 
-        // 模拟一个假的验证码
-        return "9527";
+        return code + "";
     }
 
     /**
@@ -43,7 +64,7 @@ public class VerificationUtils {
     * @Author: hejiajun
     * @Date: 2018/9/3
     */
-    public static boolean validateVerification(String verification, String phone) {
+ /*   public static boolean validateVerification(String verification, String phone) {
 
         if (StringUtils.isEmpty(verification)
                 || !StringUtils.equals(verification.trim(), getVerifByPhone(phone))) {
@@ -51,6 +72,23 @@ public class VerificationUtils {
         }
 
         return true;
+    }*/
+
+    /**
+    * @Description: 生成一个四位数的验证码
+    * @Param: []
+    * @return: int
+    * @Author: hejiajun
+    * @Date: 2018/9/20 
+    */ 
+    private static int methodOfGeneratingGourDigits(){
+        double codeDemo = Math.random();
+        String code = String.valueOf(codeDemo).substring(2, 6);
+        return Integer.parseInt(code);
     }
+
+   /*public static void main(String[] args) {
+       getVerifByPhone("13368232405");
+    }*/
 
 }
