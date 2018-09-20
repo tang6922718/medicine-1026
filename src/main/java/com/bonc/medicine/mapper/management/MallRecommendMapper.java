@@ -26,4 +26,6 @@ public interface MallRecommendMapper {
 
     public Map<String,Object> showMallRecommend(String id);
 
+    public Map<String,Object>  MallRecommendDetail(String id);
+
 }

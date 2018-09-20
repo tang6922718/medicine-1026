@@ -56,4 +56,9 @@ public class MallRecommendServiceImpl implements MallRecommendService {
     public Map<String, Object> showMallRecommend(String id) {
         return mallRecommendMapper.showMallRecommend(id);
     }
+
+    @Override
+    public Map<String, Object> MallRecommendDetail(String id) {
+        return mallRecommendMapper.MallRecommendDetail(id);
+    }
 }

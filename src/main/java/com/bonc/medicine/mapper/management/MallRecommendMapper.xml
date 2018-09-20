@@ -92,4 +92,12 @@
 		SELECT id,site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time FROM mall_recommend WHERE id=#{id}
 	</select>
 
+	<select id="MallRecommendDetail" parameterType="String" resultType="Map">
+		SELECT
+			*
+		FROM
+		mall_recommend
+		WHERE id=#{id}
+	</select>
+
 </mapper>

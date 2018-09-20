@@ -33,6 +33,16 @@ public class MallRecommendController {
         return ResultUtil.success(mallRecommendService.searchMallRecommend(map));
     }
 
+    /**
+     * 商品推荐详情
+     * @param id 推荐编号
+     * @return
+     */
+    @GetMapping("/MallRecommendDetail/{id}")
+    public Result<Object> MallRecommendDetail(@PathVariable String id){
+        return ResultUtil.success(mallRecommendService.MallRecommendDetail(id));
+    }
+
     /*
     * 停用对应商品推荐
     * */
@@ -101,6 +111,8 @@ public class MallRecommendController {
     public Result<Object> showGoodsById(@PathVariable String id){
         return ResultUtil.success(mallRecommendService.showGoodsById(id));
     }
+
+
 
 
 }
