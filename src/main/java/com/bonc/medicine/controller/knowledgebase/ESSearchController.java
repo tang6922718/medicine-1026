@@ -69,15 +69,14 @@ public class ESSearchController {
         Client client = elasticsearchTemplate.getClient();
         //根据索引搜索
         // SearchRequestBuilder srb = null == searchType || ""== searchType ?  client.prepareSearch("knowledge"): client.prepareSearch("knowledge").setTypes(searchType);
-
         SearchRequestBuilder srb = client.prepareSearch("knowledge");
 
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         qb.must(QueryBuilders.matchAllQuery());
         SearchResponse sr;
         if (null != searchType && "" != searchType) {
-            if("km_variety_encyclopedia" == searchType){
-                QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information");
+            if("km_variety_encyclopedia".equals(searchType)){
+                qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
             }else {
                 qb.must(QueryBuilders.termQuery("type", searchType));
             }
