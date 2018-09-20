@@ -171,4 +171,38 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 		map.put("goodType", goodType);
 		return ResultUtil.success(gongQiuSystemMapper.purchaselist(map));
 	}
+	
+	@Override
+	public Result<Object> my_supply_statistics(Integer user_id) {
+		
+		Map map = new HashMap<>();
+		map.put("user_id", user_id);
+		return ResultUtil.success(gongQiuSystemMapper.my_supply_statistics(map));
+	}
+	
+	@Override
+	public Result<Object> my_supply_type(Integer user_id,String type) {
+		
+		Map map = new HashMap<>();
+		map.put("user_id", user_id);
+		map.put("type", type);
+		return ResultUtil.success(gongQiuSystemMapper.my_supply_type(map));
+	}
+	
+	@Override
+	public Result<Object> my_purchase_statistics(Integer user_id) {
+		
+		Map map = new HashMap<>();
+		map.put("user_id", user_id);
+		return ResultUtil.success(gongQiuSystemMapper.my_purchase_statistics(map));
+	}
+	
+	@Override
+	public Result<Object> my_purchase_type(Integer user_id,String type) {
+		
+		Map map = new HashMap<>();
+		map.put("user_id", user_id);
+		map.put("type", type);
+		return ResultUtil.success(gongQiuSystemMapper.my_purchase_type(map));
+	}
 }

@@ -83,5 +83,18 @@ public class FieldManageController {
 											 @PathVariable int stepID){
 		return fieldManageService.getCategroySOPInfo(categroyID,stepID);
 	}
+
+
+
+	/* *
+	 * @Description 所有品种查询
+	 * @Date 17:40 2018/9/19
+	 * @Param []
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/allcategroy")
+	public Result<Object> queryAllCategroy(){
+		return fieldManageService.queryAllCategroy();
+	}
 	
 }

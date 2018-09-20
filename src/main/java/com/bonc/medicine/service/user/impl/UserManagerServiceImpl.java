@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
 import com.bonc.medicine.mapper.user.UserManagerMapper;
+import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserManagerServiceImpl implements UserManagerService {
 
 	@Autowired
 	private UserManagerMapper userManagerMapper;
+
+    @Autowired
+	private AttentionService attentionService;
 
 	@Override
 	public void addBasic(Basicinfo basicinfo) {
@@ -171,7 +175,21 @@ public class UserManagerServiceImpl implements UserManagerService {
 
 	@Override
 	public Result<Object> queryUserInfo(int userID) {
-		return ResultUtil.success(userManagerMapper.queryUserInfo(userID));
+
+		//return ResultUtil.success(userManagerMapper.queryUserInfo(userID));
+		Map queryMap = userManagerMapper.queryUserInfo(userID);
+
+        String userId = queryMap.get("id") + "";
+        Map<String, Object> fansMap = attentionService.fansNum( userId);
+        queryMap.put("fansNum", fansMap.get("fansNum"));
+        Map<String, Object> hudongMap = userManagerMapper.getActiveAndhudong( Integer.parseInt(userId));
+        queryMap.put("interact_count",hudongMap == null ?  "0":  hudongMap.get("interact_count") );
+        queryMap.put("active_count", hudongMap == null ?  "0": hudongMap.get("active_count"));
+        Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong( Integer.parseInt(userId));
+
+        queryMap.put("loveMedicineName", pinZhongMap == null ? "0" :pinZhongMap.get("loveMedicineName"));
+
+		return ResultUtil.success(queryMap);
 	}
 
 }

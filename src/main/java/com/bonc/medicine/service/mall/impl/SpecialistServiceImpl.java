@@ -154,4 +154,9 @@ public class SpecialistServiceImpl implements SpecialistService {
 		return specialistMapper.insertIssueRel(param);
 	}
 
+	@Override
+	public int is_downloaded(String id) {
+		return specialistMapper.is_downloaded(id);
+	}
+
 }

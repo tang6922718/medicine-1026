@@ -10,6 +10,7 @@
 		a.site,
 		b.site_name,
 		a.link_url,
+		a.img_order,
 		case WHEN a.`status` = 1 THEN '正常'
 		ELSE '已停用' END AS status
 		FROM
@@ -21,16 +22,16 @@
 		<if test="search_name != null and search_name != ''">
 			and a.NAME LIKE CONCAT("%",#{search_name},"%")
 		</if>
-		<if test="site != null and site != ''">
-			and a.site=#{site}
+		<if test="site_name != null and site_name != ''">
+			and a.site LIKE CONCAT("%",#{site_name},"%")
 		</if>
 		<if test="start_time != null and start_time != '' and end_time != null and end_time != ''">
 			and a.upload_time BETWEEN #{start_time} and  #{end_time}
 		</if>
-		<if test="start_time == null or start_time == '' and end_time != null and end_time != ''">
+		<if test=" (start_time == null or start_time == '') and end_time != null and end_time != ''">
 			and a.upload_time &lt;= #{end_time}
 		</if>
-		<if test="start_time != null and start_time == '' and end_time == null or end_time == ''">
+		<if test="start_time != null and start_time != '' and (end_time == null or end_time == '')">
 			and a.upload_time &gt;= #{start_time}
 		</if>
 		ORDER BY a.upload_time
@@ -43,6 +44,7 @@
 			site,
 			link_url,
 			`status`,
+			img_order,
 			upload_time
 		)
 		VALUES
@@ -52,6 +54,7 @@
 			#{site},
 			#{link_url},
 			#{status},
+			#{img_order},
 			now()
 			)
 	</insert>
@@ -64,6 +67,7 @@
 			<if test="site != null and site != ''">site=#{site},</if>
 			<if test="link_url != null and link_url != ''">link_url=#{link_url},</if>
 			<if test="status != null and status != ''">status=#{status},</if>
+			<if test="img_order != null and img_order != ''">img_order=#{img_order},</if>
 			upload_time= now()
 		</set>
 		WHERE id = #{id}

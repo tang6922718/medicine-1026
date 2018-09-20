@@ -347,7 +347,7 @@ public class DyanimicController {
 
     /*审核 动态，批准0或不批准1*/
     @SuppressWarnings("unchecked")
-    @PostMapping("/update/dyanimic")
+    @GetMapping("/update/dyanimic")
     public Result<Object> updateOneDyanimic(char effect_flag, String fail_opinion,int id) {
         int update = dyanimicService.updateOneDyanimic(effect_flag,fail_opinion,id);
         return ResultUtil.success(update);

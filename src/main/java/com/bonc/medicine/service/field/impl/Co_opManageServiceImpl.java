@@ -5,7 +5,9 @@ import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
 import com.bonc.medicine.entity.field.Notice;
 import com.bonc.medicine.mapper.field.Co_opManageMapper;
+import com.bonc.medicine.mapper.field.FieldManageMapper;
 import com.bonc.medicine.service.field.Co_opManageService;
+import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Autowired
 	Co_opManageMapper co_opManageMapper;
+
+	@Autowired
+	FieldManageMapper fieldManageMapper;
 
 	@Override
 	public Result<Object> addCo_op(Co_op tempData) {
@@ -80,7 +85,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			}
 			return ResultUtil.success(list);
 		}else {
-			return ResultUtil.error(404,"数据为空");
+			return ResultUtil.success();
 		}
 
 	}
@@ -105,14 +110,30 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> addCo_opMember(Co_op_Member tempData) {
+		// 查询所有品种信息
+		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
+
+
+		//根据tel 判断是否为平台用户
 		Map map = new HashMap();
 		String tel = tempData.getTelephone();
 		map = co_opManageMapper.queryUserID(tel);
 		if (map != null) {
 			tempData.setUser_id(String.valueOf(map.get("id")));
 		}
+
+
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
-		tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
+
+		if (tempData.getAssistant()!=null && tempData.getAssistant()!=""){
+			;
+		}else {
+			tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
+		}
+
+
+
+		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(),categroyList));
 
 		int i=co_opManageMapper.insertCo_opMember(tempData);
 		if (i>0){
@@ -123,7 +144,13 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> getCo_opMember(int ID) {
-		return ResultUtil.success(co_opManageMapper.queryCo_opMember(ID));
+		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
+
+		Map temp=co_opManageMapper.queryCo_opMember(ID);
+
+		temp.put("plant_cat_id",ExchangeCategroyNameID.IDToName(temp.get("plant_cat_id").toString(),categroyList));
+
+		return ResultUtil.success(temp);
 	}
 
 	@Override
@@ -164,7 +191,22 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> getCoopMemberList(int coop_id) {
+
 		return ResultUtil.success(co_opManageMapper.queryCoopMemberList(coop_id));
+	}
+
+	@Override
+	public Result<Object> getCoopMemberList2(int coop_id) {
+		// 所有品种信息
+		List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
+
+		List<Map> coopMemberList=co_opManageMapper.queryCoopMemberList2(coop_id);
+		for (Map obj:coopMemberList
+			 ) {
+			obj.put("plant_cat_id",ExchangeCategroyNameID.IDToName(obj.get("plant_cat_id").toString(),allCategroyInfo));
+		}
+
+		return ResultUtil.success(coopMemberList);
 	}
 
 	@Override
@@ -186,7 +228,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	}
 
 	@Override
-	public Result<Object> addNotice(String allUserId, String msg) {
+	public Result<Object> addNotice(String allUserId, String msg, String coopID, int publishUserID, String picture_url) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		String time = sdf.format(cal.getTime());
@@ -194,6 +236,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		map.put("allUserId", allUserId);
 		map.put("msg", msg);
 		map.put("time", time);
+		map.put("object_id", coopID);
+		map.put("publish_user_id", publishUserID);
+		map.put("picture_url", picture_url);
 		return ResultUtil.success(co_opManageMapper.addNotice(map));
 	}
 

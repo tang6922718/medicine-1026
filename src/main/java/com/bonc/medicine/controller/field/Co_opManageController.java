@@ -205,7 +205,7 @@ public class Co_opManageController {
 	/*
 	 * *
 	 * 
-	 * @Description 合作社社员列表查询
+	 * @Description 合作社社员列表(都带种植数)查询
 	 * 
 	 * @Date 18:15 2018/8/31
 	 * 
@@ -216,6 +216,18 @@ public class Co_opManageController {
 	@GetMapping("/co_opmember/list/{coop_id}")
 	public Result<Object> getCoopMemberList(@PathVariable int coop_id) {
 		return co_opManageService.getCoopMemberList(coop_id);
+	}
+
+
+	/* *
+	 * @Description 合作社社员列表(部分社员带种植数)查询
+	 * @Date 14:13 2018/9/19
+	 * @Param [coop_id]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/co_opmember/list2/{coop_id}")
+	public Result<Object> getCoopMemberList2(@PathVariable int coop_id){
+		return co_opManageService.getCoopMemberList2(coop_id);
 	}
 
 
@@ -244,13 +256,15 @@ public class Co_opManageController {
 	 * 给该合作社下所有人发通知
 	 */
 	@GetMapping("/Co_op/sendMsg")
-	public Result<Object> affiliatedCo_op( int user_id,  String msg) {
+	public Result<Object> affiliatedCo_op( int user_id,  String msg , String picture_url) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = co_opManageService.findAllMember(user_id);
 		String allUserId = null;
+		String coopID="";
 		if (list != null && list.size() != 0) {
 			allUserId = list.get(0).get("all_user_id").toString();
-			co_opManageService.addNotice(allUserId, msg);
+			coopID=list.get(0).get("coop_id").toString();
+			co_opManageService.addNotice(allUserId, msg,coopID,user_id,picture_url);
 		}
 		Result result = new Result();
 		result.setData("发送完毕");

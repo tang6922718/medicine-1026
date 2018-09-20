@@ -324,5 +324,17 @@ public class SpecRepertoryController {
 		param.put("end", end);
 		return ResultUtil.success(specialistService.uploadRecord(param));
 	}
+	
+	/**
+	 * 更改审阅状态（标记已下载）
+	 * @param params
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	@PutMapping("/is_downloaded")
+	public Result is_downloaded(@RequestBody Map params) {
+		String id = params.get("id")+"";
+		return ResultUtil.success(specialistService.is_downloaded(id));
+	}
 
 }

@@ -59,7 +59,12 @@ public class SopServiceImpl implements SopService {
     }
 
     @Override
-    public int sopStepDelete(Integer id) {
-        return sopMapper.sopStepDelete(id);
+    public int sopCancle(Integer id) {
+        return sopMapper.sopCancel(id);
     }
+
+//    @Override
+//    public int sopStepDelete(Integer id) {
+//        return sopMapper.sopStepDelete(id);
+//    }
 }

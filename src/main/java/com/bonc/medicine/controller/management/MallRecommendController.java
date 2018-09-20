@@ -59,20 +59,20 @@ public class MallRecommendController {
 
     /**
      *新建商品推荐
-     * @param addJson  {"addJson":[{"supply_id":6,"site":"2","img_url":"/img/url111"},{"supply_id":7,"site":"3","img_url":"/img/url111"},{"supply_id":8,"site":"4","img_url":"/img/url111"}]}
+     * @param addJson  {"site":"4","supply_id1":10,"img_url1":"/img/url111","supply_id2":11,"img_url2":"/img/url111","supply_id3":12,"img_url3":"/img/url111","state":"0"}
      * @return
      */
     @PostMapping("/mallRecommend")
     public Result<Object> mallRecommend(@RequestBody String addJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
-        List list = (List) map.get("addJson");
-        return ResultUtil.success(mallRecommendService.mallRecommend(list));
+//        List list = (List) map.get("addJson");
+        return ResultUtil.success(mallRecommendService.mallRecommend(map));
     }
 
 
     /**
      * 修改商品推荐
-     * @param editJson {"supply_id":1,"site":"2","img_url":"/img/url111","id":1}
+     * @param editJson {"id":14,"site":"2","supply_id1":10,"img_url1":"/img/url111","supply_id2":11,"img_url2":"/img/url111","supply_id3":12,"img_url3":"/img/url111","state":"0"}
      * @return
      */
     @PostMapping("/editMallRecommend")

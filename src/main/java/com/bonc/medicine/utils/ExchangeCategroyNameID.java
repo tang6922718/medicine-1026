@@ -13,14 +13,25 @@ import java.util.Map;
 public class ExchangeCategroyNameID {
 
     public static String NameToId(String name,List<Map> categroylist){
+
+        name=trimFirstAndLastChar(name,",");
+
         String ID="";
 
         if (name.contains(",")){
             String[] token=name.split(",");
             for (int i = 0; i < token.length; i++) {
                 for (Map temp: categroylist) {
-                    if (token[i].equals(temp.get("name").toString()) || temp.get("othername").toString().contains(token[i])){
+                    if (token[i].equals(temp.get("name").toString())){
                         ID+=(temp.get("id").toString()+",");
+                        break;
+                    }
+                    if (temp.get("othername")!=null){
+                        if (temp.get("othername").toString().contains(token[i]))
+                        {
+                            ID+=(temp.get("id").toString()+",");
+                            break;
+                        }
                     }
                 }
             }
@@ -39,6 +50,8 @@ public class ExchangeCategroyNameID {
     }
 
     public static String IDToName(String ID,List<Map> categroylist){
+        ID=trimFirstAndLastChar(ID,",");
+
         String name="";
 
         if (ID.contains(",")){
@@ -62,4 +75,40 @@ public class ExchangeCategroyNameID {
         if (name.length()>0) return name.substring(0,name.length()-1);
         else return "";
     }
+
+
+
+    /**
+     * 去除字符串首尾出现的某个字符.
+     *
+     * @param source  源字符串.
+     * @param element 需要去除的字符.
+     * @return String.
+     */
+    public static  String trimFirstAndLastChar(String source, String element) {
+        if(source==null){
+            return "";
+        }
+        source = source.trim(); // 循环去掉字符串首的beTrim字符
+        if(source.isEmpty()){
+            return "";
+        }
+        String beginChar = source.substring(0, 1);
+        if (beginChar.equalsIgnoreCase(element)) {
+            source = source.substring(1, source.length());
+        }
+        if(source.isEmpty()){
+            return "";
+        }
+        // 循环去掉字符串尾的beTrim字符
+        String endChar = source.substring(source.length() - 1, source.length());
+        if (endChar.equalsIgnoreCase(element)) {
+            source = source.substring(0, source.length()-1);
+        }
+        if(source.isEmpty()){
+            return "";
+        }
+        return source;
+    }
+
 }

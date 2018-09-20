@@ -89,11 +89,11 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
+        //boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
 
-        if (!isCodeValidated){
+       /* if (!isCodeValidated){
             return ResultUtil.error(ResultEnum.ERROR_VERIFI);
-        }
+        }*/
         int succesNum = userService.signUp(paramMap);
 
         Map reMap = new HashMap();
@@ -115,12 +115,12 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
+       /* boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
 
         if (!isCodeValidated){
             return ResultUtil.error(ResultEnum.ERROR_VERIFI);
         }
-
+*/
         int succesNum = userService.updatePassword(paramMap);
 
         Map reMap = new HashMap();
@@ -142,12 +142,23 @@ public class UserOperController {
         return ResultUtil.success();
     }
 
-    @Authorization
+  /*  @Authorization
     @GetMapping("/testt")
     public String test(@CurrentUser String userid) {
+        //
         System.out.println("$$$$$$$$$$$" + userid);
         return "chenggong";
     }
+
+    @GetMapping("/testt.jpg")
+    public String testt() {
+        //
+        System.out.println("$$$$$$$$$$$");
+        return "chenggong.jpg";
+    }*/
+
+
+
 
     /**
      * @Description:用户通过旧密码修改新密码

@@ -95,6 +95,7 @@
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">
 		SELECT
 			id,
+			variety_id,
 			synopsis,
 			chinese_name,
 			latin_name,

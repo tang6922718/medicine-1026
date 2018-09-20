@@ -76,10 +76,15 @@ public class ESSearchController {
         qb.must(QueryBuilders.matchAllQuery());
         SearchResponse sr;
         if (null != searchType && "" != searchType) {
-            qb.must(QueryBuilders.termQuery("type", searchType));
+            if("km_variety_encyclopedia" == searchType){
+                QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information");
+            }else {
+                qb.must(QueryBuilders.termQuery("type", searchType));
+            }
         }
         if (null != searchText && "" != searchText) {
-            qb.must(QueryBuilders.matchQuery("abstract", searchText));
+//            qb.must(QueryBuilders.matchQuery("abstract", searchText));
+            qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
         }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         sr = srb.setQuery(qb).addSort(sortBuilder).execute().actionGet();
@@ -148,7 +153,8 @@ public class ESSearchController {
         for (SearchHit hit : hitsResult) {
             Map<String, Object> source = hit.getSource();
             Map sopTypes = (Map) source.get("sop_type_scores");
-            article_score = (Double) sopTypes.get(article_type);
+            article_score = sopTypes.get(article_type).toString() == "0"?0.0:(Double) sopTypes.get(article_type);
+//            article_score = (Double) sopTypes.get(article_type);
             source.put("article_score",article_score);
 //            source.put("id",id);
             list.add(source);

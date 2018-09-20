@@ -55,31 +55,38 @@
 	</select>
 
 	<insert id="mallRecommend" parameterType="java.util.Map" useGeneratedKeys="true">
-		INSERT INTO mall_recommend(supply_id,site,img_url,state,upload_time)
-		VALUES
-		<foreach collection="list" item="item" index="index" separator=",">
-			(#{item.supply_id},
-			#{item.site},
-			#{item.img_url},
-			0,
-			now()
-			)
-		</foreach>
+		INSERT INTO mall_recommend(site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time)
+		VALUES(
+		#{site},
+		#{supply_id1},
+		#{img_url1},
+		#{supply_id2},
+		#{img_url2},
+		#{supply_id3},
+		#{img_url3},
+		#{state},
+		now()
+		)
 	</insert>
 
 	<update id="editMallRecommend"  parameterType="java.util.Map">
 		update mall_recommend
 		<set>
-			supply_id=#{supply_id},
-			site=#{site},
-			img_url=#{img_url},
+			<if test="site != null and site != ''">site=#{site},</if>
+			<if test="supply_id1 != null and supply_id1 != ''">`supply_id1`=#{supply_id1},</if>
+			<if test="img_url1 != null and img_url1 != ''">img_url1=#{img_url1},</if>
+			<if test="supply_id2 != null and supply_id2 != ''">`supply_id2`=#{supply_id2},</if>
+			<if test="img_url2 != null and img_url2 != ''">img_url2=#{img_url2},</if>
+			<if test="supply_id3 != null and supply_id3 != ''">`supply_id3`=#{supply_id3},</if>
+			<if test="img_url3 != null and img_url3 != ''">img_url3=#{img_url3},</if>
+			<if test="state != null and state != ''">state=#{state},</if>
 			upload_time=now()
 		</set>
 		where id = #{id}
 	</update>
 
 	<select id="showMallRecommend" parameterType="String" resultType="Map">
-		SELECT id,supply_id,site,img_url,state,upload_time FROM mall_recommend WHERE id=#{id}
+		SELECT id,site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time FROM mall_recommend WHERE id=#{id}
 	</select>
 
 </mapper>

@@ -64,6 +64,10 @@
 		values(#{title},#{varieties},#{content},#{issue_id},#{publish_time})
 	</insert>
 
+	<update id="setAnli" parameterType="Map">
+		update spec_issue set is_public = '1' where id = #{issue_id}
+	</update>
+
 	<select id="untreated" parameterType="Map" resultType="Map">
 		SELECT
 		a.id,
@@ -381,10 +385,7 @@
 		update
 		spec_article set
 		title = #{title},article_type = #{article_type},author =
-		#{author},label = #{label},spec_id = #{spec_id},publish_time =
-		#{publish_time},content = #{content},effect_flag =
-		#{effect_flag},img_url = #{img_url},status = #{status},fail_opinion =
-		#{fail_opinion},update_time = #{update_time},is_audit = #{is_audit};
+		#{author},content = #{content},update_time = #{update_time}  where id = #{id}
 	</update>
 	<select id="getArticlelist" parameterType="Map" resultType="Map">
 		select id,title,'文章类型' as type,publish_time from spec_article where

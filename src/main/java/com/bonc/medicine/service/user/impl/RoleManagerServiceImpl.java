@@ -57,9 +57,10 @@ public class RoleManagerServiceImpl implements RoleManagerService {
             if(null != inMap.get("create_time")){
                 SimpleDateFormat adf = new SimpleDateFormat("yyyy-MM-dd");
 
-                Date dd = new Date(Long.parseLong(inMap.get("create_time")  + "") * 1000);
-                String sec = inMap.get("create_time") + "";
-                inMap.put("create_time", TimeFormatUtils.secendsToDate(sec));
+                //Date dd = new Date(Long.parseLong(inMap.get("create_time")  + "") * 1000);
+                //String sec = inMap.get("create_time") + "";
+
+                inMap.put("create_time", adf.format(inMap.get("create_time")));
             }
         }
         return reList;

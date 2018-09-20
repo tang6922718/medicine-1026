@@ -22,5 +22,8 @@ public interface SopService {
     //sop删除
     int sopDelete(Integer id);
     //sop步骤删除
-    int sopStepDelete(Integer id);
+    //int sopStepDelete(Integer id);
+
+    //sop撤销
+    int sopCancle(Integer id);
 }

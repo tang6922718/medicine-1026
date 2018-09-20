@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.bonc.medicine.mapper.knowledgebase.SopMapper">
-	<select id="getSopStandards" parameterType="java.util.Map" resultType="Map">
+    <select id="getSopStandards" resultType="Map">
 		SELECT
         kvs.variety_id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name
 		FROM
         km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.variety_id LEFT JOIN
         common_backend_user cbu ON kvs.record_user_id = cbu.id
-		WHERE 1=1
+        WHERE sop_status=1
 		<if test="sop_type != null and sop_type != ''">
 			AND kvs.sop_type = #{sop_type}
 		</if>
@@ -17,19 +17,18 @@
 		</if>
 	</select>
 
-    <select id="getSopPlants" parameterType="java.util.Map" resultType="Map">
+    <select id="getSopPlants" resultType="com.bonc.medicine.entity.knowledgebase.SopStep">
         SELECT
 		kss.sop_id,kss.step_order,kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation,kss.audio_url
         FROM
             km_sop_step kss
         WHERE 1=1
         <if test="variety_id != null and variety_id != ''">
-			AND kss.sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = ${variety_id})
+            AND kss.sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = ${variety_id} AND sop_status=1)
         </if>
         ORDER BY
             kss.step_order
     </select>
-
 
 	<insert id="sopAdd" parameterType="java.util.Map" useGeneratedKeys="true">
 		INSERT INTO km_variety_sop (
@@ -39,7 +38,8 @@
 			sop_type,
 			record_status,
 			fail_opinion,
-			update_time
+        update_time,
+        sop_status
 		)
 		VALUES
 			(#{variety_id},
@@ -48,7 +48,8 @@
 			#{sop_type},
 			#{record_status},
 			#{fail_opinion},
-			#{update_time}
+        #{update_time},
+        1
 			)
 	</insert>
 
@@ -79,8 +80,6 @@
 		</foreach>
 	</insert>
 
-
-
 	<update id="sopUpdata" parameterType="java.util.Map">
 		UPDATE km_variety_sop
 		<set>
@@ -107,14 +106,13 @@
 		</foreach>
 	</update>
 
+    <update id="sopDelete" parameterType="java.lang.Integer">
+		UPDATE km_variety_sop SET sop_status = 0
+		WHERE variety_id = #{variety_id}
+	</update>
 
-
-	<delete id="sopDelete" parameterType="java.lang.Integer">
-        delete from km_variety_sop where variety_id = #{value}
-    </delete>
-
-	<delete id="sopStepDelete" parameterType="java.lang.Integer">
-		DELETE FROM km_sop_step where sop_id =#{idItem}
-	</delete>
-
+    <update id="sopCancel" parameterType="java.lang.Integer">
+        UPDATE km_variety_sop SET record_status=5
+        WHERE variety_id = #{variety_id}
+    </update>
 </mapper>

@@ -16,7 +16,7 @@
 		FROM
 		common_notice
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id}
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id}
 		), '%' )
 		AND notice_type = '2'
 		AND STATUS = '1'
@@ -29,8 +29,10 @@
 		FROM
 		common_notice
 		WHERE
-		notice_role_type IN #{notice_role_type}
-		AND notice_type = '1'
+		notice_role_type IN 
+		<foreach collection="notice_role_type_array" item="notice_role_type_one" index="index" open="(" separator="," close=")" >
+			#{notice_role_type_one}
+		</foreach>
 		AND
 		STATUS = '1'
 		AND state = '1'
@@ -42,8 +44,7 @@
 	<select id="findRole" parameterType="Map" resultType="Map">
 		select
 		GROUP_CONCAT(role_id order by role_id) as role_id from
-		common_user_role_rel where user_id = #{user_id} and STATUS = '1' and
-		state = '1'
+		common_user_role_rel where user_id = #{user_id} 
 	</select>
 
 	<select id="meetProfessor" parameterType="Map" resultType="Map">
@@ -53,6 +54,7 @@
 		b.head_portrait,
 		a.notice_type,
 		a.notice_content,
+		a.object_id,
 		a.publish_time,
 		c.issue_desc
 		FROM
@@ -62,7 +64,7 @@
 		LEFT JOIN spec_issue c ON a.object_id =
 		c.id
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND notice_type = '3' and STATUS = '1' and state = '1'
 	</select>
 
@@ -73,6 +75,7 @@
 		b.head_portrait,
 		a.notice_type,
 		a.notice_content,
+		a.object_id,
 		a.publish_time,
 		c.desciption
 		FROM
@@ -82,7 +85,7 @@
 		LEFT JOIN comm_dyanimic c ON a.object_id =
 		c.id
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND notice_type = '4' and STATUS = '1' and state = '1'
 	</select>
 
@@ -93,6 +96,7 @@
 		b.head_portrait,
 		a.notice_type,
 		a.notice_content,
+		a.object_id,
 		a.publish_time,
 		c.goods_name
 		FROM
@@ -101,7 +105,7 @@
 		a.publish_user_id = b.id
 		LEFT JOIN mall_supply c ON a.object_id = c.id
 		WHERE
-		notice_receiver LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND
 		notice_type = '5' and STATUS = '1' and state = '1'
 	</select>

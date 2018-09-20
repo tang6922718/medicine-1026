@@ -58,7 +58,7 @@ public class RoleManagerController {
     * @Date: 2018/9/15 
     */
     @GetMapping("/role/query/v1.0")
-    public Result getRolesByCondition(@RequestParam(required = false) String roleName,
+    public Result getRolesByCondition(@RequestParam(required = false,defaultValue = "") String roleName,
                                       @RequestParam(required = false) String pageIndex,
                                       @RequestParam(required = false) String pageSize){
 
@@ -105,7 +105,9 @@ public class RoleManagerController {
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        if(StringUtils.isEmpty(param.get("isWork").trim()) && StringUtils.isEmpty(param.get("roleName").trim())){
+
+
+        if(StringUtils.isEmpty(param.get("isWork")) && StringUtils.isEmpty(param.get("roleName"))){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
