@@ -53,7 +53,7 @@
 
 	<update id="revisited" parameterType="Map">
 		update spec_issue set revisited_mark = #{comment}
-		<if test="close != null and close == '1'">
+		<if test="close != null and close == '1'"> 
 			,issue_status = '3'
 		</if>
 		where id = #{id}
