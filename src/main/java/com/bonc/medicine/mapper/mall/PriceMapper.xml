@@ -26,8 +26,7 @@
 	</select>
 
 	<select id="market" parameterType="Map" resultType="Map">
-		select * from common_price where price_date = #{time} and
-		where state =
+		select * from common_price where price_date = #{time} and state =
 		'1' and status = '1'
 		<if test="hotword != null and hotword != ''">
 			AND cat_name like CONCAT('%',#{hotword},'%')
