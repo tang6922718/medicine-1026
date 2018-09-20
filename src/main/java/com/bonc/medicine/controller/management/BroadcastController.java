@@ -30,7 +30,7 @@ public class BroadcastController {
     @PostMapping("/broadcast")
     public Result<Object> selectBroadcast(@RequestBody(required = false) String searchJson){
         if(null == searchJson || "" == searchJson){
-            searchJson = "{ \"id \":\"\",\"search_name \":\"\", \"site\":\"\", \"start_time\":\"\", \"end_time\":\"\" }";
+            searchJson = "{ \"id\":\"\",\"search_name \":\"\", \"site\":\"\", \"start_time\":\"\", \"end_time\":\"\" }";
         }
         Map map = JacksonMapper.INSTANCE.readJsonToMap(searchJson);
         return ResultUtil.success(broadcastService.searchBroadcast(map));

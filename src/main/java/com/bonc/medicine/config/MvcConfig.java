@@ -3,6 +3,8 @@ package com.bonc.medicine.config;
 import com.bonc.medicine.interceptor.AuthorizationInterceptor;
 import com.bonc.medicine.resolvers.CurrentUserMethodArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.servlet.MultipartConfigElement;
 import java.util.List;
 
 /**
@@ -55,6 +58,16 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .allowedOrigins("*")
                 .allowedMethods("*");
 
+    }
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        //单个文件最大
+        factory.setMaxFileSize("80MB"); //KB,MB
+        /// 设置总上传数据总大小
+        factory.setMaxRequestSize("102400KB");
+        return factory.createMultipartConfig();
     }
 
     /*@Override

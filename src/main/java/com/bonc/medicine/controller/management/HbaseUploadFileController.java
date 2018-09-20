@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -59,6 +60,25 @@ public class HbaseUploadFileController {
         os.write(buff);
         os.flush();
         os.close();
+    }
+
+    @GetMapping("/getFileStream")
+    public void getFileStream(String key,HttpServletResponse response) throws Exception{
+        try {
+            byte[] file = uploadFile.downloadFile(key);
+            // 清空response
+            response.reset();
+            // 设置response的Header
+    //        response.addHeader("Content-Disposition", "attachment;filename=" + new String(filename));
+    //        response.addHeader("Content-Length", "" + file.length());
+            OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            toClient.write(file);
+            toClient.flush();
+            toClient.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
