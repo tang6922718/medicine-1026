@@ -24,23 +24,26 @@ public class Pricelmpl implements PriceService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getMarket() {
+	public List<Map<String, Object>> getMarket(String hotword) {
 
 		Map map = new HashMap<>();
+		map.put("hotword;", hotword);
 		return priceMapper.getMarket(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> getSpecifaction() {
+	public List<Map<String, Object>> getSpecifaction(String hotword) {
 
 		Map map = new HashMap<>();
+		map.put("hotword;", hotword);
 		return priceMapper.getSpecifaction(map);
 	}
 
 	@Override
-	public List<Map<String, Object>> getProduct() {
+	public List<Map<String, Object>> getProduct(String hotword) {
 
 		Map map = new HashMap<>();
+		map.put("hotword;", hotword);
 		return priceMapper.getProduct(map);
 	}
 
