@@ -139,7 +139,7 @@
 	</select>
 
 	<select id="pricelist" parameterType="Map" resultType="Map">
-		select * from common_price where status = '1'
+		select * from common_price where status = '1' 
 		<if test="hotword != null and hotword != ''">
 			AND (cat_name like CONCAT('%',#{hotword},'%') OR
 			market_name like CONCAT('%',#{hotword},'%') OR
