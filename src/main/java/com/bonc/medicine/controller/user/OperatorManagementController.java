@@ -114,5 +114,16 @@ public class OperatorManagementController {
         return ResultUtil.success(operatorManagementService.updateOperationUser(map));
     }
 
-    
+    @GetMapping("/oper/info/one/v1.0")
+    public Result getOperatorInfo(String oprid){
+
+        if (StringUtils.isEmpty(oprid)){
+            ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
+        return ResultUtil.success(operatorManagementService.getOperatorInfo(oprid));
+    }
+
+
+
 }

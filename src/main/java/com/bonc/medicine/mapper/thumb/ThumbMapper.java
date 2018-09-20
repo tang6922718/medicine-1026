@@ -19,4 +19,5 @@ public interface ThumbMapper {
     public int removeThumb(Map<String, String> paramMap);
 
     public List<Map<String, Object>> thumbNumber(Map<String, String> paramMap);
+    Map<String, Object> selectThumbNumber(Map<String, String> paramMap);
 }
