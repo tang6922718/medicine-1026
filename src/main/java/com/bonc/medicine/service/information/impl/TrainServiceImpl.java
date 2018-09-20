@@ -106,4 +106,9 @@ public class TrainServiceImpl implements TrainService {
     public int repealVideoCourse(Map<String, Object> map) {
         return trainMapper.repealVideoCourse(map);
     }
+
+    @Override
+    public int editVideoCourse(Map<String, Object> map) {
+        return trainMapper.editVideoCourse(map);
+    }
 }

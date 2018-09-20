@@ -1,6 +1,7 @@
 package com.bonc.medicine.controller.information;
 
 
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.information.LiveService;
@@ -40,7 +41,7 @@ public class LiveController {
     private static final Logger logger = Logger.getLogger("LiveController");
 
 
-    private static  Set<String> channelSet = new HashSet<>();
+    private static Set<String> channelSet = new HashSet<>();
 
     /**
      * @param map
@@ -48,7 +49,9 @@ public class LiveController {
      * @description 创建直播(直播)
      */
     @RequestMapping("/createLive")
-    public Result createLive(@RequestBody Map<String, Object> map) {
+    @com.bonc.medicine.annotation.Authorization
+    public Result createLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
         return ResultUtil.success(liveService.createLive(map));
     }
 
@@ -59,7 +62,7 @@ public class LiveController {
     @RequestMapping("/selectLive")
     public Result selectLive(@RequestBody Map<String, Object> map) {
         List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
-        for (Map<String, String> map1: lists) {
+        for (Map<String, String> map1 : lists) {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
         return ResultUtil.success(liveService.selectAllLive(map));
@@ -114,6 +117,7 @@ public class LiveController {
     public Result repealLive(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(liveService.repealLive(map));
     }
+
     /**
      * @param map
      * @return
@@ -132,29 +136,29 @@ public class LiveController {
      */
     @RequestMapping("/selectWatchNum")
     public Result selectWatchNum(@RequestBody Map<String, String> map) {
-        Map  map1 = new HashMap();
-       //观看数 预约数  评论数 点赞数
-        if((!StringUtils.isEmpty(map.get("object_id"))) || (!StringUtils.isEmpty(map.get("object_type")))){
-            map1.put("gk",viewNumberService.queryViewNumber(map).get("viewNumber"));
+        Map map1 = new HashMap();
+        //观看数 预约数  评论数 点赞数
+        Map map2;
+        String viewNum = "0";
+        String appointmentNum = "0";
+        String praiseNum = "0";
+        if (!(map2 = viewNumberService.queryViewNumber(map)).isEmpty()) {
+            viewNum = (String) map2.get("viewNumber");
         }
-        if ((!StringUtils.isEmpty(map.get("Appointment_id"))) || (!StringUtils.isEmpty(map.get("Appointment_type")))){
-            map1.put("bm",trainService.queryAppointmentNumber(map).get("bmNum"));
+        if (!(map2 = trainService.queryAppointmentNumber(map)).isEmpty()) {
+            appointmentNum = (String) map2.get("bmNum");
         }
-        if ((!StringUtils.isEmpty(map.get("comment_id")))  || (!StringUtils.isEmpty(map.get("comment_type")))){
-           //暂无
-            map1.put("pl",trainService.queryCommentNumber(map).get(""));
+        if (!(map2 = thumbService.selectThumbNumber(map)).isEmpty()) {
+            praiseNum = (String) map2.get("praise_user_id");
         }
-        if ((!StringUtils.isEmpty(map.get("acceptThumbId")))  || (!StringUtils.isEmpty(map.get("type")))){
-            map1.put("dz",thumbService.selectThumbNumber(map).get("praise_user_id"));
-        }
+        map1.put("gk", viewNum);
+        map1.put("bm", appointmentNum);
+        map1.put("dz", praiseNum);
         return ResultUtil.success(map1);
     }
 
 
-
-
     /**
-     *
      * @param
      * @return
      * @description 通知回调接口
@@ -183,7 +187,7 @@ public class LiveController {
         liveService.updateWatchPeople(map);
         //数据库更新完，再删redis缓存数据
         channelSet.clear();
-        for (String channel : channelSet){
+        for (String channel : channelSet) {
             redisService.del(channel);
         }
         return ResultUtil.success("ok");
