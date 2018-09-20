@@ -10,8 +10,10 @@
 
 	<select id="getMarket" parameterType="Map" resultType="Map">
 		select
-		distinct market_name from common_price where state = '1' and status =
-		'1' and cat_name = #{hotword}
+		distinct market_name from common_price where state = '1' and status = '1' 
+		<if test="hotword != null and hotword != ''">
+			and cat_name = #{hotword}
+		</if>
 	</select>
 
 	<select id="getSpecifaction" parameterType="Map" resultType="Map">
@@ -38,10 +40,10 @@
 		'1' and status
 		= '1'
 		<if test="hotword != null and hotword != ''">
-			AND cat_name like CONCAT('%',#{hotword},'%')
+			AND cat_name = #{hotword} 
 		</if>
 		<if test="market != null and market != ''">
-			AND market_name like CONCAT('%',#{market},'%')
+			AND market_name = #{market}
 		</if>
 		ORDER BY
 		price_date
@@ -57,16 +59,16 @@
 		cat_name from
 		common_price where state = '1' and status = '1'
 		<if test="hotword != null and hotword != ''">
-			AND cat_name like CONCAT('%',#{hotword},'%')
+			AND cat_name = #{hotword} 
 		</if>
 		<if test="market != null and market != ''">
-			AND market_name like CONCAT('%',#{market},'%')
+			AND market_name = #{market} 
 		</if>
 		<if test="specifaction != null and specifaction != ''">
-			AND specifaction like CONCAT('%',#{specifaction},'%')
+			AND specifaction = #{specifaction}
 		</if>
 		<if test="product != null and product != ''">
-			AND product_name like CONCAT('%',#{product},'%')
+			AND product_name = #{product}
 		</if>
 		<if test="start_time != null and start_time != ''">
 			AND price_date <![CDATA[ >= ]]>
@@ -87,16 +89,16 @@
 		cat_name from
 		common_price where state = '1' and status = '1'
 		<if test="hotword != null and hotword != ''">
-			AND cat_name like CONCAT('%',#{hotword},'%')
+			AND cat_name = #{hotword} 
 		</if>
 		<if test="market != null and market != ''">
-			AND market_name like CONCAT('%',#{market},'%')
+			AND market_name = #{market}
 		</if>
 		<if test="specifaction != null and specifaction != ''">
-			AND specifaction like CONCAT('%',#{specifaction},'%')
+			AND specifaction = #{specifaction} 
 		</if>
 		<if test="product != null and product != ''">
-			AND product_name like CONCAT('%',#{product},'%')
+			AND product_name = #{product} 
 		</if>
 		<if test="start_time != null and start_time != ''">
 			AND price_date <![CDATA[ >= ]]>
@@ -121,16 +123,16 @@
 		common_price where state = '1' and status = '1' and price_date =
 		#{time}
 		<if test="hotword != null and hotword != ''">
-			AND cat_name like CONCAT('%',#{hotword},'%')
+			AND cat_name = #{hotword}
 		</if>
 		<if test="market != null and market != ''">
-			AND market_name like CONCAT('%',#{market},'%')
+			AND market_name = #{market}
 		</if>
 		<if test="specifaction != null and specifaction != ''">
-			AND specifaction like CONCAT('%',#{specifaction},'%')
+			AND specifaction = #{specifaction}
 		</if>
 		<if test="product != null and product != ''">
-			AND product_name like CONCAT('%',#{product},'%')
+			AND product_name = #{product} 
 		</if>
 		GROUP BY
 		price_date
