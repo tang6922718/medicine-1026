@@ -12,6 +12,12 @@ import java.util.Map;
 public interface UserManagerMapper {
 
 	public void addBasic(Basicinfo basicinfo);
+	
+	public int updateBasic(Map map);
+	
+	public int updateField_coop(Map map);
+	
+	public int updateField_coop_member(Map map);
 
 	public void addUserRoleRel(Map map);
 

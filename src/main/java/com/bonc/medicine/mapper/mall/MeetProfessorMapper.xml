@@ -58,6 +58,7 @@
 		</if>
 		where id = #{id}
 	</update>
+	
 	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case">
 		insert into
 		spec_case(title,varieties,content,issue_id,publish_time)

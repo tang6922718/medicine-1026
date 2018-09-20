@@ -23,12 +23,29 @@ public class UserManagerServiceImpl implements UserManagerService {
 	@Autowired
 	private UserManagerMapper userManagerMapper;
 
-    @Autowired
+	@Autowired
 	private AttentionService attentionService;
 
 	@Override
 	public void addBasic(Basicinfo basicinfo) {
 		userManagerMapper.addBasic(basicinfo);
+	}
+
+	@Override
+	public int updateBasic(Integer id, String sex, Integer age, String address) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		map.put("sex", sex);
+		map.put("age", age);
+		map.put("address", address);
+		Map map1 = new HashMap<>();
+		map1.put("id", id);
+		map1.put("sex", "男".equals(sex) ? "0" : "1");
+		map1.put("age", age);
+		map1.put("address", address);
+		userManagerMapper.updateField_coop(map);
+		userManagerMapper.updateField_coop_member(map1);
+		return userManagerMapper.updateBasic(map);
 	}
 
 	@Override
@@ -176,18 +193,18 @@ public class UserManagerServiceImpl implements UserManagerService {
 	@Override
 	public Result<Object> queryUserInfo(int userID) {
 
-		//return ResultUtil.success(userManagerMapper.queryUserInfo(userID));
+		// return ResultUtil.success(userManagerMapper.queryUserInfo(userID));
 		Map queryMap = userManagerMapper.queryUserInfo(userID);
 
-        String userId = queryMap.get("id") + "";
-        Map<String, Object> fansMap = attentionService.fansNum( userId);
-        queryMap.put("fansNum", fansMap.get("fansNum"));
-        Map<String, Object> hudongMap = userManagerMapper.getActiveAndhudong( Integer.parseInt(userId));
-        queryMap.put("interact_count",hudongMap == null ?  "0":  hudongMap.get("interact_count") );
-        queryMap.put("active_count", hudongMap == null ?  "0": hudongMap.get("active_count"));
-        Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong( Integer.parseInt(userId));
+		String userId = queryMap.get("id") + "";
+		Map<String, Object> fansMap = attentionService.fansNum(userId);
+		queryMap.put("fansNum", fansMap.get("fansNum"));
+		Map<String, Object> hudongMap = userManagerMapper.getActiveAndhudong(Integer.parseInt(userId));
+		queryMap.put("interact_count", hudongMap == null ? "0" : hudongMap.get("interact_count"));
+		queryMap.put("active_count", hudongMap == null ? "0" : hudongMap.get("active_count"));
+		Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong(Integer.parseInt(userId));
 
-        queryMap.put("loveMedicineName", pinZhongMap == null ? "" :pinZhongMap.get("loveMedicineName"));
+		queryMap.put("loveMedicineName", pinZhongMap == null ? "" : pinZhongMap.get("loveMedicineName"));
 
 		return ResultUtil.success(queryMap);
 	}
