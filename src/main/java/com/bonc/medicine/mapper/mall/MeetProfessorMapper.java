@@ -31,9 +31,9 @@ public interface MeetProfessorMapper {
 	
 	public List<Map<String, Object>> issue_statistics_solving(Map map);
 	
-	public List<Map<String, Object>> setRevisit(Map map);
+	public int setRevisit(Map map);
 	
-	public List<Map<String, Object>> eddIssue(Map map);
+	public int eddIssue(Map map);
 
 	public List<Map<String, Object>> expert(Map map);
 

@@ -96,7 +96,7 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
-	public List<Map<String, Object>> setRevisit(Integer id, Integer follow_days, String revisit_url,
+	public int setRevisit(Integer id, Integer follow_days, String revisit_url,
 			String revisited_advice) {
 		Map map = new HashMap<>();
 		map.put("id", id);
@@ -107,7 +107,7 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 	
 	@Override
-	public List<Map<String, Object>> eddIssue(Integer id, String revisited_mark, String issue_status) {
+	public int eddIssue(Integer id, String revisited_mark, String issue_status) {
 		Map map = new HashMap<>();
 		map.put("id", id);
 		map.put("revisited_mark", revisited_mark);

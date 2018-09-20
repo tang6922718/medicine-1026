@@ -189,10 +189,10 @@
 	</select>
 	
 	<select id="my_purchase_statistics" parameterType="Map" resultType="Map">
-		select (select count(1) from mall_purchase where user_id = 1 and is_aduit = '1' and state = '1') as qgz , 
-			 (select count(1) from mall_purchase where user_id = 1 and is_aduit = '3' and state = '1') as ycx ,
-			 (select count(1) from mall_purchase where user_id = 1 and is_aduit = '0' and state = '1') as shz ,
-			 (select count(1) from mall_purchase where user_id = 1 and is_aduit = '2' and state = '1') as shsb
+		select (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '1' and state = '1') as qgz , 
+			 (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '3' and state = '1') as ycx ,
+			 (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '0' and state = '1') as shz ,
+			 (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '2' and state = '1') as shsb
 	</select>
 	
 	<select id="my_purchase_type" parameterType="Map" resultType="Map">

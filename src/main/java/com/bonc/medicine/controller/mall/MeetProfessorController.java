@@ -6,6 +6,8 @@ import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.mall.MeetProfessorService;
+import com.bonc.medicine.utils.ResultUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -193,13 +195,7 @@ public class MeetProfessorController {
 	 */
 	@GetMapping("/meetProfessor/setRevisit")
 	public Result<Object> setRevisit(Integer id, Integer follow_days, String revisit_url, String revisited_advice) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = meetProfessorService.setRevisit(id, follow_days, revisit_url, revisited_advice);
-		Result<Object> result = new Result<Object>();
-		result.setCode(200);
-		result.setMsg("成功");
-		result.setData(list);
-		return result;
+		return ResultUtil.success(meetProfessorService.setRevisit(id, follow_days, revisit_url, revisited_advice));
 	}
 	
 	/*
@@ -207,13 +203,7 @@ public class MeetProfessorController {
 	 */
 	@GetMapping("/meetProfessor/eddIssue")
 	public Result<Object> eddIssue(Integer id, String revisited_mark, String issue_status) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = meetProfessorService.eddIssue(id, revisited_mark, issue_status);
-		Result<Object> result = new Result<Object>();
-		result.setCode(200);
-		result.setMsg("成功");
-		result.setData(list);
-		return result;
+		return ResultUtil.success(meetProfessorService.eddIssue(id, revisited_mark, issue_status));
 	}
 
 	/*

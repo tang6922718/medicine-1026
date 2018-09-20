@@ -31,10 +31,10 @@ public interface MeetProfessorService {
 
 	public Result<Object> expert(Integer id);
 
-	public List<Map<String, Object>> setRevisit(Integer id, Integer follow_days, String revisit_url,
+	public int setRevisit(Integer id, Integer follow_days, String revisit_url,
 			String revisited_advice);
 	
-	public List<Map<String, Object>> eddIssue(Integer id, String revisited_mark, String issue_status);
+	public int eddIssue(Integer id, String revisited_mark, String issue_status);
 
 	public void deleteInvitation(Integer id);
 
