@@ -20,7 +20,7 @@ public interface MallRecommendMapper {
 
     public Map<String,Object> showGoodsById(String id);
 
-    public int mallRecommend(List list);
+    public int mallRecommend(Map map);
 
     public int editMallRecommend(Map map);
 

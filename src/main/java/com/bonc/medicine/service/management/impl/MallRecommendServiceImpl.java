@@ -43,8 +43,8 @@ public class MallRecommendServiceImpl implements MallRecommendService {
     }
 
     @Override
-    public int mallRecommend(List list){
-        return mallRecommendMapper.mallRecommend(list);
+    public int mallRecommend(Map map){
+        return mallRecommendMapper.mallRecommend(map);
     }
 
     @Override

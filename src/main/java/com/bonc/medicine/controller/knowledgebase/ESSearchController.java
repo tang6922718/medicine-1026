@@ -76,10 +76,15 @@ public class ESSearchController {
         qb.must(QueryBuilders.matchAllQuery());
         SearchResponse sr;
         if (null != searchType && "" != searchType) {
-            qb.must(QueryBuilders.termQuery("type", searchType));
+            if("km_variety_encyclopedia" == searchType){
+                QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information");
+            }else {
+                qb.must(QueryBuilders.termQuery("type", searchType));
+            }
         }
         if (null != searchText && "" != searchText) {
-            qb.must(QueryBuilders.matchQuery("abstract", searchText));
+//            qb.must(QueryBuilders.matchQuery("abstract", searchText));
+            qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
         }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         sr = srb.setQuery(qb).addSort(sortBuilder).execute().actionGet();
