@@ -83,6 +83,14 @@ public class BroadcastController {
         return ResultUtil.success(broadcastService.deleteBroadcast(id));
     }
 
+    /*
+    * 轮播图详情
+    * */
+    @GetMapping("/showBroadcastById/{id}")
+    public Result<Object> showBroadcastById(@PathVariable String id){
+        return ResultUtil.success(broadcastService.showBroadcastById(id));
+    }
+
 
 
 }

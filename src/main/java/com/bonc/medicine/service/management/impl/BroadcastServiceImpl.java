@@ -46,4 +46,9 @@ public class BroadcastServiceImpl implements BroadcastService {
     public int editBroadcast(Map map) {
         return broadcastMapper.editBroadcast(map);
     }
+
+    @Override
+    public Map showBroadcastById(String id) {
+        return broadcastMapper.showBroadcastById(id);
+    }
 }

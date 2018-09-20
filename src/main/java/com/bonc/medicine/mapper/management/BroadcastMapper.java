@@ -21,4 +21,6 @@ public interface BroadcastMapper {
     public int addBroadcast(Map map);
 
     public int editBroadcast(Map map);
+
+    public Map showBroadcastById(String id);
 }
