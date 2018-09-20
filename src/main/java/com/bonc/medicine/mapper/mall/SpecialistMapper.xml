@@ -162,12 +162,11 @@
     </select>
     <select id="caseDetail" parameterType="java.lang.String" resultType="Map">
     	SELECT
-			sc.tittle,
+			sc.title,
 			sc.content,
-			sc.img_url as sc_img, 
 			sc.publish_time,
 			si.issue_desc,
-			si.img_url as si_img,
+			si.img_url,
 			si.video_url,
 			si.issue_time,
 			si.issue_address,
