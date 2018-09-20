@@ -89,7 +89,7 @@ public class DyanimicController {
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
                 map.put("attentionStatus",attentionTF); //1-关注 0-未关注
-                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
+                map.put("thumbStatus",thumbStatus); //1：点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -146,7 +146,7 @@ public class DyanimicController {
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
                 map.put("attentionStatus",attentionTF); //1-关注 0-未关注
-                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
+                map.put("thumbStatus",thumbStatus); //1：点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -206,7 +206,7 @@ public class DyanimicController {
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
                 map.put("attentionStatus",attentionTF); //1-关注 0-未关注
-                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
+                map.put("thumbStatus",thumbStatus); //1：点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -267,7 +267,7 @@ public class DyanimicController {
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
                 map.put("attentionStatus",attentionTF); //1-关注 0-未关注
-                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
+                map.put("thumbStatus",thumbStatus); //1：点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -326,7 +326,7 @@ public class DyanimicController {
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
                 map.put("attentionStatus",attentionTF); //1-关注 0-未关注
-                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
+                map.put("thumbStatus",thumbStatus); //1：点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }

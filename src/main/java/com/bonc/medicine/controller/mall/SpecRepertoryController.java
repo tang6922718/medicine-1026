@@ -1,8 +1,11 @@
 package com.bonc.medicine.controller.mall;
 
+import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Issue;
 import com.bonc.medicine.entity.mall.Specialist;
+import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.service.mall.SpecialistService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ import java.util.Map;
 public class SpecRepertoryController {
 	@Autowired
 	SpecialistService specialistService;
+	@Autowired
+	private MeetProfessorService meetProfessorService;
 	
 	
 	/**
@@ -247,6 +252,7 @@ public class SpecRepertoryController {
 		specialistService.insertIssueRel(params);
 		return ResultUtil.success();
 	}
+	
 	@SuppressWarnings({ "rawtypes" })
 	@PutMapping("/invite")
 	public Result inviteOtherSpec(@RequestBody Map params) {
@@ -261,6 +267,31 @@ public class SpecRepertoryController {
 			list.add(one);
 		}
 		return ResultUtil.success(specialistService.insertIssueRel(list));
+	}
+	
+	
+	/**
+	 * 单独邀请专家并返回该问题已邀请专家
+	 * @param params
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes" })
+	@PutMapping("/inviteSpec")
+	@Transactional
+	public Result inviteSpec(@RequestBody Map params) {
+		String issueid = params.get("issueid")+"";
+		String specid = params.get("specid")+"";
+		if (issueid.equals("") || specid.equals("")) {
+			throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+		}
+		List list = new ArrayList<>();
+		Map one = new HashMap<>();
+		one.put("specid", specid);
+		one.put("issueid", issueid);
+		one.put("is_assigned", "1");
+		list.add(one);
+		specialistService.insertIssueRel(list);
+		return ResultUtil.success(meetProfessorService.expert(Integer.parseInt(issueid)));
 	}
 	
 	/**

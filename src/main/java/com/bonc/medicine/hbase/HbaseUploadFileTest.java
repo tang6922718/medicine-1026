@@ -19,12 +19,12 @@ import java.util.UUID;
 @Component("uploadFile")
 public class HbaseUploadFileTest {
 
-//    public static void main(String[] args)  throws IOException{
-//
-////        uploadFile1();
-////        uploadFile2();
+    public static void main(String[] args)  throws IOException{
+
+//        uploadFile1();
+        uploadFileTest2();
 //        readFile("pngTest");
-//    }
+    }
 
     @Value("${hbase.zookeeper.quorum}")
     private String zkQuorum;

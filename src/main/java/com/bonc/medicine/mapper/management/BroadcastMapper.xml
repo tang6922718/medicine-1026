@@ -85,4 +85,8 @@
 		DELETE FROM common_broadcast WHERE id = #{id}
 	</delete>
 
+	<select id="showBroadcastById" parameterType="String" resultType="Map">
+		SELECT * FROM common_broadcast WHERE id=#{id}
+	</select>
+
 </mapper>

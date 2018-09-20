@@ -78,17 +78,23 @@ public interface TrainMapper {
 
     //评论统计  todo
     @Select("SELECT COUNT(id)  as bmNum from train_appointment  WHERE object_id=#{comment_id} and object_type=#{Appointment_type}  GROUP BY user_id ")
-    Map queryCommentNumber(Map<String,String> map);
+    Map queryCommentNumber(Map<String, String> map);
 
     @Update("update train_video_course set is_display='0' where id=#{id}")
-    int delCourseTrainVideo(Map<String,Object> map);
+    int delCourseTrainVideo(Map<String, Object> map);
 
 
     @Update("update train_offline  set  operation_status='0' where id =#{id}")
-    int repealOfflineTrain(Map<String,Object> map);
+    int repealOfflineTrain(Map<String, Object> map);
 
     @Update("update train_video_course  set  operation_status='0' where id =#{id}")
-    int repealVideoCourse(Map<String,Object> map);
+    int repealVideoCourse(Map<String, Object> map);
+
+
+
+    @UpdateProvider(type = TrainDynaSqlProvider.class,
+            method = "editVideoCourse")
+    int editVideoCourse(Map<String,Object> map);
 
 
     class TrainDynaSqlProvider {
@@ -189,11 +195,10 @@ public interface TrainMapper {
             return new SQL() {{
                 SELECT("*");
                 FROM("train_video_course");
-
-                if(map.get("publish_time") != null && map.get("publish_time") != ""){
+                if (map.get("publish_time") != null && map.get("publish_time") != "") {
                     WHERE("publish_time >= #{publish_time}");
                 }
-                if(map.get("title") != null && map.get("title") != ""){
+                if (map.get("title") != null && map.get("title") != "") {
                     WHERE("title  like CONCAT('%',#{title},'%')");
                 }
 
@@ -210,12 +215,12 @@ public interface TrainMapper {
         public String selectTrainList(final Map<String, Object> map) {
             return new SQL() {{
                 SELECT("*");
-                FROM("train_offline");
-
-                if(map.get("publish_time") != null && map.get("publish_time") != ""){
+                FROM("train_offline a");
+                LEFT_OUTER_JOIN("train_offline_video b on a.id =b.train_id");
+                if (map.get("publish_time") != null && map.get("publish_time") != "") {
                     WHERE("publish_time >=#{publish_time}");
                 }
-                if(map.get("title") != null && map.get("title") != ""){
+                if (map.get("title") != null && map.get("title") != "") {
                     WHERE("title  like CONCAT('%',#{title},'%')");
                 }
                 if (map.get("id") != null) {
@@ -288,13 +293,43 @@ public interface TrainMapper {
                         break;
                 }
 //                where id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})
-                if (map.get("user_id") != null && map.get("object_type")!=null) {
+                if (map.get("user_id") != null && map.get("object_type") != null) {
                     WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
                 }
 
             }}.toString();
         }
 
+        public String editVideoCourse(final Map<String, Object> map) {
+            return new SQL() {{
+                UPDATE("train_video_course");
+
+                if (map.get("title") != null) {
+                    SET("title=#{title}");
+                }
+                if (map.get("video_type") != null) {
+                    SET("video_type=#{video_type}");
+                }
+                if (map.get("lecturer_name") != null) {
+                    SET("lecturer_name=#{lecturer_name}");
+                }
+
+                if (map.get("course_introduce") != null) {
+                    SET("course_introduce=#{course_introduce}");
+                }
+                if (map.get("duration") != null) {
+                    SET("duration=#{duration}");
+                }
+                if (map.get("video_url") != null) {
+                    SET("video_url=#{video_url}");
+                }
+
+                if (map.get("img_url") != null) {
+                    SET("img_url=#{img_url}");
+                }
+                WHERE("id=#{id}");
+            }}.toString();
+        }
 
     }
 }

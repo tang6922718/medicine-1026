@@ -59,6 +59,9 @@ public interface LiveMapper {
                 if (map.get("room_desc") != null) {
                     VALUES("room_desc", "#{room_desc}");
                 }
+                if (map.get("room_desc") != null) {
+                    VALUES("lecture_desc", "#{lecture_desc}");
+                }
                 if (map.get("room_id") != null) {
                     VALUES("room_id", "#{room_id}");
                 }
@@ -95,30 +98,25 @@ public interface LiveMapper {
         public String editLive(final Map<String, Object> map) {
             return new SQL() {{
                 UPDATE("train_live");
-
-                if(map.get("title") != null){
-                    SET("title=#{title}");
+                if(map.get("room_title") != null){
+                    SET("room_title=#{room_title}");
                 }
-                if(map.get("train_type") != null){
-                    SET("train_type=#{train_type}");
-                }
-
-                if(map.get("train_introduce") != null){
-                    SET("train_introduce=#{train_introduce}");
-                }
-                if(map.get("lecturer_introduce") != null){
-                    SET("lecturer_introduce=#{lecturer_introduce}");
+                if(map.get("live_type") != null){
+                    SET("live_type=#{live_type}");
                 }
 
-                if(map.get("address") != null){
-                    SET("address=#{address}");
+                if(map.get("room_desc") != null){
+                    SET("room_desc=#{room_desc}");
                 }
-                if(map.get("train_time") != null){
-                    SET("train_time=#{train_time}");
+                if(map.get("lecturer_desc") != null){
+                    SET("lecturer_desc=#{lecturer_desc}");
                 }
 
-                if(map.get("duration") != null){
-                    SET("duration=#{duration}");
+                if(map.get("live_start") != null){
+                    SET("live_start=#{live_start}");
+                }
+                if(map.get("live_end") != null){
+                    SET("live_end=#{live_end}");
                 }
                 if(map.get("img_url") != null){
                     SET("img_url=#{img_url}");
@@ -148,8 +146,6 @@ public interface LiveMapper {
 
                 WHERE("is_display='1'");
             }}.toString()/*+"  limit "+start+","+end*/;
-
-
             System.out.println(sql);
             return sql;
 
