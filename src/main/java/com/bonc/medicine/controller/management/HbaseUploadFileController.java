@@ -62,8 +62,23 @@ public class HbaseUploadFileController {
         os.close();
     }
 
-    @GetMapping("/getFileStream")
-    public void getFileStream(String key,HttpServletResponse response) throws Exception{
+    @GetMapping("/getImgStream")
+    public void getImgStream(String key,HttpServletResponse response){
+        getFileStream(key,response);
+    }
+
+    @GetMapping("/getAudioStream")
+    public void getAudioStream(String key,HttpServletResponse response){
+        getFileStream(key,response);
+    }
+
+    @GetMapping("/getVideoStream")
+    public void getVideoStream(String key,HttpServletResponse response){
+        getFileStream(key,response);
+    }
+
+
+    private void getFileStream(String key,HttpServletResponse response){
         try {
             byte[] file = uploadFile.downloadFile(key);
             // 清空response
@@ -76,7 +91,7 @@ public class HbaseUploadFileController {
             toClient.write(file);
             toClient.flush();
             toClient.close();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
