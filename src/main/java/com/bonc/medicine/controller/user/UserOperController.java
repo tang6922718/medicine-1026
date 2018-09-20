@@ -89,11 +89,11 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
+        //boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
 
-        if (!isCodeValidated){
+       /* if (!isCodeValidated){
             return ResultUtil.error(ResultEnum.ERROR_VERIFI);
-        }
+        }*/
         int succesNum = userService.signUp(paramMap);
 
         Map reMap = new HashMap();
@@ -115,12 +115,12 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
+       /* boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
 
         if (!isCodeValidated){
             return ResultUtil.error(ResultEnum.ERROR_VERIFI);
         }
-
+*/
         int succesNum = userService.updatePassword(paramMap);
 
         Map reMap = new HashMap();

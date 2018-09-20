@@ -195,4 +195,5 @@ public class UserManagerController {
 	public Result<Object> queryUserInfo(@RequestParam int userID){
 		return userManagerService.queryUserInfo(userID);
 	}
+
 }
