@@ -42,7 +42,7 @@ public class DyanimicController {
     // 查询所有人动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/dyanimic")
-    public Result<Object> selectAllDyanimic(int dyn_cat_id,String publish_time) {
+    public Result<Object> selectAllDyanimic(int dyn_cat_id,String publish_time,int user_id) {
         List returnList = new ArrayList();
         List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time);
         if(list.size() > 0) {
@@ -70,23 +70,26 @@ public class DyanimicController {
                 int messageNumber = commentReplyService.commentsCount(param);
 
                 //此处引用 当前用户是否关注 动态发布者
-//                param.clear();
-//                int attedUserId = (int) amap.get("publish_user_id");
-//                int user_id = 1;   //当前用户id，暂时假数据
-//                param.put("userId", user_id+"");
-//                param.put("attedUserId", attedUserId+"");
-//                Map attention = attentionService.attentionRelation(map);
-//                Object attentionTF = attention.get("followed");
+                param.clear();
+                int attedUserId = (int) amap.get("publish_user_id");
 
-                // 此处引用 当前用户是否对该条动态点赞
+                  //当前用户id，本应java后台获取，暂时由前端传过来
 
+                param.put("userId", user_id+"");
+                param.put("attedUserId", attedUserId+"");
+                param.put("type", "0");
+                Map attention = attentionService.attentionRelation(param);
+                Object attentionTF = attention.get("followed");
+
+               // 此处引用 当前用户是否对该条动态点赞
+                int thumbStatus = thumbService.thumbStatus(user_id+"", "0", attedUserId+"");
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
-//                map.put("attention",attentionTF); //1-关注 0-未关注
-                map.put("praise",1);
+                map.put("attentionStatus",attentionTF); //1-关注 0-未关注
+                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -96,7 +99,7 @@ public class DyanimicController {
     // 查询某一用户(不是当前用户)发布的动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/user")
-    public Result<Object> selectUserDyanimic(int publish_user_id,int dyn_cat_id) {
+    public Result<Object> selectUserDyanimic(int publish_user_id,int dyn_cat_id,int user_id) {
         List returnList = new ArrayList();
         List<Map> list = dyanimicService.selectUserDyanimic( publish_user_id, dyn_cat_id);
         if(list.size() > 0) {
@@ -124,23 +127,26 @@ public class DyanimicController {
                 int messageNumber = commentReplyService.commentsCount(param);
 
                 //此处引用 当前用户是否关注 动态发布者
-//                param.clear();
-//                int attedUserId = (int) amap.get("publish_user_id");
-//                int user_id = 1;
-//                param.put("userId", user_id+"");
-//                param.put("attedUserId", attedUserId+"");
-//                Map attention = attentionService.attentionRelation(map);
-//                Object attentionTF = attention.get("followed");
+                param.clear();
+                int attedUserId = (int) amap.get("publish_user_id");
+
+                //当前用户id，本应java后台获取，暂时由前端传过来
+
+                param.put("userId", user_id+"");
+                param.put("attedUserId", attedUserId+"");
+                param.put("type", "0");
+                Map attention = attentionService.attentionRelation(param);
+                Object attentionTF = attention.get("followed");
 
                 // 此处引用 当前用户是否对该条动态点赞
-
+                int thumbStatus = thumbService.thumbStatus(user_id+"", "0", attedUserId+"");
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
-//                map.put("attention",attentionTF); //1-关注 0-未关注
-                map.put("praise",1);
+                map.put("attentionStatus",attentionTF); //1-关注 0-未关注
+                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -152,7 +158,7 @@ public class DyanimicController {
     // 查询当前用户发布的动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/mine")
-    public Result<Object> selectMineDyanimic(int dyn_cat_id) {
+    public Result<Object> selectMineDyanimic(int dyn_cat_id,int user_id) {
         List returnList = new ArrayList();
         int publish_user_id = 1; // publish_user_id 是 当前用户id
         List<Map> list = dyanimicService.selectUserDyanimic( publish_user_id, dyn_cat_id);
@@ -181,23 +187,26 @@ public class DyanimicController {
                 int messageNumber = commentReplyService.commentsCount(param);
 
                 //此处引用 当前用户是否关注 动态发布者
-//                param.clear();
-//                int attedUserId = (int) amap.get("publish_user_id");
-//                int user_id = 1;
-//                param.put("userId", user_id+"");
-//                param.put("attedUserId", attedUserId+"");
-//                Map attention = attentionService.attentionRelation(map);
-//                Object attentionTF = attention.get("followed");
+                param.clear();
+                int attedUserId = (int) amap.get("publish_user_id");
+
+                //当前用户id，本应java后台获取，暂时由前端传过来
+
+                param.put("userId", user_id+"");
+                param.put("attedUserId", attedUserId+"");
+                param.put("type", "0");
+                Map attention = attentionService.attentionRelation(param);
+                Object attentionTF = attention.get("followed");
 
                 // 此处引用 当前用户是否对该条动态点赞
-
+                int thumbStatus = thumbService.thumbStatus(user_id+"", "0", attedUserId+"");
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
-//                map.put("attention",attentionTF); //1-关注 0-未关注
-                map.put("praise",1);
+                map.put("attentionStatus",attentionTF); //1-关注 0-未关注
+                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -208,9 +217,11 @@ public class DyanimicController {
     // 查询当前用户参与过（不包含发布）的动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/mineJoin")
-    public Result<Object> selectMineJoinDyanimic() {
+    public Result<Object> selectMineJoinDyanimic(int user_id) {
         List returnList = new ArrayList();
-        int user_id = 1; // 当前用户id
+
+        //当前用户id，本应java后台获取，暂时由前端传过来
+
         List<Map> list = dyanimicService.selectJoinDyanimic(user_id);
         if(list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
@@ -237,23 +248,26 @@ public class DyanimicController {
                 int messageNumber = commentReplyService.commentsCount(param);
 
                 //此处引用 当前用户是否关注 动态发布者
-//                param.clear();
-//                int attedUserId = (int) amap.get("publish_user_id");
-////                int user_id = 1;
-//                param.put("userId", user_id+"");
-//                param.put("attedUserId", attedUserId+"");
-//                Map attention = attentionService.attentionRelation(map);
-//                Object attentionTF = attention.get("followed");
+                param.clear();
+                int attedUserId = (int) amap.get("publish_user_id");
+
+                //当前用户id，本应java后台获取，暂时由前端传过来
+
+                param.put("userId", user_id+"");
+                param.put("attedUserId", attedUserId+"");
+                param.put("type", "0");
+                Map attention = attentionService.attentionRelation(param);
+                Object attentionTF = attention.get("followed");
 
                 // 此处引用 当前用户是否对该条动态点赞
-
+                int thumbStatus = thumbService.thumbStatus(user_id+"", "0", attedUserId+"");
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
-//                map.put("attention",attentionTF); //1-关注 0-未关注
-                map.put("praise",1);
+                map.put("attentionStatus",attentionTF); //1-关注 0-未关注
+                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }
@@ -265,7 +279,7 @@ public class DyanimicController {
     // 查询具体的一条动态
     @SuppressWarnings("unchecked")
     @GetMapping("/select/detailOne")
-    public Result<Object> selectDetailOneDyanimic(int id) {
+    public Result<Object> selectDetailOneDyanimic(int id,int user_id) {
         List returnList = new ArrayList();
         List<Map> list = dyanimicService.selectDetailOneDyanimic(id);  //查询出为一条数据，还是返回的list
         if(list.size() > 0) {
@@ -291,27 +305,28 @@ public class DyanimicController {
                 param.put("object_type", "2");
                 param.put("object_id", dyanimicId+"");
                 int messageNumber = commentReplyService.commentsCount(param);
-/*
 
                 //此处引用 当前用户是否关注 动态发布者
                 param.clear();
                 int attedUserId = (int) amap.get("publish_user_id");
-                int user_id = 1;
+
+                //当前用户id，本应java后台获取，暂时由前端传过来
+
                 param.put("userId", user_id+"");
                 param.put("attedUserId", attedUserId+"");
-                Map attention = attentionService.attentionRelation(map);
+                param.put("type", "0");
+                Map attention = attentionService.attentionRelation(param);
                 Object attentionTF = attention.get("followed");
 
                 // 此处引用 当前用户是否对该条动态点赞
-
-*/
+                int thumbStatus = thumbService.thumbStatus(user_id+"", "0", attedUserId+"");
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);
                 map.put("message",messageNumber);
                 map.put("view",viewNumber);
-//                map.put("attention",attentionTF); //1-关注 0-未关注
-                map.put("praise",1);
+                map.put("attentionStatus",attentionTF); //1-关注 0-未关注
+                map.put("thumbStatus",thumbStatus); //点赞 0： 未点赞 ;-999:参数不全
                 returnList.add(map);
             }
         }

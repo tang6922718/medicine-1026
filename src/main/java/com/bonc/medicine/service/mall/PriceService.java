@@ -7,11 +7,11 @@ public interface PriceService {
 
 	public List<Map<String, Object>> getArieties();
 
-	public List<Map<String, Object>> getMarket();
+	public List<Map<String, Object>> getMarket(String hotword);
 
-	public List<Map<String, Object>> getSpecifaction();
+	public List<Map<String, Object>> getSpecifaction(String hotword);
 
-	public List<Map<String, Object>> getProduct();
+	public List<Map<String, Object>> getProduct(String hotword);
 
 	public List<Map<String, Object>> market(String hotword, String market, Integer limit);
 
