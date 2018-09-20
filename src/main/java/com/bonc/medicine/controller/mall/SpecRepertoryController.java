@@ -291,7 +291,7 @@ public class SpecRepertoryController {
 		one.put("is_assigned", "1");
 		list.add(one);
 		specialistService.insertIssueRel(list);
-		return ResultUtil.success(meetProfessorService.expert(Integer.parseInt(issueid)));
+		return meetProfessorService.expert(Integer.parseInt(issueid));
 	}
 	
 	/**
