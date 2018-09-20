@@ -29,5 +29,13 @@
         and object_id= #{acceptThumbId}
     </select>
 
+    <select id="selectThumbNumber" parameterType="Map" resultType="Map">
+        select
+          praise_user_id
+        from
+          common_praise
+        where object_type = #{type}
+        and object_id= #{acceptThumbId}
+    </select>
 
 </mapper>
