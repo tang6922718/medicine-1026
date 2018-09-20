@@ -7,14 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface InfoMapper {
-/*
-    {"<script>",
-            "SELECT * FROM `info_basic`",
-            "WHERE 1=1",
-            "<when test='cat_code!=null'>",
-            "AND cat_code = #{cat_code}",
-            "</when>",
-            "</script>"}*/
+
     @Select({"<script>",
             "SELECT * FROM `info_basic`",
             "WHERE 1=1",

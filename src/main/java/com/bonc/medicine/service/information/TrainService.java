@@ -40,4 +40,6 @@ public interface TrainService {
     int repealOfflineTrain(Map<String,Object> map);
 
     int repealVideoCourse(Map<String,Object> map);
+
+    int editVideoCourse(Map<String,Object> map);
 }

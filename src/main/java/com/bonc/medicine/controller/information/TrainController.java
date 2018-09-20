@@ -1,6 +1,8 @@
 package com.bonc.medicine.controller.information;
 
 
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.TrainService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -26,7 +28,9 @@ public class TrainController {
      * @description 新建线下培训(发布线下培训)
      */
     @RequestMapping("/createTrain")
-    public Result createTrain(@RequestBody Map<String, Object> map) {
+    @Authorization
+    public Result createTrain(@CurrentUser String user_id,@RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
         return ResultUtil.success(trainService.createTrain(map));
     }
 
@@ -57,7 +61,9 @@ public class TrainController {
      * @description 交流互动(交流互动) (插入)
      */
     @RequestMapping("/addComment")
-    public Result addComment(@RequestBody Map<String, Object> map) {
+    @Authorization
+    public Result addComment(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
         return ResultUtil.success(trainService.addComment(map));
     }
     /**
@@ -96,7 +102,9 @@ public class TrainController {
      * @description 预约报名(预约报名)
      */
     @RequestMapping("/addTrainApply")
-    public Result addTrainApply(@RequestBody(required = false)  Map<String, Object> map) {
+    @Authorization
+    public Result addTrainApply(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
         return ResultUtil.success(trainService.addTrainApply(map));
     }
 
@@ -112,18 +120,28 @@ public class TrainController {
     }
 
 
+    /**
+     * @param map
+     * @return
+     * @description 编辑线下视频  (编辑线下视频)
+     */
+    @RequestMapping("/editOfflineTrainVideo")
+    @Authorization
+    public Result editOfflineTrainVideo(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
+        return ResultUtil.success(trainService.editOfflineTrainVideo(map));
+    }
+
 
     /**
      * @param map
      * @return
      * @description 编辑视频  (编辑视频)
      */
-    @RequestMapping("/editOfflineTrainVideo")
-    public Result editOfflineTrainVideo(@RequestBody(required = false)  Map<String, Object> map) {
-        return ResultUtil.success(trainService.editOfflineTrainVideo(map));
+    @RequestMapping("/editVideoCourse")
+    public Result editVideoCourse(@RequestBody(required = false)  Map<String, Object> map) {
+        return ResultUtil.success(trainService.editVideoCourse(map));
     }
-
-
     /**
      * @param map
      * @return
