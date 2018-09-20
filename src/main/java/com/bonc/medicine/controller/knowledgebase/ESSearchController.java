@@ -86,7 +86,7 @@ public class ESSearchController {
             qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
         }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
-        sr = srb.setQuery(qb).addSort(sortBuilder).execute().actionGet();
+        sr = srb.setQuery(qb).addSort(sortBuilder).setSize(50).execute().actionGet();
         /*if(null == searchText || ""== searchText){
             sr = srb.setQuery(QueryBuilders.matchAllQuery()).execute().actionGet(); // 查询所有
         }else{
@@ -100,9 +100,9 @@ public class ESSearchController {
             list.add(source);
             System.out.println(hit.getSourceAsString());
         }
-        int len = list.size();
-        len = len > 50 ? 50 : len;
-        return ResultUtil.success(list.subList(0, len));
+//        int len = list.size();
+//        len = len > 50 ? 50 : len;
+        return ResultUtil.success(list);
 
     }
 
@@ -159,8 +159,8 @@ public class ESSearchController {
             list.add(source);
 //            System.out.println(hit.getSourceAsString());
         }
-        int len = list.size();
-        len = len>10?10:len;
+//        int len = list.size();
+//        len = len>10?10:len;
         Collections.sort(list, new Comparator<Map<String, Object>>() {
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                 Double score1 = Double.valueOf(o1.get("article_score").toString()) ;//score1是从你list里面拿出来的一个
@@ -168,7 +168,7 @@ public class ESSearchController {
                 return score2.compareTo(score1);
             }
         });
-        return ResultUtil.success(list.subList(0, len));
+        return ResultUtil.success(list);
     }
 
 }
