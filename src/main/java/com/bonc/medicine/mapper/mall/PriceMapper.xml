@@ -27,7 +27,8 @@
 
 	<select id="market" parameterType="Map" resultType="Map">
 		select * from common_price where price_date = #{time} and
-		where state = '1' and status = '1'
+		where state =
+		'1' and status = '1'
 		<if test="hotword != null and hotword != ''">
 			AND cat_name like CONCAT('%',#{hotword},'%')
 		</if>
@@ -100,13 +101,14 @@
 		price_date
 		limit 0,9
 	</select>
-	
+
 	<select id="todayPrice" parameterType="Map" resultType="Map">
 		SELECT
 		price_date,
 		( SUM( price ) / count( 1 ) ) AS price,
 		cat_name from
-		common_price where state = '1' and status = '1' and price_date = #{time}
+		common_price where state = '1' and status = '1' and price_date =
+		#{time}
 		<if test="hotword != null and hotword != ''">
 			AND cat_name like CONCAT('%',#{hotword},'%')
 		</if>
@@ -122,4 +124,38 @@
 		GROUP BY
 		price_date
 	</select>
+
+	<select id="pricelist" parameterType="Map" resultType="Map">
+		select * from common_price where status = '0'
+		<if test="hotword != null and hotword != ''">
+			AND (cat_name like CONCAT('%',#{hotword},'%') OR
+			market_name like CONCAT('%',#{hotword},'%') OR
+			specifaction like CONCAT('%',#{hotword},'%') OR
+			product_name like CONCAT('%',#{hotword},'%'))
+		</if>
+		<if test="priceType != null and priceType == '市场价格'">
+			AND market_name IS NOT NULL
+		</if>
+		<if test="priceType != null and priceType == '产地价格'">
+			AND product_name IS NOT NULL
+		</if>
+		<if test="priceState != null and priceState == '正常'">
+			AND state = '1'
+		</if>
+		<if test="priceState != null and priceState == '停用'">
+			AND state = '0'
+		</if>
+		<if test="start_time != null and start_time != ''">
+			AND price_date <![CDATA[ >= ]]> #{start_time}
+		</if>
+		<if test="end_time != null and end_time != ''">
+			AND price_date <![CDATA[ <= ]]> #{end_time}
+		</if>
+	</select>
+
+	<update id="priceState" parameterType="Map">
+		update common_price set
+		state = #{state} where id = #{id}
+	</update>
+
 </mapper>

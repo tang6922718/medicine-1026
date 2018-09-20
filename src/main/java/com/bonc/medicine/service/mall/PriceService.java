@@ -20,7 +20,12 @@ public interface PriceService {
 
 	public List<Map<String, Object>> detail(String hotword, String market, String product, String specifaction,
 			String start_time, String end_time);
-	
+
 	public List<Map<String, Object>> todayPrice(String hotword, String market, String product, String specifaction);
+
+	public List<Map<String, Object>> pricelist(String hotword, String priceType, String priceState, String start_time,
+			String end_time);
+
+	public int priceState(Integer id, String state);
 
 }

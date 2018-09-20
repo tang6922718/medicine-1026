@@ -80,7 +80,7 @@ public class Pricelmpl implements PriceService {
 		map.put("end_time", end_time);
 		return priceMapper.detail(map);
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> todayPrice(String hotword, String market, String product, String specifaction) {
 		Map map = new HashMap<>();
@@ -92,6 +92,26 @@ public class Pricelmpl implements PriceService {
 		map.put("specifaction", specifaction);
 		map.put("time", time);
 		return priceMapper.todayPrice(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> pricelist(String hotword, String priceType, String priceState, String start_time,
+			String end_time) {
+		Map map = new HashMap<>();
+		map.put("hotword", hotword);
+		map.put("priceType", priceType);
+		map.put("priceState", priceState);
+		map.put("start_time", start_time);
+		map.put("end_time", end_time);
+		return priceMapper.pricelist(map);
+	}
+
+	@Override
+	public int priceState(Integer id, String state) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		map.put("state", state);
+		return priceMapper.priceState(map);
 	}
 
 }

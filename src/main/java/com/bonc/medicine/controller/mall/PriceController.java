@@ -54,7 +54,7 @@ public class PriceController {
 	 * 市场价格
 	 */
 	@GetMapping("/price/market")
-	public Result<Object> market( String hotword,  String market) {
+	public Result<Object> market(String hotword, String market) {
 		return ResultUtil.success(priceService.market(hotword, market));
 	}
 
@@ -75,7 +75,7 @@ public class PriceController {
 			String end_time) {
 		return ResultUtil.success(priceService.detail(hotword, market, product, specifaction, start_time, end_time));
 	}
-	
+
 	/*
 	 * 今日价格
 	 */
@@ -83,13 +83,22 @@ public class PriceController {
 	public Result<Object> detail(String hotword, String market, String product, String specifaction) {
 		return ResultUtil.success(priceService.todayPrice(hotword, market, product, specifaction));
 	}
-	
+
 	/*
 	 * 价格管理列表查询
 	 */
 	@GetMapping("/price/pricelist")
-	public Result<Object> pricelist(String hotword, String market, String product, String specifaction) {
-		return ResultUtil.success(priceService.todayPrice(hotword, market, product, specifaction));
+	public Result<Object> pricelist(String hotword, String priceType, String priceState, String start_time,
+			String end_time) {
+		return ResultUtil.success(priceService.pricelist(hotword, priceType, priceState, start_time, end_time));
+	}
+
+	/*
+	 * 价格启用停用，1启用0停用
+	 */
+	@GetMapping("/price/priceState")
+	public Result<Object> priceState(Integer id, String state) {
+		return ResultUtil.success(priceService.priceState(id, state));
 	}
 
 }

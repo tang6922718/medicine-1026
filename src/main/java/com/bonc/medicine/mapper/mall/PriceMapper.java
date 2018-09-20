@@ -23,5 +23,9 @@ public interface PriceMapper {
 	public List<Map<String, Object>> detail(Map map);
 	
 	public List<Map<String, Object>> todayPrice(Map map);
+	
+	public List<Map<String, Object>> pricelist(Map map);
+	
+	public int priceState(Map map);
 
 }
