@@ -5,6 +5,7 @@ import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.user.OperatorManagementMapper;
 import com.bonc.medicine.service.user.OperatorManagementService;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -59,9 +60,10 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
     @Transactional
     public Map<String, Object> createNewOperationUser(Map<String, Object> map) {
          //=operatorManagementMapper.createNewOperationUserInfo(map);
-        int aaa  =operatorManagementMapper.createNewOperationUserInfo(map);
+        map.put("password", DigestUtils.md5Hex(map.get("password") + ""));
+        int woes  =operatorManagementMapper.createNewOperationUserInfo(map);
         //System.out.println(aaa);
-        if (aaa < 1 || StringUtils.isEmpty(map.get("id") + "")){
+        if (woes < 1 || StringUtils.isEmpty(map.get("id") + "")){
             throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
         }
         String backendUserid = map.get("id") + "";
@@ -81,6 +83,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
 
     @Override
     public Map<String, Object> updateOperationUser(Map<String, String> map) {
+        map.put("password", DigestUtils.md5Hex(map.get("password") + ""));
         int row = operatorManagementMapper.updateOperationUserInfo(map);
         if (row < 1){
             throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
@@ -97,5 +100,17 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
         Map reMap = new HashMap();
         reMap.put("succeed", 1);
         return reMap;
+    }
+
+    @Override
+    public Map<String, Object> getOperatorInfo(String opid) {
+        Map map = new HashMap();
+        map.put("opid", opid);
+        List<Map> reList = operatorManagementMapper.queryOperaterTable(map);
+        if (null == reList || null == reList.get(0).get("telephone")){
+            throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+        }
+
+        return reList.get(0);
     }
 }

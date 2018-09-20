@@ -23,6 +23,13 @@ public class VerificationUtilsController {
     * @Description: 通过手机号码获取短信验证码的接口
     * @Param: [map]key:phone
     * @return: com.bonc.medicine.entity.Result： Result里面的data，data里面的code就是验证码
+     * {
+     *     "code": 200,
+     *     "msg": "成功",
+     *     "data": {
+     *         "code": "5954"
+     *     }
+     * }
     * @Author: hejiajun
     * @Date: 2018/9/20 
     */ 
