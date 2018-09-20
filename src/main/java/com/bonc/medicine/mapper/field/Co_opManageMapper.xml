@@ -120,13 +120,13 @@
 	</select>
 
 	<select id="queryAssistant" resultType="Map" parameterType="Integer">
-		SELECT id,name,img_url,assistant FROM field_coop_member
+		SELECT id,name,img_url,assistant,user_id FROM field_coop_member
 		WHERE assistant ='0' AND
 		state='0' AND coop_id = #{coop_id}
 	</select>
 
 	<select id="queryNotAssistant" resultType="Map" parameterType="Integer">
-		SELECT id,name,img_url,assistant FROM field_coop_member
+		SELECT id,name,img_url,assistant,user_id FROM field_coop_member
 		WHERE (assistant ='1' OR
 		assistant IS NULL) AND state='0' AND coop_id =
 		#{coop_id}
