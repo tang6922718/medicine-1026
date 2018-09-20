@@ -4,23 +4,26 @@
 <mapper namespace="com.bonc.medicine.mapper.management.MallRecommendMapper">
 	<select id="searchMallRecommend" parameterType="java.util.Map" resultType="Map">
 		SELECT
-		a.id,
-		a.supply_id,
-		a.site,
-		c.site_name,
-		b.goods_name,
-		case WHEN a.state = 0 THEN '正常'
-		ELSE '已停用' END AS state
+			a.id,
+			CONCAT_WS(",",a.supply_id1,a.supply_id2,a.supply_id3) AS supply_ids,
+			CONCAT_WS(",",a.img_url1,a.img_url2,a.img_url3) AS img_urls,
+			CONCAT_WS(",",b.goods_name,c.goods_name,d.goods_name) AS goods_names,
+			a.site,
+			e.site_name,
+			case WHEN a.state = 0 THEN '正常'
+			ELSE '已停用' END AS state
 		FROM
-		mall_recommend a
-		INNER JOIN mall_supply b ON a.supply_id = b.id
-		INNER JOIN common_recommend_site c ON a.site = c.id
+			mall_recommend a
+		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
+		LEFT JOIN mall_supply c ON a.supply_id2 = c.id
+		LEFT JOIN mall_supply d ON a.supply_id3 = d.id
+		INNER JOIN common_recommend_site e ON a.site = e.id
 		WHERE 1 = 1
 		<if test="id != null and id != ''">
 			and a.id = #{id}
 		</if>
 		<if test="search_name != null and search_name != ''">
-			and b.goods_name LIKE CONCAT("%",#{search_name},"%")
+			and b.goods_name LIKE CONCAT("%",#{search_name},"%") or c.goods_name LIKE CONCAT("%",#{search_name},"%") or d.goods_name LIKE CONCAT("%",#{search_name},"%")
 		</if>
 		<if test="site != null and site != ''">
 			and a.site=#{site}
