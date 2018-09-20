@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface TrainService {
 
+    Map queryAppointmentNumber(Map<String, String> map);
+
     int createTrain(Map<String, Object> map);
 
     int createVideo(Map<String, Object> map);
@@ -30,4 +32,12 @@ public interface TrainService {
     List<Map> selectCourseClass();
 
     List<Map> selectTrainApply(Map<String,Object> map);
+
+    Map queryCommentNumber(Map<String,String> map);
+
+    int delCourseTrainVideo(Map<String,Object> map);
+
+    int repealOfflineTrain(Map<String,Object> map);
+
+    int repealVideoCourse(Map<String,Object> map);
 }

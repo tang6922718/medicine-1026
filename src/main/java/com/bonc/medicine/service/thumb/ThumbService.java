@@ -1,5 +1,7 @@
 package com.bonc.medicine.service.thumb;
 
+import com.bonc.medicine.controller.information.TestRedisController;
+
 import java.util.Map;
 
 /**
@@ -19,4 +21,5 @@ public interface ThumbService {
 
     public Map<String, Object> thumbNumber(Map<String, String> paramMap);
 
+    Map selectThumbNumber(Map<String,String> map);
 }

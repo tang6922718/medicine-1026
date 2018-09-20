@@ -40,8 +40,11 @@ public interface LiveMapper {
     int editLive(Map<String, Object> map);
 
 
-    @Update("update train_live  set  is_display='0' where id =#{id}")
+    @Update("update train_live  set  operation_status='0' where id =#{id}")
     int repealLive(Map<String, Object> map);
+
+    @Update("update train_live  set  is_display='0' where id =#{id}")
+    int delLive(Map<String, Object> map);
 
     class LiveDynaSqlProvider {
         public String addLive(final Map<String, Object> map) {
@@ -126,23 +129,25 @@ public interface LiveMapper {
 
         public String selectLive(final Map<String, Object> map) {
 
-            int start= (Integer.parseInt(String.valueOf(map.get("pageNum")))-1)*Integer.parseInt(String.valueOf(map.get("pageSize")));
-            int end=Integer.parseInt(String.valueOf(map.get("pageSize")));
+          /*  int start= (Integer.parseInt(String.valueOf(map.get("pageNum")))-1)*Integer.parseInt(String.valueOf(map.get("pageSize")));
+            int end=Integer.parseInt(String.valueOf(map.get("pageSize")));*/
 
             String sql=new SQL() {{
                 SELECT("*");
                 FROM("train_live");
                 if(map.get("live_start") != null && map.get("live_start") != ""){
-                    WHERE("live_start>#{live_start}");
+                    WHERE("live_start>=#{live_start}");
                 }
                 if(map.get("room_title") != null && map.get("room_title") != ""){
-                    WHERE("room_title  like '%#{live_start}%'");
+                    WHERE("room_title  like CONCAT('%',#{room_title},'%')");
                 }
                 if(map.get("id") != null && map.get("id") != ""){
                     WHERE("id=#{id}");
                 }
 
-            }}.toString()+"  limit "+start+","+end;
+
+                WHERE("is_display='1'");
+            }}.toString()/*+"  limit "+start+","+end*/;
 
 
             System.out.println(sql);

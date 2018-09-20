@@ -152,7 +152,7 @@
 	</select>
 
 	<select id="coop_hrlp_list" resultType="Map">
-		select a.user_id , b.name , a.assistant from field_coop_member a left join field_coop b on a.coop_id = b.id 
+		select IFNULL(a.user_id,'') AS user_id , b.name , a.assistant from field_coop_member a left join field_coop b on a.coop_id = b.id 
 	</select>
 
 	<select id="integrallist" resultType="Map">

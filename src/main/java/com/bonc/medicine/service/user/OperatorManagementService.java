@@ -43,4 +43,7 @@ public interface OperatorManagementService {
     public Map<String, Object> updateOperationUser(Map<String, String> map);
 
 
+    public Map<String, Object> getOperatorInfo(String opid);
+
+
 }

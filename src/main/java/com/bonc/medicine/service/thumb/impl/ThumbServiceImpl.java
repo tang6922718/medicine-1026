@@ -98,4 +98,11 @@ public class ThumbServiceImpl implements ThumbService {
 
         }
     }
+
+    @Override
+    public Map selectThumbNumber(Map<String, String> map) {
+        return  thumbMapper.selectThumbNumber(map);
+    }
+
+
 }

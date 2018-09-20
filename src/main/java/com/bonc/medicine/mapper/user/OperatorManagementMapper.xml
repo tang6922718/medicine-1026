@@ -14,7 +14,10 @@
             ccu.telephone,
             ccu.is_allowed,
             cro.role_name,
-        ccc.name as craete_name
+            ccc.name as craete_name,
+            ccu.`password`,
+            ccu.email,
+            ccu.sex
 
         FROM
             common_backend_user ccu
@@ -24,13 +27,17 @@
         where
             cro.create_user_id is not null
 
-        <if test="roleId != null || roleId != ''">
+        <if test="roleId != null and roleId != ''">
             and cro.id = #{roleId}
         </if>
 
-        <if test="keyWord != null || keyWord != ''">
+        <if test="keyWord != null and keyWord != ''">
             and ccu.loginid like concat( '%', #{keyWord} , '%')
             or  ccu.name  like concat( '%', #{keyWord} , '%')
+        </if>
+
+        <if test="opid != null and opid != ''">
+            and ccu.id = #{opid}
         </if>
 
     </select>
@@ -69,7 +76,7 @@
       UPDATE common_backend_user
         set id = #{id}
             <if test="loginId != null and loginId != ''">
-              , login_id = #{loginId}
+              , loginid = #{loginId}
             </if>
             <if test="password != null and password != ''">
                 , password = #{password}
@@ -93,6 +100,7 @@
 
         where backend_user_id = #{id}
     </update>
+
 
 
 
