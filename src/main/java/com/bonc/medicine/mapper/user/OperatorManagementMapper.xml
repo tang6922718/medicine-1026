@@ -88,7 +88,7 @@
                 , telephone = #{telephone}
             </if>
             <if test="isWork != null and isWork != ''">
-                , is_work = #{isWork}
+                , is_allowed = #{isWork}
             </if>
         where id = #{id}
     </update>
