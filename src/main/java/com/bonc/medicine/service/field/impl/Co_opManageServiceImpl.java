@@ -85,7 +85,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			}
 			return ResultUtil.success(list);
 		}else {
-			return ResultUtil.error(404,"数据为空");
+			return ResultUtil.success();
 		}
 
 	}

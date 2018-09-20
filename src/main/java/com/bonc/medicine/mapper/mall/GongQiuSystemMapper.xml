@@ -174,16 +174,16 @@
 	
 	<select id="my_supply_type" parameterType="Map" resultType="Map">
 		select * from mall_supply where state = '0' and seller_id = #{user_id}
-		<if test="type != null and type != '1'">
+		<if test="type != null and type == 1">
             AND carriage_status = '1'
         </if>
-        <if test="type != null and type != '2'">
+        <if test="type != null and type == 2">
             AND carriage_status = '2'
         </if>
-        <if test="type != null and type != '3'">
+        <if test="type != null and type == 3">
             AND is_audit = '0'
         </if>
-        <if test="type != null and type != '4'">
+        <if test="type != null and type == 4">
             AND is_audit = '2'
         </if>
 	</select>
@@ -197,16 +197,16 @@
 	
 	<select id="my_purchase_type" parameterType="Map" resultType="Map">
 		select * from mall_purchase where state = '1' and user_id = #{user_id}
-		<if test="type != null and type != '1'">
+		<if test="type != null and type == 1">
             AND is_aduit = '1'
         </if>
-        <if test="type != null and type != '2'">
+        <if test="type != null and type == 2">
             AND is_aduit = '3'
         </if>
-        <if test="type != null and type != '3'">
+        <if test="type != null and type == 3">
             AND is_aduit = '0'
         </if>
-        <if test="type != null and type != '4'">
+        <if test="type != null and type == 4">
             AND is_aduit = '2'
         </if>
 	</select>
