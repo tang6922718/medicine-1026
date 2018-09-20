@@ -34,6 +34,11 @@
 		<if test="market != null and market != ''">
 			AND market_name like CONCAT('%',#{market},'%')
 		</if>
+		ORDER BY
+		price_date
+		<if test="limit != null and limit != ''">
+			limit 0 , #{limit}
+		</if>
 	</select>
 
 	<select id="trend" parameterType="Map" resultType="Map">
@@ -63,8 +68,6 @@
 			#{end_time}
 		</if>
 		GROUP BY
-		price_date
-		ORDER BY
 		price_date
 	</select>
 
@@ -150,6 +153,8 @@
 		<if test="end_time != null and end_time != ''">
 			AND price_date <![CDATA[ <= ]]> #{end_time}
 		</if>
+		ORDER BY
+		price_date
 	</select>
 
 	<update id="priceState" parameterType="Map">

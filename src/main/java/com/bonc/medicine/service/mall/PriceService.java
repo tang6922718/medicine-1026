@@ -13,7 +13,7 @@ public interface PriceService {
 
 	public List<Map<String, Object>> getProduct();
 
-	public List<Map<String, Object>> market(String hotword, String market);
+	public List<Map<String, Object>> market(String hotword, String market, Integer limit);
 
 	public List<Map<String, Object>> trend(String hotword, String market, String product, String specifaction,
 			String start_time, String end_time);
