@@ -2,6 +2,8 @@ package com.bonc.medicine.controller.mall;
 
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.mall.PriceService;
+import com.bonc.medicine.utils.ResultUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,114 +19,77 @@ public class PriceController {
 	private PriceService priceService;
 
 	/*
-	 * 获取热词接口
+	 * 获取品种
 	 */
-	@GetMapping("/price/hotword")
-	public Result<Object> hotword() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = priceService.hotword();
-		Result result = new Result();
-		result.setData(list);
-		return result;
+	@GetMapping("/price/get/arieties")
+	public Result<Object> getArieties() {
+		return ResultUtil.success(priceService.getArieties());
 	}
 
 	/*
-	 * 增加热词接口
+	 * 获取市场
 	 */
-	@GetMapping("/price/add/hotword/{hotword}")
-	public Result<Object> addHotword(@PathVariable String hotword) {
-		priceService.addHotword(hotword);
-		Result result = new Result();
-		result.setCode(200);
-		result.setMsg("成功");
-		return result;
+	@GetMapping("/price/get/market")
+	public Result<Object> getMarket() {
+		return ResultUtil.success(priceService.getMarket());
+	}
+
+	/*
+	 * 获取规格
+	 */
+	@GetMapping("/price/get/specifaction")
+	public Result<Object> getSpecifaction() {
+		return ResultUtil.success(priceService.getSpecifaction());
+	}
+
+	/*
+	 * 获取产地
+	 */
+	@GetMapping("/price/get/product")
+	public Result<Object> getProduct() {
+		return ResultUtil.success(priceService.getProduct());
 	}
 
 	/*
 	 * 市场价格
 	 */
-	@GetMapping("/price/market/{hotword}/{market}")
-	public Result<Object> market(@PathVariable String hotword, @PathVariable String market) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = priceService.market(hotword, market);
-		Result result = new Result();
-		result.setData(list);
-		result.setCode(200);
-		result.setMsg("成功");
-		return result;
+	@GetMapping("/price/market")
+	public Result<Object> market( String hotword,  String market) {
+		return ResultUtil.success(priceService.market(hotword, market));
 	}
 
 	/*
-	 * 产地价格
+	 * 价格走势
 	 */
-	@GetMapping("/price/product/{hotword}/{product}")
-	public Result<Object> product(@PathVariable String hotword, @PathVariable String product) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = priceService.product(hotword, product);
-		Result result = new Result();
-		result.setData(list);
-		result.setCode(200);
-		result.setMsg("成功");
-		return result;
-	}
-
-	/*
-	 * 历史价格走势type0：全部,1：一年,2：一月
-	 */
-	@GetMapping("/price/trend/{hotword}/{type}")
-	public Result<Object> trend(@PathVariable String hotword, @PathVariable String type) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		if ("0".equals(type.toString())) {
-			String end_time = format.format(date);
-			list = priceService.trend(hotword, "2017-01-01", end_time);
-			Result result = new Result();
-			result.setData(list);
-			result.setCode(200);
-			result.setMsg("成功");
-			return result;
-		} else if ("1".equals(type.toString())) {
-			c.add(Calendar.YEAR, -1);
-			Date y = c.getTime();
-			String start_time = format.format(y);
-			String end_time = format.format(date);
-			list = priceService.trend(hotword, start_time, end_time);
-			Result result = new Result();
-			result.setData(list);
-			result.setCode(200);
-			result.setMsg("成功");
-			return result;
-		} else if ("2".equals(type.toString())) {
-			c.add(Calendar.MONTH, -1);
-			Date y = c.getTime();
-			String start_time = format.format(y);
-			String end_time = format.format(date);
-			list = priceService.trend(hotword, start_time, end_time);
-			Result result = new Result();
-			result.setData(list);
-			result.setCode(200);
-			result.setMsg("成功");
-			return result;
-		}
-		return null;
+	@GetMapping("/price/trend")
+	public Result<Object> trend(String hotword, String market, String product, String specifaction, String start_time,
+			String end_time) {
+		return ResultUtil.success(priceService.trend(hotword, market, product, specifaction, start_time, end_time));
 	}
 
 	/*
 	 * 价格明细表
 	 */
-	@GetMapping("/price/detail/{hotword}")
-	public Result<Object> detail(@PathVariable String hotword) {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = priceService.detail(hotword);
-		Result result = new Result();
-		result.setData(list);
-		result.setCode(200);
-		result.setMsg("成功");
-		return result;
+	@GetMapping("/price/detail")
+	public Result<Object> detail(String hotword, String market, String product, String specifaction, String start_time,
+			String end_time) {
+		return ResultUtil.success(priceService.detail(hotword, market, product, specifaction, start_time, end_time));
+	}
+	
+	/*
+	 * 今日价格
+	 */
+	@GetMapping("/price/todayPrice")
+	public Result<Object> detail(String hotword, String market, String product, String specifaction) {
+		return ResultUtil.success(priceService.todayPrice(hotword, market, product, specifaction));
+	}
+	
+	/*
+	 * 价格管理列表查询
+	 */
+	@GetMapping("/price/pricelist")
+	public Result<Object> pricelist(String hotword, String market, String product, String specifaction) {
+		return ResultUtil.success(priceService.todayPrice(hotword, market, product, specifaction));
 	}
 
 }
