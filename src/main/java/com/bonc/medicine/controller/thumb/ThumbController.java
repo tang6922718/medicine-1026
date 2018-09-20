@@ -84,6 +84,24 @@ public class ThumbController {
 
     }
 
+    /**
+    * @Description:获取当前用户对 某个对象是否点赞 三个参数都是必须的
+    * @Param: [userid : 当前的userid, type：对象的类型, acceptThumbId：对象的id]
+    * @return: int 1：点赞 0： 未点赞 ;-999:参数不全
+    * @Author: hejiajun
+    * @Date: 2018/9/20
+    */
+    @GetMapping("/thumb/status/v1.0")
+    public int thumbStatus(@RequestParam(required = true) String userid,
+                              @RequestParam(required = true)  String type,
+                              @RequestParam(required = true)  String acceptThumbId){
+
+        return  thumbService.thumbStatus(userid, type, acceptThumbId);
+    }
+
+
+
+
     public void validatePram( Map<String, String> paramMap){
         if (null == paramMap){
             throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);

@@ -5,6 +5,7 @@ import com.bonc.medicine.adapter.ThumbAdapter;
 import com.bonc.medicine.mapper.thumb.ThumbMapper;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.utils.RedisKeyUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -102,6 +103,29 @@ public class ThumbServiceImpl implements ThumbService {
     @Override
     public Map selectThumbNumber(Map<String, String> map) {
         return  thumbMapper.selectThumbNumber(map);
+    }
+
+    @Override
+    public int thumbStatus(String userid, String type, String acceptThumbId) {
+
+        if (StringUtils.isEmpty(userid) || StringUtils.isEmpty(type) || StringUtils.isEmpty(acceptThumbId)){
+            return -999;
+        }
+        String key = RedisKeyUtil.getThumbKey(acceptThumbId, type);
+        boolean exists = jedisAdapter.sismember(key, acceptThumbId);
+        if (exists){
+            return  1;
+        }
+        Map<String, String> paramMap = new HashMap();
+        paramMap.put("userid", userid);
+        paramMap.put("type", type);
+        paramMap.put("acceptThumbId", acceptThumbId);
+        List<Map<String, Object>> reList = thumbMapper.thumbStatus(paramMap);
+        if (null == reList || reList.size() < 1){
+            return 0;
+        }
+
+        return 1;
     }
 
 

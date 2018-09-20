@@ -161,7 +161,7 @@ public class UserOperController {
 
 
     /**
-     * @Description:用户通过旧密码修改新密码
+     * @Description:用户通过旧密码修改新密码 通过id或者telephone都可以修改密码
      * @Param: [paramMap] keys:newPassword;oldPassword,secNewPassword,telephone
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun

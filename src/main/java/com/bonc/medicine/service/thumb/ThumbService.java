@@ -1,6 +1,7 @@
 package com.bonc.medicine.service.thumb;
 
 import com.bonc.medicine.controller.information.TestRedisController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -22,4 +23,6 @@ public interface ThumbService {
     public Map<String, Object> thumbNumber(Map<String, String> paramMap);
 
     Map selectThumbNumber(Map<String,String> map);
+
+    public int  thumbStatus(String userid, String type, String acceptThumbId);
 }

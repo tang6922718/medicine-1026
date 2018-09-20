@@ -38,4 +38,15 @@
         and object_id= #{acceptThumbId}
     </select>
 
+    <select id="thumbStatus" resultType="Map" parameterType="Map">
+        SELECT
+            praise_user_id
+        FROM
+            common_praise
+        WHERE
+            object_id = #{acceptThumbId}
+            AND praise_user_id = #{userid}
+            AND object_type = #{type}
+    </select>
+
 </mapper>

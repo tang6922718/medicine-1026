@@ -32,8 +32,16 @@
         set
           password = #{password},
           update_time = #{updateTime}
-        where
-          telephone = #{phone}
+        where 1 = 1
+		<if test="phone ！= null and phone != ''">
+			and telephone = #{phone}
+		</if>
+		<if test="userid ！= null and userid != ''">
+			and id = #{userid}
+		</if>
+
+
+
     </update>
 
     <select id="getTableByPhone" parameterType="Map" resultType="Map">
