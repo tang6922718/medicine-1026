@@ -217,6 +217,7 @@
 			si.video_url,
 			si.issue_time,
 			si.issue_address,
+			si.follow_days,
 			cmv.variety_name,
 			ds.subject_name,
 			si.field_ids,
