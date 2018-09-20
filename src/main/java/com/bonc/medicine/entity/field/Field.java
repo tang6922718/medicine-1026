@@ -32,8 +32,7 @@ public class Field {
     private String state; // 数据状态   0,可用；    1，不可用
     private int creator_id; // 创建者ID
     private String guide_flag; // 是否指导标识   0 是      1  不是
-    private String[] categroys; // 品种的 categroy plantNum  seedAge  (可多种)
-    private String categroysList; //品种的 categroy plantNum  seedAge  (可多种)
+    private String categroysList; //品种的 categroy plantNum  seedAge
 
     public int getId() {
         return id;
@@ -209,14 +208,6 @@ public class Field {
 
     public void setGuide_flag(String guide_flag) {
         this.guide_flag = guide_flag;
-    }
-
-    public String[] getCategroys() {
-        return categroys;
-    }
-
-    public void setCategroys(String[] categroys) {
-        this.categroys = categroys;
     }
 
     public String getCategroysList() {

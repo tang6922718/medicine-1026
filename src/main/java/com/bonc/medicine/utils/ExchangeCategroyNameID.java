@@ -50,7 +50,7 @@ public class ExchangeCategroyNameID {
     }
 
     public static String IDToName(String ID,List<Map> categroylist){
-        ID=trimFirstAndLastChar2(ID,",");
+        ID=trimFirstAndLastChar(ID,",");
 
         String name="";
 
@@ -77,6 +77,7 @@ public class ExchangeCategroyNameID {
     }
 
 
+
     /**
      * 去除字符串首尾出现的某个字符.
      *
@@ -101,43 +102,11 @@ public class ExchangeCategroyNameID {
         }
         // 循环去掉字符串尾的beTrim字符
         String endChar = source.substring(source.length() - 1, source.length());
-        if (endChar.equalsIgnoreCase(element) && source.length()>1) {
+        if (endChar.equalsIgnoreCase(element)) {
             source = source.substring(0, source.length()-1);
-        }else{
-            source = "";
-        }
-        return source;
-    }
-
-
-    /**
-     * 去除字符串首尾出现的某个字符.
-     *
-     * @param source  源字符串.
-     * @param element 需要去除的字符.
-     * @return String.
-     */
-    public static  String trimFirstAndLastChar2(String source, String element) {
-        if(source==null){
-            return "";
-        }
-        source = source.trim(); // 循环去掉字符串首的beTrim字符
-        if(source.isEmpty()){
-            return "";
-        }
-        String beginChar = source.substring(0, 1);
-        if (beginChar.equalsIgnoreCase(element)) {
-            source = source.substring(1, source.length());
         }
         if(source.isEmpty()){
             return "";
-        }
-        // 循环去掉字符串尾的beTrim字符
-        String endChar = source.substring(source.length() - 1, source.length());
-        if (!endChar.equalsIgnoreCase(element) && source.length()>1) {
-            ;
-        }else{
-            source = "";
         }
         return source;
     }
