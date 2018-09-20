@@ -20,7 +20,7 @@ import java.util.Map;
 public class VerificationUtilsController {
 
     /**
-    * @Description: 通过手机号码获取短信验证码的接口
+    * @Description: 通过手机号码获取短信验证码的接口..发送验证码的接口，返回的验证码可以关心也可以不关心
     * @Param: [map]key:phone
     * @return: com.bonc.medicine.entity.Result： Result里面的data，data里面的code就是验证码
      * {
