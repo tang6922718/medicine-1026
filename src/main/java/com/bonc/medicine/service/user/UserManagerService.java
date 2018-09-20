@@ -15,7 +15,7 @@ public interface UserManagerService {
 
 	public void addUserRoleRel(Integer id, Integer user_role_id);
 	
-	public int updateBasic(Integer id,String sex,Integer age,String address);
+	public int updateBasic(Integer id,String sex,Integer age,String address,String img_url);
 
 	public void addCatRel(Integer id, Integer cat_rel_id);
 

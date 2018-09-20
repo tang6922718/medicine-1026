@@ -32,17 +32,20 @@ public class UserManagerServiceImpl implements UserManagerService {
 	}
 
 	@Override
-	public int updateBasic(Integer id, String sex, Integer age, String address) {
+	@Transactional
+	public int updateBasic(Integer id, String sex, Integer age, String address,String img_url) {
 		Map map = new HashMap<>();
 		map.put("id", id);
 		map.put("sex", sex);
 		map.put("age", age);
 		map.put("address", address);
+		map.put("img_url", img_url);
 		Map map1 = new HashMap<>();
 		map1.put("id", id);
 		map1.put("sex", "男".equals(sex) ? "0" : "1");
 		map1.put("age", age);
 		map1.put("address", address);
+		map1.put("img_url", img_url);
 		userManagerMapper.updateField_coop(map);
 		userManagerMapper.updateField_coop_member(map1);
 		return userManagerMapper.updateBasic(map);

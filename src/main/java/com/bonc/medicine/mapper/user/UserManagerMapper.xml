@@ -11,7 +11,7 @@
 	</insert>
 
 	<update id="updateBasic" parameterType="Map">
-		update common_user set name = #{name} ,sex = #{sex} ,age = #{age} , address = #{address} where id = #{id}
+		update common_user set name = #{name} ,sex = #{sex} ,age = #{age} , address = #{address} head_portrait = #{img_url} where id = #{id}
 	</update>
 	
 	<update id="updateField_coop" parameterType="Map">
@@ -19,7 +19,7 @@
 	</update>
 	
 	<update id="updateField_coop_member" parameterType="Map">
-		update field_coop_member set name = #{name} ,sex = #{sex}, age = #{age} ,address = #{address} where user_id = #{id}
+		update field_coop_member set name = #{name} ,sex = #{sex}, age = #{age} ,address = #{address} ,img_url = #{img_url} where user_id = #{id}
 	</update>
 
 	<insert id="addUserRoleRel" parameterType="Map">

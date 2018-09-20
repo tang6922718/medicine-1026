@@ -35,8 +35,8 @@ public class UserManagerController {
 	}
 	
 	@GetMapping("/userManager/update/Basic")
-	public Result<Object> updateBasic(Integer id,String sex,Integer age,String address) {
-		return ResultUtil.success(userManagerService.updateBasic(id,sex,age,address));
+	public Result<Object> updateBasic(Integer id,String sex,Integer age,String address,String img_url) {
+		return ResultUtil.success(userManagerService.updateBasic(id,sex,age,address,img_url));
 	}
 
 	/*
