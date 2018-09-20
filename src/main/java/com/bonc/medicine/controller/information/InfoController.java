@@ -1,6 +1,7 @@
 package com.bonc.medicine.controller.information;
 
 
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.InfoService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -20,9 +21,14 @@ public class InfoController {
      * @param catCode
      * @return
      */
+
+
     @RequestMapping("/infoList")
-    public Result infoList(@RequestParam(required = false) String catCode) {
-        return  ResultUtil.success(infoService.getAllInfo(catCode));
+    public Result infoList(@RequestParam(required = false) String catCode,
+                           @RequestParam(required = false,defaultValue = "1") String pageNum,
+                           @RequestParam(required = false, defaultValue = "10") String pageSize) {
+
+        return  ResultUtil.success(infoService.getAllInfo(catCode,pageNum,pageSize));
     }
 
     /**
@@ -31,7 +37,9 @@ public class InfoController {
      * @return
      */
     @PostMapping("/addInfo")
-    public Result addInfo(@RequestBody Map<String,Object>  map) {
+    @com.bonc.medicine.annotation.Authorization
+    public Result addInfo(@CurrentUser String user_id,@RequestBody Map<String,Object>  map) {
+
         return  ResultUtil.success(infoService.addInfo(map));
     }
 

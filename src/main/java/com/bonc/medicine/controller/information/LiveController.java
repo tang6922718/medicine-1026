@@ -4,9 +4,13 @@ package com.bonc.medicine.controller.information;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.information.LiveService;
+import com.bonc.medicine.service.information.TrainService;
+import com.bonc.medicine.service.thumb.ThumbService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.TecentCloudUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +27,15 @@ public class LiveController {
 
     @Autowired
     RedisService redisService;
+
+    @Autowired
+    private ViewNumberService viewNumberService;
+
+    @Autowired
+    TrainService trainService;
+
+    @Autowired
+    ThumbService thumbService;
 
     private static final Logger logger = Logger.getLogger("LiveController");
 
@@ -101,11 +114,47 @@ public class LiveController {
     public Result repealLive(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(liveService.repealLive(map));
     }
+    /**
+     * @param map
+     * @return
+     * @description 删除直播 （删除直播）
+     */
+    @RequestMapping("/delLive")
+    public Result delLive(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(liveService.delLive(map));
+    }
+
+
+    /**
+     * @param map
+     * @return
+     * @description 统一查看观看数，收藏数等接口 （你传我就帮你查）
+     */
+    @RequestMapping("/selectWatchNum")
+    public Result selectWatchNum(@RequestBody Map<String, String> map) {
+        Map  map1 = new HashMap();
+       //观看数 预约数  评论数 点赞数
+        if((!StringUtils.isEmpty(map.get("object_id"))) || (!StringUtils.isEmpty(map.get("object_type")))){
+            map1.put("gk",viewNumberService.queryViewNumber(map).get("viewNumber"));
+        }
+        if ((!StringUtils.isEmpty(map.get("Appointment_id"))) || (!StringUtils.isEmpty(map.get("Appointment_type")))){
+            map1.put("bm",trainService.queryAppointmentNumber(map).get("bmNum"));
+        }
+        if ((!StringUtils.isEmpty(map.get("comment_id")))  || (!StringUtils.isEmpty(map.get("comment_type")))){
+           //暂无
+            map1.put("pl",trainService.queryCommentNumber(map).get(""));
+        }
+        if ((!StringUtils.isEmpty(map.get("acceptThumbId")))  || (!StringUtils.isEmpty(map.get("type")))){
+            map1.put("dz",thumbService.selectThumbNumber(map).get("praise_user_id"));
+        }
+        return ResultUtil.success(map1);
+    }
 
 
 
 
     /**
+     *
      * @param
      * @return
      * @description 通知回调接口
@@ -137,7 +186,6 @@ public class LiveController {
         for (String channel : channelSet){
             redisService.del(channel);
         }
-
         return ResultUtil.success("ok");
     }
 

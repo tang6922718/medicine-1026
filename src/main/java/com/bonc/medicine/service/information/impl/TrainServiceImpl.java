@@ -14,8 +14,14 @@ import java.util.Map;
 public class TrainServiceImpl implements TrainService {
 
 
-    @Autowired
+    @Autowired(required = false)
     TrainMapper trainMapper;
+
+    @Override
+    public Map queryAppointmentNumber(Map<String, String> map) {
+        return trainMapper.queryAppointmentNumber(map);
+    }
+
     @Override
     public int createTrain(Map<String, Object> map) {
         return trainMapper.createTrain(map);
@@ -79,5 +85,25 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public List<Map> selectTrainApply(Map<String, Object> map) {
         return trainMapper.selectTrainApply(map);
+    }
+
+    @Override
+    public Map queryCommentNumber(Map<String, String> map) {
+        return  trainMapper.queryCommentNumber(map);
+    }
+
+    @Override
+    public int delCourseTrainVideo(Map<String, Object> map) {
+        return trainMapper.delCourseTrainVideo(map);
+    }
+
+    @Override
+    public int repealOfflineTrain(Map<String, Object> map) {
+        return trainMapper.repealOfflineTrain(map);
+    }
+
+    @Override
+    public int repealVideoCourse(Map<String, Object> map) {
+        return trainMapper.repealVideoCourse(map);
     }
 }

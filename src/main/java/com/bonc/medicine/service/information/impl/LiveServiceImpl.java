@@ -61,4 +61,9 @@ public class LiveServiceImpl implements LiveService {
     public int repealLive(Map<String, Object> map) {
         return liveMapper.repealLive(map);
     }
+
+    @Override
+    public int delLive(Map<String, Object> map) {
+        return liveMapper.delLive(map);
+    }
 }

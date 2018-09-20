@@ -2,6 +2,7 @@ package com.bonc.medicine.service.information.impl;
 
 import com.bonc.medicine.mapper.information.InfoMapper;
 import com.bonc.medicine.service.information.InfoService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,8 @@ public class InfoServiceImpl implements InfoService {
 
 
     @Override
-    public List<Map> getAllInfo(String catCode) {
+    public List<Map> getAllInfo(String catCode,  String pageNum,String pageSize) {
+        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
         return infoMapper.getAllInfo(catCode);
     }
 

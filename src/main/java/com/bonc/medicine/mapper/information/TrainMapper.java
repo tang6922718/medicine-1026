@@ -72,6 +72,25 @@ public interface TrainMapper {
     List<Map> selectTrainApply(Map<String, Object> map);
 
 
+    @Select("SELECT COUNT(id)  as bmNum from train_appointment  WHERE object_id=#{Appointment_id} and object_type=#{Appointment_type}  GROUP BY user_id ")
+    Map queryAppointmentNumber(Map<String, String> map);
+
+
+    //评论统计  todo
+    @Select("SELECT COUNT(id)  as bmNum from train_appointment  WHERE object_id=#{comment_id} and object_type=#{Appointment_type}  GROUP BY user_id ")
+    Map queryCommentNumber(Map<String,String> map);
+
+    @Update("update train_video_course set is_display='0' where id=#{id}")
+    int delCourseTrainVideo(Map<String,Object> map);
+
+
+    @Update("update train_offline  set  operation_status='0' where id =#{id}")
+    int repealOfflineTrain(Map<String,Object> map);
+
+    @Update("update train_video_course  set  operation_status='0' where id =#{id}")
+    int repealVideoCourse(Map<String,Object> map);
+
+
     class TrainDynaSqlProvider {
         public String createTrain(final Map<String, Object> map) {
             return new SQL() {{
@@ -170,12 +189,21 @@ public interface TrainMapper {
             return new SQL() {{
                 SELECT("*");
                 FROM("train_video_course");
+
+                if(map.get("publish_time") != null && map.get("publish_time") != ""){
+                    WHERE("publish_time >= #{publish_time}");
+                }
+                if(map.get("title") != null && map.get("title") != ""){
+                    WHERE("title  like CONCAT('%',#{title},'%')");
+                }
+
                 if (map.get("video_type") != null) {
                     WHERE("video_type=#{video_type}");
                 }
                 if (map.get("id") != null) {
                     WHERE("id=#{id}");
                 }
+                WHERE("is_display='1'");
             }}.toString();
         }
 
@@ -183,10 +211,17 @@ public interface TrainMapper {
             return new SQL() {{
                 SELECT("*");
                 FROM("train_offline");
+
+                if(map.get("publish_time") != null && map.get("publish_time") != ""){
+                    WHERE("publish_time >=#{publish_time}");
+                }
+                if(map.get("title") != null && map.get("title") != ""){
+                    WHERE("title  like CONCAT('%',#{title},'%')");
+                }
                 if (map.get("id") != null) {
                     WHERE("id=#{id}");
                 }
-
+                WHERE("is_display='1'");
             }}.toString();
         }
 

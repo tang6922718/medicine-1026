@@ -18,4 +18,6 @@ public interface  LiveService {
     int editLive(Map<String, Object> map);
 
     int repealLive(Map<String, Object> map);
+
+    int delLive(Map<String,Object> map);
 }

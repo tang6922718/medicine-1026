@@ -127,11 +127,41 @@ public class TrainController {
     /**
      * @param map
      * @return
-     * @description 删除视频  (删除视频)
+     * @description 删除线下视频  (删除视频)
+     */
+    @RequestMapping("/delCourseTrainVideo")
+    public Result delCourseTrainVideo(@RequestBody(required = false)  Map<String, Object> map) {
+        return ResultUtil.success(trainService.delCourseTrainVideo(map));
+    }
+
+    /**
+     * @param map
+     * @return
+     * @description 删除线下视频  (删除视频)
      */
     @RequestMapping("/delOfflineTrainVideo")
     public Result delOfflineTrainVideo(@RequestBody(required = false)  Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrainVideo(map));
+    }
+
+    /**
+     * @param map
+     * @return
+     * @description 撤销线下培训（撤销线下培训）
+     */
+    @RequestMapping("/repealOfflineTrain")
+    public Result repealOfflineTrain(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(trainService.repealOfflineTrain(map));
+    }
+
+    /**
+     * @param map
+     * @return
+     * @description 撤销课程视频（撤销课程视频）
+     */
+    @RequestMapping("/repealVideoCourse")
+    public Result repealVideoCourse(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(trainService.repealVideoCourse(map));
     }
 
     /**
