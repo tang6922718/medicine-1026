@@ -30,24 +30,24 @@ public class PriceController {
 	 * 获取市场
 	 */
 	@GetMapping("/price/get/market")
-	public Result<Object> getMarket() {
-		return ResultUtil.success(priceService.getMarket());
+	public Result<Object> getMarket(String hotword) {
+		return ResultUtil.success(priceService.getMarket(hotword));
 	}
 
 	/*
 	 * 获取规格
 	 */
 	@GetMapping("/price/get/specifaction")
-	public Result<Object> getSpecifaction() {
-		return ResultUtil.success(priceService.getSpecifaction());
+	public Result<Object> getSpecifaction(String hotword) {
+		return ResultUtil.success(priceService.getSpecifaction(hotword));
 	}
 
 	/*
 	 * 获取产地
 	 */
 	@GetMapping("/price/get/product")
-	public Result<Object> getProduct() {
-		return ResultUtil.success(priceService.getProduct());
+	public Result<Object> getProduct(String hotword) {
+		return ResultUtil.success(priceService.getProduct(hotword));
 	}
 
 	/*

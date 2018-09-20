@@ -62,10 +62,15 @@
 
     <select id="queryIntegralHistory" parameterType="Map" resultType="Map">
         select
-        de.user_id, de.action_code ,de.point, de.action_time,cu.name, cu.telephone
+        de.user_id, de.action_code ,de.point,
+        DATE_FORMAT(de.action_time, '%Y-%m-%d') AS action_time,
+        cu.name,
+        cu.telephone,
+        ccr.chinese_name
         from
         common_integral_dtl de left join common_user cu
         on de.user_id = cu.id
+        LEFT JOIN common_integral_rule ccr on de.action_code=ccr.action_code
         where 1 = 1
         <if test="userId != null and userId != ''">
             and de.user_id = #{userId}

@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,11 +29,11 @@ public class HbaseUploadFile {
     private String zkQuorum;
 
     @Value("${hbase.master}")
-    private static  String hBaseMaster;
+    private String hBaseMaster;
 
-    private static  Configuration conf = new Configuration();
+    private Configuration conf = new Configuration();
 
-    private static Configuration getConf(){
+    private Configuration getConf(){
         conf.set("hbase.zookeeper.quorum",hBaseMaster);
         return conf;
     }
@@ -39,7 +41,7 @@ public class HbaseUploadFile {
     /*
      * 文件保存至Hbase
      * */
-    public static String uploadFileToHbase( MultipartFile myfile) throws IOException{
+    public String uploadFileToHbase( MultipartFile myfile) throws IOException{
         String tableName = "image_audio_vedio";
         String family="cf";
         //产生一个UUID字符串，理论上绝对不会重复
@@ -75,7 +77,7 @@ public class HbaseUploadFile {
     /*
      * 从hbase读取文件
      * */
-    public static String readFileFromHbase(String key,String dirPath) throws Exception{
+    public String readFileFromHbase(String key,String dirPath) throws Exception{
         conf = getConf();
         HTable table = new HTable(conf,"image_audio_vedio");
 //        Get get = new Get(key.getBytes());
@@ -98,7 +100,7 @@ public class HbaseUploadFile {
      * @return 将二进制转成base64返回
      * @throws Exception
      */
-    public static String readImgByByte(String key) throws Exception{
+    public String readImgByByte(String key) throws Exception{
         return Base64.encodeBase64String(downloadFile(key));
     }
 
@@ -108,7 +110,7 @@ public class HbaseUploadFile {
      * @return
      * @throws Exception
      */
-    public static byte[] downloadFile(String key) throws Exception{
+    public byte[] downloadFile(String key) throws Exception{
         conf = getConf();
         HTable table = new HTable(conf,"image_audio_vedio");
         Get get = new Get(key.getBytes());

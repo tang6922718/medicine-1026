@@ -11,23 +11,32 @@
 	<select id="getMarket" parameterType="Map" resultType="Map">
 		select
 		distinct market_name from common_price where state = '1' and status =
-		'1'
+		'1' and cat_name = #{hotword}
 	</select>
 
 	<select id="getSpecifaction" parameterType="Map" resultType="Map">
 		select distinct specifaction from common_price where state = '1' and
-		status = '1'
+		status = '1' and cat_name = #{hotword}
 	</select>
 
 	<select id="getProduct" parameterType="Map" resultType="Map">
 		select
 		distinct product_name from common_price where state = '1' and status =
-		'1'
+		'1' and cat_name = #{hotword}
 	</select>
 
 	<select id="market" parameterType="Map" resultType="Map">
-		select * from common_price where price_date = #{time} and state =
-		'1' and status = '1'
+		select
+		id,price_date,IFNULL(cat_name,'') AS
+		cat_name,IFNULL(specifaction,'') AS
+		specifaction,IFNULL(product_name,'') AS product_name,
+		IFNULL(market_name,'') AS market_name,IFNULL(price,'') AS
+		price,IFNULL(in_time,'') AS in_time,IFNULL(state,'') AS
+		state,IFNULL(status,'') AS status
+		from common_price where price_date =
+		#{time} and state =
+		'1' and status
+		= '1'
 		<if test="hotword != null and hotword != ''">
 			AND cat_name like CONCAT('%',#{hotword},'%')
 		</if>
@@ -132,8 +141,10 @@
 		<if test="hotword != null and hotword != ''">
 			AND (cat_name like CONCAT('%',#{hotword},'%') OR
 			market_name like CONCAT('%',#{hotword},'%') OR
-			specifaction like CONCAT('%',#{hotword},'%') OR
-			product_name like CONCAT('%',#{hotword},'%'))
+			specifaction like
+			CONCAT('%',#{hotword},'%') OR
+			product_name like
+			CONCAT('%',#{hotword},'%'))
 		</if>
 		<if test="priceType != null and priceType == '市场价格'">
 			AND market_name IS NOT NULL
@@ -148,10 +159,12 @@
 			AND state = '0'
 		</if>
 		<if test="start_time != null and start_time != ''">
-			AND price_date <![CDATA[ >= ]]> #{start_time}
+			AND price_date <![CDATA[ >= ]]>
+			#{start_time}
 		</if>
 		<if test="end_time != null and end_time != ''">
-			AND price_date <![CDATA[ <= ]]> #{end_time}
+			AND price_date <![CDATA[ <= ]]>
+			#{end_time}
 		</if>
 		ORDER BY
 		price_date
