@@ -86,7 +86,7 @@
 	</select>
 	
 	<select id="specialIsFollow" parameterType="java.util.Map" resultType="Map">
-		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '1'
+		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '0'
 	</select>
 	
 	<select id="specDetail" parameterType="java.lang.String" resultType="Map">

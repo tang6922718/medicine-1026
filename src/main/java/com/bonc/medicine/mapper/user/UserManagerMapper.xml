@@ -10,6 +10,18 @@
 		values(#{telephone},#{name},#{password},#{sex},#{age},#{address});
 	</insert>
 
+	<update id="updateBasic" parameterType="Map">
+		update common_user set name = #{name} ,sex = #{sex} ,age = #{age} , address = #{address} head_portrait = #{img_url} where id = #{id}
+	</update>
+	
+	<update id="updateField_coop" parameterType="Map">
+		update field_coop set age = #{age} , address = #{address} ,official_user_name = #{name} where official_user_id = #{id}
+	</update>
+	
+	<update id="updateField_coop_member" parameterType="Map">
+		update field_coop_member set name = #{name} ,sex = #{sex}, age = #{age} ,address = #{address} ,img_url = #{img_url} where user_id = #{id}
+	</update>
+
 	<insert id="addUserRoleRel" parameterType="Map">
 		Insert into
 		common_user_role_rel

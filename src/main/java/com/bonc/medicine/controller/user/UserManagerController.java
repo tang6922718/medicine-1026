@@ -33,6 +33,11 @@ public class UserManagerController {
 		}
 		return id;
 	}
+	
+	@GetMapping("/userManager/update/Basic")
+	public Result<Object> updateBasic(Integer id,String sex,Integer age,String address,String img_url) {
+		return ResultUtil.success(userManagerService.updateBasic(id,sex,age,address,img_url));
+	}
 
 	/*
 	 * 添加专家信息
