@@ -187,7 +187,7 @@ public class UserManagerServiceImpl implements UserManagerService {
         queryMap.put("active_count", hudongMap == null ?  "0": hudongMap.get("active_count"));
         Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong( Integer.parseInt(userId));
 
-        queryMap.put("loveMedicineName", pinZhongMap == null ? "0" :pinZhongMap.get("loveMedicineName"));
+        queryMap.put("loveMedicineName", pinZhongMap == null ? "" :pinZhongMap.get("loveMedicineName"));
 
 		return ResultUtil.success(queryMap);
 	}
