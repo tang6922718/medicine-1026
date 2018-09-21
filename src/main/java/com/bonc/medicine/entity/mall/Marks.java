@@ -7,8 +7,9 @@ public class Marks {
 	private int supply_id;// 商品id
 	private int owner_user_id;// 商品所有者的id。非强制需要
 	private int leave_user_id;// 留言者的id
+	private String mark_url;// 留言图片
 	private String mark_message;// 留言的信息
-	private Date leave_time;// 留言的时间
+	private String leave_time;// 留言的时间
 
 	public int getId() {
 		return id;
@@ -42,6 +43,14 @@ public class Marks {
 		this.leave_user_id = leave_user_id;
 	}
 
+	public String getMark_url() {
+		return mark_url;
+	}
+
+	public void setMark_url(String mark_url) {
+		this.mark_url = mark_url;
+	}
+
 	public String getMark_message() {
 		return mark_message;
 	}
@@ -50,12 +59,13 @@ public class Marks {
 		this.mark_message = mark_message;
 	}
 
-	public Date getLeave_time() {
+	public String getLeave_time() {
 		return leave_time;
 	}
 
-	public void setLeave_time(Date leave_time) {
+	public void setLeave_time(String leave_time) {
 		this.leave_time = leave_time;
 	}
+
 
 }
