@@ -103,14 +103,16 @@
 	<select id="selectJoinDyanimic" resultType="java.util.Map">
 
 		select distinct a.* from (
-			select DISTINCT a.*,b.praise_time as joinTime from
+			select DISTINCT a.*,b.praise_time as joinTime,d.address,d.head_portrait from
 			comm_dyanimic a
 			left join common_praise b on a.id = b.object_id
+			left join common_user d on a.publish_user_id = d.id
 			where a.effect_flag = '0' and b.object_type = '0' and b.praise_user_id = #{user_id}  and a.publish_user_id != #{user_id}
 			union all
-			select distinct a.*,c.reply_time as joinTime from
+			select distinct a.*,c.reply_time as joinTime,d.address,d.head_portrait from
 			comm_dyanimic a
 			left join common_comment c on a.id = c.object_id
+			left join common_user d on a.publish_user_id = d.id
 			where a.effect_flag = '0' and c.object_type = '2' and c.from_uid = #{user_id} and a.publish_user_id != #{user_id}
 			) a
 		group by id
