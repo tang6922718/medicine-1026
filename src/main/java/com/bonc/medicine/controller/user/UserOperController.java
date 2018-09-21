@@ -59,16 +59,20 @@ public class UserOperController {
                         HttpServletResponse response) throws Exception {
         // 1、接收两个参数。
         // 2、调用Service进行登录。
-        if(StringUtils.isEmpty(paramMap.get("phone")) || StringUtils.isEmpty(paramMap.get("password"))){
-            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        if(StringUtils.isEmpty(paramMap.get("phone")) ){
+            return ResultUtil.error(000,"手机号码不能是空哦");
+        }
+
+        if(StringUtils.isEmpty(paramMap.get("password")) ){
+            return ResultUtil.error(000,"密码不能是空哦");
         }
 
         Result result = userService.login(paramMap.get("phone"), paramMap.get("password"));
         // 3、从返回结果中取token，写入cookie。Cookie要跨域。
-        String token = result.getData().toString();
+       /* String token = result.getData().toString();
         //设置cookie的key和value，key随便字符串，value为token值
         Cookie cookie = new Cookie("kkk", token);
-        Cookie[] ss = request.getCookies();
+        Cookie[] ss = request.getCookies();*/
 
         return result;
 
