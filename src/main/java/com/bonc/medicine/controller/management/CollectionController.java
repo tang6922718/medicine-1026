@@ -89,8 +89,14 @@ public class CollectionController {
     }
 
 
-
-
+    /*
+    *
+    * 案例详情
+    * */
+    @GetMapping("/specCaseDetail/{id}")
+    public Result<Object> specCaseDetail(@PathVariable String id){
+        return ResultUtil.success(collectionService.specCaseDetail(id));
+    }
 
 
 

@@ -89,7 +89,33 @@
 	</update>
 
 	<select id="showMallRecommend" parameterType="String" resultType="Map">
-		SELECT id,site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time FROM mall_recommend WHERE id=#{id}
+		SELECT
+			a.id,
+			a.site,
+			a.supply_id1,
+			a.img_url1,
+			b.linkman,
+			b.goods_name,
+			b.detail,
+			a.supply_id2,
+			a.img_url2,
+			c.linkman,
+			c.goods_name,
+			c.detail,
+			a.supply_id3,
+			a.img_url3,
+			d.linkman,
+			d.goods_name,
+			d.detail,
+			a.state,
+			a.upload_time
+		FROM
+			mall_recommend a
+		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
+		LEFT JOIN mall_supply c ON a.supply_id2 = c.id
+		LEFT JOIN mall_supply d ON a.supply_id3 = d.id
+		WHERE
+			a.id =#{id}
 	</select>
 
 	<select id="MallRecommendDetail" parameterType="String" resultType="Map">

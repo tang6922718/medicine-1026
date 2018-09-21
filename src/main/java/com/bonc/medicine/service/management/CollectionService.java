@@ -23,4 +23,6 @@ public interface CollectionService {
     public Map<String,Object> mallSupplyDetail(String id);
 
     public Map<String,Object> mallPurchaseDetail(String id);
+
+    public Map<String,Object> specCaseDetail(String id);
 }
