@@ -39,7 +39,7 @@ public class DyanimicController {
     @PostMapping("/insert")
     public Result<Object> insertDyanimic(Dyanimic dyanimic){return ResultUtil.success(dyanimicService.insertDyanimic(dyanimic));}
 
-    // 查询所有人动态
+    // 查询所有人动态 APP
     @SuppressWarnings("unchecked")
     @GetMapping("/select/dyanimic")
     public Result<Object> selectAllDyanimic(int dyn_cat_id,String publish_time,int user_id) {
@@ -96,7 +96,50 @@ public class DyanimicController {
         return ResultUtil.success(returnList);
     }
 
-    // 查询某一用户(不是当前用户)发布的动态
+
+    // 查询所有人动态  后台管理
+    @SuppressWarnings("unchecked")
+    @GetMapping("/select/dyanimicBackstage")
+    public Result<Object> dyanimicBackstage(int dyn_cat_id,String publish_time) {
+        List returnList = new ArrayList();
+        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time);
+        if(list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                Map map = new HashMap();
+
+                Map amap = list.get(i);
+                int dyanimicId = (int)amap.get("id");
+                // 此处引用 点赞 的接口
+                Map<String, String> param = new HashMap<>();
+                param.put("type", "0");
+                param.put("acceptThumbId", dyanimicId+"");
+                Map<String, Object> dianzan = thumbService.thumbNumber(param);
+                Object thumbNumber = dianzan.get("thumbNumber");
+                // 此处引用 浏览数 的接口
+                param.clear();
+                param.put("objectType", "0");
+                param.put("objectId", dyanimicId+"");
+                Map<String, Object> liulan = viewNumberService.queryViewNumber(param);
+                Object viewNumber = liulan.get("viewNumber");
+                // 此处引用 回复消息数 的接口
+                param.clear();
+                param.put("object_type", "2");
+                param.put("object_id", dyanimicId+"");
+                int messageNumber = commentReplyService.commentsCount(param);
+
+                map.put("dyanimic",amap);
+                map.put("thumb",thumbNumber);
+                map.put("message",messageNumber);
+                map.put("view",viewNumber);
+                returnList.add(map);
+            }
+        }
+        return ResultUtil.success(returnList);
+    }
+
+
+
+    // 查询某一用户(不是当前用户)发布的动态  app
     @SuppressWarnings("unchecked")
     @GetMapping("/select/user")
     public Result<Object> selectUserDyanimic(int publish_user_id,int dyn_cat_id,int user_id) {
@@ -327,6 +370,47 @@ public class DyanimicController {
                 map.put("view",viewNumber);
                 map.put("attentionStatus",attentionTF); //1-关注 0-未关注
                 map.put("thumbStatus",thumbStatus); //1：点赞 0： 未点赞 ;-999:参数不全
+                returnList.add(map);
+            }
+        }
+        return ResultUtil.success(returnList);
+    }
+
+
+    // 查询具体的一条动态  后台管理
+    @SuppressWarnings("unchecked")
+    @GetMapping("/select/detailOneBackstage")
+    public Result<Object> selectDetailOneBackstageDyanimic(int id) {
+        List returnList = new ArrayList();
+        List<Map> list = dyanimicService.selectDetailOneDyanimic(id);  //查询出为一条数据，还是返回的list
+        if(list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                Map map = new HashMap();
+
+                Map amap = list.get(i);
+                int dyanimicId = (int)amap.get("id");
+                // 此处引用 点赞 的接口
+                Map<String, String> param = new HashMap<>();
+                param.put("type", "0");
+                param.put("acceptThumbId", dyanimicId+"");
+                Map<String, Object> dianzan = thumbService.thumbNumber(param);
+                Object thumbNumber = dianzan.get("thumbNumber");
+                // 此处引用 浏览数 的接口
+                param.clear();
+                param.put("objectType", "0");
+                param.put("objectId", dyanimicId+"");
+                Map<String, Object> liulan = viewNumberService.queryViewNumber(param);
+                Object viewNumber = liulan.get("viewNumber");
+                // 此处引用 回复消息数 的接口
+                param.clear();
+                param.put("object_type", "2");
+                param.put("object_id", dyanimicId+"");
+                int messageNumber = commentReplyService.commentsCount(param);
+
+                map.put("dyanimic",amap);
+                map.put("thumb",thumbNumber);
+                map.put("message",messageNumber);
+                map.put("view",viewNumber);
                 returnList.add(map);
             }
         }
