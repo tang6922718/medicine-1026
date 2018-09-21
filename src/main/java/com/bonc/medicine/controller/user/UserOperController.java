@@ -12,6 +12,7 @@ import com.bonc.medicine.utils.VerificationUtils;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
@@ -58,6 +59,10 @@ public class UserOperController {
                         HttpServletResponse response) throws Exception {
         // 1、接收两个参数。
         // 2、调用Service进行登录。
+        if(StringUtils.isEmpty(paramMap.get("phone")) || StringUtils.isEmpty(paramMap.get("password"))){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
         Result result = userService.login(paramMap.get("phone"), paramMap.get("password"));
         // 3、从返回结果中取token，写入cookie。Cookie要跨域。
         String token = result.getData().toString();

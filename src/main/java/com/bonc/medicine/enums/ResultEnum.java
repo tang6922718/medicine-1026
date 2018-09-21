@@ -18,7 +18,9 @@ public enum ResultEnum {
     ERROR_PHONE(203, "无此手机号"),
     UN_USE_PHONE(206,"账户无效，或者已经被注册"),
     NET_ERROR(405,"网络错误，请稍后再试"),
-    OUT_OF_TIME(401,"登陆超时")
+    OUT_OF_TIME(401,"登陆超时"),
+    ERROR_CODE(205,"验证码错误"),
+    CODE_OUT_TIME(209,"验证码超时啦")
     ;
 
     private Integer code;
