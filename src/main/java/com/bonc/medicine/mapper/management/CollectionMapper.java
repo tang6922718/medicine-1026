@@ -27,4 +27,6 @@ public interface CollectionMapper {
 
     public Map<String,Object> mallPurchaseDetail(String id);
 
+    public Map<String,Object> specCaseDetail(String id);
+
 }

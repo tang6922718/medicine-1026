@@ -57,5 +57,10 @@ public class CollectionServiceImpl implements CollectionService {
         return collectionMapper.mallPurchaseDetail(id);
     }
 
+    @Override
+    public Map<String, Object> specCaseDetail(String id) {
+        return collectionMapper.specCaseDetail(id);
+    }
+
 
 }

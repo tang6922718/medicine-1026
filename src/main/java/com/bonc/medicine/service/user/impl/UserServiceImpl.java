@@ -110,7 +110,8 @@ public class UserServiceImpl implements UserService {
         paramMap.put("phone", username);
         paramMap.put("password", DigestUtils.md5Hex(password));
         List<Map<String, Object>> reList = userMapper.login(paramMap);
-		if (reList.size() == 0 || reList.get(0).get("telephone") == null) {
+
+		if (null == reList || reList.size() == 0 || reList.get(0).get("telephone") == null) {
 			return ResultUtil.error(ResultEnum.ERROR_LOGIN);
 		}
 		User user = new User();
@@ -239,6 +240,11 @@ public class UserServiceImpl implements UserService {
 
 
         return reMap;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(DigestUtils.md5Hex("123"));
+
     }
 
 

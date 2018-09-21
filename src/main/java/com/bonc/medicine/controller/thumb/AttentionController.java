@@ -39,7 +39,7 @@ public class AttentionController {
 
 
     /**
-    * @Description:查询当前用户是否关注了某用户 type=1：被专注用户是专家 = 0：被关注用户是普通用户
+    * @Description:查询当前用户是否关注了某用户 现在关注只有专家和用户，，，type都是0  之前是一个1；一个0.现在改改
     * @Param: [userId：当前用户, attedUserId：被关注的用户, type]
     * @return: com.bonc.thumb.entity.Result
     * @Author: hejiajun

@@ -9,9 +9,9 @@ public class CodeKeyUtil {
 
     private static String SPLIT = ":";
 
-    private static String INTEGRAL_PRE = "INTEGRAL";
+    private static String CODE_PRE = "VCODE";
 
-    private static String INTEGRAL_RULE_SUB = "RULES";
+    private static String CODE_SUB = "CASUAL";
 
     /**
      * @Description: 验证码的KEY
@@ -20,9 +20,9 @@ public class CodeKeyUtil {
      * @Author: hejiajun
      * @Date: 2018/9/6
      */
-    public static String getIntegralKey(String userId) {
+    public static String getIntegralKey(String phone) {
 
-        return INTEGRAL_PRE + SPLIT + userId;
+        return CODE_PRE + SPLIT + phone  + CODE_SUB;
     }
 
 }

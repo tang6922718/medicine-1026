@@ -114,5 +114,9 @@
 		FROM mall_purchase
 		WHERE id = #{id}
 	</select>
+	
+	<select id="specCaseDetail" parameterType="String" resultType="Map">
+		SELECT * FROM spec_case WHERE id = #{id}
+	</select>
 
 </mapper>

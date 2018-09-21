@@ -70,8 +70,8 @@
 
 	<insert id="marks" parameterType="com.bonc.medicine.entity.mall.Marks">
 		insert into
-		mall_business_marks(supply_id,owner_user_id,leave_user_id,mark_message,leave_time)
-		values(#{supply_id},#{owner_user_id},#{leave_user_id},#{mark_message},#{leave_time})
+		mall_business_marks(supply_id,owner_user_id,leave_user_id,mark_url,mark_message,leave_time)
+		values(#{supply_id},#{owner_user_id},#{leave_user_id},#{mark_url},#{mark_message},now())
 	</insert>
 
 	<insert id="reply" parameterType="com.bonc.medicine.entity.mall.Reply">
