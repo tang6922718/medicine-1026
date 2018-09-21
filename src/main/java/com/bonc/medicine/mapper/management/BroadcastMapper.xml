@@ -20,7 +20,7 @@
 			and a.id = #{id}
 		</if>
 		<if test="search_name != null and search_name != ''">
-			and a.NAME LIKE CONCAT("%",#{search_name},"%")
+			and b.site_name LIKE CONCAT("%",#{search_name},"%")
 		</if>
 		<if test="site_name != null and site_name != ''">
 			and a.site LIKE CONCAT("%",#{site_name},"%")

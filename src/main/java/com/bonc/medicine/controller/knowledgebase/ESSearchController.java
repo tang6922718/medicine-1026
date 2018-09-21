@@ -152,7 +152,7 @@ public class ESSearchController {
         for (SearchHit hit : hitsResult) {
             Map<String, Object> source = hit.getSource();
             Map sopTypes = (Map) source.get("sop_type_scores");
-            article_score = sopTypes.get(article_type).toString() == "0"?0.0:(Double) sopTypes.get(article_type);
+            article_score =  "0".equals(sopTypes.get(article_type).toString())?0.0:(Double) sopTypes.get(article_type);
 //            article_score = (Double) sopTypes.get(article_type);
             source.put("article_score",article_score);
 //            source.put("id",id);
