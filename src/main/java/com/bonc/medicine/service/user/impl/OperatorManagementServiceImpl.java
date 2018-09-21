@@ -33,7 +33,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
         PageHelper.startPage(Integer.valueOf(map.get("pageIndex")), Integer.valueOf(map.get("pageSize")));
         List<Map<String, Object>> reList = operatorManagementMapper.queryOperaterTable(map);
 
-        if (null == reList || null == reList.get(0).get("telephone")){
+        if (null == reList || reList.size() < 1 || null == reList.get(0).get("telephone")){
             throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
         }
 
