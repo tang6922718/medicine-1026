@@ -3,68 +3,121 @@
 
 <mapper namespace="com.bonc.medicine.mapper.mall.ViewTheDataMapper">
 
-    <select id="interaction" parameterType="Map" resultType="Map">
-        select
-        interact_count,stats_time from spec_interact_stats where spec_id
-        = #{user_id}
-        and stats_time <![CDATA[ >= ]]>
-        #{start_time} and stats_time <![CDATA[ <= ]]>
-        #{end_time}
-    </select>
+	<select id="interaction" parameterType="Map" resultType="Map">
+		select
+		interact_count,stats_time from spec_interact_stats where spec_id
+		= #{user_id}
+		and stats_time <![CDATA[ >= ]]>
+		#{start_time} and stats_time <![CDATA[ <= ]]>
+		#{end_time}
+	</select>
 
-    <select id="problemStatistics" parameterType="Map" resultType="Map">
-        SELECT
-        (
-        SELECT
-        count( 1 )
-        FROM
-        spec_issue a
-        LEFT JOIN
-        spec_issue_association b ON a.id = b.issueid
-        LEFT JOIN spec_info c ON
-        b.specid = c.spec_id
-        WHERE
-        b.specid = #{user_id}
-        AND issue_time <![CDATA[ >= ]]>
-        #{start_time}
-        AND issue_time <![CDATA[ <= ]]>
-        #{end_time}
-        ) AS askme,
-        (
-        SELECT
-        count( 1 )
-        FROM
-        spec_issue a
-        LEFT JOIN
-        spec_issue_association b ON a.id = b.issueid
-        LEFT JOIN spec_info c ON
-        b.specid = c.spec_id
-        WHERE
-        b.specid = #{user_id}
-        AND ( issue_status = '2'
-        OR issue_status = '3' )
-        AND issue_time <![CDATA[ >= ]]>
-        #{start_time}
-        AND issue_time <![CDATA[ <= ]]>
-        #{end_time}
-        ) AS solve,
-        (
-        SELECT
-        count( 1 )
-        FROM
-        spec_issue a
-        LEFT JOIN
-        spec_issue_association b ON a.id = b.issueid
-        LEFT JOIN spec_info c ON
-        b.specid = c.spec_id
-        WHERE
-        b.specid = #{user_id}
-        AND ( is_public = '1' )
-        AND issue_time <![CDATA[ >= ]]>
-        #{start_time}
-        AND issue_time <![CDATA[ <= ]]>
-        #{end_time}
-        ) AS public
-    </select>
+	<select id="thisWeekInteraction" parameterType="Map" resultType="Map">
+		select
+		IFNULL(sum(interact_count),0) as sum from spec_interact_stats
+		where spec_id
+		= #{user_id}
+		and stats_time <![CDATA[ >= ]]>
+		#{start_time} and stats_time <![CDATA[ <= ]]>
+		#{end_time}
+	</select>
+
+	<select id="historyInteraction" parameterType="Map" resultType="Map">
+		select
+		IFNULL(sum(interact_count),0) as sum from spec_interact_stats
+		where spec_id
+		= #{user_id}
+		and stats_time <![CDATA[ >= ]]>
+		#{start_time} and stats_time <![CDATA[ <= ]]>
+		#{end_time}
+	</select>
+
+	<select id="rankInteraction" resultType="Map">
+		SELECT
+		b.id as user_id,
+		b.head_portrait,
+		b.NAME as name,
+		0 AS 'follow',
+		0 AS 'collection',
+		0 AS
+		'issue',
+		0 AS total
+		FROM
+		spec_info a
+		LEFT JOIN common_user b ON a.spec_id
+		= b.id
+	</select>
+
+	<select id="follow" resultType="Map">
+		select object_id,count(1) as
+		follow from common_follow where follow_flag = '1' group by object_id
+	</select>
+
+	<select id="collection" resultType="Map">
+		select
+		collect_object_id,count(1) as collection from common_collection where
+		(collect_type = '5' or collect_type = '2') group by collect_object_id
+	</select>
+
+	<select id="issue" resultType="Map">
+		select specid,count(1) as issue
+		from spec_issue_association where (is_assigned = '0' or is_assigned =
+		'1') group by specid
+	</select>
+
+	<select id="problemStatistics" parameterType="Map" resultType="Map">
+		SELECT
+		(
+		SELECT
+		count( 1 )
+		FROM
+		spec_issue a
+		LEFT JOIN
+		spec_issue_association b ON a.id = b.issueid
+		LEFT JOIN spec_info c ON
+		b.specid = c.spec_id
+		WHERE
+		b.specid = #{user_id}
+		AND issue_time <![CDATA[ >= ]]>
+		#{start_time}
+		AND issue_time <![CDATA[ <= ]]>
+		#{end_time}
+		) AS askme,
+		(
+		SELECT
+		count( 1 )
+		FROM
+		spec_issue a
+		LEFT JOIN
+		spec_issue_association b ON a.id = b.issueid
+		LEFT JOIN spec_info c ON
+		b.specid = c.spec_id
+		WHERE
+		b.specid = #{user_id}
+		AND ( issue_status = '2'
+		OR issue_status = '3' )
+		AND issue_time <![CDATA[ >= ]]>
+		#{start_time}
+		AND issue_time <![CDATA[ <= ]]>
+		#{end_time}
+		) AS solve,
+		(
+		SELECT
+		count( 1 )
+		FROM
+		spec_issue a
+		LEFT JOIN
+		spec_issue_association b ON a.id = b.issueid
+		LEFT JOIN spec_info c ON
+		b.specid = c.spec_id
+		WHERE
+		b.specid = #{user_id}
+		AND ( is_public = '1' )
+		AND issue_time <![CDATA[ >= ]]>
+		#{start_time}
+		AND issue_time <![CDATA[ <= ]]>
+		#{end_time}
+		) AS public
+	</select>
 
 </mapper>
