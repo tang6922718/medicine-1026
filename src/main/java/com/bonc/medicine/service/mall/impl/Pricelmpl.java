@@ -43,7 +43,7 @@ public class Pricelmpl implements PriceService {
 	public List<Map<String, Object>> getProduct(String hotword) {
 
 		Map map = new HashMap<>();
-		map.put("hotword;", hotword);
+		map.put("hotword", hotword);
 		return priceMapper.getProduct(map);
 	}
 
