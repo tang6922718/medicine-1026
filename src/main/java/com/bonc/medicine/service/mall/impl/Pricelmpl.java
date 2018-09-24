@@ -27,7 +27,7 @@ public class Pricelmpl implements PriceService {
 	public List<Map<String, Object>> getMarket(String hotword) {
 
 		Map map = new HashMap<>();
-		map.put("hotword;", hotword);
+		map.put("hotword", hotword);
 		return priceMapper.getMarket(map);
 	}
 
@@ -35,7 +35,7 @@ public class Pricelmpl implements PriceService {
 	public List<Map<String, Object>> getSpecifaction(String hotword) {
 
 		Map map = new HashMap<>();
-		map.put("hotword;", hotword);
+		map.put("hotword", hotword);
 		return priceMapper.getSpecifaction(map);
 	}
 
