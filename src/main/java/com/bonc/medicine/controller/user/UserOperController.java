@@ -124,6 +124,10 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
+        if (StringUtils.isEmpty(paramMap.get("phone")) || StringUtils.isEmpty(paramMap.get("password"))){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
        /* boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
 
         if (!isCodeValidated){
@@ -132,6 +136,9 @@ public class UserOperController {
 */
         int succesNum = userService.updatePassword(paramMap);
 
+        if(succesNum < 1){
+            ResultUtil.error(ResultEnum.NET_ERROR);
+        }
         Map reMap = new HashMap();
         reMap.put("succeed", succesNum);
 
