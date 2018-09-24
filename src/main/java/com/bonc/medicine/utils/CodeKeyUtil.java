@@ -20,7 +20,7 @@ public class CodeKeyUtil {
      * @Author: hejiajun
      * @Date: 2018/9/6
      */
-    public static String getIntegralKey(String phone) {
+    public static String getCodeKey(String phone) {
 
         return CODE_PRE + SPLIT + phone  + CODE_SUB;
     }
