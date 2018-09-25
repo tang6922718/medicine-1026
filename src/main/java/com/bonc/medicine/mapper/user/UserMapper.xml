@@ -72,4 +72,23 @@
 			 and password = #{password}
 
 	</select>
+
+	<select id="loginSecond" parameterType="Map" resultType="Map">
+		SELECT
+			cu.id,
+			cu.telephone,
+			cu.NAME,
+			cu.address,
+			cu.head_portrait,
+			GROUP_CONCAT(cll.role_id) as role_id,
+			GROUP_CONCAT(crr.role_name) as role_name
+		FROM
+			common_user cu
+			LEFT JOIN common_user_role_rel cll ON cu.id = cll.user_id
+			LEFT JOIN common_role crr ON cll.role_id = crr.id
+		WHERE
+			 cu.telephone = #{phone}
+			 and cu.password = #{password}
+		ORDER BY cll.role_id
+	</select>
 </mapper>
