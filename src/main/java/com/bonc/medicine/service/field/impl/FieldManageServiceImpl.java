@@ -33,6 +33,7 @@ public class FieldManageServiceImpl implements FieldManageService {
 			tempData.setCoop_name((String)map.get("coop_name"));
 		}
 		tempData.setRegistation_time(new Date());
+		tempData.setState("0");
 //		tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));
 
 		//新建地块是否成功  成功后才往品种信息表里插入地块品种信息
@@ -126,6 +127,7 @@ public class FieldManageServiceImpl implements FieldManageService {
 				) {
 			obj.put("plant_typeID",obj.get("plant_type"));
 			obj.put("plant_type", ExchangeCategroyNameID.IDToName(obj.get("plant_type").toString(),categroy));
+			obj.put("fieldCategroyInfo",fieldManageMapper.queryFieldCategroyInfo((int)obj.get("id")));
 		}
 
 		list2=fieldManageMapper.getOperation(param);

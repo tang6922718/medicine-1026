@@ -208,6 +208,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 		Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong(Integer.parseInt(userId));
 
 		queryMap.put("loveMedicineName", pinZhongMap == null ? "" : pinZhongMap.get("loveMedicineName"));
+		queryMap.put("loveMedicineID", pinZhongMap == null ? "" : pinZhongMap.get("loveMedicineID"));
 
 		return ResultUtil.success(queryMap);
 	}

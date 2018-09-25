@@ -201,7 +201,8 @@
 
     <select id="getUserCarePinZhong" resultType="Map" parameterType="Integer">
 		SELECT
-            GROUP_CONCAT(variety_name) as loveMedicineName
+            GROUP_CONCAT(variety_name) as loveMedicineName,
+            GROUP_CONCAT(ccr.variety_code) as loveMedicineID
         FROM
             common_user_care_varieties_r ccr
             LEFT JOIN common_medicine_variety cv ON ccr.variety_code = cv.variety_code
