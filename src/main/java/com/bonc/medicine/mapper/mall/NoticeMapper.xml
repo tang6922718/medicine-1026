@@ -86,7 +86,7 @@
 		c.id
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
-		AND notice_type = '4' and STATUS = '1' and state = '1'
+		AND a.notice_type = '4' and a.STATUS = '1' and a.state = '1'
 	</select>
 
 	<select id="message" parameterType="Map" resultType="Map">
@@ -107,7 +107,7 @@
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
 		AND
-		notice_type = '5' and STATUS = '1' and state = '1'
+		a.notice_type = '5' and a.STATUS = '1' and a.state = '1'
 	</select>
 
 </mapper>
