@@ -25,4 +25,8 @@ public interface CollectionService {
     public Map<String,Object> mallPurchaseDetail(String id);
 
     public Map<String,Object> specCaseDetail(String id);
+
+    public int isCollect(String collect_type,String collect_object_id);
+
+    public int undoCollect(String collect_type,String collect_object_id);
 }

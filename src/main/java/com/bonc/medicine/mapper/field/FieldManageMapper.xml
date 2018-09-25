@@ -2,62 +2,66 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bonc.medicine.mapper.field.FieldManageMapper">
 
-    <insert id="insertField" parameterType="com.bonc.medicine.entity.field.Field" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO field_info (
-							   plant_address,
-							   plant_type,
-							   lati_long,
-							   plant_area,
-							   registation_time,
-							   user_id,
-							   user_name,
-							   user_tel,
-							   coop_name,
-							   is_end,
-							   photo_url,
-							   pre_crop,
-							   seed_source,
-							   soil_type,
-							   altitude,
-							   vegetation_type,
-							   transmittance_type,
-							   update_time,
-							   state,
-							   creator_id,
-							   guide_flag
-							)
-							VALUES(
-							   #{plant_address},
-							   #{plant_type},
-							   #{lati_long},
-							   #{plant_area},
-							   #{registation_time},
-							   #{user_id},
-							   #{user_name},
-							   #{user_tel},
-							   #{coop_name},
-							   #{is_end},
-							   #{photo_url},
-							   #{pre_crop},
-							   #{seed_source},
-							   #{soil_type},
-							   #{altitude},
-							   #{vegetation_type},
-							   #{transmittance_type},
-							   #{update_time},
-							   #{state},
-							   #{creator_id},
-							   #{guide_flag}
-							)
-    </insert>
-
-	<insert id="insertFieldPlantCategroysInfo" parameterType="Map" >
-		INSERT INTO field_info_categroyinfo (fieldID,categroyID,plantNum,seedAge)
-		VALUES (#{fieldID},#{categroyID},#{plantNum},#{seedAge})
+	<insert id="insertField" parameterType="com.bonc.medicine.entity.field.Field"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO field_info (
+		plant_address,
+		plant_type,
+		lati_long,
+		plant_area,
+		registation_time,
+		user_id,
+		user_name,
+		user_tel,
+		coop_name,
+		is_end,
+		photo_url,
+		pre_crop,
+		seed_source,
+		soil_type,
+		altitude,
+		vegetation_type,
+		transmittance_type,
+		update_time,
+		state,
+		creator_id,
+		guide_flag
+		)
+		VALUES(
+		#{plant_address},
+		#{plant_type},
+		#{lati_long},
+		#{plant_area},
+		#{registation_time},
+		#{user_id},
+		#{user_name},
+		#{user_tel},
+		#{coop_name},
+		#{is_end},
+		#{photo_url},
+		#{pre_crop},
+		#{seed_source},
+		#{soil_type},
+		#{altitude},
+		#{vegetation_type},
+		#{transmittance_type},
+		#{update_time},
+		#{state},
+		#{creator_id},
+		#{guide_flag}
+		)
 	</insert>
 
-    <select id="getfield" resultType="Map" parameterType="Map">
-    	select * from field_info
+	<insert id="insertFieldPlantCategroysInfo" parameterType="Map">
+		INSERT
+		INTO field_info_categroyinfo
+		(fieldID,categroyID,plantNum,seedAge)
+		VALUES
+		(#{fieldID},#{categroyID},#{plantNum},#{seedAge})
+	</insert>
+
+	<select id="getfield" resultType="Map" parameterType="Map">
+		select * from field_info
 		where 1 = 1
 		<if test='field_id != null and field_id != ""'>
 			AND id = #{field_id}
@@ -74,46 +78,55 @@
 
 		<if test='key_word != null and key_word != ""'>
 			AND (
-			user_name LIKE CONCAT('%',#{key_word}, '%')  or coop_name LIKE CONCAT('%',#{key_word}, '%') OR
-			user_tel LIKE CONCAT('%',#{key_word}, '%')
+			user_name LIKE CONCAT('%',#{key_word}, '%') or
+			coop_name LIKE CONCAT('%',#{key_word}, '%') OR
+			user_tel LIKE
+			CONCAT('%',#{key_word}, '%')
 			)
 		</if>
 
-		<if test='start_time != null and start_time != "" and end_time != null and end_time != "" '>
-			AND registation_time >= #{start_time}  AND #{end_time} >= registation_time
+		<if
+			test='start_time != null and start_time != "" and end_time != null and end_time != "" '>
+			AND registation_time >= #{start_time} AND #{end_time} >=
+			registation_time
 		</if>
 		ORDER BY registation_time DESC
-    </select>
+	</select>
 
 
-    <insert id="addOperation" parameterType="com.bonc.medicine.entity.field.FieldRecord">
-        INSERT INTO field_record (
-							   field_id,
-							   segment_id,
-							   photo_url,
-							   video_url,
-							   record_time,
-							   guide_flag,
-							   record_user_id,
-							   categroyID
-							)
-							VALUES(
-							   #{field_id},
-							   #{segment_id},
-							   #{photo_url},
-							   #{video_url},
-							   #{record_time},
-							   #{guide_flag},
-							   #{record_user_id},
-							   #{categroyID}
-							)
-    </insert>
+	<insert id="addOperation" parameterType="com.bonc.medicine.entity.field.FieldRecord">
+		INSERT INTO field_record
+		(
+		field_id,
+		segment_id,
+		photo_url,
+		video_url,
+		record_time,
+		guide_flag,
+		record_user_id,
+		categroyID
+		)
+		VALUES(
+		#{field_id},
+		#{segment_id},
+		#{photo_url},
+		#{video_url},
+		#{record_time},
+		#{guide_flag},
+		#{record_user_id},
+		#{categroyID}
+		)
+	</insert>
 
 
 	<select id="getOperation" resultType="hashMap" parameterType="map">
-		select A.*,B.variety_name AS categroyName ,C.name,D.step_name,D.next_suggestion
-		from field_record A , common_medicine_variety B , common_user C, km_sop_step D
-		where A.categroyID = B.variety_code AND A.record_user_id = C.id AND A.segment_id = D.id
+		select A.*,B.variety_name AS categroyName
+		,C.name,D.step_name,D.next_suggestion
+		from field_record A ,
+		common_medicine_variety B , common_user C, km_sop_step D
+		where
+		A.categroyID = B.variety_code AND A.record_user_id = C.id AND
+		A.segment_id = D.id
 		<if test='field_id != null and field_id != ""'>
 			AND A.field_id = #{field_id}
 		</if>
@@ -130,7 +143,7 @@
 			AND A.categroyID = #{categroyID}
 		</if>
 		order by record_time ASC
-    </select>
+	</select>
 
 
 	<select id="queryUserInfo" resultType="Map" parameterType="Integer">
@@ -139,102 +152,143 @@
 
 	<select id="queryCoopName" resultType="Map" parameterType="Integer">
 		SELECT name AS coop_name FROM field_coop WHERE state='0'
-		AND id = (SELECT coop_id FROM field_coop_member WHERE state='0' AND user_id = #{ID})
+		AND id =
+		(SELECT coop_id FROM field_coop_member WHERE state='0' AND user_id =
+		#{ID})
 	</select>
 
-	<update id="updateFieldInfo" >
-		UPDATE field_info SET update_time = #{date} WHERE id = #{fieldID}
+	<update id="updateFieldInfo">
+		UPDATE field_info SET update_time =
+		#{date} WHERE id =
+		#{fieldID}
 	</update>
 
 	<select id="guideRecord" resultType="Map" parameterType="Map">
 		( SELECT
-			'新建种植' AS 'record',
-			a.user_name,
-			a.plant_type,
-			a.plant_num,
-			a.plant_age,
-			a.plant_area,
-			a.plant_address,
-			NULL AS step_name,
-			NULL AS photo_url,
-			a.registation_time AS time 
-			FROM
-				field_info a 
-			WHERE
-				a.state = '0' 
-				AND a.guide_flag = '0' 
-				AND a.user_id = #{user_id} 
-			) UNION
-			(
-			SELECT
-				'登记种植信息' AS 'record',
-				a.user_name,
-				a.plant_type,
-				NULL AS 'plant_num',
-				NULL AS 'plant_age',
-				NULL AS 'plant_area',
-				NULL AS 'plant_address',
-				c.step_name,
-				b.photo_url,
-				b.record_time AS time 
-			FROM
-				field_info a
-				LEFT JOIN field_record b ON a.id = b.field_id
-				LEFT JOIN km_sop_step c ON b.segment_id = c.id 
-			WHERE
-				a.state = '0' 
-				AND a.guide_flag = '0' 
-				AND a.user_id = #{user_id} 
-			)
+		'新建种植' AS 'record',
+		a.id,
+		a.user_name,
+		a.plant_type,
+		NULL AS 'plant_msg',
+		a.plant_area,
+		a.plant_address,
+		NULL AS step_name,
+		NULL AS photo_url,
+		a.registation_time AS time
+		FROM
+		field_info a
+		WHERE
+		a.state = '0'
+		AND
+		a.guide_flag = '0'
+		AND a.creator_id = #{user_id}
+		) UNION
+		(
+		SELECT
+		'登记种植信息'
+		AS 'record',
+		a.id,
+		a.user_name,
+		a.plant_type,
+		NULL AS 'plant_msg',
+		NULL AS
+		'plant_area',
+		NULL AS 'plant_address',
+		c.step_name,
+		b.photo_url,
+		b.record_time AS time
+		FROM
+		field_info a
+		LEFT JOIN field_record b ON a.id
+		= b.field_id
+		LEFT JOIN km_sop_step c ON b.segment_id = c.id
+		WHERE
+		a.state = '0'
+		AND a.guide_flag = '0'
+		AND a.creator_id = #{user_id}
+		AND
+		b.record_user_id = #{user_id}
+		AND b.guide_flag = '0'
+		)
 	</select>
-	
+
 	<select id="guideRecordNum" resultType="Map" parameterType="Map">
-		select count(1) from (
-			( SELECT
-			'新建种植' AS 'record',
-			a.user_name,
-			a.plant_type,
-			a.plant_num,
-			a.plant_age,
-			a.plant_area,
-			a.plant_address,
-			NULL AS step_name,
-			NULL AS photo_url,
-			a.registation_time AS time 
-			FROM
-				field_info a 
-			WHERE
-				a.state = '0' 
-				AND a.guide_flag = '0' 
-				AND a.user_id = #{user_id} 
-			) UNION
-			(
-			SELECT
-				'登记种植信息' AS 'record',
-				a.user_name,
-				a.plant_type,
-				NULL AS 'plant_num',
-				NULL AS 'plant_age',
-				NULL AS 'plant_area',
-				NULL AS 'plant_address',
-				c.step_name,
-				b.photo_url,
-				b.record_time AS time 
-			FROM
-				field_info a
-				LEFT JOIN field_record b ON a.id = b.field_id
-				LEFT JOIN km_sop_step c ON b.segment_id = c.id 
-			WHERE
-				a.state = '0' 
-				AND a.guide_flag = '0' 
-				AND a.user_id = #{user_id} 
-			)		
-		) as d
+		SELECT
+		count( 1 ) AS num
+		FROM
+		(
+		(
+		SELECT
+		'新建种植' AS 'record',
+		a.id,
+		a.user_name,
+		a.plant_type,
+		NULL AS 'plant_msg',
+		a.plant_area,
+		a.plant_address,
+		NULL AS
+		step_name,
+		NULL AS photo_url,
+		a.registation_time
+		AS time
+		FROM
+		field_info a
+		WHERE
+		a.state = '0'
+		AND a.guide_flag = '0'
+		AND
+		a.creator_id = #{user_id}
+		) UNION
+		(
+		SELECT
+		'登记种植信息' AS 'record',
+		a.id,
+		a.user_name,
+		a.plant_type,
+		NULL AS
+		'plant_msg',
+		NULL AS 'plant_area',
+		NULL
+		AS 'plant_address',
+		c.step_name,
+		b.photo_url,
+		b.record_time AS time
+		FROM
+		field_info a
+		LEFT JOIN
+		field_record b ON a.id = b.field_id
+		LEFT JOIN
+		km_sop_step c ON
+		b.segment_id = c.id
+		WHERE
+		a.state = '0'
+		AND a.guide_flag
+		= '0'
+		AND
+		a.creator_id = #{user_id}
+		AND b.record_user_id = #{user_id}
+		AND
+		b.guide_flag = '0'
+		)
+		) AS d
 	</select>
 
+	<select id="getPlantMsg" resultType="Map" parameterType="Integer">
+		SELECT
+		b.variety_name,
+		a.plantNum,
+		a.seedAge
+		FROM
+		field_info_categroyinfo a
+		LEFT JOIN common_medicine_variety b ON a.categroyID = b.variety_code
+		WHERE
+		a.fieldID = #{id}
+	</select>
 
-	<select id="queryFarmOpreationByCategroy" resultType="Map" parameterType="Integer">
-		SELECT id,step_name FROM km_sop_step WHERE sop_id = #{categroyID} ORDER BY step_order ASC
+	<select id="queryFarmOpreationByCategroy" resultType="Map"
+		parameterType="Integer">
+		SELECT id,step_name FROM km_sop_step WHERE sop_id =
+		#{categroyID} ORDER BY step_order ASC
 	</select>
 
 	<select id="querySOP" resultType="Map" parameterType="Map">
@@ -249,14 +303,20 @@
 	</select>
 
 
-	<select id="queryAllCategroy" resultType="Map" >
-		SELECT variety_code AS id,variety_name AS name,variety_alias AS othername FROM common_medicine_variety
+	<select id="queryAllCategroy" resultType="Map">
+		SELECT
+		variety_code AS
+		id,variety_name AS name,variety_alias AS othername
+		FROM
+		common_medicine_variety
 	</select>
 
-	<select id="queryFieldCategroyInfo" resultType="Map" parameterType="Integer">
-		select B.variety_name AS categroyName, A.plantNum ,A.seedAge
-        from field_info_categroyinfo A,common_medicine_variety B
-        WHERE  A.categroyID=B.variety_code AND A.fieldID= #{fieldID}
+	<select id="queryFieldCategroyInfo" resultType="Map"
+		parameterType="Integer">
+		select B.variety_name AS categroyName, A.plantNum
+		,A.seedAge
+		from field_info_categroyinfo A,common_medicine_variety B
+		WHERE A.categroyID=B.variety_code AND A.fieldID= #{fieldID}
 	</select>
-	
+
 </mapper>

@@ -144,6 +144,11 @@ public class VarietyEncyclopediaController {
         return ResultUtil.success(map);
     }
 
+    @GetMapping("/breedInfoByVarietyId/{variety_code}")
+    public Result<Object> breedInfoByVarietyId(@PathVariable String variety_code) throws Exception{
+        return ResultUtil.success(varietyEncyclopediaService.breedInfoByVarietyId(variety_code));
+    }
+
 
     /**
      * 知识库信息审核列表
