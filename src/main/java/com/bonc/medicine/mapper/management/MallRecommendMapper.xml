@@ -137,6 +137,7 @@
 			b.detail AS detail1,
 			b.price AS price1,
 			b.price_unit AS price_unit1,
+			b.seller_id AS seller_id1,
 			a.supply_id2,
 			a.img_url2,
 			c.linkman AS linkman2,
@@ -144,6 +145,7 @@
 			c.detail AS detail2,
 			c.price AS price2,
 			c.price_unit AS price_unit2,
+			c.seller_id AS seller_id2,
 			a.supply_id3,
 			a.img_url3,
 			d.linkman AS linkman3,
@@ -151,6 +153,7 @@
 			d.detail AS detail3,
 			d.price AS price3,
 			d.price_unit AS price_unit3,
+			d.seller_id AS seller_id3,
 			a.state,
 			a.upload_time
 		FROM
