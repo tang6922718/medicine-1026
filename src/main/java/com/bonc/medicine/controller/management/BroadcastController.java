@@ -41,10 +41,10 @@ public class BroadcastController {
     * 新增轮播图
     * */
     @PostMapping("/addBroadcast")
-    public Result<Object> addBroadcast(@RequestBody MultipartFile myfile, @RequestBody String addJson) throws Exception{
-        String key = uploadFile.uploadFileToHbase(myfile);
+    public Result<Object> addBroadcast(/*@RequestBody MultipartFile myfile,*/ @RequestBody String addJson) throws Exception{
+//        String key = uploadFile.uploadFileToHbase(myfile);
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
-        map.put("img_url",key);
+//        map.put("img_url",key);
         return ResultUtil.success(broadcastService.addBroadcast(map));
     }
 

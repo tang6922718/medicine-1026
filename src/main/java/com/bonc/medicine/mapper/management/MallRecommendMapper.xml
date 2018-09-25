@@ -126,4 +126,44 @@
 		WHERE id=#{id}
 	</select>
 
+	<select id="qualityRecommend" resultType="Map">
+		SELECT
+			a.id,
+			a.site,
+			a.supply_id1,
+			a.img_url1,
+			b.linkman AS linkman1,
+			b.goods_name AS goods_name1,
+			b.detail AS detail1,
+			b.price AS price1,
+			b.price_unit AS price_unit1,
+			a.supply_id2,
+			a.img_url2,
+			c.linkman AS linkman2,
+			c.goods_name AS goods_name2,
+			c.detail AS detail2,
+			c.price AS price2,
+			c.price_unit AS price_unit2,
+			a.supply_id3,
+			a.img_url3,
+			d.linkman AS linkman3,
+			d.goods_name AS goods_name3,
+			d.detail AS detail3,
+			d.price AS price3,
+			d.price_unit AS price_unit3,
+			a.state,
+			a.upload_time
+		FROM
+			mall_recommend a
+		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
+		LEFT JOIN mall_supply c ON a.supply_id2 = c.id
+		LEFT JOIN mall_supply d ON a.supply_id3 = d.id
+		WHERE a.site in
+			<foreach collection="array" item="site" index="index"
+					 open="(" close=")" separator=",">
+				#{site}
+			</foreach>
+		ORDER BY a.upload_time DESC
+	</select>
+
 </mapper>
