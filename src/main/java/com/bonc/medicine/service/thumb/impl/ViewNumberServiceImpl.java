@@ -44,7 +44,7 @@ public class ViewNumberServiceImpl implements ViewNumberService {
         } else {
             synchronized (reMap) {
                 List<Map<String, Object>> list = viewNumberMapper.queryViewNumber(map);
-                if (list.size() < 1 || null == list.get(0).get("view_num")) {
+                if (null == list || list.size() < 1 || null == list.get(0).get("view_num")) {
                     reMap.put(key, "0");
                     return reMap;
                 }

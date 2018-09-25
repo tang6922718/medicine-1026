@@ -33,10 +33,10 @@
           password = #{password},
           update_time = #{updateTime}
         where 1 = 1
-		<if test="phone ！= null and phone != ''">
+		<if test="phone != null and phone != ''">
 			and telephone = #{phone}
 		</if>
-		<if test="userid ！= null and userid != ''">
+		<if test="userid != null and userid != ''">
 			and id = #{userid}
 		</if>
 
