@@ -14,6 +14,8 @@ public interface VarietyEncyclopediaService {
     public List<Map<String,Object>> selectBreed(String search_name,String type_code, String record_status);
     public Map<String,Object> selectBreedDetail(String id);
 
+    public Map<String,Object> breedInfoByVarietyId(String variety_code);
+
     public int addBreed(Map map);
 
     public int updateBreedInfo(Map map);

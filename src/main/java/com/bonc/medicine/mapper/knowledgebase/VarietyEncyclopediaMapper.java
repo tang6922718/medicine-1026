@@ -16,6 +16,8 @@ public interface VarietyEncyclopediaMapper {
     public List<Map<String,Object>> selectBreed(Map map);
     public Map<String,Object> selectBreedDetail(String id);
 
+    public Map<String,Object> breedInfoByVarietyId(String variety_code);
+
     public int addBreed(Map map);
 
     public int updateBreedInfo(Map map);
@@ -35,4 +37,5 @@ public interface VarietyEncyclopediaMapper {
     public List<Map<String,Object>> searchHistoryText();
 
     public String selectUserCare(String user_id);
+
 }
