@@ -13,7 +13,7 @@
 			#{goods_source},#{linkman},#{telephone},#{state},#{user_id})
 	</insert>
 	
-	<select id="offerList" parameterType="java.util.Map">
+	<select id="offerList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			mp.goods_name,
 			mp.specification,
@@ -33,11 +33,11 @@
 			mo.publish_time DESC
 	</select>
 	
-	<select id="offerDetail" parameterType="java.lang.String">
+	<select id="offerDetail" parameterType="java.lang.String" resultType="java.util.Map" >
 		SELECT * FROM mall_offer WHERE id = #{id}
 	</select>
 	
-	<select id="countOffers" parameterType="java.util.List">
+	<select id="countOffers" parameterType="java.util.List" resultType="java.util.Map">
 		SELECT
 			purchase_id,
 			COUNT( 1 ) AS count 
@@ -45,12 +45,12 @@
 			mall_offer 
 		WHERE
 			purchase_id IN 
-			<foreach collection="array" item="id"  open="(" separator="," close=")"> #{id} </foreach>
+			<foreach collection="list" item="id"  open="(" separator="," close=")"> #{id} </foreach>
 		GROUP BY
 			purchase_id 
 	</select>
 	
-	<select id="offerToMe" parameterType="java.lang.String">
+	<select id="offerToMe" parameterType="java.lang.String" resultType="java.util.Map">
 		SELECT
 			mo.id,
 			mp.goods_name,
