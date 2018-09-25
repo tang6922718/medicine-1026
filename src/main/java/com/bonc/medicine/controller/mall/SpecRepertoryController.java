@@ -292,10 +292,13 @@ public class SpecRepertoryController {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
 		list = specialistService.specialList(param);
+		Map resultMap = new HashMap<>();
+		resultMap.put("invitedNum", 0);
 		if (issue_id != null && !issue_id.equals("")) {
 			Result result = meetProfessorService.expert(Integer.parseInt(issue_id));
 			if (result.getCode() == 200) {
 				List<Map> res = (List)result.getData();
+				resultMap.put("invitedNum", res.size());
 				for (Map map : res) {
 					String specid = map.get("specid")+"";
 					for (Map<String,Object> map2 : list) {
@@ -306,7 +309,8 @@ public class SpecRepertoryController {
 				}
 			}
 		}
-		return ResultUtil.success(list);
+		resultMap.put("list", list);
+		return ResultUtil.success(resultMap);
 	}
 	
 	
