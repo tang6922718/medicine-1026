@@ -33,15 +33,17 @@ public class UserManagerServiceImpl implements UserManagerService {
 
 	@Override
 	@Transactional
-	public int updateBasic(Integer id, String sex, Integer age, String address,String img_url) {
+	public int updateBasic(Integer id, String name ,String sex, Integer age, String address,String img_url) {
 		Map map = new HashMap<>();
 		map.put("id", id);
+		map.put("name", name);
 		map.put("sex", sex);
 		map.put("age", age);
 		map.put("address", address);
 		map.put("img_url", img_url);
 		Map map1 = new HashMap<>();
 		map1.put("id", id);
+		map1.put("name", name);
 		map1.put("sex", "男".equals(sex) ? "0" : "1");
 		map1.put("age", age);
 		map1.put("address", address);
