@@ -47,7 +47,7 @@
 		common_user_role_rel where user_id = #{user_id} 
 	</select>
 
-	<select id="meetProfessor" parameterType="Map" resultType="Map">
+	<select id="meetProfessor" parameterType="Map" resultType="Map"> 
 		SELECT
 		a.id,
 		b.NAME,
