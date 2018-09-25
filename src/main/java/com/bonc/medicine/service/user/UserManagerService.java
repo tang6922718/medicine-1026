@@ -1,6 +1,5 @@
 package com.bonc.medicine.service.user;
 
-
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
@@ -14,8 +13,8 @@ public interface UserManagerService {
 	public void addBasic(Basicinfo basicinfo);
 
 	public void addUserRoleRel(Integer id, Integer user_role_id);
-	
-	public int updateBasic(Integer id,String sex,Integer age,String address,String img_url);
+
+	public int updateBasic(Integer id, String name, String sex, Integer age, String address, String img_url);
 
 	public void addCatRel(Integer id, Integer cat_rel_id);
 
