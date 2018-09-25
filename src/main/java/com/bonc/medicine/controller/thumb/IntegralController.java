@@ -108,6 +108,17 @@ public class IntegralController {
     /**
      * @Description:用户有相应的操作，增加积分。actionCode:LOGIN_FIRST_DAY;PUBLISH_SUPPLY;GIVE_THUMB(暂定)
      * @Param: keys:userId;actionCode
+     * CLOCK_IN 每天签到
+     * LECTURE_COMPLETE 完整听完课（视频/直播）
+     * ASK_EXPERTS 向专家提问
+     * DO_REPLY 回复
+     * RELEASE_DYNAMIC 发动态
+     * RELEASE_PURCHASE 发求购
+     * RELEASE_SUPPLY 发供应
+     * DO_THUMB 点赞
+     * COMPLETE_INFORMA 完善个人信息
+     * REGISTER_PLANTIN 种植登记
+     * ACQUIRE_PHONE 获取联系方式（商城商品）
      * @return: com.bonc.thumb.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/8
@@ -124,6 +135,7 @@ public class IntegralController {
         } catch (Exception e) {
             reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
             reMap.put("succeedScore", "0");
+            reMap.put("msg", e.getMessage());
             return ResultUtil.success(reMap);
         }
     }

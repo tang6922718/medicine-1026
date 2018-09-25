@@ -15,6 +15,11 @@ public class MedicineRuntimeException extends RuntimeException{
         this.code = resultEnum.getCode();
     }
 
+    public MedicineRuntimeException(int code , String msg) {
+        super(msg);
+        //this.code = resultEnum.getCode();
+    }
+
     public Integer getCode() {
         return code;
     }

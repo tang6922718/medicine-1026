@@ -70,7 +70,7 @@ public class AttentionController {
 
     /**
     * @Description: 关注的请求
-    * @Param: [paramMap]  key: attedUserId,  userid ,  type
+    * @Param: [paramMap]  key: attedUserId,  userId ,  type
     * @return: com.bonc.thumb.entity.Result
     * @Author: hejiajun
     * @Date: 2018/9/4
@@ -90,7 +90,7 @@ public class AttentionController {
 
     /**
      * @Description: 取消关注的请求
-     * @Param: [paramMap]  key: attedUserId,  userid ,  type
+     * @Param: [paramMap]  key: attedUserId,  userId ,  type
      * @return: com.bonc.thumb.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/4
