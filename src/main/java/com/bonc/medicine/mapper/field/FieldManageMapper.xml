@@ -168,7 +168,71 @@
 		'新建种植' AS 'record',
 		a.id,
 		a.user_name,
-		a.plant_type,
+		NULL AS 'variety_name',
+		NULL AS
+		'plant_msg',
+		a.plant_area,
+		a.plant_address,
+		NULL AS step_name,
+		NULL AS
+		photo_url,
+		a.registation_time AS time
+		FROM
+		field_info a
+		WHERE
+		a.state = '0'
+		AND a.guide_flag = '0'
+		AND a.creator_id = #{user_id}
+		) UNION
+		(
+		SELECT
+		'登记种植信息' AS
+		'record',
+		a.id,
+		a.user_name,
+		d.variety_name,
+		NULL AS
+		'plant_msg',
+		NULL AS
+		'plant_area',
+		NULL AS 'plant_address',
+		c.step_name,
+		b.photo_url,
+		b.record_time AS time
+		FROM
+		field_info a
+		LEFT JOIN
+		field_record b ON a.id
+		= b.field_id
+		LEFT JOIN
+		km_sop_step c ON
+		b.segment_id = c.id
+		LEFT JOIN
+		common_medicine_variety
+		d ON b.categroyID =
+		d.variety_code
+		WHERE
+		a.state
+		= '0'
+		AND a.guide_flag = '0'
+		AND a.creator_id
+		= #{user_id}
+		AND b.record_user_id =#{user_id}
+		AND b.guide_flag = '0'
+		)
+	</select>
+
+	<select id="guideRecordNum" resultType="Map" parameterType="Map">
+		SELECT
+		count( 1 ) AS num
+		FROM
+		(
+		(
+		SELECT
+		'新建种植' AS 'record',
+		a.id,
+		a.user_name,
+		NULL AS 'variety_name',
 		NULL AS 'plant_msg',
 		a.plant_area,
 		a.plant_address,
@@ -189,10 +253,10 @@
 		AS 'record',
 		a.id,
 		a.user_name,
-		a.plant_type,
+		d.variety_name,
 		NULL AS 'plant_msg',
-		NULL AS
-		'plant_area',
+		NULL
+		AS 'plant_area',
 		NULL AS 'plant_address',
 		c.step_name,
 		b.photo_url,
@@ -202,6 +266,8 @@
 		LEFT JOIN field_record b ON a.id
 		= b.field_id
 		LEFT JOIN km_sop_step c ON b.segment_id = c.id
+		LEFT JOIN
+		common_medicine_variety d ON b.categroyID = d.variety_code
 		WHERE
 		a.state = '0'
 		AND a.guide_flag = '0'
@@ -210,67 +276,7 @@
 		b.record_user_id = #{user_id}
 		AND b.guide_flag = '0'
 		)
-	</select>
-
-	<select id="guideRecordNum" resultType="Map" parameterType="Map">
-		SELECT
-		count( 1 ) AS num
-		FROM
-		(
-		(
-		SELECT
-		'新建种植' AS 'record',
-		a.id,
-		a.user_name,
-		a.plant_type,
-		NULL AS 'plant_msg',
-		a.plant_area,
-		a.plant_address,
-		NULL AS
-		step_name,
-		NULL AS photo_url,
-		a.registation_time
-		AS time
-		FROM
-		field_info a
-		WHERE
-		a.state = '0'
-		AND a.guide_flag = '0'
-		AND
-		a.creator_id = #{user_id}
-		) UNION
-		(
-		SELECT
-		'登记种植信息' AS 'record',
-		a.id,
-		a.user_name,
-		a.plant_type,
-		NULL AS
-		'plant_msg',
-		NULL AS 'plant_area',
-		NULL
-		AS 'plant_address',
-		c.step_name,
-		b.photo_url,
-		b.record_time AS time
-		FROM
-		field_info a
-		LEFT JOIN
-		field_record b ON a.id = b.field_id
-		LEFT JOIN
-		km_sop_step c ON
-		b.segment_id = c.id
-		WHERE
-		a.state = '0'
-		AND a.guide_flag
-		= '0'
-		AND
-		a.creator_id = #{user_id}
-		AND b.record_user_id = #{user_id}
-		AND
-		b.guide_flag = '0'
-		)
-		) AS d
+		) AS e
 	</select>
 
 	<select id="getPlantMsg" resultType="Map" parameterType="Integer">
@@ -280,7 +286,8 @@
 		a.seedAge
 		FROM
 		field_info_categroyinfo a
-		LEFT JOIN common_medicine_variety b ON a.categroyID = b.variety_code
+		LEFT
+		JOIN common_medicine_variety b ON a.categroyID = b.variety_code
 		WHERE
 		a.fieldID = #{id}
 	</select>
