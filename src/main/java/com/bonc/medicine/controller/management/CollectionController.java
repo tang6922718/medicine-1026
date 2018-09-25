@@ -98,7 +98,20 @@ public class CollectionController {
         return ResultUtil.success(collectionService.specCaseDetail(id));
     }
 
+    /**
+     * 是否收藏
+     * @param collect_type 收藏类型
+     * @param collect_object_id 收藏类型下目标的id
+     * @return
+     */
+    @GetMapping("/isCollect/{collect_type}/{collect_object_id}")
+    public Result<Object> isCollect(@PathVariable String collect_type,@PathVariable String collect_object_id){
+        return ResultUtil.success(collectionService.isCollect(collect_type,collect_object_id));
+    }
 
-
+    @GetMapping("/undoCollect/{collect_type}/{collect_object_id}")
+    public Result<Object> undoCollect(@PathVariable String collect_type,@PathVariable String collect_object_id){
+        return ResultUtil.success(collectionService.undoCollect(collect_type,collect_object_id));
+    }
 
 }

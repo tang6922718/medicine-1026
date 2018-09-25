@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
 
         paramMap.put("tableName", getTableByPhone(paramMap.get("phone")));
         paramMap.put("password", DigestUtils.md5Hex(paramMap.get("password")));
+        paramMap.put("phone", paramMap.get("phone"));
 
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -133,6 +134,7 @@ public class UserServiceImpl implements UserService {
         Map map = new HashMap();
         map.put("token", token);
         map.put("userId", user.getId());
+        map.put("role", user.getId());
 		return ResultUtil.success(map);
 	}
 
@@ -242,9 +244,52 @@ public class UserServiceImpl implements UserService {
         return reMap;
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         System.out.println(DigestUtils.md5Hex("123"));
 
+    }*/
+
+    public Result loginSecond(String username, String password, String equipment) throws Exception{
+
+        Map paramMap = new HashMap();
+        //paramMap.put("tableName", getTableByPhone(username));
+        paramMap.put("phone", username);
+        paramMap.put("password", DigestUtils.md5Hex(password));
+        List<Map<String, Object>> reList = new ArrayList<>();
+
+        // 如果是APP登陆
+        if(StringUtils.equals("APP", equipment.trim())){
+            reList = userMapper.loginSecond(paramMap);
+        }
+
+
+        if (null == reList || reList.size() == 0 ||  null == reList.get(0) || reList.get(0).get("telephone") == null) {
+            return ResultUtil.error(ResultEnum.ERROR_LOGIN);
+        }
+        User user = new User();
+        user.setId(reList.get(0).get("id") == null ? 0 : Integer.parseInt(reList.get(0).get("id") + ""));
+        user.setName(reList.get(0).get("name") == null ? "" : reList.get(0).get("name").toString());
+        user.setTelephone(reList.get(0).get("telephone") == null ? "" : reList.get(0).get("telephone").toString());
+        user.setHeadPortrait(reList.get(0).get("head_portrait") == null ? "" : reList.get(0).get("head_portrait").toString());
+        user.setAddress(reList.get(0).get("address") == null ? "" : reList.get(0).get("address").toString());
+        user.setRoles(reList.get(0).get("role_id") == null ? "" : reList.get(0).get("role_id").toString());
+        user.setRoleName(reList.get(0).get("role_name") == null ? "" : reList.get(0).get("role_name").toString());
+
+        //String token = UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString().replace("-", "");
+        // 3、把用户信息保存到redis。Key就是token，value就是User对象转换成json。
+        // 4、使用String类型保存Session信息。可以使用“前缀:token”为key
+        //user.setPassword(null);
+        redisService.set(RedisKeyUtil.getUserInfoKey(token), JsonUtil.getJsonString(user));
+        // 5、设置key的过期时间。模拟Session的过期时间。一般半个小时。
+        redisService.expire(RedisKeyUtil.getUserInfoKey(token), OUT_TIME);
+        // 6、返回Result包装token。
+        Map map = new HashMap();
+        map.put("token", token);
+        map.put("userId", user.getId());
+        map.put("roleId", user.getRoles());
+        map.put("roleName", user.getRoleName());
+        return ResultUtil.success(map);
     }
 
 

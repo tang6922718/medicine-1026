@@ -33,10 +33,11 @@ public class UserManagerController {
 		}
 		return id;
 	}
-	
+
 	@GetMapping("/userManager/update/Basic")
-	public Result<Object> updateBasic(Integer id,String sex,Integer age,String address,String img_url) {
-		return ResultUtil.success(userManagerService.updateBasic(id,sex,age,address,img_url));
+	public Result<Object> updateBasic(Integer id, String name, String sex, Integer age, String address,
+			String img_url) {
+		return ResultUtil.success(userManagerService.updateBasic(id, name, sex, age, address, img_url));
 	}
 
 	/*
@@ -83,7 +84,7 @@ public class UserManagerController {
 	 */
 	@PutMapping("/userManager/userStatus")
 	public Result<Object> userStatus(@RequestBody Map param) {
-		return userManagerService.userStatus(Integer.parseInt(param.get("id")+""), param.get("status")+"");
+		return userManagerService.userStatus(Integer.parseInt(param.get("id") + ""), param.get("status") + "");
 	}
 
 	/*
@@ -146,7 +147,7 @@ public class UserManagerController {
 	 * 用户管理列表
 	 */
 	@GetMapping("/userManager/get/userlist")
-	public Result<Object> userlist(String tel,  String role, String startTime, String endTime) {
+	public Result<Object> userlist(String tel, String role, String startTime, String endTime) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();// 保存1，2，3，4，10列数据
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();// 保存5,6列数据
 		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();// 保存7列数据
@@ -189,15 +190,19 @@ public class UserManagerController {
 		return ResultUtil.success(list);
 	}
 
-
-	/* *
+	/*
+	 * *
+	 * 
 	 * @Description 查询用户的基本信息
+	 * 
 	 * @Date 17:51 2018/9/18
+	 * 
 	 * @Param [userID]
+	 * 
 	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
 	 */
 	@GetMapping("/userManager/userbaseinfo")
-	public Result<Object> queryUserInfo(@RequestParam int userID){
+	public Result<Object> queryUserInfo(@RequestParam int userID) {
 		return userManagerService.queryUserInfo(userID);
 	}
 

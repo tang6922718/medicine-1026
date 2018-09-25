@@ -9,6 +9,18 @@ import java.util.Map;
 public interface ViewTheDataMapper {
 
     public List<Map<String, Object>> interaction(Map map);
+    
+    public List<Map<String, Object>> thisWeekInteraction(Map map);
+    
+    public List<Map<String, Object>> historyInteraction(Map map);
+    
+    public List<Map<String, Object>> rankInteraction();
+    
+    public List<Map<String, Object>> follow();
+    
+    public List<Map<String, Object>> collection();
+    
+    public List<Map<String, Object>> issue();
 
     public List<Map<String, Object>> problemStatistics(Map map);
 

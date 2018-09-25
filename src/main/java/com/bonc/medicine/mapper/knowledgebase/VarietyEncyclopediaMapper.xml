@@ -125,6 +125,44 @@
 		 	id = #{id}
 	</select>
 
+	<select id="breedInfoByVariety" parameterType="String" resultType="Map">
+		SELECT
+			id,
+			variety_id,
+			synopsis,
+			chinese_name,
+			latin_name,
+			alias,
+			two_law,
+			circles,
+			door,
+			outline,
+			item,
+			suborder,
+			section,
+			family,
+			genus,
+			speices,
+			subspecies,
+			distribution_area,
+			graph_url,
+			feature,
+			habit,
+			distrubtion_range,
+			variety,
+			cultivation_tech,
+			main_value,
+			composition
+		FROM km_variety_encyclopedia
+		WHERE 1=1
+		<if test="variety_code != null and variety_code != ''">
+		 	and variety_id = #{variety_code}
+		</if>
+		<if test="variety_name != null and variety_name != ''">
+			and chinese_name = #{variety_name} OR alias LIKE concat('%',#{variety_name},'%')
+		</if>
+	</select>
+
 	<select id="showHotBreed" resultType="Map">
 		SELECT variety_code,variety_name FROM common_medicine_variety LIMIT 20
 	</select>

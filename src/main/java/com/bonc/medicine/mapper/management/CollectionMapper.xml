@@ -119,4 +119,20 @@
 		SELECT * FROM spec_case WHERE id = #{id}
 	</select>
 
+	<select id="isCollect" parameterType="Map" resultType="Integer">
+		SELECT count(1) FROM common_collection c
+		LEFT JOIN (
+		SELECT id,5 AS type FROM train_video_course UNION
+		SELECT id,2 AS type FROM spec_article UNION
+		SELECT id,3 AS type FROM mall_supply UNION
+		SELECT id,9 AS type FROM mall_purchase UNION
+		SELECT id,1 AS type FROM info_basic)
+		a ON c.collect_type = a.type AND c.collect_object_id = a.id
+		WHERE c.collect_type = #{collect_type} AND c.collect_object_id = #{collect_object_id}
+	</select>
+
+	<update id="undoCollect" parameterType="Map">
+		DELETE FROM common_collection WHERE collect_type = #{collect_type} AND collect_object_id = #{collect_object_id}
+	</update>
+
 </mapper>

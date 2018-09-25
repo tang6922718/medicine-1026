@@ -19,6 +19,8 @@ public interface UserMapper {
 
 	public List<Map<String, Object>> login(Map<String, String> paramMap);
 
+	public List<Map<String, Object>> loginSecond(Map<String, String> paramMap);
+
 	public List<Map<String, Object>> getTableByPhone(String phone);
 
     public int updatePassword(Map<String, String> paramMap);

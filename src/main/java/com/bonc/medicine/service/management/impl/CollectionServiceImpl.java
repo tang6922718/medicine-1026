@@ -5,6 +5,7 @@ import com.bonc.medicine.service.management.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,22 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public Map<String, Object> specCaseDetail(String id) {
         return collectionMapper.specCaseDetail(id);
+    }
+
+    @Override
+    public int isCollect(String collect_type, String collect_object_id) {
+        Map map = new HashMap();
+        map.put("collect_type",collect_type);
+        map.put("collect_object_id",collect_object_id);
+        return collectionMapper.isCollect(map);
+    }
+
+    @Override
+    public int undoCollect(String collect_type, String collect_object_id) {
+        Map map = new HashMap();
+        map.put("collect_type",collect_type);
+        map.put("collect_object_id",collect_object_id);
+        return collectionMapper.undoCollect(map);
     }
 
 

@@ -53,11 +53,13 @@ public class VerificationUtilsController {
 
 
         String code = VerificationUtils.getVerifByPhone(map.get("phone"));
+
+        //目前设置的验证码过期时间是5分钟-考虑要发送会延迟
         long outTime = 300L;
 
         try {
-            redisService.set(CodeKeyUtil.getIntegralKey(map.get("phone")), code);
-            redisService.expire(CodeKeyUtil.getIntegralKey(map.get("phone")),outTime );
+            redisService.set(CodeKeyUtil.getCodeKey(map.get("phone")), code);
+            redisService.expire(CodeKeyUtil.getCodeKey(map.get("phone")),outTime );
         }catch (Exception e){
             return ResultUtil.error(ResultEnum.NET_ERROR);
         }
@@ -84,12 +86,12 @@ public class VerificationUtilsController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        boolean ex = jedisAdapter.sismember(CodeKeyUtil.getIntegralKey(map.get("phone")), map.get("code"));
+        boolean ex = jedisAdapter.exists(CodeKeyUtil.getCodeKey(map.get("phone")));
 
         if (ex){
             try {
 
-                String code = redisService.get(CodeKeyUtil.getIntegralKey(map.get("phone")));
+                String code = redisService.get(CodeKeyUtil.getCodeKey(map.get("phone")));
 
                 if(StringUtils.equals(code, map.get("code"))){
                     Map ma = new HashMap();
@@ -101,7 +103,7 @@ public class VerificationUtilsController {
                 return ResultUtil.error(ResultEnum.NET_ERROR);
             }
         }else{
-            throw new MedicineRuntimeException(ResultEnum.CODE_OUT_TIME);
+            return ResultUtil.error(222, "亲！！请先获取验证码啦");
         }
 
     }

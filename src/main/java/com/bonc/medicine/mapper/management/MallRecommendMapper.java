@@ -28,4 +28,6 @@ public interface MallRecommendMapper {
 
     public Map<String,Object>  MallRecommendDetail(String id);
 
+    public List qualityRecommend(String... ids);
+
 }

@@ -112,7 +112,15 @@ public class MallRecommendController {
         return ResultUtil.success(mallRecommendService.showGoodsById(id));
     }
 
-
+    /**
+     *精品推荐
+     * @param sites
+     * @return
+     */
+    @GetMapping("/qualityRecommend")
+    public Result<Object> qualityRecommend(@RequestParam String... sites){
+        return ResultUtil.success(mallRecommendService.qualityRecommend(sites));
+    }
 
 
 }

@@ -37,7 +37,10 @@ public class OfferController {
 		for (Map<String, Object> map : result) {
 			purchase_ids.add(map.get("purchase_id")+"");
 		}
-		List<Map<String, Object>> counts = offerService.countOffers(purchase_ids);
+		List<Map<String, Object>> counts = new ArrayList<>();
+		if (purchase_ids.size() > 0) {
+			counts = offerService.countOffers(purchase_ids);
+		}
 		for (Map<String,Object> off : result) {
 			String purchase_id = off.get("purchase_id")+"";
 			for (Map<String, Object> cou : counts) {

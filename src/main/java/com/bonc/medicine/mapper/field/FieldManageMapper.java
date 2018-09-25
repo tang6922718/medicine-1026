@@ -26,9 +26,11 @@ public interface FieldManageMapper {
 
     public int updateFieldInfo(@Param("fieldID") int fieldID, @Param("date") Date date); //更新地块的最新更新时间
 
-    public List<Map> guideRecord(Map param);
+    public List<Map<String, Object>> guideRecord(Map param);
 
-    public List<Map> guideRecordNum(Map param);
+    public List<Map<String, Object>> guideRecordNum(Map param);
+    
+    public List<Map<String, Object>> getPlantMsg(int id);
 
     public List<Map> queryFarmOpreationByCategroy(int categroyID);
 

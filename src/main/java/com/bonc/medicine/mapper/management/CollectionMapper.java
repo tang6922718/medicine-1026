@@ -29,4 +29,8 @@ public interface CollectionMapper {
 
     public Map<String,Object> specCaseDetail(String id);
 
+    public int isCollect(Map map);
+
+    public int undoCollect(Map map);
+
 }
