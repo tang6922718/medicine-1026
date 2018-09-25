@@ -16,7 +16,7 @@ public interface VarietyEncyclopediaMapper {
     public List<Map<String,Object>> selectBreed(Map map);
     public Map<String,Object> selectBreedDetail(String id);
 
-    public Map<String,Object> breedInfoByVarietyId(String variety_code);
+    public Map<String,Object> breedInfoByVariety(Map map);
 
     public int addBreed(Map map);
 

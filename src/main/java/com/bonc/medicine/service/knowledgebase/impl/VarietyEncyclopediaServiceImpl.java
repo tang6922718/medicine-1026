@@ -39,8 +39,11 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
     }
 
     @Override
-    public Map<String, Object> breedInfoByVarietyId(String variety_code) {
-        return varietyEncyclopediaMapper.breedInfoByVarietyId(variety_code);
+    public Map<String, Object> breedInfoByVariety(String variety_code,String variety_name) {
+        Map map = new HashMap();
+        map.put("variety_code",variety_code);
+        map.put("variety_name", variety_name);
+        return varietyEncyclopediaMapper.breedInfoByVariety(map);
     }
 
     @Override
