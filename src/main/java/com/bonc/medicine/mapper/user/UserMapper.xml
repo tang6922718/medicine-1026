@@ -91,4 +91,22 @@
 			 and cu.password = #{password}
 		ORDER BY cll.role_id
 	</select>
+
+    <select id="getUserInfoById" parameterType="String" resultType="Map">
+        SELECT
+            id,
+            name,
+            wetchat,
+            telephone,
+            email,
+            sex,
+            address,
+            head_portrait
+        FROM
+            common_user
+        WHERE
+            id = #{userId}
+
+            limit 1
+    </select>
 </mapper>

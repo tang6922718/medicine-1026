@@ -233,11 +233,11 @@ public class JedisAdapter implements InitializingBean {
      * @Author: hejiajun
      * @Date: 2018/9/7
      */
-    public Set<String> keys(){
+    public Set<String> keys(String pre){
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            return jedis.keys("*");
+            return jedis.keys(pre+ "*");
         } catch (Exception e) {
             logger.error("Jedis keys 异常：" + e.getMessage());
             return new HashSet();

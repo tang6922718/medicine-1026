@@ -74,6 +74,8 @@ public interface UserService {
 
     public Map changePassword(Map<String, String> map);
 
+    public User getUserInfoById(String userId);
+
 
 
 
