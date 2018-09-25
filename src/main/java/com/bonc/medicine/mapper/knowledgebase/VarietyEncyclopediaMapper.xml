@@ -125,7 +125,7 @@
 		 	id = #{id}
 	</select>
 
-	<select id="breedInfoByVarietyId" parameterType="String" resultType="Map">
+	<select id="breedInfoByVariety" parameterType="String" resultType="Map">
 		SELECT
 			id,
 			variety_id,
@@ -154,8 +154,13 @@
 			main_value,
 			composition
 		FROM km_variety_encyclopedia
-		WHERE
-		 	variety_id = #{variety_code}
+		WHERE 1=1
+		<if test="variety_code != null and variety_code != ''">
+		 	and variety_id = #{variety_code}
+		</if>
+		<if test="variety_name != null and variety_name != ''">
+			and chinese_name = #{variety_name} OR alias LIKE concat('%',#{variety_name},'%')
+		</if>
 	</select>
 
 	<select id="showHotBreed" resultType="Map">
