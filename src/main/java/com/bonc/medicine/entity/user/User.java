@@ -46,8 +46,11 @@ public class User {
     //用户头像信息
     private String headPortrait;
 
-    //用户角色
+    //用户角色id
     private String roles;
+    //用户角色名字
+    private String roleName;
+
 
     //用户关心品种
     private String caresVarieties;
@@ -178,6 +181,14 @@ public class User {
         this.verification = verification;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -194,6 +205,7 @@ public class User {
                 ", updateTime=" + updateTime +
                 ", headPortrait='" + headPortrait + '\'' +
                 ", roles='" + roles + '\'' +
+                ", roleName='" + roleName + '\'' +
                 ", caresVarieties='" + caresVarieties + '\'' +
                 ", verification='" + verification + '\'' +
                 '}';

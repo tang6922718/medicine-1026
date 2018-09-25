@@ -282,6 +282,36 @@ public class SpecRepertoryController {
 		}
 		return ResultUtil.success(specialistService.insertIssueRel(list));
 	}
+	@SuppressWarnings({ "rawtypes" })
+	@GetMapping("/inviteList")
+	@Transactional
+	public Result inviteList(String cat_code, String subject_code, String issue_id) {
+		Map param = new HashMap<>();
+		param.put("cat_code", cat_code);
+		param.put("subject_code", subject_code);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+		list = specialistService.specialList(param);
+		Map resultMap = new HashMap<>();
+		resultMap.put("invitedNum", 0);
+		if (issue_id != null && !issue_id.equals("")) {
+			Result result = meetProfessorService.expert(Integer.parseInt(issue_id));
+			if (result.getCode() == 200) {
+				List<Map> res = (List)result.getData();
+				resultMap.put("invitedNum", res.size());
+				for (Map map : res) {
+					String specid = map.get("specid")+"";
+					for (Map<String,Object> map2 : list) {
+						if (specid.equals(map2.get("spec_id")+"")) {
+							map2.put("invited", "1");
+						}
+					}
+				}
+			}
+		}
+		resultMap.put("list", list);
+		return ResultUtil.success(resultMap);
+	}
 	
 	
 	/**

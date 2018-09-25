@@ -60,6 +60,8 @@ public interface UserService {
 
     public Result login(String username, String password) throws Exception;
 
+    public Result loginSecond(String username, String password, String equipment) throws Exception;
+
     public Result getUserByToken(String token) throws  Exception;
 
     public TokenModel createToken(User user) throws Exception;
