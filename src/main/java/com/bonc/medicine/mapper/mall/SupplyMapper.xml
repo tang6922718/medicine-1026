@@ -16,11 +16,10 @@
     </insert>
 
     <select id="queryRecommend" resultType="Map" parameterType="Map">
-        SELECT A.* FROM mall_supply A,mall_recommend B
-        WHERE A.id = B.supply_id
-        AND B.state = '0' AND A.state = '0'
-        AND A.is_audit = '1' AND B.site =
-        #{site}
+        SELECT A.* FROM mall_supply A
+        inner join mall_recommend B on (A.id=B.supply_id1 or A.id=B.supply_id2 or A.id=B.supply_id3)
+        WHERE B.state = '0' AND A.state = '0'
+        AND A.is_audit = '1' AND B.site=#{site};
     </select>
 
     <select id="queryDetails" resultType="Map" parameterType="String">
