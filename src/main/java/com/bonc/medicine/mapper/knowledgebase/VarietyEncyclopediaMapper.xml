@@ -83,10 +83,10 @@
 			and a.chinese_name LIKE concat('%',#{search_name},'%')
 		</if>
 		<if test="type_code != null and type_code != ''">
-			and record_status = #{type_code}
+			and codex_status = #{type_code}
 		</if>
 		<if test="record_status != null and record_status != ''">
-			and codex_status= #{record_status}
+			and record_status= #{record_status}
 		</if>
 		ORDER BY
 		record_time DESC
