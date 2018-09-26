@@ -5,6 +5,7 @@ import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.constants.Constants;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.TokenModel;
+import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -231,6 +232,21 @@ public class UserOperController {
 
         return result;
 
+    }
+
+    /**
+    * @Description: 通过userId获取用户的信息
+    * @Param: [UserId]
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/25 
+    */ 
+    @GetMapping("/info/user/v1.0/{userId}")
+    public Result getUserInfoById(@PathVariable String UserId){
+
+        User user = userService.getUserInfoById(UserId);
+
+       return  ResultUtil.success(user);
     }
 
 

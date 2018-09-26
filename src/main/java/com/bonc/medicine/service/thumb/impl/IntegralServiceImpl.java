@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @program: medicine-hn
@@ -120,6 +118,8 @@ public class IntegralServiceImpl implements IntegralService {
                             ? ruleObject.getIsEffect() : paramMap.get("isEffect").charAt(0));
                     ruleObject.setUpperBound(StringUtils.isEmpty(paramMap.get("upperBound"))
                             ? ruleObject.getUpperBound() : Integer.parseInt(paramMap.get("upperBound")));
+                    ruleObject.setUpperBound(StringUtils.isEmpty(paramMap.get("chineseName"))
+                            ? ruleObject.getUpperBound() : Integer.parseInt(paramMap.get("chineseName")));
 
                     redisService.setList(IntegralKeyUtil.getIntegralRuleKey(), integralList);
                     redisService.expire(IntegralKeyUtil.getIntegralRuleKey(), OUT_TIME);//6xiaoshi
@@ -145,11 +145,20 @@ public class IntegralServiceImpl implements IntegralService {
         //paramMap 里面有userId,actionCode
         try {
             List<IntegralRule> ruleList = getIntegralRuleByPage();
+            IntegralRule ruleDemo = null;
             for (IntegralRule rule : ruleList) {
                 if (StringUtils.equals(rule.getActionCode(), paramMap.get("actionCode"))) {
+                    ruleDemo = rule;
                     paramMap.put("point", String.valueOf(rule.getPoint()));
                 }
             }
+
+            boolean goingDown = checkIntegralTimes(paramMap, ruleDemo);
+
+            if(!goingDown){
+                throw new MedicineRuntimeException(201, "亲！今天你也元气满满呢，操作次数上限了哦");
+            }
+
             //添加历史记录表
             int impactNumberScore = integralMapper.addIntegralHistory(paramMap);//如果失败等待再次执行时比较好的。
 
@@ -218,6 +227,38 @@ public class IntegralServiceImpl implements IntegralService {
             }
         }
     }
+
+    /**
+    * @Description: 检查积分增加的次数，比如，签到每天只能签到一次
+    * @Param: [paramMap]
+    * @return: boolean true:还可以操作。false:操作到上限次数了
+    * @Author: hejiajun
+    * @Date: 2018/9/25 
+    */ 
+    private boolean checkIntegralTimes(Map<String, String> paramMap, IntegralRule ruleDemo){
+
+        // map 里面有；userId;actionCode
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-hh");
+        String timeNow = sdf.format(new Date());
+        paramMap.put("timeNow", timeNow);
+        Map<String, Object> resultMap =  integralMapper.queryTodayIntegralOpTimes(paramMap);
+        if(null == resultMap || null == resultMap.get("timesToday")){
+
+            return true;
+        }
+        int times = ruleDemo.getUpperBound() / ruleDemo.getPoint();
+
+        if(Integer.parseInt(resultMap.get("timesToday") + "") < times){
+            return true;
+        }
+
+        return  false;
+    }
+
+   /* public static void main(String[] args) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(sdf.format(new Date()));
+    }*/
 
 
 }

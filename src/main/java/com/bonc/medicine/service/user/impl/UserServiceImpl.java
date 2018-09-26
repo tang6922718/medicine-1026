@@ -1,6 +1,7 @@
 package com.bonc.medicine.service.user.impl;
 
 import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.TokenModel;
 import com.bonc.medicine.entity.user.User;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RedisService redisService;
+
+    @Autowired
+    private JedisAdapter jedisAdapter;
 
 	@Autowired
 	private UserMapper userMapper;
@@ -244,8 +248,51 @@ public class UserServiceImpl implements UserService {
         return reMap;
     }
 
+    @Override
+    public User getUserInfoById(String userId) {
+
+        // TODO 先写死了
+        Set<String> key =  jedisAdapter.keys("USERINFO:"+userId + "_");
+        if (null != key && key.size() != 0){
+            try{
+                String json = redisService.get(key.toArray()[0] + "");
+                User user = JsonUtil.json2Obj(json, User.class);
+                return user;
+            }catch (Exception e){
+
+                return getUserMiddleMethod(userId);
+            }
+        }else{
+            return getUserMiddleMethod(userId);
+        }
+    }
+
+    /**
+    * @Description: 这是个辅助的方法，重复代码
+    * @Param: [userId]
+    * @return: com.bonc.medicine.entity.user.User
+    * @Author: hejiajun
+    * @Date: 2018/9/25 
+    */ 
+    private  User getUserMiddleMethod(String userId) {
+        Map<String, Object> userMap = userMapper.getUserInfoById(userId);
+        User user = new User();
+        user.setId(userMap.get("id") == null ? 0 : Integer.parseInt(userMap.get("id") + ""));
+        user.setName(userMap.get("name") == null ? "无名氏" : userMap.get("name").toString());
+        user.setTelephone(userMap.get("telephone") == null ? "" : userMap.get("telephone").toString());
+        user.setHeadPortrait(userMap.get("head_portrait") == null ? "" : userMap.get("head_portrait").toString());
+        user.setAddress(userMap.get("address") == null ? "" : userMap.get("address").toString());
+        user.setWetchat(userMap.get("wetchat") == null ? "" : userMap.get("wetchat").toString());
+        user.setEmail(userMap.get("email") == null ? "" : userMap.get("email").toString());
+        user.setSex(userMap.get("sex") == null ? '无' : (userMap.get("sex") + "").charAt(0));
+        user.setExpertise_field(userMap.get("expertise_field") == null ? "" : userMap.get("expertise_field") + "");
+        user.setEmployment_age(userMap.get("employment_age") == null ? "" : userMap.get("employment_age") + "");
+        user.setCaresVarieties(userMap.get("loveVariety") == null ? "" : userMap.get("loveVariety") + "");
+        return user;
+    }
+
    /* public static void main(String[] args) {
-        System.out.println(DigestUtils.md5Hex("123"));
+        System.out.println(DigestUtils.md5Hex("123456"));
 
     }*/
 

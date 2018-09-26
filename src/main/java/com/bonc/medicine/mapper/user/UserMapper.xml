@@ -91,4 +91,27 @@
 			 and cu.password = #{password}
 		ORDER BY cll.role_id
 	</select>
+
+    <select id="getUserInfoById" parameterType="String" resultType="Map">
+       SELECT
+				cu.id,
+				cu.name,
+				cu.wetchat,
+				cu.telephone,
+				cu.email,
+				cu.sex,
+				cu.address,
+				cu.head_portrait,
+				sis.expertise_field,
+				sis.employment_age ,
+				GROUP_CONCAT(cmmv.variety_name) as loveVariety
+			FROM
+				common_user cu
+				LEFT JOIN spec_info sis ON cu.id = sis.spec_id
+				LEFT JOIN  common_user_care_varieties_r curr on cu.id=curr.user_id
+				LEFT JOIN common_medicine_variety cmmv on curr.variety_code=cmmv.variety_code
+           where cu.id = #{userId}
+
+            limit 1
+    </select>
 </mapper>

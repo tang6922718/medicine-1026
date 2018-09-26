@@ -9,4 +9,5 @@ public interface CommentReplyService {
 	public List<Map> queryComments(Map param);
 	public int commentsCount(Map param);
 	public List<Map> queryReplies(List comment_ids);
+	public int deleteComment(String id);
 }

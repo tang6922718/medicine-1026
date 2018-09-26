@@ -28,9 +28,7 @@ public class TrainController {
      * @description 新建线下培训(发布线下培训)
      */
     @RequestMapping("/createTrain")
-    @Authorization
-    public Result createTrain(@CurrentUser String user_id,@RequestBody Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+    public Result createTrain(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(trainService.createTrain(map));
     }
 
@@ -192,8 +190,6 @@ public class TrainController {
         return ResultUtil.success(trainService.editOfflineTrain(map));
     }
 
-
-
     /**
      * @param map
      * @return
@@ -223,9 +219,7 @@ public class TrainController {
             System.out.print("获取签名失败");
             e.printStackTrace();
         }
-
         return ResultUtil.success(signature);
     }
-
 
 }

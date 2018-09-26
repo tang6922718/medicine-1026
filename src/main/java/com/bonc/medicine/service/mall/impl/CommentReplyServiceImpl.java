@@ -45,4 +45,13 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 		return Integer.parseInt(result.get(0).get("count")+"");
 	}
 
+	@Override
+	public int deleteComment(String id) {
+		int rows = commentReplyMapper.deleteComment(id);
+		if (rows < 1) {
+			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+		}
+		return rows;
+	}
+
 }

@@ -292,10 +292,13 @@ public class SpecRepertoryController {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
 		list = specialistService.specialList(param);
+		Map resultMap = new HashMap<>();
+		resultMap.put("invitedNum", 0);
 		if (issue_id != null && !issue_id.equals("")) {
 			Result result = meetProfessorService.expert(Integer.parseInt(issue_id));
 			if (result.getCode() == 200) {
 				List<Map> res = (List)result.getData();
+				resultMap.put("invitedNum", res.size());
 				for (Map map : res) {
 					String specid = map.get("specid")+"";
 					for (Map<String,Object> map2 : list) {
@@ -306,7 +309,8 @@ public class SpecRepertoryController {
 				}
 			}
 		}
-		return ResultUtil.success(list);
+		resultMap.put("list", list);
+		return ResultUtil.success(resultMap);
 	}
 	
 	
@@ -358,15 +362,15 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/file")
-	public Result uploadFile(String title, String spec_id, String file_size, String file_url, String status) {
+	public Result uploadFile(String title, String spec_id, String file_size, String file_url) {
 		Map param = new HashMap();
 		param.put("title", title);
 		param.put("spec_id", spec_id);
 		param.put("file_size", file_size);
 		param.put("file_url", file_url);
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
-		param.put("upload_time", sdf.format(new Date()));
-		param.put("status", status);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		param.put("upload_time", sdf.format(new Date().getTime()));
+		param.put("status", "0");
 		
 		return ResultUtil.success(specialistService.uploadFile(param));
 	}

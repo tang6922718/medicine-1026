@@ -29,4 +29,6 @@ public interface UserMapper {
 
 	public  List<Map<String, Object>> getIdByPhone(String phone);
 
+	public  Map<String, Object> getUserInfoById(String userId);
+
 }

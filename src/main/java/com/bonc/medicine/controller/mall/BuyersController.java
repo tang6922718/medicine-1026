@@ -40,9 +40,10 @@ public class BuyersController {
 	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
-	@GetMapping("/revokePurchase")
-	public Result<Object> revokePurchase(String id) {
-		return ResultUtil.success(buyersService.revokePurchase(id));
+	@PutMapping("/revokePurchase")
+	public Result<Object> revokePurchase(@RequestBody Map param) {
+		String[] ids = (String[])param.get("ids");
+		return ResultUtil.success(buyersService.revokePurchase(ids));
 	}
 	
 	@SuppressWarnings("unchecked")

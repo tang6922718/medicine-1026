@@ -30,4 +30,7 @@ public interface SopMapper {
 
     //sop撤销
     int sopCancel(Integer id);
+
+    //获取品种sop名列表
+    List<Map<String, Object>> getSopLists();
 }

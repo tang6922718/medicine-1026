@@ -121,6 +121,8 @@ public interface LiveMapper {
                 if(map.get("img_url") != null){
                     SET("img_url=#{img_url}");
                 }
+
+                SET("operation_status='1'");
                 WHERE("id=#{id}");
             }}.toString();
         }

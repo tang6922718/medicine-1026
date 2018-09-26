@@ -91,15 +91,14 @@ public interface TrainMapper {
     int repealVideoCourse(Map<String, Object> map);
 
 
-
     @UpdateProvider(type = TrainDynaSqlProvider.class,
             method = "editVideoCourse")
-    int editVideoCourse(Map<String,Object> map);
+    int editVideoCourse(Map<String, Object> map);
 
 
     class TrainDynaSqlProvider {
         public String createTrain(final Map<String, Object> map) {
-            return new SQL() {{
+            String sql = new SQL() {{
                 INSERT_INTO("train_offline");
                 if (map.get("user_id") != null) {
                     VALUES("user_id", "#{user_id}");
@@ -132,6 +131,9 @@ public interface TrainMapper {
                     VALUES("train_introduce", "#{train_introduce}");
                 }
             }}.toString();
+
+            System.out.println(sql);
+            return sql;
         }
 
         public String createVideo(final Map<String, Object> map) {
@@ -273,6 +275,8 @@ public interface TrainMapper {
                 if (map.get("fail_opinion") != null) {
                     SET("fail_opinion=#{fail_opinion}");
                 }
+
+                SET("operation_status='1'");
                 WHERE("id=#{id}");
             }}.toString();
         }
@@ -327,6 +331,9 @@ public interface TrainMapper {
                 if (map.get("img_url") != null) {
                     SET("img_url=#{img_url}");
                 }
+
+                SET("operation_status='1'");
+
                 WHERE("id=#{id}");
             }}.toString();
         }

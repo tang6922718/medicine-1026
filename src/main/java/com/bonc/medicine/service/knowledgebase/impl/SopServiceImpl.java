@@ -63,6 +63,11 @@ public class SopServiceImpl implements SopService {
         return sopMapper.sopCancel(id);
     }
 
+    @Override
+    public List<Map<String, Object>> getSopLists() {
+        return sopMapper.getSopLists();
+    }
+
 //    @Override
 //    public int sopStepDelete(Integer id) {
 //        return sopMapper.sopStepDelete(id);

@@ -10,13 +10,22 @@ public interface InfoMapper {
 
     @Select({"<script>",
             "SELECT * FROM `info_basic`",
-            "WHERE 1=1",
+            "WHERE is_display='1'",
             "<when test='catCode!=null' >",
             "AND cat_code = #{catCode}",
             "</when>",
+            "<when test='status!=null' >",
+            "AND status = #{status}",
+            "</when>",
+            "<when test='source_code!=null' >",
+            "AND source_code = #{source_code}",
+            "</when>",
+            "<when test='title!=null' >",
+            "AND title  like CONCAT('%',#{title},'%')",
+            "</when>",
             "</script>"})
     @ResultType(List.class)
-    List<Map> getAllInfo(@Param("catCode") String catCode);
+    List<Map> getAllInfo(@Param("catCode") String catCode,@Param("title") String title,@Param("status") String status,@Param("source_code") String source_code);
 
 
     @InsertProvider(type=InfoDynaSqlProvider.class,
@@ -51,6 +60,10 @@ public interface InfoMapper {
 
     @Update("update info_basic  set  is_display='0' where id =#{id}")
     int delInfo(Map<String, Object> map);
+
+
+    @Update("update info_basic  set  status='0' where id =#{id}")
+    int infoRepeal(String id);
 
     class InfoDynaSqlProvider {
         public String addInfo(final Map<String,Object> map)
