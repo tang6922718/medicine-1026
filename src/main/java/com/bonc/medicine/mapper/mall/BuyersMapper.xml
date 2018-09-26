@@ -44,7 +44,8 @@
     
 	<!-- 逻辑上删除，数据库只做修改 -->
     <update id="deletePurchase" parameterType="java.lang.String">
-    	update mall_purchase SET state = '0' WHERE id = #{id}
+    	update mall_purchase SET state = '0' WHERE id IN 
+    	<foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
     </update>
     
     <update id="revokePurchase" parameterType="java.lang.String">
