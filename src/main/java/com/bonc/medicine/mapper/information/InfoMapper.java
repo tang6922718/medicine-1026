@@ -14,9 +14,18 @@ public interface InfoMapper {
             "<when test='catCode!=null' >",
             "AND cat_code = #{catCode}",
             "</when>",
+            "<when test='status!=null' >",
+            "AND status = #{status}",
+            "</when>",
+            "<when test='source_code!=null' >",
+            "AND source_code = #{source_code}",
+            "</when>",
+            "<when test='title!=null' >",
+            "AND title  like CONCAT('%',#{title},'%')",
+            "</when>",
             "</script>"})
     @ResultType(List.class)
-    List<Map> getAllInfo(@Param("catCode") String catCode);
+    List<Map> getAllInfo(@Param("catCode") String catCode,@Param("title") String title,@Param("status") String status,@Param("source_code") String source_code);
 
 
     @InsertProvider(type=InfoDynaSqlProvider.class,

@@ -22,9 +22,9 @@ public class InfoServiceImpl implements InfoService {
 
 
     @Override
-    public List<Map> getAllInfo(String catCode,  String pageNum,String pageSize) {
+    public List<Map> getAllInfo(String catCode,  String pageNum,String pageSize,String title,String status,String source_code) {
         PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
-        return infoMapper.getAllInfo(catCode);
+        return infoMapper.getAllInfo(catCode,title,status,source_code);
     }
 
     @Override

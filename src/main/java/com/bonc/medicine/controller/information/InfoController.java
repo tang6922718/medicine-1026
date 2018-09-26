@@ -25,10 +25,13 @@ public class InfoController {
 
     @RequestMapping("/infoList")
     public Result infoList(@RequestParam(required = false) String catCode,
+                           @RequestParam(required = false) String title,
+                           @RequestParam(required = false) String status,
+                           @RequestParam(required = false) String source_code,
                            @RequestParam(required = false,defaultValue = "1") String pageNum,
                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
 
-        return  ResultUtil.success(infoService.getAllInfo(catCode,pageNum,pageSize));
+        return  ResultUtil.success(infoService.getAllInfo(catCode,pageNum,pageSize,title,status,source_code));
     }
 
     /**

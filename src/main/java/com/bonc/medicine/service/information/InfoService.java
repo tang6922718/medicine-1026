@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface InfoService {
 
-    List<Map> getAllInfo(String catCode, String pageNum,String pageSize);
+    List<Map> getAllInfo(String catCode, String pageNum,String pageSize,String title,String status,String source_code);
 
     int addInfo(Map<String, Object> map);
 
