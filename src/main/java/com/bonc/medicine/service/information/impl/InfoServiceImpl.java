@@ -70,4 +70,9 @@ public class InfoServiceImpl implements InfoService {
     public int delInfo(Map<String, Object> map) {
         return infoMapper.delInfo(map);
     }
+
+    @Override
+    public int infoRepeal(String id) {
+        return infoMapper.infoRepeal(id);
+    }
 }

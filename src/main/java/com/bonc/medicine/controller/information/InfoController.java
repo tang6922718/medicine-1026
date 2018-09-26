@@ -43,6 +43,20 @@ public class InfoController {
         return  ResultUtil.success(infoService.addInfo(map));
     }
 
+
+    /**
+     * @description 咨讯撤销
+     * @param id
+     * @return
+     */
+    @RequestMapping("/infoRepeal")
+    public Result infoRepeal(@RequestParam String  id) {
+        return  ResultUtil.success(infoService.infoRepeal(id));
+    }
+
+
+
+
     /**
      * @description 咨讯审核
      * @param map

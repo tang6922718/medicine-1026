@@ -21,4 +21,6 @@ public interface InfoService {
     Map infoReadCount(Map map);
 
     int delInfo(Map<String, Object> map);
+
+    int infoRepeal(String id);
 }

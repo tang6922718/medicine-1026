@@ -10,7 +10,7 @@ public interface InfoMapper {
 
     @Select({"<script>",
             "SELECT * FROM `info_basic`",
-            "WHERE 1=1",
+            "WHERE is_display='1'",
             "<when test='catCode!=null' >",
             "AND cat_code = #{catCode}",
             "</when>",
@@ -51,6 +51,10 @@ public interface InfoMapper {
 
     @Update("update info_basic  set  is_display='0' where id =#{id}")
     int delInfo(Map<String, Object> map);
+
+
+    @Update("update info_basic  set  status='0' where id =#{id}")
+    int infoRepeal(String id);
 
     class InfoDynaSqlProvider {
         public String addInfo(final Map<String,Object> map)
