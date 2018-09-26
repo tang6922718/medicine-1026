@@ -26,4 +26,7 @@ public interface SopService {
 
     //sop撤销
     int sopCancle(Integer id);
+
+    //获取品种sop名列表
+    List<Map<String, Object>> getSopLists();
 }

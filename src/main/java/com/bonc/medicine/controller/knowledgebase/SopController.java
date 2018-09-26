@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +37,21 @@ public class SopController {
     @Transactional
     public Result<Object> addSops(@RequestBody String addJson){
          //addJson传入两部分，一部分为sop基本信息，一部分为sop步骤信息
-        Map map = JacksonMapper.INSTANCE.readJsonToMap((addJson));
+        System.out.println("*******" + addJson);
+        Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
+        System.out.println("****" + map);
         Map sopMap = (Map) map.get("sop");//获取sop基本信息
+        System.out.println("****" + sopMap);
+        //时间
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String addTime = df.format(new Date());
+        System.out.println(addTime);
+        sopMap.put("record_time", addTime);
+        //sop状态
+        sopMap.put("sop_status", 1);
+        //审核状态
+        sopMap.put("record_status", 2);
+
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
 
         int count = sopService.sopAdd(sopMap);
@@ -70,6 +85,11 @@ public class SopController {
     public Result<Object> cancelSop(@PathVariable(required = false) Integer variety_id) {
         int count = sopService.sopCancle(variety_id);
         return ResultUtil.success(count);
+    }
+
+    @GetMapping("/getSopLists")
+    public Result<Object> getSopLists() {
+        return ResultUtil.success(sopService.getSopLists());
     }
 
 }

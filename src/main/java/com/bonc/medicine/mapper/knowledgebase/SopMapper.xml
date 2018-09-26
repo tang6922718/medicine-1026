@@ -38,8 +38,8 @@
 			sop_type,
 			record_status,
 			fail_opinion,
-        update_time,
-        sop_status
+		update_time,
+		sop_status
 		)
 		VALUES
 			(#{variety_id},
@@ -48,8 +48,8 @@
 			#{sop_type},
 			#{record_status},
 			#{fail_opinion},
-        #{update_time},
-        1
+		#{update_time},
+		#{sop_status}
 			)
 	</insert>
 
@@ -115,4 +115,8 @@
         UPDATE km_variety_sop SET record_status=5
         WHERE variety_id = #{variety_id}
     </update>
+
+	<select id="getSopLists" resultType="Map">
+		SELECT chinese_name,variety_id FROM km_variety_encyclopedia WHERE variety_id NOT IN (SELECT variety_id FROM km_variety_sop WHERE sop_status = 1)
+	</select>
 </mapper>
