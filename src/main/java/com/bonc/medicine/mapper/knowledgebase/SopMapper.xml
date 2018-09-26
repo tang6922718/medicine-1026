@@ -9,10 +9,10 @@
         km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.variety_id LEFT JOIN
         common_backend_user cbu ON kvs.record_user_id = cbu.id
         WHERE sop_status=1
-		<if test="sop_type != null and sop_type != ''">
+        <if test="sop_type != null and sop_type != '' and sop_type != -1">
 			AND kvs.sop_type = #{sop_type}
 		</if>
-		<if test="record_status != null and record_status != ''">
+        <if test="record_status != null and record_status != '' and record_status != -1">
 			AND kvs.record_status = #{record_status}
 		</if>
 	</select>
@@ -38,8 +38,8 @@
 			sop_type,
 			record_status,
 			fail_opinion,
-        update_time,
-        sop_status
+		update_time,
+		sop_status
 		)
 		VALUES
 			(#{variety_id},
@@ -48,8 +48,8 @@
 			#{sop_type},
 			#{record_status},
 			#{fail_opinion},
-        #{update_time},
-        1
+		#{update_time},
+		#{sop_status}
 			)
 	</insert>
 
@@ -115,4 +115,8 @@
         UPDATE km_variety_sop SET record_status=5
         WHERE variety_id = #{variety_id}
     </update>
+
+	<select id="getSopLists" resultType="Map">
+		SELECT chinese_name,variety_id FROM km_variety_encyclopedia WHERE variety_id NOT IN (SELECT variety_id FROM km_variety_sop WHERE sop_status = 1)
+	</select>
 </mapper>

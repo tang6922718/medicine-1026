@@ -20,10 +20,13 @@
 			and a.id = #{id}
 		</if>
 		<if test="search_name != null and search_name != ''">
-			and b.site_name LIKE CONCAT("%",#{search_name},"%")
+			and a.NAME LIKE CONCAT("%",#{search_name},"%")
 		</if>
 		<if test="site_name != null and site_name != ''">
-			and a.site LIKE CONCAT("%",#{site_name},"%")
+			and b.site_name LIKE CONCAT("%",#{site_name},"%")
+		</if>
+		<if test="site != null and site != ''">
+			and a.site = #{site}
 		</if>
 		<if test="start_time != null and start_time != '' and end_time != null and end_time != ''">
 			and a.upload_time BETWEEN #{start_time} and  #{end_time}

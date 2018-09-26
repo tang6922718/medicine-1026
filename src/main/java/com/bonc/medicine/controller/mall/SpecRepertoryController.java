@@ -7,6 +7,7 @@ import com.bonc.medicine.entity.mall.Specialist;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.service.mall.SpecialistService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class SpecRepertoryController {
 	SpecialistService specialistService;
 	@Autowired
 	private MeetProfessorService meetProfessorService;
+	@Autowired
+	private ViewNumberService viewNumberService;
 	
 	
 	/**
@@ -206,7 +209,18 @@ public class SpecRepertoryController {
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/articles/detail")
 	public Result articleDetail(String id) {
-		return ResultUtil.success(specialistService.articleDetail(id));
+		Map result = specialistService.articleDetail(id);
+		Map param = new HashMap<>();
+		param.put("objectType", "5");
+		param.put("objectId", id);
+		Map map = new HashMap<>();
+		String viewNum = "0";
+		if (!(map = viewNumberService.queryViewNumber(param)).isEmpty()) {
+            viewNum = (String) map.get("viewNumber");
+        }
+		result.put("viewNum", viewNum);
+		viewNumberService.addOrUpdateViewNumberCord(param);
+		return ResultUtil.success(result);
 	}
 	
 	/**
@@ -267,6 +281,36 @@ public class SpecRepertoryController {
 			list.add(one);
 		}
 		return ResultUtil.success(specialistService.insertIssueRel(list));
+	}
+	@SuppressWarnings({ "rawtypes" })
+	@GetMapping("/inviteList")
+	@Transactional
+	public Result inviteList(String cat_code, String subject_code, String issue_id) {
+		Map param = new HashMap<>();
+		param.put("cat_code", cat_code);
+		param.put("subject_code", subject_code);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+		list = specialistService.specialList(param);
+		Map resultMap = new HashMap<>();
+		resultMap.put("invitedNum", 0);
+		if (issue_id != null && !issue_id.equals("")) {
+			Result result = meetProfessorService.expert(Integer.parseInt(issue_id));
+			if (result.getCode() == 200) {
+				List<Map> res = (List)result.getData();
+				resultMap.put("invitedNum", res.size());
+				for (Map map : res) {
+					String specid = map.get("specid")+"";
+					for (Map<String,Object> map2 : list) {
+						if (specid.equals(map2.get("spec_id")+"")) {
+							map2.put("invited", "1");
+						}
+					}
+				}
+			}
+		}
+		resultMap.put("list", list);
+		return ResultUtil.success(resultMap);
 	}
 	
 	

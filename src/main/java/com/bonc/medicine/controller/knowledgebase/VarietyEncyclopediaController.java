@@ -144,6 +144,18 @@ public class VarietyEncyclopediaController {
         return ResultUtil.success(map);
     }
 
+    /**
+     * 通过品种查询百科详情
+     * @param variety_code
+     * @param variety_name
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/breedInfoByVariety")
+    public Result<Object> breedInfoByVariety(@RequestParam(required = false) String variety_code,@RequestParam(required = false) String variety_name) throws Exception{
+        return ResultUtil.success(varietyEncyclopediaService.breedInfoByVariety(variety_code,variety_name));
+    }
+
 
     /**
      * 知识库信息审核列表

@@ -22,6 +22,8 @@ public interface IntegralMapper {
 
     public int updateUserIntergal(Map<String, String> paramMap);
 
+    public Map<String, Object> queryTodayIntegralOpTimes(Map<String, String> paramMap);
+
 
 }
 

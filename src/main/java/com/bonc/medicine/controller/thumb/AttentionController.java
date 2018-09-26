@@ -3,9 +3,11 @@ package com.bonc.medicine.controller.thumb;
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.thumb.AttentionService;
+import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.IntegralKeyUtil;
 import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
@@ -14,9 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @program: medicine-hn
@@ -35,6 +35,9 @@ public class AttentionController {
 
     @Autowired
     JedisAdapter jedisAdapter;
+
+    @Autowired
+    private UserService userService;
 
 
 
@@ -70,7 +73,7 @@ public class AttentionController {
 
     /**
     * @Description: 关注的请求
-    * @Param: [paramMap]  key: attedUserId,  userid ,  type
+    * @Param: [paramMap]  key: attedUserId,  userId ,  type
     * @return: com.bonc.thumb.entity.Result
     * @Author: hejiajun
     * @Date: 2018/9/4
@@ -90,7 +93,7 @@ public class AttentionController {
 
     /**
      * @Description: 取消关注的请求
-     * @Param: [paramMap]  key: attedUserId,  userid ,  type
+     * @Param: [paramMap]  key: attedUserId,  userId ,  type
      * @return: com.bonc.thumb.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/4
@@ -117,7 +120,8 @@ public class AttentionController {
     * @Date: 2018/9/5 
     */ 
     @GetMapping("/attention/list/v1.0/{userId}/{type}")
-    public Result attentionList(@PathVariable String userId, @PathVariable String type){
+    public Result attentionList(@PathVariable String userId,
+                                @PathVariable String type){
 
         //String userid , String type
         Map paramMap = new HashMap();
@@ -125,8 +129,23 @@ public class AttentionController {
         paramMap.put("type", type);
 
         Map succeed = attentionService.attentionList(paramMap);
+        Set<String> idSet = (Set<String>)(succeed.get("attentionedUsers"));
+        List<Map<String,Object>> outList = new ArrayList();
+        if (null == idSet || idSet.size() < 1){
+            return ResultUtil.error(ResultEnum.NO_CONTENT);
+        }
 
-        return ResultUtil.success(succeed);
+        for (String ids: idSet) {
+            Map<String,Object> outMap = new HashMap();
+            User user = userService.getUserInfoById(ids);
+            outMap.put("headPortrait", user.getHeadPortrait());
+            outMap.put("name", user.getName());
+            Map<String, Object> fansMap =  attentionService.fansNum(userId);
+            outMap.put("fansNumber", fansMap.get("fansNum"));
+            outList.add(outMap);
+        }
+
+        return ResultUtil.success(outList);
     }
 
     /**
@@ -145,9 +164,9 @@ public class AttentionController {
         return ResultUtil.success(attentionService.fansNum(userId));
     }
 
-    @RequestMapping("/keys")
-    public Set keys (){
-        return jedisAdapter.keys();
+    @RequestMapping("/keys/{pre}")
+    public Set keys (@PathVariable String pre){
+        return jedisAdapter.keys(pre);
     }
 
    /* @RequestMapping("/get")

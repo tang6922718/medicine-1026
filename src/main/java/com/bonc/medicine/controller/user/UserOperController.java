@@ -5,6 +5,7 @@ import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.constants.Constants;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.TokenModel;
+import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -124,6 +125,10 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
+        if (StringUtils.isEmpty(paramMap.get("phone")) || StringUtils.isEmpty(paramMap.get("password"))){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
        /* boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
 
         if (!isCodeValidated){
@@ -132,6 +137,9 @@ public class UserOperController {
 */
         int succesNum = userService.updatePassword(paramMap);
 
+        if(succesNum < 1){
+            ResultUtil.error(ResultEnum.NET_ERROR);
+        }
         Map reMap = new HashMap();
         reMap.put("succeed", succesNum);
 
@@ -187,6 +195,58 @@ public class UserOperController {
 
         return ResultUtil.success(map);
 
+    }
+
+    /**
+     * @Description:
+     * @Param: [phone, password,equipment：APP和门户登陆--APP 后台登陆--BACK         request, response]
+     * @return: com.bonc.user.entity.Result
+     * @Author: hejiajun
+     * @Date: 2018/8/30
+     */
+    @PostMapping("/user/login/v2.0")
+    public Result loginSecond(@RequestBody Map<String, String> paramMap,
+                        HttpServletRequest request,
+                        HttpServletResponse response) throws Exception {
+        // 1、接收两个参数。
+        // 2、调用Service进行登录。
+        if(StringUtils.isEmpty(paramMap.get("phone")) ){
+            return ResultUtil.error(000,"手机号码不能是空哦");
+        }
+
+        if(StringUtils.isEmpty(paramMap.get("password")) ){
+            return ResultUtil.error(000,"密码不能是空哦");
+        }
+
+        //默认设置为 APP和门户登陆
+        if(StringUtils.isEmpty(paramMap.get("equipment")) ){
+            paramMap.put("equipment", "APP");
+        }
+
+        Result result = userService.loginSecond(paramMap.get("phone"), paramMap.get("password"), paramMap.get("equipment"));
+        // 3、从返回结果中取token，写入cookie。Cookie要跨域。
+       /* String token = result.getData().toString();
+        //设置cookie的key和value，key随便字符串，value为token值
+        Cookie cookie = new Cookie("kkk", token);
+        Cookie[] ss = request.getCookies();*/
+
+        return result;
+
+    }
+
+    /**
+    * @Description: 通过userId获取用户的信息
+    * @Param: [UserId]
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/25 
+    */ 
+    @GetMapping("/info/user/v1.0/{userId}")
+    public Result getUserInfoById(@PathVariable String UserId){
+
+        User user = userService.getUserInfoById(UserId);
+
+       return  ResultUtil.success(user);
     }
 
 

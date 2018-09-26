@@ -25,8 +25,18 @@ public class IntegralRule {
     //每日上限
     private int upperBound;
 
+    private int upperTimes;
+
 
     public IntegralRule() {
+    }
+
+    public int getUpperTimes() {
+        return upperTimes;
+    }
+
+    public void setUpperTimes(int upperTimes) {
+        this.upperTimes = upperTimes;
     }
 
     public int getId() {
@@ -86,6 +96,7 @@ public class IntegralRule {
                 ", isEffect=" + isEffect +
                 ", chineseName='" + chineseName + '\'' +
                 ", upperBound=" + upperBound +
+                ", upperTimes=" + upperTimes +
                 '}';
     }
 }

@@ -33,10 +33,10 @@
           password = #{password},
           update_time = #{updateTime}
         where 1 = 1
-		<if test="phone ！= null and phone != ''">
+		<if test="phone != null and phone != ''">
 			and telephone = #{phone}
 		</if>
-		<if test="userid ！= null and userid != ''">
+		<if test="userid != null and userid != ''">
 			and id = #{userid}
 		</if>
 
@@ -72,4 +72,41 @@
 			 and password = #{password}
 
 	</select>
+
+	<select id="loginSecond" parameterType="Map" resultType="Map">
+		SELECT
+			cu.id,
+			cu.telephone,
+			cu.NAME,
+			cu.address,
+			cu.head_portrait,
+			GROUP_CONCAT(cll.role_id) as role_id,
+			GROUP_CONCAT(crr.role_name) as role_name
+		FROM
+			common_user cu
+			LEFT JOIN common_user_role_rel cll ON cu.id = cll.user_id
+			LEFT JOIN common_role crr ON cll.role_id = crr.id
+		WHERE
+			 cu.telephone = #{phone}
+			 and cu.password = #{password}
+		ORDER BY cll.role_id
+	</select>
+
+    <select id="getUserInfoById" parameterType="String" resultType="Map">
+        SELECT
+            id,
+            name,
+            wetchat,
+            telephone,
+            email,
+            sex,
+            address,
+            head_portrait
+        FROM
+            common_user
+        WHERE
+            id = #{userId}
+
+            limit 1
+    </select>
 </mapper>

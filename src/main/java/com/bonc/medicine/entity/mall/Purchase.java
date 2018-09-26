@@ -5,7 +5,7 @@ public class Purchase {
 	private String goods_name; // 商品名称
 	private char purchase_cat_code; // 求购分类:1,种子种苗；2，源药材；3.农资农机
 	private char goods_cat_code; // 商品品种：1肥料、2农机、3设备，4农药
-	private char specification; // 规格：1 统货、2 皮、3 切片、4 两半
+	private String specification; // 规格：1 统货、2 皮、3 切片、4 两半
 	private int user_id; // 用户编号
 	private String img_url; // 商品图片
 	private String publish_time; // 发布时间
@@ -64,10 +64,10 @@ public class Purchase {
 	public void setGoods_cat_code(char goods_cat_code) {
 		this.goods_cat_code = goods_cat_code;
 	}
-	public char getSpecification() {
+	public String getSpecification() {
 		return specification;
 	}
-	public void setSpecification(char specification) {
+	public void setSpecification(String specification) {
 		this.specification = specification;
 	}
 	public char getEffect_flag() {

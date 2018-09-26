@@ -49,7 +49,7 @@ public class GongQiuController {
 	}
 
 	/*
-	 * 商品激活与删除 0删除1激活
+	 * 商品激活与删除 1删除0激活
 	 */
 	@GetMapping("/gongQiuSystem/delGoods/{supplyId}/{result}")
 	public Result<Object> delGoods(@PathVariable Integer supplyId, @PathVariable String result) {
