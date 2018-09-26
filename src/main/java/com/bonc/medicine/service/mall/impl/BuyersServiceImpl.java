@@ -76,8 +76,8 @@ public class BuyersServiceImpl implements BuyersService {
 	}
 	
 	@Override
-	public int revokePurchase(String[] ids) {
-		if (ids.length < 1) {
+	public int revokePurchase(List ids) {
+		if (ids.size() < 1) {
 			throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
 		}
 		return buyersMapper.revokePurchase(ids);
