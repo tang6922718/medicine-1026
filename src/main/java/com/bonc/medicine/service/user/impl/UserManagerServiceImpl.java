@@ -4,10 +4,12 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
+import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.user.UserManagerMapper;
 import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -213,6 +215,28 @@ public class UserManagerServiceImpl implements UserManagerService {
 		queryMap.put("loveMedicineID", pinZhongMap == null ? "" : pinZhongMap.get("loveMedicineID"));
 
 		return ResultUtil.success(queryMap);
+	}
+
+	@Override
+	public Result<Object> updateUserPlantRole(Map<String, String> params) {
+		if (StringUtils.isEmpty(params.get("userID")) || StringUtils.isEmpty(params.get("isPlant"))){
+			return ResultUtil.error(ResultEnum.MISSING_PARA);
+		}
+
+		if (Integer.parseInt(params.get("isPlant"))==0){ // 是否种植户   0 是    1 不是
+			// 先删除 再插入
+			int i=userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID")));
+			i=userManagerMapper.insertUserPlantRole(Integer.parseInt(params.get("userID")));
+			if (i<=0){
+				return ResultUtil.error(ResultEnum.UNKONW_ERROR);
+			}
+			return ResultUtil.success(ResultEnum.SUCCESS);
+
+		}else {
+
+			return ResultUtil.success(userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID"))));
+		}
+
 	}
 
 }

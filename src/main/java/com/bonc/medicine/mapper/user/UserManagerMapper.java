@@ -63,4 +63,8 @@ public interface UserManagerMapper {
 
 	public Map getUserCarePinZhong(int userID);
 
+	public int deleteUserPlantRole(int userID);
+
+	public int insertUserPlantRole(int userID);
+
 }

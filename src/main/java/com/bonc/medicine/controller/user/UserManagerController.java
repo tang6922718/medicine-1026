@@ -206,4 +206,16 @@ public class UserManagerController {
 		return userManagerService.queryUserInfo(userID);
 	}
 
+
+	/* *
+	 * @Description 修改用户的种植户角色    种植户角色不需要审核
+	 * @Date 10:53 2018/9/26
+	 * @Param [params]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@PutMapping("/userManager/updatePlantRole")
+	public Result<Object> updateUserPlantRole(@RequestBody Map<String,String> params){
+		return userManagerService.updateUserPlantRole(params);
+	}
+
 }
