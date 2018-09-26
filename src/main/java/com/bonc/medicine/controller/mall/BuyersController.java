@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,15 +36,16 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@DeleteMapping("/purchase")
-	public Result<Object> deletePurchase(String id) {
-		return ResultUtil.success(buyersService.deletePurchase(id));
+	public Result<Object> deletePurchase(@RequestBody Map param) {
+		List ids = (List)param.get("ids");
+		return ResultUtil.success(buyersService.deletePurchase(ids));
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@PutMapping("/revokePurchase")
 	public Result<Object> revokePurchase(@RequestBody Map param) {
-		String[] ids = (String[])param.get("ids");
+		List ids = (List)param.get("ids");
 		return ResultUtil.success(buyersService.revokePurchase(ids));
 	}
 	
