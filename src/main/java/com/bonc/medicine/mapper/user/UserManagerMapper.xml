@@ -210,4 +210,12 @@
             ccr.user_id =  #{userId}
 	</select>
 
+	<delete id="deleteUserPlantRole" parameterType="Integer">
+		DELETE FROM common_user_role_rel WHERE user_id= #{userID} AND role_id=1
+	</delete>
+
+	<insert id="insertUserPlantRole" parameterType="Integer">
+		INSERT INTO common_user_role_rel(user_id,role_id) VALUES (#{userID},1)
+	</insert>
+
 </mapper>
