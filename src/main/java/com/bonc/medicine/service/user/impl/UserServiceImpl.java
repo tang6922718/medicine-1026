@@ -308,6 +308,9 @@ public class UserServiceImpl implements UserService {
         // 如果是APP登陆
         if(StringUtils.equals("APP", equipment.trim())){
             reList = userMapper.loginSecond(paramMap);
+        }else if (StringUtils.equals("BACK", equipment.trim())){
+
+            reList = userMapper.backUser(paramMap);
         }
 
 
@@ -337,6 +340,7 @@ public class UserServiceImpl implements UserService {
         map.put("userId", user.getId());
         map.put("roleId", user.getRoles());
         map.put("roleName", user.getRoleName());
+        map.put("name", user.getName());
         return ResultUtil.success(map);
     }
 
