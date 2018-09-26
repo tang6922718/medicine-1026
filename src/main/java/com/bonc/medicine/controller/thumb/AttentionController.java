@@ -131,9 +131,15 @@ public class AttentionController {
 
         Map succeed = attentionService.attentionList(paramMap);
         Set<String> idSet = (Set<String>)(succeed.get("attentionedUsers"));
+
+
         List<Map<String,Object>> outList = new ArrayList();
         if (null == idSet || idSet.size() < 1){
-            return ResultUtil.error(ResultEnum.NO_CONTENT);
+            idSet = (Set<String>)(succeed.get("attentionedPro"));
+            if (null == idSet || idSet.size() < 1){
+
+                return ResultUtil.error(ResultEnum.NO_CONTENT);
+            }
         }
 
         for (String ids: idSet) {
@@ -147,7 +153,7 @@ public class AttentionController {
             User user = userService.getUserInfoById(ids);
             outMap.put("headPortrait", user.getHeadPortrait());
             outMap.put("name", user.getName());
-            Map<String, Object> fansMap =  attentionService.fansNum(userId);
+            Map<String, Object> fansMap =  attentionService.fansNum(ids);
             outMap.put("fansNumber", fansMap.get("fansNum"));
             outMap.put("expertise_field", user.getExpertise_field());
             outMap.put("employment_age", user.getEmployment_age());
@@ -203,7 +209,7 @@ public class AttentionController {
             User user = userService.getUserInfoById(ids);
             outMap.put("headPortrait", user.getHeadPortrait());
             outMap.put("name", user.getName());
-            Map<String, Object> fansMap =  attentionService.fansNum(userId);
+            Map<String, Object> fansMap =  attentionService.fansNum(ids);
             outMap.put("fansNumber", fansMap.get("fansNum"));
             outMap.put("expertise_field", user.getExpertise_field());
             outMap.put("employment_age", user.getEmployment_age());
@@ -238,11 +244,11 @@ public class AttentionController {
         return jedisAdapter.keys(pre);
     }
 
-   /* @RequestMapping("/get")
-    public long keys222 (){
-        long p = redisService.redisService(IntegralKeyUtil.getIntegralRuleKey());
-        return p;
-    }*/
+    @RequestMapping("/del/{key}")
+    public long keys222 (@PathVariable String key){
+        jedisAdapter.del(key);
+        return 111L;
+    }
 
 
     public void validatePram( Map<String, String> paramMap){
