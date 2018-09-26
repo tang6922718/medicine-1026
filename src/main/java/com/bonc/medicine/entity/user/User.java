@@ -57,6 +57,24 @@ public class User {
 
     //验证码
     private String verification;
+    private String employment_age;
+    private String expertise_field;
+
+    public String getEmployment_age() {
+        return employment_age;
+    }
+
+    public void setEmployment_age(String employment_age) {
+        this.employment_age = employment_age;
+    }
+
+    public String getExpertise_field() {
+        return expertise_field;
+    }
+
+    public void setExpertise_field(String expertise_field) {
+        this.expertise_field = expertise_field;
+    }
 
     public User() {
     }
@@ -208,6 +226,8 @@ public class User {
                 ", roleName='" + roleName + '\'' +
                 ", caresVarieties='" + caresVarieties + '\'' +
                 ", verification='" + verification + '\'' +
+                ", employment_age='" + employment_age + '\'' +
+                ", expertise_field='" + expertise_field + '\'' +
                 '}';
     }
 }

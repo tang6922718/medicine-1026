@@ -32,7 +32,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        //如果参数类型是User并且有CurrentUser注解则支持
+        //如果参数有CurrentUser注解则支持
         if (parameter.hasParameterAnnotation(CurrentUser.class)) {
             return true;
         }

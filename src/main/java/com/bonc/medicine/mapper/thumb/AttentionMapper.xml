@@ -54,4 +54,14 @@
         and object_id =  #{attedUserId}
     </select>
 
+    <select id="fansList" parameterType="String" resultType="Map">
+        SELECT
+            follow_user_id
+        FROM
+            common_follow
+        WHERE
+            follow_flag = 1
+            AND object_id = #{userId}
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.thumb;
 
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
@@ -13,6 +14,7 @@ import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -136,16 +138,84 @@ public class AttentionController {
         }
 
         for (String ids: idSet) {
+            //Map<String, String> map = new HashMap<>();
+            //map.put("userId", userId);
+            paramMap.put("attedUserId", ids);
+           // map.put("type", type);
+            Map isFlow = attentionService.attentionRelation(paramMap);
+
             Map<String,Object> outMap = new HashMap();
             User user = userService.getUserInfoById(ids);
             outMap.put("headPortrait", user.getHeadPortrait());
             outMap.put("name", user.getName());
             Map<String, Object> fansMap =  attentionService.fansNum(userId);
             outMap.put("fansNumber", fansMap.get("fansNum"));
+            outMap.put("expertise_field", user.getExpertise_field());
+            outMap.put("employment_age", user.getEmployment_age());
+            outMap.put("loveVariety", user.getCaresVarieties());
+            outMap.put("followed",   isFlow.get("followed"));
+            outMap.put("id",   ids);
             outList.add(outMap);
         }
 
         return ResultUtil.success(outList);
+    }
+
+    /**
+    * @Description:查询用户的粉丝列表
+    * @Param: [userId]
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/26
+    */
+    @GetMapping("/attention/fans/list/v1.0/{userId}")
+    //public Result fansList(@PathVariable String userId, @CurrentUser String headUserId){
+    public Result fansList(@PathVariable String userId){
+
+        String uuuserId = "";
+        //if (StringUtils.isEmpty(userId) && StringUtils.isEmpty(headUserId)){
+        if (StringUtils.isEmpty(userId) ){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
+        if (!StringUtils.isEmpty(userId)){
+            uuuserId = userId;
+        }
+        /*if (!StringUtils.isEmpty(headUserId)){
+            uuuserId = headUserId;
+        }
+*/
+        Map succeed = attentionService.fansList(uuuserId);
+
+        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+        if (null == idSet || idSet.size() < 1){
+            return ResultUtil.error(ResultEnum.NO_CONTENT);
+        }
+        List<Map<String,Object>> outList = new ArrayList();
+
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("userId", uuuserId);
+        for (String ids: idSet) {
+            paramMap.put("attedUserId", ids);
+            paramMap.put("type", "0");
+            Map isFlow = attentionService.attentionRelation(paramMap);
+
+            Map<String,Object> outMap = new HashMap();
+            User user = userService.getUserInfoById(ids);
+            outMap.put("headPortrait", user.getHeadPortrait());
+            outMap.put("name", user.getName());
+            Map<String, Object> fansMap =  attentionService.fansNum(userId);
+            outMap.put("fansNumber", fansMap.get("fansNum"));
+            outMap.put("expertise_field", user.getExpertise_field());
+            outMap.put("employment_age", user.getEmployment_age());
+            outMap.put("loveVariety", user.getCaresVarieties());
+            outMap.put("followed",   isFlow.get("followed"));
+            outMap.put("id",   ids);
+            outList.add(outMap);
+        }
+
+        return ResultUtil.success(outList);
+
     }
 
     /**

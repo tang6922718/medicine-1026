@@ -147,6 +147,43 @@ public class AttentionServiceImpl implements AttentionService {
         }
     }
 
+    public Map<String, Object> fansList(String userId) {
+        Map<String, Object> reMap = new HashMap<>();
+        String key = "fansList";
+
+        Set<String> set = new HashSet<>();
+        set = attentionAdapter.getFansListId(userId);
+
+        if(set != null && set.size() > 0){
+            jedisAdapter.expire(RedisKeyUtil.getFansKey(userId));
+            reMap.put(key, set);
+            return reMap;
+        }else {
+            List<Map<String, Object>> queMap = new ArrayList<>();
+            synchronized (queMap) {
+                queMap = attentionMapper.fansList(userId);
+                if(queMap.size() != 0 && null != queMap.get(0) && null != queMap.get(0).get("follow_user_id")){
+                    List<String> ids = new ArrayList();
+                    String [] arrays = new String[queMap.size()];
+                    for (Map<String, Object> map: queMap) {
+                        set.add(map.get("follow_user_id") == null ? "" : map.get("follow_user_id").toString());
+                        ids.add(map.get("follow_user_id") == null ? "" : map.get("follow_user_id").toString());
+                    }
+
+                    attentionAdapter.addFans(userId,  ids.toArray(arrays));
+
+                    reMap.put(key, set);
+                    return reMap;
+                }else{
+                    reMap.put(key, new HashSet<>());
+                    return reMap;
+                }
+            }
+
+        }
+
+    }
+
     @SuppressWarnings("SpellCheckingInspection")
     @Override
     public long removeAttention(Map<String, String> param) {

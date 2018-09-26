@@ -19,6 +19,8 @@ public interface AttentionMapper {
 
 	public List<Map<String, Object>> fansNum(String param);
 
+	public List<Map<String, Object>> fansList(String userId);
+
 	
 
 
