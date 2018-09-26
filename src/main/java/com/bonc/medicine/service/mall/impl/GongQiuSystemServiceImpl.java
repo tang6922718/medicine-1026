@@ -69,10 +69,10 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 
 	@Override
-	public Result<Object> delGoods(Integer supplyId, String result) {
+	public Result<Object> delGoods(String supplyId, String result) {
 
 		Map map = new HashMap<>();
-		map.put("supplyId", supplyId);
+		map.put("id", supplyId.split(","));
 		map.put("result", result);
 		return ResultUtil.success(gongQiuSystemMapper.delGoods(map));
 	}
