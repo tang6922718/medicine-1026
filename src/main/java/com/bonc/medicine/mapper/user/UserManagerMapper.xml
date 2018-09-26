@@ -218,4 +218,15 @@
 		INSERT INTO common_user_role_rel(user_id,role_id) VALUES (#{userID},1)
 	</insert>
 
+	<delete id="deleteUserCareVariety" parameterType="Integer">
+		DELETE FROM common_user_care_varieties_r WHERE user_id = #{userID}
+	</delete>
+
+	<insert id="insertUserCareVariety">
+		INSERT INTO common_user_care_varieties_r (user_id,variety_code) VALUES
+		<foreach collection="list" item="temp" separator=",">
+			(#{temp.userID}, #{temp.variety_code})
+		</foreach>
+	</insert>
+
 </mapper>

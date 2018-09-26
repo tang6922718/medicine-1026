@@ -218,4 +218,16 @@ public class UserManagerController {
 		return userManagerService.updateUserPlantRole(params);
 	}
 
+
+	/* *
+	 * @Description 修改用户关心品种
+	 * @Date 17:17 2018/9/26
+	 * @Param [parsms]
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@PutMapping("/userManager/updateCareVariety")
+	public Result<Object> updateUserCareVariety(@RequestBody Map<String,Object> parsms){
+		return userManagerService.updateUserCareVariety(parsms);
+	}
+
 }
