@@ -14,7 +14,6 @@ import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

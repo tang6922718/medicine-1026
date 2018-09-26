@@ -368,8 +368,8 @@ public class SpecRepertoryController {
 		param.put("spec_id", spec_id);
 		param.put("file_size", file_size);
 		param.put("file_url", file_url);
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
-		param.put("upload_time", sdf.format(new Date()));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		param.put("upload_time", sdf.format(new Date().getTime()));
 		param.put("status", "0");
 		
 		return ResultUtil.success(specialistService.uploadFile(param));

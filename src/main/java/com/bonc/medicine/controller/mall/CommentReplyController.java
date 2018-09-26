@@ -59,6 +59,11 @@ public class CommentReplyController {
 		return ResultUtil.success(commentReplyService.commentsCount(param));
 	}
 	
+	@DeleteMapping("/delete")
+	public Result deleteComment(String id) {
+		return ResultUtil.success(commentReplyService.deleteComment(id));
+	}
+	
 	
 	
 	
