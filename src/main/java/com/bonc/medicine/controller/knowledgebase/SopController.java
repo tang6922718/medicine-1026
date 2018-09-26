@@ -37,24 +37,23 @@ public class SopController {
     @Transactional
     public Result<Object> addSops(@RequestBody String addJson){
          //addJson传入两部分，一部分为sop基本信息，一部分为sop步骤信息
-        System.out.println("*******" + addJson);
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
-        System.out.println("****" + map);
         Map sopMap = (Map) map.get("sop");//获取sop基本信息
-        System.out.println("****" + sopMap);
         //时间
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String addTime = df.format(new Date());
-        System.out.println(addTime);
         sopMap.put("record_time", addTime);
         //sop状态
         sopMap.put("sop_status", 1);
         //审核状态
         sopMap.put("record_status", 2);
-
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
-
         int count = sopService.sopAdd(sopMap);
+        System.out.println(sopMap.get("id"));
+        Long id = (Long) sopMap.get("id");
+        for (int i = 0; i < sopStepList.size(); i++) {
+            ((Map) sopStepList.get(i)).put("sop_id", id);
+        }
         count += sopService.sopStepAdd(sopStepList);
         return ResultUtil.success(count);
     }
