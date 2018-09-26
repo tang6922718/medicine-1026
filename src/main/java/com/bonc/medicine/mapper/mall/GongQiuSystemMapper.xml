@@ -33,7 +33,7 @@
 	<update id="delGoods" parameterType="Map">
 		update mall_supply set state
 		= #{result} where id in 
-		<foreach collection="array" item="id" open="(" separator="," close=")">#{id}</foreach>
+		<foreach collection="id" item="id" open="(" separator="," close=")">#{id}</foreach>
 	</update>
 
 	<update id="goodsOn" parameterType="Map">
