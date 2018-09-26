@@ -13,15 +13,14 @@
 			title,
 			km_type,
 			object_id,
-			publish_time,
-			status
+			publish_time
 		)
 		VALUES
 			(#{title},
 			#{km_type},
-			#{object_id},
-			#{publish_time},
-			#{status})
+			#{id},
+			now()
+			)
 	</insert>
 
 </mapper>
