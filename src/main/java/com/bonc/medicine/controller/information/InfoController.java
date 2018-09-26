@@ -5,9 +5,12 @@ import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.InfoService;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,9 +20,9 @@ public class InfoController {
     InfoService infoService;
 
     /**
-     * @description 查询咨讯列表
      * @param catCode
      * @return
+     * @description 查询咨讯列表
      */
 
 
@@ -28,101 +31,98 @@ public class InfoController {
                            @RequestParam(required = false) String title,
                            @RequestParam(required = false) String status,
                            @RequestParam(required = false) String source_code,
-                           @RequestParam(required = false,defaultValue = "1") String pageNum,
+                           @RequestParam(required = false, defaultValue = "1") String pageNum,
                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
-
-        return  ResultUtil.success(infoService.getAllInfo(catCode,pageNum,pageSize,title,status,source_code));
+        List list = infoService.getAllInfo(catCode, pageNum, pageSize, title, status, source_code);
+        PageInfo<List> pageInfo = new PageInfo<List>(list);
+        return ResultUtil.successTatol(list,pageInfo.getTotal());
     }
 
     /**
-     * @description 添加咨询
      * @param map
      * @return
+     * @description 添加咨询
      */
     @PostMapping("/addInfo")
     @com.bonc.medicine.annotation.Authorization
-    public Result addInfo(@CurrentUser String user_id,@RequestBody Map<String,Object>  map) {
-        map.put("user_id",user_id);
-        return  ResultUtil.success(infoService.addInfo(map));
+    public Result addInfo(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.put("user_id", user_id);
+        return ResultUtil.success(infoService.addInfo(map));
     }
 
 
     /**
-     * @description 咨讯撤销
      * @param id
      * @return
+     * @description 咨讯撤销
      */
     @RequestMapping("/infoRepeal")
-    public Result infoRepeal(@RequestParam String  id) {
-        return  ResultUtil.success(infoService.infoRepeal(id));
+    public Result infoRepeal(@RequestParam String id) {
+        return ResultUtil.success(infoService.infoRepeal(id));
     }
 
 
-
-
     /**
-     * @description 咨讯审核
      * @param map
      * @return
+     * @description 咨讯审核
      */
     @RequestMapping("/infoAudit")
-    public Result infoAudit(@RequestBody Map<String,Object>  map) {
-        return  ResultUtil.success(infoService.infoAudit(map));
+    public Result infoAudit(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(infoService.infoAudit(map));
     }
 
     /**
-     * @description 咨讯详情
      * @param id
      * @return
+     * @description 咨讯详情
      */
     @RequestMapping("/infoDetail")
-    public Result infoDetail(@RequestParam String  id) {
-            return  ResultUtil.success(infoService.infoDetailById(id));
+    public Result infoDetail(@RequestParam String id) {
+        return ResultUtil.success(infoService.infoDetailById(id));
     }
 
 
-
-
     /**
-     * @description 咨讯编辑
      * @param map
      * @return
+     * @description 咨讯编辑
      */
     @RequestMapping("/infoEdit")
     @com.bonc.medicine.annotation.Authorization
-    public Result infoEdit (@CurrentUser String user_id,@RequestBody Map<String,Object>  map) {
-        map.putIfAbsent("user_id",user_id);
-        return  ResultUtil.success(infoService.infoEditById(map));
+    public Result infoEdit(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
+        return ResultUtil.success(infoService.infoEditById(map));
     }
 
     /**
-     * @description 相关咨讯
      * @param map
      * @return
+     * @description 相关咨讯
      */
     @RequestMapping("/infoClass")
-    public Result infoClass (@RequestBody Map<String,Object>  map) {
-        return  ResultUtil.success(infoService.infoClass(map));
+    public Result infoClass(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(infoService.infoClass(map));
     }
 
     /**
-     * @description 资讯浏览数
      * @param map
      * @return
+     * @description 资讯浏览数
      */
     @RequestMapping("/infoReadCount")
-    public Result infoReadCount (@RequestBody Map<String,Object>  map) {
-        return  ResultUtil.success(infoService.infoReadCount(map));
+    public Result infoReadCount(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(infoService.infoReadCount(map));
     }
 
     /**
-     * @description 删除资讯
      * @param map
      * @return
+     * @description 删除资讯
      */
     @RequestMapping("/delInfo")
-    public Result delInfo (@RequestBody Map<String,Object>  map) {
-        return  ResultUtil.success(infoService.delInfo(map));
+    public Result delInfo(@RequestBody Map<String, Object> map) {
+        return ResultUtil.success(infoService.delInfo(map));
     }
 
 }

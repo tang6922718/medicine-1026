@@ -9,6 +9,10 @@ public class Result<T> {
     //提示信息
     private String msg;
 
+
+
+    private long tatol;
+
     // 具体的内容
     private T data;
 
@@ -36,4 +40,11 @@ public class Result<T> {
         this.data = data;
     }
 
+    public long getTatol() {
+        return tatol;
+    }
+
+    public void setTatol(long tatol) {
+        this.tatol = tatol;
+    }
 }
