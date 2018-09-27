@@ -98,7 +98,8 @@
 		a.notice_content,
 		a.object_id,
 		a.publish_time,
-		c.goods_name
+		c.goods_name,
+		substring_index(c.img_url,',',1) as img_url
 		FROM
 		common_notice a
 		LEFT JOIN common_user b ON
