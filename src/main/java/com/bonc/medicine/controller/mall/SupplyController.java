@@ -5,6 +5,11 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Offer;
 import com.bonc.medicine.entity.mall.Supply;
 import com.bonc.medicine.service.mall.SupplyService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +19,8 @@ public class SupplyController {
 
     @Autowired
     private SupplyService supplyService;
+    @Autowired
+    private ViewNumberService viewNumberService;
     
     /* *
      * @Description 发布供应接口
@@ -48,6 +55,12 @@ public class SupplyController {
      */
     @GetMapping("/details/{id}")
     public Result<Object> getDetails(@PathVariable String id){
+    	
+    	Map<String, String> map = new HashMap<>();
+        map.put("objectType", "3");
+        map.put("objectId", id);
+        viewNumberService.queryViewNumber(map);
+    	
         return supplyService.getDetails(id);
     }
 

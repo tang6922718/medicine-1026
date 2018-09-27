@@ -38,7 +38,7 @@
 		GROUP BY mp.id,mp.goods_name,mp.specification,mp.purchase_quantity,mp.publish_time
 		ORDER by mp.publish_time DESC 
 		<if test="limit != null and limit != ''">
-			LIMIT 10
+			LIMIT 0,#{limit}
 		</if>
     </select>
     

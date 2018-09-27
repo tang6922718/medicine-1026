@@ -3,6 +3,7 @@ package com.bonc.medicine.controller.mall;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Purchase;
 import com.bonc.medicine.service.mall.BuyersService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ public class BuyersController {
 	
 	@Autowired
 	BuyersService buyersService;
+	@Autowired
+    private ViewNumberService viewNumberService;
 	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
@@ -71,6 +74,11 @@ public class BuyersController {
 	@ResponseBody
 	@GetMapping("/purchase/detail")
 	public Result<Object> purchasepDetail(String id) {
+		
+		Map<String, String> map = new HashMap<>();
+        map.put("objectType", "9");
+        map.put("objectId", id);
+        viewNumberService.queryViewNumber(map);
 		return ResultUtil.success(buyersService.purchasepDetail(id));
 	} 
 	@SuppressWarnings("unchecked")
