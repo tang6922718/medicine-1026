@@ -77,6 +77,16 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
     }
 
     @Override
+    public int changeStatus(Map map) {
+        return varietyEncyclopediaMapper.changeStatus(map);
+    };
+
+    @Override
+    public int changePhaStatus(Map map) {
+        return varietyEncyclopediaMapper.changePhaStatus(map);
+    };
+
+    @Override
     public List<Map<String, Object>> sourceDistribution() {
         return varietyEncyclopediaMapper.sourceDistribution();
     }

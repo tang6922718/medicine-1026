@@ -188,12 +188,17 @@ public class VarietyEncyclopediaController {
             auditJson = "{\"fail_opinion\": \"\", \"status\": \"\", \"km_type\": \"\", \"object_id\": \"\"}";
         }
         Map map = JacksonMapper.INSTANCE.readJsonToMap(auditJson);
-        /*if(null != map.get("km_type") && "" !=map.get("km_type")){
+        if(null != map.get("km_type") && "" !=map.get("km_type")){
             String km_type = (String) map.get("km_type");
+            String status = (String) map.get("status");
+            String km_status = "1".equals(status)?"3":"4";
+            map.put("km_status",km_status);
             if("1".equals(km_type)){
-
+                varietyEncyclopediaService.changeStatus(map);
+            }else if("6".equals(km_type)){
+                varietyEncyclopediaService.changePhaStatus(map);
             }
-        };*/
+        };
 
         return ResultUtil.success(varietyEncyclopediaService.kmAudit(map));
     }
