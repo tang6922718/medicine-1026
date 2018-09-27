@@ -100,7 +100,8 @@
 		a.publish_time,
 		c.goods_name,
 		substring_index(c.img_url,',',1) as img_url,
-		d.mark_url
+		d.mark_url,
+		c.public_time as goods_public_time
 		FROM
 		common_notice a
 		LEFT JOIN common_user b ON
