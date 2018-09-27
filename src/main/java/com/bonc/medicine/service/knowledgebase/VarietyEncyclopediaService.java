@@ -28,6 +28,10 @@ public interface VarietyEncyclopediaService {
 
     public int kmAudit(Map map);
 
+    public int changeStatus(Map map);
+
+    public int changePhaStatus(Map map);
+
     public List<Map<String,Object>> sourceDistribution();
 
     public int addHistoryText(String search_text);

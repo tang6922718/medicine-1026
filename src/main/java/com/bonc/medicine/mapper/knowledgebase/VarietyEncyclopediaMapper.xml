@@ -205,6 +205,14 @@
 		and a.`status` IS null OR a.`status`=2
 		ORDER BY a.`status` DESC
 	</select>
+	
+	<update id="changeStatus" parameterType="java.util.Map">
+		UPDATE km_variety_encyclopedia SET record_status =#{km_status} WHERE id = #{object_id}
+	</update>
+
+	<update id="changePhaStatus" parameterType="java.util.Map">
+		UPDATE km_variety_encyclopedia SET record_status =#{km_status} WHERE variety_id = (SELECT cat_code FROM km_pharmacopoeia_information WHERE id=#{object_id})
+	</update>
 
 	<update id="kmAudit" parameterType="java.util.Map">
 		UPDATE km_audit
