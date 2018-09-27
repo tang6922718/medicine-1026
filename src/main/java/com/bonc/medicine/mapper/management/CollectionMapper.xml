@@ -128,11 +128,15 @@
 		SELECT id,9 AS type FROM mall_purchase UNION
 		SELECT id,1 AS type FROM info_basic)
 		a ON c.collect_type = a.type AND c.collect_object_id = a.id
-		WHERE c.collect_type = #{collect_type} AND c.collect_object_id = #{collect_object_id}
+		WHERE c.collect_type = #{collect_type} AND c.collect_object_id = #{collect_object_id} AND c.user_id = #{user_id}
 	</select>
 
 	<update id="undoCollect" parameterType="Map">
-		DELETE FROM common_collection WHERE collect_type = #{collect_type} AND collect_object_id = #{collect_object_id}
+		DELETE FROM common_collection WHERE collect_type = #{collect_type} AND collect_object_id = #{collect_object_id} AND user_id = #{user_id}
 	</update>
+
+	<select id="collectCount" parameterType="Map" resultType="Integer">
+		SELECT count(1) FROM common_collection WHERE collect_type=#{collect_type} AND collect_object_id=#{collect_object_id}
+	</select>
 
 </mapper>

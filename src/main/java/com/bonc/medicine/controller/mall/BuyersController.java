@@ -3,13 +3,16 @@ package com.bonc.medicine.controller.mall;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Purchase;
 import com.bonc.medicine.service.mall.BuyersService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,6 +21,8 @@ public class BuyersController {
 	
 	@Autowired
 	BuyersService buyersService;
+	@Autowired
+    private ViewNumberService viewNumberService;
 	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
@@ -34,15 +39,17 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@DeleteMapping("/purchase")
-	public Result<Object> deletePurchase(String id) {
-		return ResultUtil.success(buyersService.deletePurchase(id));
+	public Result<Object> deletePurchase(@RequestBody Map param) {
+		List ids = (List)param.get("ids");
+		return ResultUtil.success(buyersService.deletePurchase(ids));
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ResponseBody
-	@GetMapping("/revokePurchase")
-	public Result<Object> revokePurchase(String id) {
-		return ResultUtil.success(buyersService.revokePurchase(id));
+	@PutMapping("/revokePurchase")
+	public Result<Object> revokePurchase(@RequestBody Map param) {
+		List ids = (List)param.get("ids");
+		return ResultUtil.success(buyersService.revokePurchase(ids));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -67,6 +74,11 @@ public class BuyersController {
 	@ResponseBody
 	@GetMapping("/purchase/detail")
 	public Result<Object> purchasepDetail(String id) {
+		
+		Map<String, String> map = new HashMap<>();
+        map.put("objectType", "9");
+        map.put("objectId", id);
+        viewNumberService.queryViewNumber(map);
 		return ResultUtil.success(buyersService.purchasepDetail(id));
 	} 
 	@SuppressWarnings("unchecked")

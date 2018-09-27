@@ -63,7 +63,7 @@ public class RedisKeyUtil {
     }
 
     public static String  getFansKey(String userid){
-        return FANS_PREFIX + SPLIT + userid  + USER_TYPE;
+        return FANS_PREFIX + SPLIT + userid  + SPLIT + USER_TYPE;
     }
 
 

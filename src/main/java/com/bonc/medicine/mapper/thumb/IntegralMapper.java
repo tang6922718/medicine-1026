@@ -22,7 +22,10 @@ public interface IntegralMapper {
 
     public int updateUserIntergal(Map<String, String> paramMap);
 
+    public  List<Map<String, Object>> queryClockInStatus(String userId);
+
     public Map<String, Object> queryTodayIntegralOpTimes(Map<String, String> paramMap);
+
 
 
 }

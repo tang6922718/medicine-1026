@@ -119,8 +119,8 @@
 
         ORDER BY public_time DESC
 
-        <if test="NUM != null and NUM != ''">
-            LIMIT #{NUM}
+        <if test="limit != null and limit != ''">
+            LIMIT 0,#{limit}
         </if>
     </select>
 

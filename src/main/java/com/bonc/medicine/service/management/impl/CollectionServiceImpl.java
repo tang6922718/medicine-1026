@@ -64,19 +64,29 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public int isCollect(String collect_type, String collect_object_id) {
+    public int isCollect(String collect_type, String collect_object_id,String user_id) {
         Map map = new HashMap();
         map.put("collect_type",collect_type);
         map.put("collect_object_id",collect_object_id);
+        map.put("user_id",user_id);
         return collectionMapper.isCollect(map);
     }
 
     @Override
-    public int undoCollect(String collect_type, String collect_object_id) {
+    public int undoCollect(String collect_type, String collect_object_id,String user_id) {
         Map map = new HashMap();
         map.put("collect_type",collect_type);
         map.put("collect_object_id",collect_object_id);
+        map.put("user_id",user_id);
         return collectionMapper.undoCollect(map);
+    }
+
+    @Override
+    public int collectCount(String collect_type, String collect_object_id){
+        Map map = new HashMap();
+        map.put("collect_type",collect_type);
+        map.put("collect_object_id",collect_object_id);
+        return collectionMapper.collectCount(map);
     }
 
 

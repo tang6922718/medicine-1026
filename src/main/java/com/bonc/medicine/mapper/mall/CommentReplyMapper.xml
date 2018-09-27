@@ -36,4 +36,8 @@
 		</foreach>
 		ORDER BY cc.comment_id ASC, cc.reply_time DESC
 	</select>
+	
+	<delete id="deleteComment" parameterType="String">
+		delete from common_comment where id = #{id} or comment_id = #{id}
+	</delete>
 </mapper>

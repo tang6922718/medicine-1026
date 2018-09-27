@@ -134,10 +134,40 @@ public class IntegralController {
             return ResultUtil.success(reMap);
         } catch (Exception e) {
             reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
+            reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
             reMap.put("succeedScore", "0");
             reMap.put("msg", e.getMessage());
             return ResultUtil.success(reMap);
         }
+    }
+
+
+    /**
+    * @Description: 通过userid查询用户今天是否签到
+    * @Param: [userId, actionCode：默认CLOCK_IN----签到操作]
+    * @return: com.bonc.medicine.entity.Result
+     *
+     *  clocked:true--表示已经签到；false：表示还没有签到
+    * @Author: hejiajun
+    * @Date: 2018/9/27 
+    */ 
+    @GetMapping("/oper/clockin/v1.0")
+    public Result queryClockInStatus(@RequestParam(required = false) String userId,
+                                     @RequestParam(required = false) String actionCode){
+
+        if (StringUtils.isEmpty(userId)){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+        String code = "";
+        if (StringUtils.isEmpty(actionCode)){
+            code = "CLOCK_IN";
+        }
+
+        boolean goingDown = integralService.queryClockInStatus(userId, code);
+        Map resultMap = new HashMap();
+        resultMap.put("clocked", !goingDown);
+        return ResultUtil.success(resultMap);
+
     }
 
 

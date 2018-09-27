@@ -179,6 +179,23 @@ public class IntegralServiceImpl implements IntegralService {
         }
     }
 
+    @Override
+    public boolean queryClockInStatus(String userId, String actionCode) {
+        Map<String, String> paramMap = new HashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String timeNow = sdf.format(new Date());
+        paramMap.put("timeNow", timeNow);
+        paramMap.put("userId", userId);
+        paramMap.put("actionCode", actionCode);
+        Map<String, Object> resultMap =  integralMapper.queryTodayIntegralOpTimes(paramMap);
+        if(null == resultMap || null == resultMap.get("timesToday")
+                || StringUtils.equals("0",resultMap.get("timesToday")+"")){
+
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @Description:更新积分总数表和当前用户缓存的工具类
      * @Param: [map]
@@ -238,11 +255,12 @@ public class IntegralServiceImpl implements IntegralService {
     private boolean checkIntegralTimes(Map<String, String> paramMap, IntegralRule ruleDemo){
 
         // map 里面有；userId;actionCode
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-hh");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String timeNow = sdf.format(new Date());
         paramMap.put("timeNow", timeNow);
         Map<String, Object> resultMap =  integralMapper.queryTodayIntegralOpTimes(paramMap);
-        if(null == resultMap || null == resultMap.get("timesToday")){
+        if(null == resultMap || null == resultMap.get("timesToday")
+                ||  StringUtils.equals("0",resultMap.get("timesToday")+"")){
 
             return true;
         }

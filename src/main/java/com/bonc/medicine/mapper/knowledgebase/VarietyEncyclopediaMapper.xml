@@ -55,7 +55,8 @@
 			<if test="cultivation_tech != null and cultivation_tech != ''">cultivation_tech=#{cultivation_tech},</if>
 			<if test="main_value != null and main_value != ''">main_value=#{main_value},</if>
 			<if test="composition != null and composition != ''">composition=#{composition},</if>
-			upload_time= now()
+			record_status = '2',
+			update_time= now()
 		</set>
 		WHERE id = #{id}
 	</update>

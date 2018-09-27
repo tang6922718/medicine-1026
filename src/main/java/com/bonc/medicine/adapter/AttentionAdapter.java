@@ -74,13 +74,13 @@ public class AttentionAdapter {
         // 在当前news上点赞后获取key: LIKE:ENTITY_NEWS:2
         String attKey = RedisKeyUtil.getAttentionKey(userId, entityType);
         // 在喜欢集合中添加当前操作用户的userId(即当前用户点赞后，被点赞用户的like集合中就会加上一个点赞的用户信息)
-
-        //jedisAdapter.sadd(attKey, userId);
-
-        //String disLikeKey = RedisKeyUtil.getDisLikeKey(entityId, entityType);
-        //jedisAdapter.srem(disLikeKey, String.valueOf(userId));
-        //jedisAdapter.sadd(attKey, entityId);
         return jedisAdapter.sdiff(attKey);
+    }
+
+    public Set<String> getFansListId(String userId) {
+        String getFansKey = RedisKeyUtil.getFansKey(userId);
+        // 在喜欢集合中添加当前操作用户的userId(即当前用户点赞后，被点赞用户的like集合中就会加上一个点赞的用户信息)
+        return jedisAdapter.sdiff(getFansKey);
     }
 
     /*

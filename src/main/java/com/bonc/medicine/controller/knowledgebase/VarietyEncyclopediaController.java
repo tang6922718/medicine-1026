@@ -93,6 +93,7 @@ public class VarietyEncyclopediaController {
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
         int count = varietyEncyclopediaService.updateBreedInfo(map);
 //        count += pharmacopoeiaInfoService.updatePhara(map);
+        count += auditService.addAudit(map);
         return ResultUtil.success(count);
     }
     /*
@@ -107,7 +108,9 @@ public class VarietyEncyclopediaController {
     @PostMapping("/updetePharaDetail")
     public Result<Object> updatePharaDetail(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(editJson);
-        return ResultUtil.success(pharmacopoeiaInfoService.updatePharaDetail(map));
+        int count = pharmacopoeiaInfoService.updatePharaDetail(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
 

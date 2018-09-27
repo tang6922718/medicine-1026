@@ -71,13 +71,19 @@ public class BuyersServiceImpl implements BuyersService {
 	}
 
 	@Override
-	public int deletePurchase(String id) {
-		return buyersMapper.deletePurchase(id);
+	public int deletePurchase(List ids) {
+		if (ids.size() < 1) {
+			throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+		}
+		return buyersMapper.deletePurchase(ids);
 	}
 	
 	@Override
-	public int revokePurchase(String id) {
-		return buyersMapper.revokePurchase(id);
+	public int revokePurchase(List ids) {
+		if (ids.size() < 1) {
+			throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+		}
+		return buyersMapper.revokePurchase(ids);
 	}
 
 	@Override

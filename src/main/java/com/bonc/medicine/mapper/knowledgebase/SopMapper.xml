@@ -30,7 +30,7 @@
             kss.step_order
     </select>
 
-	<insert id="sopAdd" parameterType="java.util.Map" useGeneratedKeys="true">
+	<insert id="sopAdd" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO km_variety_sop (
 			variety_id,
 			record_time,

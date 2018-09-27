@@ -104,6 +104,7 @@ public class MallRecommendController {
 
     /**
      * 根据供应编号显示 商品提供用户 商品名称 商品简介 图片
+     * 只显示审核通过，上架，可用的商品
      * @param id
      * @return {"code":200,"msg":"成功","data":{"goods_name":"枸杞","img_url":"https://pro.modao.cc/uploads3/images/2060/20603852/raw_1527144746.png","id":1,"detail":"好药无价，谁吃谁知道！","linkman":"彭XX"}}
      */

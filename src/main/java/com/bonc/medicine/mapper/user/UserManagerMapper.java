@@ -67,4 +67,8 @@ public interface UserManagerMapper {
 
 	public int insertUserPlantRole(int userID);
 
+	public int deleteUserCareVariety(int userID);
+
+	public int insertUserCareVariety(List userCareVariety);
+
 }

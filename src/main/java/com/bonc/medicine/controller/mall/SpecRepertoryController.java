@@ -362,15 +362,11 @@ public class SpecRepertoryController {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/file")
-	public Result uploadFile(String title, String spec_id, String file_size, String file_url, String status) {
-		Map param = new HashMap();
-		param.put("title", title);
-		param.put("spec_id", spec_id);
-		param.put("file_size", file_size);
-		param.put("file_url", file_url);
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
-		param.put("upload_time", sdf.format(new Date()));
-		param.put("status", status);
+	public Result uploadFile(@RequestBody Map param) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		param.put("upload_time", sdf.format(new Date().getTime()));
+		param.put("status", "0");
 		
 		return ResultUtil.success(specialistService.uploadFile(param));
 	}
