@@ -44,12 +44,7 @@ public class ESSearchController {
      */
     @GetMapping("/toSearch")
     public Result<Object> searchByType(@RequestParam(required = false) String searchText, @RequestParam(required = false) String searchType) throws Exception {
-        List list = new ArrayList();
-        for (HomeTypeEnum typeName:HomeTypeEnum.values()) {
-            list.addAll(searchEachTypeFor5(typeName.toString().toLowerCase()));
-        }
-        return ResultUtil.success(list);
-//        return searchAll(searchText,searchType);
+        return searchAll(searchText,searchType);
     }
 
     /**
@@ -68,7 +63,7 @@ public class ESSearchController {
         if (null!=user_id && "" != user_id){
             userCare = varietyEncyclopediaService.selectUserCare(user_id);
         }
-        return searchAll(userCare,null);
+        return ResultUtil.success(getEveryTypeInfo(userCare));
     }
 
     private Result<Object> searchAll(String searchText, String searchType) throws Exception {
@@ -113,13 +108,24 @@ public class ESSearchController {
 
     }
 
-    private List searchEachTypeFor5(String searchType){
+    private List getEveryTypeInfo(String searchText){
+        List list = new ArrayList();
+        for (HomeTypeEnum typeName:HomeTypeEnum.values()) {
+            list.addAll(searchEachTypeFor5(searchText,typeName.toString().toLowerCase()));
+        }
+        return list;
+    }
+
+    private List searchEachTypeFor5(String searchText,String searchType){
         //获取连接client
         Client client = elasticsearchTemplate.getClient();
         //根据索引搜索
         SearchRequestBuilder srb = client.prepareSearch("knowledge");
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         qb.must(QueryBuilders.termQuery("type", searchType));
+        if (null != searchText && "" != searchText) {
+            qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
+        }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
         SearchHits hits = sr.getHits();
