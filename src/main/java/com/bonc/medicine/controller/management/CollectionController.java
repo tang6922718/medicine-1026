@@ -117,11 +117,24 @@ public class CollectionController {
         return ResultUtil.success(collectionService.isCollect(collect_type,collect_object_id,user_id));
     }
 
+    /**
+     * 取消收藏
+     * @param collect_type
+     * @param collect_object_id
+     * @param user_id
+     * @return
+     */
     @GetMapping("/undoCollect/{collect_type}/{collect_object_id}/{user_id}")
     public Result<Object> undoCollect(@PathVariable String collect_type,@PathVariable String collect_object_id,@PathVariable String user_id){
         return ResultUtil.success(collectionService.undoCollect(collect_type,collect_object_id,user_id));
     }
 
+    /**
+     * 收藏数
+     * @param collect_type
+     * @param collect_object_id
+     * @return
+     */
     @GetMapping("/collectCount/{collect_type}/{collect_object_id}")
     public Result<Object> collectCount(@PathVariable String collect_type,@PathVariable String collect_object_id){
         return ResultUtil.success(collectionService.collectCount(collect_type,collect_object_id));

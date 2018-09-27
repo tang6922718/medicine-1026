@@ -93,6 +93,7 @@ public class VarietyEncyclopediaController {
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
         int count = varietyEncyclopediaService.updateBreedInfo(map);
 //        count += pharmacopoeiaInfoService.updatePhara(map);
+        auditService.czAudit(map);//撤销原来存入审核表的数据，修改后重新插入。不存在则直接插入
         count += auditService.addAudit(map);
         return ResultUtil.success(count);
     }
@@ -109,6 +110,7 @@ public class VarietyEncyclopediaController {
     public Result<Object> updatePharaDetail(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(editJson);
         int count = pharmacopoeiaInfoService.updatePharaDetail(map);
+        auditService.czAudit(map);
         count += auditService.addAudit(map);
         return ResultUtil.success(count);
     }
@@ -180,11 +182,19 @@ public class VarietyEncyclopediaController {
      * @return
      */
     @PostMapping("/kmAudit")
+    @Transactional
     public Result<Object> kmAudit(@RequestBody String auditJson){
         if(null == auditJson || "" == auditJson){
             auditJson = "{\"fail_opinion\": \"\", \"status\": \"\", \"km_type\": \"\", \"object_id\": \"\"}";
         }
         Map map = JacksonMapper.INSTANCE.readJsonToMap(auditJson);
+        /*if(null != map.get("km_type") && "" !=map.get("km_type")){
+            String km_type = (String) map.get("km_type");
+            if("1".equals(km_type)){
+
+            }
+        };*/
+
         return ResultUtil.success(varietyEncyclopediaService.kmAudit(map));
     }
 

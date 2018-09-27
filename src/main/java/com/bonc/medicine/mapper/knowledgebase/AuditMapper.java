@@ -11,4 +11,6 @@ public interface AuditMapper {
 	public int insertAudit();
 
 	public int addAudit(Map map);
+
+	public int czAudit(Map map);
 }
