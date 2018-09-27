@@ -4,6 +4,7 @@ package com.bonc.medicine.controller.knowledgebase;
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.enums.HomeTypeEnum;
 import com.bonc.medicine.service.knowledgebase.VarietyEncyclopediaService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -36,6 +37,7 @@ public class ESSearchController {
     private VarietyEncyclopediaService varietyEncyclopediaService;
 
 
+
     /**
      * 知识库查询
      * @throws Exception
@@ -61,7 +63,7 @@ public class ESSearchController {
         if (null!=user_id && "" != user_id){
             userCare = varietyEncyclopediaService.selectUserCare(user_id);
         }
-        return searchAll(userCare,null);
+        return ResultUtil.success(getEveryTypeInfo(userCare));
     }
 
     private Result<Object> searchAll(String searchText, String searchType) throws Exception {
@@ -104,6 +106,36 @@ public class ESSearchController {
 //        len = len > 50 ? 50 : len;
         return ResultUtil.success(list);
 
+    }
+
+    private List getEveryTypeInfo(String searchText){
+        List list = new ArrayList();
+        for (HomeTypeEnum typeName:HomeTypeEnum.values()) {
+            list.addAll(searchEachTypeFor5(searchText,typeName.toString().toLowerCase()));
+        }
+        return list;
+    }
+
+    private List searchEachTypeFor5(String searchText,String searchType){
+        //获取连接client
+        Client client = elasticsearchTemplate.getClient();
+        //根据索引搜索
+        SearchRequestBuilder srb = client.prepareSearch("knowledge");
+        BoolQueryBuilder qb = QueryBuilders.boolQuery();
+        qb.must(QueryBuilders.termQuery("type", searchType));
+        if (null != searchText && "" != searchText) {
+            qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
+        }
+        SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
+        SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
+        SearchHits hits = sr.getHits();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (SearchHit hit : hits) {
+            Map<String, Object> source = hit.getSource();
+            list.add(source);
+            System.out.println(hit.getSourceAsString());
+        }
+        return list;
     }
 
 

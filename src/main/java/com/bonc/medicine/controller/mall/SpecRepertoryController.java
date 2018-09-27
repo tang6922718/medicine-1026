@@ -4,11 +4,13 @@ import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Issue;
 import com.bonc.medicine.entity.mall.Specialist;
+import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.service.mall.SpecialistService;
 import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
+import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,8 @@ public class SpecRepertoryController {
 	private ViewNumberService viewNumberService;
 	@Autowired
 	private AttentionService attentionService; 
+	@Autowired
+	private UserService userService; 
 	
 	
 	
@@ -128,7 +132,7 @@ public class SpecRepertoryController {
 				param1.put("attedUserId", map.get("spec_id")+"");
 				param1.put("type", "1");
 				Map res = attentionService.attentionRelation(param1);
-				map.put("is_followed", res.get("followed"));
+				map.put("is_follow", res.get("followed"));
 			}
 		}
 		for(int i=0;i<list.size();i++){
@@ -156,6 +160,9 @@ public class SpecRepertoryController {
 		Map param = new HashMap<>();
 		param.put("spec_id", spec_id);
 		list= specialistService.specDetail(param);
+		User user = userService.getUserInfoById(spec_id);
+		String acount = user.getActive_count();
+		list.get(0).put("active_count", acount);
 		if(user_id!=null)
 		{
 			Map param1 = new HashMap<>();
