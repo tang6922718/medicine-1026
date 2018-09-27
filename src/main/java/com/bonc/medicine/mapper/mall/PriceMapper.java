@@ -17,6 +17,8 @@ public interface PriceMapper {
 	public List<Map<String, Object>> getProduct(Map map);
 
 	public List<Map<String, Object>> market(Map map);
+	
+	public List<Map<String, Object>> homeMarket(Map map);
 
 	public List<Map<String, Object>> trend(Map map);
 

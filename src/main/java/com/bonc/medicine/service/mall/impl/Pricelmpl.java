@@ -48,15 +48,23 @@ public class Pricelmpl implements PriceService {
 	}
 
 	@Override
-	public List<Map<String, Object>> market(String hotword, String market,Integer limit) {
+	public List<Map<String, Object>> market(String hotword, String market) {
+		Map map = new HashMap<>();
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//String time = sdf.format(new Date());
+		map.put("hotword", hotword);
+		map.put("market", market);
+		//map.put("time", time);
+		return priceMapper.market(map);
+	}
+	
+	@Override
+	public List<Map<String, Object>> homeMarket() {
 		Map map = new HashMap<>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String time = sdf.format(new Date());
-		map.put("hotword", hotword);
-		map.put("market", market);
-		map.put("limit", limit);
 		map.put("time", time);
-		return priceMapper.market(map);
+		return priceMapper.homeMarket(map);
 	}
 
 	@Override

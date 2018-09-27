@@ -54,8 +54,16 @@ public class PriceController {
 	 * 市场价格
 	 */
 	@GetMapping("/price/market")
-	public Result<Object> market(String hotword, String market,Integer limit) {
-		return ResultUtil.success(priceService.market(hotword, market,limit));
+	public Result<Object> market(String hotword, String market) {
+		return ResultUtil.success(priceService.market(hotword, market));
+	}
+	
+	/*
+	 * 首页市场价格显示当天的最新6条
+	 */
+	@GetMapping("/price/homeMarket")
+	public Result<Object> homeMarket() {
+		return ResultUtil.success(priceService.homeMarket());
 	}
 
 	/*

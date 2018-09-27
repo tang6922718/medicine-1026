@@ -10,7 +10,8 @@
 
 	<select id="getMarket" parameterType="Map" resultType="Map">
 		select
-		distinct market_name from common_price where state = '1' and status = '1' 
+		distinct market_name from common_price where state = '1' and
+		status = '1'
 		<if test="hotword != null and hotword != ''">
 			and cat_name = #{hotword}
 		</if>
@@ -35,21 +36,41 @@
 		IFNULL(market_name,'') AS market_name,IFNULL(price,'') AS
 		price,IFNULL(in_time,'') AS in_time,IFNULL(state,'') AS
 		state,IFNULL(status,'') AS status
-		from common_price where price_date =
-		#{time} and state =
-		'1' and status
+		from common_price where state =
+		'1'
+		and status
 		= '1'
 		<if test="hotword != null and hotword != ''">
-			AND cat_name = #{hotword} 
+			AND cat_name = #{hotword}
 		</if>
 		<if test="market != null and market != ''">
 			AND market_name = #{market}
 		</if>
 		ORDER BY
 		price_date
-		<if test="limit != null and limit != ''">
-			limit 0 , #{limit}
-		</if>
+	</select>
+
+	<select id="homeMarket" parameterType="Map" resultType="Map">
+		SELECT
+		id,
+		price_date,
+		IFNULL( cat_name, '' ) AS cat_name,
+		IFNULL( specifaction, '' ) AS specifaction,
+		IFNULL( product_name, '' ) AS product_name,
+		IFNULL( market_name, '' ) AS market_name,
+		IFNULL( price, '' ) AS price,
+		IFNULL( in_time, '' ) AS in_time,
+		IFNULL( state, '' ) AS state,
+		IFNULL( STATUS, '' ) AS STATUS
+		FROM
+		common_price
+		WHERE
+		state = '1'
+		AND STATUS = '1'
+		ORDER BY
+		price_date DESC,
+		in_time DESC
+		LIMIT 0,6
 	</select>
 
 	<select id="trend" parameterType="Map" resultType="Map">
@@ -59,10 +80,10 @@
 		cat_name from
 		common_price where state = '1' and status = '1'
 		<if test="hotword != null and hotword != ''">
-			AND cat_name = #{hotword} 
+			AND cat_name = #{hotword}
 		</if>
 		<if test="market != null and market != ''">
-			AND market_name = #{market} 
+			AND market_name = #{market}
 		</if>
 		<if test="specifaction != null and specifaction != ''">
 			AND specifaction = #{specifaction}
@@ -89,16 +110,16 @@
 		cat_name from
 		common_price where state = '1' and status = '1'
 		<if test="hotword != null and hotword != ''">
-			AND cat_name = #{hotword} 
+			AND cat_name = #{hotword}
 		</if>
 		<if test="market != null and market != ''">
 			AND market_name = #{market}
 		</if>
 		<if test="specifaction != null and specifaction != ''">
-			AND specifaction = #{specifaction} 
+			AND specifaction = #{specifaction}
 		</if>
 		<if test="product != null and product != ''">
-			AND product_name = #{product} 
+			AND product_name = #{product}
 		</if>
 		<if test="start_time != null and start_time != ''">
 			AND price_date <![CDATA[ >= ]]>
@@ -132,14 +153,14 @@
 			AND specifaction = #{specifaction}
 		</if>
 		<if test="product != null and product != ''">
-			AND product_name = #{product} 
+			AND product_name = #{product}
 		</if>
 		GROUP BY
 		price_date
 	</select>
 
 	<select id="pricelist" parameterType="Map" resultType="Map">
-		select * from common_price where status = '1' 
+		select * from common_price where status = '1'
 		<if test="hotword != null and hotword != ''">
 			AND (cat_name like CONCAT('%',#{hotword},'%') OR
 			market_name like CONCAT('%',#{hotword},'%') OR
