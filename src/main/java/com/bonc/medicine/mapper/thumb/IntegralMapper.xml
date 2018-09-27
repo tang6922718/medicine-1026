@@ -103,7 +103,7 @@
       insert into
         common_integral_dtl
       values
-        (0, #{actionCode}, #{point}, now());
+        (#{userId}, #{actionCode}, #{point}, now());
     </insert>
 
     <select id="queryTodayIntegralOpTimes" parameterType="Map" resultType="Map">
