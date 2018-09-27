@@ -219,6 +219,7 @@ public interface TrainMapper {
                 SELECT("*");
                 FROM("train_offline a");
                 LEFT_OUTER_JOIN("train_offline_video b on a.id =b.train_id");
+                WHERE("is_display='1'");
                 if (map.get("publish_time") != null && map.get("publish_time") != "") {
                     WHERE("publish_time >=#{publish_time}");
                 }
@@ -226,9 +227,9 @@ public interface TrainMapper {
                     WHERE("title  like CONCAT('%',#{title},'%')");
                 }
                 if (map.get("id") != null) {
-                    WHERE("id=#{id}");
+                    WHERE("a.id=#{id}");
                 }
-                WHERE("is_display='1'");
+
             }}.toString();
         }
 
@@ -332,7 +333,7 @@ public interface TrainMapper {
                     SET("img_url=#{img_url}");
                 }
 
-                SET("operation_status='1'");
+                SET("operation_status='1selectTrainList'");
 
                 WHERE("id=#{id}");
             }}.toString();
