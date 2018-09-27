@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,6 +238,22 @@ public class UserManagerServiceImpl implements UserManagerService {
 			return ResultUtil.success(userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID"))));
 		}
 
+	}
+
+	@Override
+	public Result<Object> updateUserCareVariety(Map<String, Object> params) {
+
+		if (params.get("list")==null || params.get("userID")==null){
+			return ResultUtil.error(ResultEnum.MISSING_PARA);
+		}
+
+		int userID= (int) params.get("userID");
+		List careVariety= (List) params.get("list");
+
+		int i=userManagerMapper.deleteUserCareVariety(userID);
+		i=userManagerMapper.insertUserCareVariety(careVariety);
+
+		return ResultUtil.success(i);
 	}
 
 }

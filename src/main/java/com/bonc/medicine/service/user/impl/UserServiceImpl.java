@@ -284,7 +284,8 @@ public class UserServiceImpl implements UserService {
         user.setAddress(userMap.get("address") == null ? "" : userMap.get("address").toString());
         user.setWetchat(userMap.get("wetchat") == null ? "" : userMap.get("wetchat").toString());
         user.setEmail(userMap.get("email") == null ? "" : userMap.get("email").toString());
-        user.setSex(userMap.get("sex") == null ? '无' : (userMap.get("sex") + "").charAt(0));
+        user.setSex(userMap.get("sex") == null ? '无' : (userMap.get("sex") + "").toCharArray().length > 0 ?
+                (userMap.get("sex") + "").toCharArray()[0] : '无');
         user.setExpertise_field(userMap.get("expertise_field") == null ? "" : userMap.get("expertise_field") + "");
         user.setEmployment_age(userMap.get("employment_age") == null ? "" : userMap.get("employment_age") + "");
         user.setCaresVarieties(userMap.get("loveVariety") == null ? "" : userMap.get("loveVariety") + "");
@@ -307,6 +308,9 @@ public class UserServiceImpl implements UserService {
         // 如果是APP登陆
         if(StringUtils.equals("APP", equipment.trim())){
             reList = userMapper.loginSecond(paramMap);
+        }else if (StringUtils.equals("BACK", equipment.trim())){
+
+            reList = userMapper.backUser(paramMap);
         }
 
 
@@ -336,6 +340,7 @@ public class UserServiceImpl implements UserService {
         map.put("userId", user.getId());
         map.put("roleId", user.getRoles());
         map.put("roleName", user.getRoleName());
+        map.put("name", user.getName());
         return ResultUtil.success(map);
     }
 

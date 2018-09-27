@@ -17,7 +17,7 @@ public interface GongQiuSystemService {
 
 	public Result<Object> recommend(Recommend recommend);
 
-	public Result<Object> delGoods(Integer sellerId, String result);
+	public Result<Object> delGoods(String sellerId, String result);
 
 	public Result<Object> goodsOn(String sellerId);
 
