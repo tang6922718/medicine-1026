@@ -13,11 +13,13 @@ public interface CollectionMapper {
 
     public int collect(Map map);
 
-    public List<Map<String,Object>> searchInfoByCollect();
+    public List<Map<String,Object>> searchInfoByCollect(String user_id);
 
-    public List<Map<String,Object>> searchSupplyByCollect();
+    public List<Map<String,Object>> searchSupplyByCollect(String user_id);
 
-    public List<Map<String,Object>> searchVideoByCollect();
+    public List<Map<String,Object>> searchPurchaseByCollect(String user_id);
+
+    public List<Map<String,Object>> searchVideoByCollect(String user_id);
 
     public Map<String,Object> infoBasicDetail(String id);
 

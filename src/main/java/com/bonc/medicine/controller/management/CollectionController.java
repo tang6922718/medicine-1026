@@ -32,8 +32,8 @@ public class CollectionController {
     * 收藏夹—资讯列表搜索
     * */
     @GetMapping("/searchInfoByCollect")
-    public Result<Object> searchInfoByCollect(){
-        return ResultUtil.success(collectionService.searchInfoByCollect());
+    public Result<Object> searchInfoByCollect(@RequestParam String user_id){
+        return ResultUtil.success(collectionService.searchInfoByCollect(user_id));
     }
 
 
@@ -46,11 +46,19 @@ public class CollectionController {
     }
 
     /*
-    * 收藏夹—商品列表搜索,供应和求购列表
+    * 收藏夹—商品列表搜索,供应列表
     * */
     @GetMapping("/searchSupplyByCollect")
-    public Result<Object> searchSupplyByCollect(){
-        return ResultUtil.success(collectionService.searchSupplyByCollect());
+    public Result<Object> searchSupplyByCollect(@RequestParam String user_id){
+        return ResultUtil.success(collectionService.searchSupplyByCollect(user_id));
+    }
+
+    /*
+    * 收藏夹—商品列表搜索,求购列表
+    * */
+    @GetMapping("/searchPurchaseByCollect")
+    public Result<Object> searchPurchaseByCollect(@RequestParam String user_id){
+        return ResultUtil.success(collectionService.searchPurchaseByCollect(user_id));
     }
 
     /*
@@ -75,8 +83,8 @@ public class CollectionController {
     * 收藏夹—视频列表搜索
     * */
     @GetMapping("/searchVideoByCollect")
-    public Result<Object> searchVideoByCollect(){
-        return ResultUtil.success(collectionService.searchVideoByCollect());
+    public Result<Object> searchVideoByCollect(@RequestParam String user_id){
+        return ResultUtil.success(collectionService.searchVideoByCollect(user_id));
     }
 
     /*

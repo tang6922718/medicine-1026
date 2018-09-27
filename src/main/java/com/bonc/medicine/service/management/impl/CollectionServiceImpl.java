@@ -24,18 +24,23 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public List<Map<String, Object>> searchInfoByCollect() {
-        return collectionMapper.searchInfoByCollect();
+    public List<Map<String, Object>> searchInfoByCollect(String user_id) {
+        return collectionMapper.searchInfoByCollect(user_id);
     }
 
     @Override
-    public List<Map<String, Object>> searchSupplyByCollect() {
-        return collectionMapper.searchSupplyByCollect();
+    public List<Map<String, Object>> searchSupplyByCollect(String user_id) {
+        return collectionMapper.searchSupplyByCollect(user_id);
     }
 
     @Override
-    public List<Map<String, Object>> searchVideoByCollect() {
-        return collectionMapper.searchVideoByCollect();
+    public List<Map<String,Object>> searchPurchaseByCollect(String user_id){
+        return collectionMapper.searchPurchaseByCollect(user_id);
+    }
+
+    @Override
+    public List<Map<String, Object>> searchVideoByCollect(String user_id) {
+        return collectionMapper.searchVideoByCollect(user_id);
     }
 
     @Override

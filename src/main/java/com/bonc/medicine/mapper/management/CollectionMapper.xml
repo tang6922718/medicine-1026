@@ -21,7 +21,7 @@
 			);
 	</insert>
 	
-	<select id="searchInfoByCollect" resultType="java.util.Map">
+	<select id="searchInfoByCollect" parameterType="String" resultType="java.util.Map">
 		SELECT
 			a.id,
 			a.title,
@@ -31,12 +31,14 @@
 		FROM
 			info_basic a
 		LEFT JOIN info_category b ON a.cat_code = b.cat_code
+		WHERE a.id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=1 AND user_id = #{user_id})
 		ORDER BY
 			a.publish_date DESC
 	</select>
 
-	<select id="searchSupplyByCollect" resultType="java.util.Map">
+	<select id="searchSupplyByCollect" parameterType="String" resultType="java.util.Map">
 		SELECT
+			id,
 			goods_name,
 			img_url,
 			specification,
@@ -48,11 +50,26 @@
 			public_time
 		FROM
 			mall_supply
+		WHERE id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=3 AND user_id = #{user_id})
 		ORDER BY
 			public_time DESC
 	</select>
 
-	<select id="searchVideoByCollect" resultType="Map">
+	<select id="searchPurchaseByCollect" parameterType="String"  resultType="java.util.Map">
+		SELECT
+			a.*,
+			COUNT(a.id) AS askBuy
+		FROM
+			mall_purchase a
+		LEFT JOIN mall_offer b ON a.id = b.purchase_id
+		WHERE
+			a.id IN (SELECT collect_object_id FROM common_collection WHERE collect_type = 9 AND user_id = #{user_id})
+		GROUP BY a.id
+		ORDER BY
+				publish_time DESC
+	</select>
+
+	<select id="searchVideoByCollect" parameterType="String" resultType="Map">
 		SELECT
 			id,
 			title,
@@ -64,6 +81,7 @@
 			publish_time
 		FROM
 			train_video_course
+		WHERE id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=5 AND user_id = #{user_id})
 		ORDER BY
 			publish_time DESC
 	</select>
