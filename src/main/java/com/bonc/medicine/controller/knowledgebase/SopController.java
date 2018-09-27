@@ -49,7 +49,6 @@ public class SopController {
         sopMap.put("record_status", 2);
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
         int count = sopService.sopAdd(sopMap);
-        System.out.println(sopMap.get("id"));
         Long id = (Long) sopMap.get("id");
         for (int i = 0; i < sopStepList.size(); i++) {
             ((Map) sopStepList.get(i)).put("sop_id", id);
@@ -64,10 +63,11 @@ public class SopController {
     public Result<Object> editSops(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap((editJson));
         Map sopMap = (Map) map.get("sop");//获取sop基本信息
-        System.out.println(sopMap);
+        int variety_id = (int) sopMap.get("variety_id");//获取variety_id
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
-        System.out.println(sopStepList);
-
+        for (int i = 0; i < sopStepList.size(); i++) {
+            ((Map) sopStepList.get(i)).put("variety_id", variety_id);
+        }
         int count = sopService.sopUpdata(sopMap);
         count += sopService.sopStepUpdata(sopStepList);
         return ResultUtil.success(count);

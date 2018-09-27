@@ -124,7 +124,7 @@ public class SpecRepertoryController {
 		if(user_id!=null) {
 			for (Map<String,Object> map : list) {
 				Map param1 = new HashMap<>();
-				param1.put("user_id", user_id);
+				param1.put("userId", user_id);
 				param1.put("attedUserId", map.get("spec_id")+"");
 				param1.put("type", "1");
 				Map res = attentionService.attentionRelation(param1);
