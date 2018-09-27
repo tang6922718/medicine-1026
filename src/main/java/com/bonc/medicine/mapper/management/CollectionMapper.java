@@ -33,4 +33,6 @@ public interface CollectionMapper {
 
     public int undoCollect(Map map);
 
+    public int collectCount(Map map);
+
 }

@@ -104,14 +104,19 @@ public class CollectionController {
      * @param collect_object_id 收藏类型下目标的id
      * @return
      */
-    @GetMapping("/isCollect/{collect_type}/{collect_object_id}")
-    public Result<Object> isCollect(@PathVariable String collect_type,@PathVariable String collect_object_id){
-        return ResultUtil.success(collectionService.isCollect(collect_type,collect_object_id));
+    @GetMapping("/isCollect/{collect_type}/{collect_object_id}/{user_id}")
+    public Result<Object> isCollect(@PathVariable String collect_type,@PathVariable String collect_object_id,@PathVariable String user_id){
+        return ResultUtil.success(collectionService.isCollect(collect_type,collect_object_id,user_id));
     }
 
-    @GetMapping("/undoCollect/{collect_type}/{collect_object_id}")
-    public Result<Object> undoCollect(@PathVariable String collect_type,@PathVariable String collect_object_id){
-        return ResultUtil.success(collectionService.undoCollect(collect_type,collect_object_id));
+    @GetMapping("/undoCollect/{collect_type}/{collect_object_id}/{user_id}")
+    public Result<Object> undoCollect(@PathVariable String collect_type,@PathVariable String collect_object_id,@PathVariable String user_id){
+        return ResultUtil.success(collectionService.undoCollect(collect_type,collect_object_id,user_id));
+    }
+
+    @GetMapping("/collectCount/{collect_type}/{collect_object_id}")
+    public Result<Object> collectCount(@PathVariable String collect_type,@PathVariable String collect_object_id){
+        return ResultUtil.success(collectionService.collectCount(collect_type,collect_object_id));
     }
 
 }
