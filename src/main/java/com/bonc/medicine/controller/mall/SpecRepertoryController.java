@@ -7,6 +7,7 @@ import com.bonc.medicine.entity.mall.Specialist;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.service.mall.SpecialistService;
+import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class SpecRepertoryController {
 	private MeetProfessorService meetProfessorService;
 	@Autowired
 	private ViewNumberService viewNumberService;
+	@Autowired
+	private AttentionService attentionService; 
+	
 	
 	
 	/**
@@ -117,17 +121,14 @@ public class SpecRepertoryController {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();//存关注数据
 		list = specialistService.specialList(param);
-		if(user_id!=null)
-		{
-			Map param1 = new HashMap<>();
-			param1.put("user_id", user_id);
-			list1 = specialistService.specialIsFollow(param1);
-			for(int i=0;i<list.size();i++){
-				for(int j=0;j<list1.size();j++){
-					if(list.get(i).get("spec_id").toString().equals(list1.get(j).get("object_id").toString())){
-						list.get(i).put("is_follow", 1);
-					}
-				}
+		if(user_id!=null) {
+			for (Map<String,Object> map : list) {
+				Map param1 = new HashMap<>();
+				param1.put("user_id", user_id);
+				param1.put("attedUserId", map.get("spec_id")+"");
+				param1.put("type", "1");
+				Map res = attentionService.attentionRelation(param1);
+				map.put("is_followed", res.get("followed"));
 			}
 		}
 		for(int i=0;i<list.size();i++){
