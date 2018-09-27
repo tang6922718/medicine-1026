@@ -4,6 +4,7 @@ package com.bonc.medicine.controller.knowledgebase;
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.enums.HomeTypeEnum;
 import com.bonc.medicine.service.knowledgebase.VarietyEncyclopediaService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -36,13 +37,19 @@ public class ESSearchController {
     private VarietyEncyclopediaService varietyEncyclopediaService;
 
 
+
     /**
      * 知识库查询
      * @throws Exception
      */
     @GetMapping("/toSearch")
     public Result<Object> searchByType(@RequestParam(required = false) String searchText, @RequestParam(required = false) String searchType) throws Exception {
-        return searchAll(searchText,searchType);
+        List list = new ArrayList();
+        for (HomeTypeEnum typeName:HomeTypeEnum.values()) {
+            list.addAll(searchEachTypeFor5(typeName.toString().toLowerCase()));
+        }
+        return ResultUtil.success(list);
+//        return searchAll(searchText,searchType);
     }
 
     /**
@@ -104,6 +111,25 @@ public class ESSearchController {
 //        len = len > 50 ? 50 : len;
         return ResultUtil.success(list);
 
+    }
+
+    private List searchEachTypeFor5(String searchType){
+        //获取连接client
+        Client client = elasticsearchTemplate.getClient();
+        //根据索引搜索
+        SearchRequestBuilder srb = client.prepareSearch("knowledge");
+        BoolQueryBuilder qb = QueryBuilders.boolQuery();
+        qb.must(QueryBuilders.termQuery("type", searchType));
+        SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
+        SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
+        SearchHits hits = sr.getHits();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (SearchHit hit : hits) {
+            Map<String, Object> source = hit.getSource();
+            list.add(source);
+            System.out.println(hit.getSourceAsString());
+        }
+        return list;
     }
 
 
