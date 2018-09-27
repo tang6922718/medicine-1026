@@ -54,7 +54,7 @@
 	</delete>
 
 	<select id="showGoodsById" parameterType="String" resultType="Map">
-		SELECT id,goods_name,linkman,img_url,detail FROM mall_supply WHERE id=#{id}
+		SELECT id,goods_name,linkman,img_url,detail FROM mall_supply WHERE carriage_status = 1 AND state = 0 AND is_audit = 1 AND id=#{id}
 	</select>
 
 	<insert id="mallRecommend" parameterType="java.util.Map" useGeneratedKeys="true">
