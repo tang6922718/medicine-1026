@@ -59,6 +59,7 @@ public class SupplyController {
     	Map<String, String> map = new HashMap<>();
         map.put("objectType", "3");
         map.put("objectId", id);
+        map.put("viewNumber", "1");
         viewNumberService.queryViewNumber(map);
     	
         return supplyService.getDetails(id);

@@ -78,6 +78,7 @@ public class BuyersController {
 		Map<String, String> map = new HashMap<>();
         map.put("objectType", "9");
         map.put("objectId", id);
+        map.put("viewNumber", "1");
         viewNumberService.queryViewNumber(map);
 		return ResultUtil.success(buyersService.purchasepDetail(id));
 	} 
