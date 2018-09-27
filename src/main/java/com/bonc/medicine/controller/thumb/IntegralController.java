@@ -144,7 +144,7 @@ public class IntegralController {
 
     /**
     * @Description: 通过userid查询用户今天是否签到
-    * @Param: [userId, actionCode]
+    * @Param: [userId, actionCode：默认CLOCK_IN----签到操作]
     * @return: com.bonc.medicine.entity.Result
      *
      *  clocked:true--表示已经签到；false：表示还没有签到
