@@ -15,7 +15,7 @@ public class ViewNumberKeyUtil {
 
     public static String getViewNumberKey(String objectId, String ObjectType) {
 
-        return PRE + SPLIT + objectId + SPLIT + ObjectType + SUB;
+        return PRE + SPLIT + objectId + SPLIT + ObjectType + SPLIT + SUB;
     }
 
 

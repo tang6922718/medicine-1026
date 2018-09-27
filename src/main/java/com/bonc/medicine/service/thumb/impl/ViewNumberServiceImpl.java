@@ -59,7 +59,7 @@ public class ViewNumberServiceImpl implements ViewNumberService {
 
     public boolean queryExistsObject(Map<String, String> map) {
         List<Map<String, Object>> list = viewNumberMapper.queryExistsObject(map);
-        if (list.size() < 1 || null == list.get(0).get("id")) {
+        if (list.size() < 1 || null == list.get(0) || null == list.get(0).get("id")) {
             return false;
         } else {
             return true;

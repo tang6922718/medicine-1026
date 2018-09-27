@@ -120,4 +120,18 @@
     </select>
 
 
+    <select id="queryClockInStatus" parameterType="String" resultType="Map">
+
+        select
+          count(user_id) as clockTimes
+        from
+          common_integral_dtl
+        where
+          user_id = #{userId}
+          and action_code =  'CLOCK_IN'
+          and action_time = #{timeNow}
+
+    </select>
+
+
 </mapper>

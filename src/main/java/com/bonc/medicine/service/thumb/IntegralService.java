@@ -24,6 +24,7 @@ public interface IntegralService {
 
     public Map<String, String> addIntegralHistory(Map<String, String> paramMap) throws Exception;
 
+    public boolean queryClockInStatus (String userId, String actionCode);
 
 
 }
