@@ -160,6 +160,8 @@ public class AttentionController {
             outMap.put("loveVariety", user.getCaresVarieties());
             outMap.put("followed",   isFlow.get("followed"));
             outMap.put("id",   ids);
+            outMap.put("active_count",   user.getActive_count());
+            outMap.put("interactiveNumber",   user.getInteractiveNumber());
             outList.add(outMap);
         }
 
@@ -216,6 +218,8 @@ public class AttentionController {
             outMap.put("loveVariety", user.getCaresVarieties());
             outMap.put("followed",   isFlow.get("followed"));
             outMap.put("id",   ids);
+            outMap.put("active_count",   user.getActive_count());
+            outMap.put("interactiveNumber",   user.getInteractiveNumber());
             outList.add(outMap);
         }
 

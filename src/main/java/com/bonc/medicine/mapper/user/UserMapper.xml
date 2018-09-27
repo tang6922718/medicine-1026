@@ -112,7 +112,7 @@
 	</select>
 
     <select id="getUserInfoById" parameterType="String" resultType="Map">
-       SELECT
+  			SELECT
 				cu.id,
 				cu.name,
 				cu.wetchat,
@@ -123,12 +123,15 @@
 				cu.head_portrait,
 				sis.expertise_field,
 				sis.employment_age ,
-				GROUP_CONCAT(cmmv.variety_name) as loveVariety
+				GROUP_CONCAT(cmmv.variety_name) as loveVariety,
+				sst.active_count,
+				sst.interact_count
 			FROM
 				common_user cu
 				LEFT JOIN spec_info sis ON cu.id = sis.spec_id
 				LEFT JOIN  common_user_care_varieties_r curr on cu.id=curr.user_id
 				LEFT JOIN common_medicine_variety cmmv on curr.variety_code=cmmv.variety_code
+				left join spec_interact_stats sst on cu.id = sst.spec_id
            where cu.id = #{userId}
 
             limit 1

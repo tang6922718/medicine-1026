@@ -287,8 +287,10 @@ public class UserServiceImpl implements UserService {
         user.setSex(userMap.get("sex") == null ? '无' : (userMap.get("sex") + "").toCharArray().length > 0 ?
                 (userMap.get("sex") + "").toCharArray()[0] : '无');
         user.setExpertise_field(userMap.get("expertise_field") == null ? "" : userMap.get("expertise_field") + "");
-        user.setEmployment_age(userMap.get("employment_age") == null ? "" : userMap.get("employment_age") + "");
+        user.setEmployment_age(userMap.get("employment_age") == null ? "0" : userMap.get("employment_age") + "");
         user.setCaresVarieties(userMap.get("loveVariety") == null ? "" : userMap.get("loveVariety") + "");
+        user.setInteractiveNumber(userMap.get("interact_count") == null ? "0" : userMap.get("interact_count") + "");
+        user.setActive_count(userMap.get("active_count") == null ? "0" : userMap.get("active_count") + "");
         return user;
     }
 
