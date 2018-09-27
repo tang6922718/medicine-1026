@@ -37,7 +37,16 @@ public class DyanimicController {
     //新增一条动态
     @SuppressWarnings("unchecked")
     @PostMapping("/insert")
-    public Result<Object> insertDyanimic(Dyanimic dyanimic){return ResultUtil.success(dyanimicService.insertDyanimic(dyanimic));}
+    public Result<Object> insertDyanimic(@RequestBody Map map){
+        Dyanimic dyanimic = new Dyanimic();
+        dyanimic.setDyn_cat_id((int)map.get("dyn_cat_id"));
+        dyanimic.setDesciption((String)map.get("desciption"));
+        dyanimic.setImg_url((String)map.get("img_url"));
+        dyanimic.setVideo_url((String)map.get("video_url"));
+        dyanimic.setTelephone((String)map.get("telephone"));
+        dyanimic.setPublish_user_id((int)map.get("publish_user_id")); // 发布者id即当前用户id，其实该由后台获取
+        System.out.println(dyanimic);
+        return ResultUtil.success(dyanimicService.insertDyanimic(dyanimic));}
 
     // 查询所有人动态 APP
     @SuppressWarnings("unchecked")
