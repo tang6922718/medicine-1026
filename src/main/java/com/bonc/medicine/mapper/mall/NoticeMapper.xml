@@ -16,8 +16,8 @@
 		FROM
 		common_notice
 		WHERE
-		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id}
-		), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id}
+		), ',%' )
 		AND notice_type = '2'
 		AND STATUS = '1'
 		AND state = '1' UNION
@@ -64,7 +64,7 @@
 		LEFT JOIN spec_issue c ON a.object_id =
 		c.id
 		WHERE
-		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND a.notice_type = '3' and a.STATUS = '1' and a.state = '1'
 	</select>
 
@@ -85,7 +85,7 @@
 		LEFT JOIN comm_dyanimic c ON a.object_id =
 		c.id
 		WHERE
-		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND a.notice_type = '4' and a.STATUS = '1' and a.state = '1'
 	</select>
 
@@ -99,14 +99,16 @@
 		a.object_id,
 		a.publish_time,
 		c.goods_name,
-		substring_index(c.img_url,',',1) as img_url
+		substring_index(c.img_url,',',1) as img_url,
+		d.mark_url
 		FROM
 		common_notice a
 		LEFT JOIN common_user b ON
 		a.publish_user_id = b.id
 		LEFT JOIN mall_supply c ON a.object_id = c.id
+		LEFT JOIN mall_business_marks d on c.id = d.supply_id
 		WHERE
-		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%', #{user_id} ), '%' )
+		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND
 		a.notice_type = '5' and a.STATUS = '1' and a.state = '1'
 	</select>
