@@ -59,6 +59,25 @@ public class User {
     private String verification;
     private String employment_age;
     private String expertise_field;
+    private String interactiveNumber;
+    private String active_count;
+
+
+    public String getActive_count() {
+        return active_count;
+    }
+
+    public void setActive_count(String active_count) {
+        this.active_count = active_count;
+    }
+
+    public String getInteractiveNumber() {
+        return interactiveNumber;
+    }
+
+    public void setInteractiveNumber(String interactiveNumber) {
+        this.interactiveNumber = interactiveNumber;
+    }
 
     public String getEmployment_age() {
         return employment_age;
@@ -207,6 +226,7 @@ public class User {
         this.roleName = roleName;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
@@ -228,6 +248,8 @@ public class User {
                 ", verification='" + verification + '\'' +
                 ", employment_age='" + employment_age + '\'' +
                 ", expertise_field='" + expertise_field + '\'' +
+                ", interactiveNumber='" + interactiveNumber + '\'' +
+                ", active_count='" + active_count + '\'' +
                 '}';
     }
 }
