@@ -103,7 +103,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;
+		return ResultUtil.error(ResultEnum.NO_CONTENT);
 	}
 
 	/*
@@ -149,7 +149,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;
+		return ResultUtil.error(ResultEnum.NO_CONTENT);
 	}
 
 	/*
@@ -187,7 +187,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;
+		return ResultUtil.error(ResultEnum.NO_CONTENT);
 	}
 
 	/*
