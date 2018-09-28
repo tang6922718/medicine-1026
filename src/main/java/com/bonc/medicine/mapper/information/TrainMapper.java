@@ -101,6 +101,12 @@ public interface TrainMapper {
     List<Map> selectSpecialist();
 
 
+    //查询是否报名
+    @SelectProvider(type = TrainDynaSqlProvider.class,
+            method = "selectApply")
+    int selectApply(Map<String,Object> map);
+
+
     class TrainDynaSqlProvider {
         public String createTrain(final Map<String, Object> map) {
             String sql = new SQL() {{
@@ -344,5 +350,21 @@ public interface TrainMapper {
             }}.toString();
         }
 
+        public String selectApply(final Map<String, Object> map) {
+            return new SQL() {{
+                SELECT("count(id)");
+                FROM("train_appointment");
+                if (map.get("object_id") != null) {
+                    WHERE("object_id=#{object_id}");
+                }
+                if (map.get("object_type") != null) {
+                    WHERE("object_type=#{object_type}");
+                }
+                if (map.get("user_id") != null) {
+                    WHERE("user_id=#{user_id}");
+                }
+
+            }}.toString();
+        }
     }
 }

@@ -44,4 +44,6 @@ public interface TrainService {
     int editVideoCourse(Map<String,Object> map);
 
     List<Map> selectSpecialist();
+
+    int selectApply(Map<String,Object> map);
 }

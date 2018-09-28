@@ -21,7 +21,6 @@ public class TrainController {
     @Autowired
     TrainService trainService;
 
-
     /**
      * @param map
      * @return
@@ -106,6 +105,27 @@ public class TrainController {
         return ResultUtil.success(trainService.addTrainApply(map));
     }
 
+    /**
+     * @param map
+     * @return
+     * @description 查询是否报名(根据object_id,object_type,user_id)
+     */
+    @RequestMapping("/selectApply")
+    public Result selectApply(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
+        return ResultUtil.success(trainService.selectApply(map));
+    }
+
+    /**
+     * @param map
+     * @return
+     * @description 查询报名数量(根据object_id)
+     */
+    @RequestMapping("/selectApplyNum")
+    public Result selectApplyNum(@RequestBody(required = false)  Map<String, Object> map) {
+        return ResultUtil.success(trainService.selectApply(map));
+    }
+
 
     /**
      * @param map
@@ -113,7 +133,8 @@ public class TrainController {
      * @description 我的培训(查询预约报名的直播和线下培训列表)
      */
     @RequestMapping("/selectTrainApply")
-    public Result selectTrainApply(@RequestBody  Map<String, Object> map) {
+    public Result selectTrainApply(@CurrentUser  String user_id,@RequestBody  Map<String, Object> map) {
+        map.putIfAbsent("user_id",user_id);
         return ResultUtil.success(trainService.selectTrainApply(map));
     }
 
