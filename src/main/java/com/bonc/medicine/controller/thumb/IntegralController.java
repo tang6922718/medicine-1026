@@ -124,21 +124,22 @@ public class IntegralController {
      * @Date: 2018/9/8
      */
     @PostMapping("/integral/v1.0")
-    public Result addIntegralHistoryUpdateScore(@RequestBody Map<String, String> paramMap) {
+    public Result addIntegralHistoryUpdateScore(@RequestBody Map<String, String> paramMap) throws Exception{
         if (StringUtils.isEmpty(paramMap.get("userId")) || StringUtils.isEmpty(paramMap.get("actionCode"))) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
         Map<String, String> reMap = null;
-        try {
+        /*try {*/
             reMap = integralService.addIntegralHistory(paramMap);
             return ResultUtil.success(reMap);
-        } catch (Exception e) {
-            reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
-            reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
+       /* } catch (Exception e) {
+            //reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
+            *//*reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
             reMap.put("succeedScore", "0");
             reMap.put("msg", e.getMessage());
-            return ResultUtil.success(reMap);
-        }
+            return ResultUtil.error();*//*
+
+        }*/
     }
 
 

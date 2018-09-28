@@ -101,7 +101,7 @@ public class ESSearchController {
         }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         sr = srb.setQuery(qb).addSort(sortBuilder).setSize(50).execute().actionGet();
-        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
+//        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
         /*if(null == searchText || ""== searchText){
             sr = srb.setQuery(QueryBuilders.matchAllQuery()).execute().actionGet(); // 查询所有
         }else{
@@ -190,6 +190,9 @@ public class ESSearchController {
 
         SearchResponse sr = srb.setQuery(qb).execute().actionGet();
         SearchHits hits = sr.getHits();
+        if (0 == hits.getTotalHits()) {
+            return ResultUtil.success(0);
+        }
 
 //        查出 arcitle_type
         String article_type = (String) hits.getAt(0).getSource().get("artice_type");
@@ -202,6 +205,9 @@ public class ESSearchController {
 
         SearchResponse sresult = srb.setQuery(qbd).execute().actionGet();
         SearchHits hitsResult = sresult.getHits();
+        if (0 == hitsResult.getTotalHits()) {
+            return ResultUtil.success(0);
+        }
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Double article_score = 0.0;
         for (SearchHit hit : hitsResult) {

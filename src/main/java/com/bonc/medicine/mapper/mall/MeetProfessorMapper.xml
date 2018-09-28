@@ -19,15 +19,11 @@
 		a.is_revisited,
 		a.is_public
 		FROM
-		spec_issue a,
-		spec_issue_association b,
-		spec_info c,
-		common_user d
+		spec_issue a left join spec_issue_association b on a.id = b.issueid
+		left join spec_info c on b.specid = c.spec_id 
+		left join common_user d on d.id = a.issue_user_id
 		WHERE
-		a.id = b.issueid
-		AND b.specid = c.spec_id
-		AND b.is_assigned = '0'
-		AND d.id = a.issue_user_id
+		b.is_assigned = '0'
 		<if test="issue_status != null and issue_status != '全部'">
 			AND issue_status LIKE
 			CONCAT(CONCAT('%',#{issue_status,jdbcType=VARCHAR}),'%')

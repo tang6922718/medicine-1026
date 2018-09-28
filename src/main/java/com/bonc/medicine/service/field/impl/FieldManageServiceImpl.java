@@ -25,12 +25,19 @@ public class FieldManageServiceImpl implements FieldManageService {
 
 		Map map = new HashMap();
 		map = fieldManageMapper.queryUserInfo(tempData.getUser_id());
-		map.putAll(fieldManageMapper.queryCoopName(tempData.getUser_id()));
 		if (map != null) {
 			tempData.setUser_name((String) map.get("name"));
 			tempData.setUser_tel((String) map.get("telephone"));
-			tempData.setCoop_name((String) map.get("coop_name"));
 		}
+
+		Map map2 = new HashMap();
+		map2=fieldManageMapper.queryCoopName(tempData.getUser_id());  // map2 有可能为空
+		if (map2==null){
+			tempData.setCoop_name("");
+		}else {
+			tempData.setCoop_name( map2.get("coop_name")==null?"":(String) map2.get("coop_name"));
+		}
+
 		tempData.setRegistation_time(new Date());
 		tempData.setState("0");
 		// tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));

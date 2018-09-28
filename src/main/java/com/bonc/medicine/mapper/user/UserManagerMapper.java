@@ -12,18 +12,18 @@ import java.util.Map;
 public interface UserManagerMapper {
 
 	public void addBasic(Basicinfo basicinfo);
-	
+
 	public int updateBasic(Map map);
-	
+
 	public int updateField_coop(Map map);
-	
+
 	public int updateField_coop_member(Map map);
 
-	public void addUserRoleRel(Map map);
+	public void addUserRoleRel(int id, int role);
 
-	public void addCatRel(Map map);
+	public void addCatRel(int user_id, int id);
 
-	public void addSubject_rel(Map map);
+	public void addSubject_rel(int user_id, int id);
 
 	public void addExpert(Expert expert);
 

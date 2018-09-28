@@ -108,7 +108,7 @@ public class TrainController {
     /**
      * @param map
      * @return
-     * @description 查询是否报名(根据)
+     * @description 查询是否报名(根据object_id,object_type,user_id)
      */
     @RequestMapping("/selectApply")
     public Result selectApply(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
@@ -116,7 +116,15 @@ public class TrainController {
         return ResultUtil.success(trainService.selectApply(map));
     }
 
-
+    /**
+     * @param map
+     * @return
+     * @description 查询报名数量(根据object_id)
+     */
+    @RequestMapping("/selectApplyNum")
+    public Result selectApplyNum(@RequestBody(required = false)  Map<String, Object> map) {
+        return ResultUtil.success(trainService.selectApply(map));
+    }
 
 
     /**

@@ -35,6 +35,10 @@ public interface GongQiuSystemMapper {
 	public List<Map> range(Map map);
 
 	public int marks(Marks marks);
+	
+	public int queryUserId(Integer supply_id);
+	
+	public int addNotice(Map map);
 
 	public int reply(Reply reply);
 	

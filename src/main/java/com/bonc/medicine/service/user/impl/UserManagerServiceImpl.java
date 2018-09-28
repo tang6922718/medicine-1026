@@ -1,5 +1,6 @@
 package com.bonc.medicine.service.user.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
@@ -54,30 +55,6 @@ public class UserManagerServiceImpl implements UserManagerService {
 		userManagerMapper.updateField_coop(map);
 		userManagerMapper.updateField_coop_member(map1);
 		return userManagerMapper.updateBasic(map);
-	}
-
-	@Override
-	public void addUserRoleRel(Integer id, Integer user_role_id) {
-		Map map = new HashMap<>();
-		map.put("id", id);
-		map.put("role_id", user_role_id);
-		userManagerMapper.addUserRoleRel(map);
-	}
-
-	@Override
-	public void addCatRel(Integer id, Integer cat_rel_id) {
-		Map map = new HashMap<>();
-		map.put("id", id);
-		map.put("cat_rel_id", cat_rel_id);
-		userManagerMapper.addCatRel(map);
-	}
-
-	@Override
-	public void addSubject_rel(Integer id, Integer subject_rel_id) {
-		Map map = new HashMap<>();
-		map.put("id", id);
-		map.put("subject_rel_id", subject_rel_id);
-		userManagerMapper.addSubject_rel(map);
 	}
 
 	@Override
@@ -254,6 +231,60 @@ public class UserManagerServiceImpl implements UserManagerService {
 		i=userManagerMapper.insertUserCareVariety(careVariety);
 
 		return ResultUtil.success(i);
+	}
+
+	@Override
+	@Transactional
+	public void addUser(JSONObject json) {
+		Map<String, Object> tempData = new HashMap<String, Object>();
+		tempData.putAll(json);
+		Basicinfo basicinfo = new Basicinfo();
+		basicinfo.setAddress(tempData.get("address").toString());
+		basicinfo.setAge(Integer.parseInt(tempData.get("age").toString()));
+		basicinfo.setName(tempData.get("name").toString());
+		basicinfo.setPassword(tempData.get("password").toString());
+		basicinfo.setSex(tempData.get("sex").toString());
+		basicinfo.setTelephone(tempData.get("telephone").toString());
+		basicinfo.setRole(tempData.get("role").toString());
+		userManagerMapper.addBasic(basicinfo);
+		int id = basicinfo.getId();// user_id
+		String[] role = basicinfo.getRole().split(",");
+		for (int i = 0; i < role.length; i++) {
+			userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
+		}
+		if (basicinfo.getRole().toString().contains("5")) {
+			Expert expert = new Expert();
+			expert.setSpec_id(id);
+			expert.setName(tempData.get("name").toString());
+			expert.setEmployment_age(Integer.parseInt(tempData.get("employment_age").toString()));
+			expert.setEducation(tempData.get("education").toString());
+			expert.setProfessional_direction(tempData.get("professional_direction").toString());
+			expert.setTitle(tempData.get("title").toString());
+			expert.setCompany(tempData.get("company").toString());
+			expert.setExpertise_field(tempData.get("expertise_field").toString());
+			expert.setCat_rel(tempData.get("cat_rel").toString());
+			expert.setSubject_rel(tempData.get("subject_rel").toString());
+			expert.setDetail(tempData.get("detail").toString());
+			userManagerMapper.addExpert(expert);
+			String[] cat_rel = expert.getCat_rel().split(",");
+			for (int i = 0; i < cat_rel.length; i++) {
+				userManagerMapper.addCatRel(id, Integer.parseInt(cat_rel[i]));
+			}
+			String[] subject_rel = expert.getSubject_rel().split(",");
+			for (int i = 0; i < subject_rel.length; i++) {
+				userManagerMapper.addSubject_rel(id, Integer.parseInt(subject_rel[i]));
+			}
+		}
+		if (basicinfo.getRole().toString().contains("3")) {
+			Cooperative cooperative = new Cooperative();
+			cooperative.setName(tempData.get("coo_name").toString());
+			cooperative.setOfficial_user_id(id);
+			cooperative.setOfficial_user_name(tempData.get("official_user_name").toString());
+			cooperative.setAddress(tempData.get("address").toString());
+			cooperative.setImg_url(tempData.get("img_url").toString());
+			cooperative.setCultivar(tempData.get("cultivar").toString());
+			cooperative.setIntroduce(tempData.get("introduce").toString());
+		}
 	}
 
 }

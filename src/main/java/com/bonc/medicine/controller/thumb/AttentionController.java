@@ -302,5 +302,16 @@ public class AttentionController {
         reMap.put("succeed", likeCount);
         return ResultUtil.success(reMap);
     }*/
+    public static void main(String[] args) {
+        List<Map> ll = new ArrayList();
+        Map hh = new HashMap();
+        hh.put("iii", 123);
+        ll.add(hh);
+        for (Map yy: ll) {
+            yy.put("iii",345);
+            yy.put("444",444);
+        }
+        System.out.println(ll.toString());
+    }
 
 }
