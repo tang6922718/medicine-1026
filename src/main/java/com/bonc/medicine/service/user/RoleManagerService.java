@@ -55,4 +55,12 @@ public interface RoleManagerService {
      */
     public Map<String, Object> updateRolePermissions();
 
+    /**
+    * @Description:获取全部的菜单--后台管理
+    * @Param: []
+    * @return: java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+    * @Author: hejiajun
+    * @Date: 2018/9/28
+    */
+    public List<Map<String, Object>> queryAllMenu();
 }
