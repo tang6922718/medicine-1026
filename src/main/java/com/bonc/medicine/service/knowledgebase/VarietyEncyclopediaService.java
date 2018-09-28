@@ -32,6 +32,12 @@ public interface VarietyEncyclopediaService {
 
     public int changePhaStatus(Map map);
 
+    public int changeSopStatus(Map map);
+
+    public int changeInfoStatus(Map map);
+
+    public int changeVedioStatus(Map map);
+
     public List<Map<String,Object>> sourceDistribution();
 
     public int addHistoryText(String search_text);

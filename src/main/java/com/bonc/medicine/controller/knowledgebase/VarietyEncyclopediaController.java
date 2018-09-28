@@ -192,11 +192,19 @@ public class VarietyEncyclopediaController {
             String km_type = (String) map.get("km_type");
             String status = (String) map.get("status");
             String km_status = "1".equals(status)?"3":"4";
+            String ve_status = "1".equals(status)?"3":"2";
             map.put("km_status",km_status);
+            map.put("iv_status",km_status);
             if("1".equals(km_type)){
                 varietyEncyclopediaService.changeStatus(map);
             }else if("6".equals(km_type)){
                 varietyEncyclopediaService.changePhaStatus(map);
+            }else if("4".equals(km_type)){
+                varietyEncyclopediaService.changeSopStatus(map);
+            }else if("2".equals(km_type)){
+                varietyEncyclopediaService.changeInfoStatus(map);
+            }else if("5".equals(km_type)){
+                varietyEncyclopediaService.changeVedioStatus(map);
             }
         };
 
