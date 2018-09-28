@@ -143,9 +143,10 @@ public class IntegralServiceImpl implements IntegralService {
     public Map<String, String> addIntegralHistory(Map<String, String> paramMap) throws Exception {
 
         //paramMap 里面有userId,actionCode
+        IntegralRule ruleDemo = null;
         try {
             List<IntegralRule> ruleList = getIntegralRuleByPage();
-            IntegralRule ruleDemo = null;
+
             for (IntegralRule rule : ruleList) {
                 if (StringUtils.equals(rule.getActionCode(), paramMap.get("actionCode"))) {
                     ruleDemo = rule;
@@ -153,30 +154,31 @@ public class IntegralServiceImpl implements IntegralService {
                 }
             }
 
-            boolean goingDown = checkIntegralTimes(paramMap, ruleDemo);
-
-            if(!goingDown){
-                throw new MedicineRuntimeException(201, "亲！今天你也元气满满呢，操作次数上限了哦");
-            }
-
-            //添加历史记录表
-            int impactNumberScore = integralMapper.addIntegralHistory(paramMap);//如果失败等待再次执行时比较好的。
-
-            //更新积分总数并且跟新缓存
-            Map<String, String> scoreMap = updateIntegralUtil(paramMap);
-            //scoreMap.get("integral");
-            if (impactNumberScore > 0) {
-                scoreMap.put("succeedScore", paramMap.get("point"));
-            } else {
-                scoreMap.put("succeedScore", "0");
-            }
-            /*if(impactNumberScore < 1){
-                这里暂时不处理
-            }*/
-            return scoreMap;
         } catch (Exception e) {
             throw new MedicineRuntimeException(ResultEnum.ERROE);
         }
+        boolean goingDown = checkIntegralTimes(paramMap, ruleDemo);
+
+        if(!goingDown){
+            throw new MedicineRuntimeException(201, "亲！今天你也元气满满呢，操作次数上限了哦");
+        }
+
+        //添加历史记录表
+        int impactNumberScore = integralMapper.addIntegralHistory(paramMap);//如果失败等待再次执行时比较好的。
+
+        //更新积分总数并且跟新缓存
+        Map<String, String> scoreMap = updateIntegralUtil(paramMap);
+        //scoreMap.get("integral");
+        if (impactNumberScore > 0) {
+            scoreMap.put("succeedScore", paramMap.get("point"));
+        } else {
+            scoreMap.put("succeedScore", "0");
+        }
+        /*if(impactNumberScore < 1){
+            这里暂时不处理
+        }*/
+        return scoreMap;
+
     }
 
     @Override
@@ -206,6 +208,10 @@ public class IntegralServiceImpl implements IntegralService {
     public Map<String, String> updateIntegralUtil(Map<String, String> map) throws Exception {
 
         int impactNumber = integralMapper.updateUserIntergal(map);
+        if(impactNumber < 1){
+            impactNumber = integralMapper.addIntegralRecord(map);
+        }
+
         boolean exists = integralAdapter.existsIntegralKey(map.get("userId"));
         if (exists && impactNumber > 0) {
             redisService.del(IntegralKeyUtil.getIntegralKey(map.get("userId")));
