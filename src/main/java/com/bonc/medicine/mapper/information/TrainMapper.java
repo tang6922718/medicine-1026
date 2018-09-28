@@ -96,7 +96,7 @@ public interface TrainMapper {
     int editVideoCourse(Map<String, Object> map);
 
 
-    @Select("select *  from  spec_info")
+    @Select("select spec_id,name  from  spec_info")
     @ResultType(List.class)
     List<Map> selectSpecialist();
 
