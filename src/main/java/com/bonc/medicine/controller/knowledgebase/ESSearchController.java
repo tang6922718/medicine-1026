@@ -84,11 +84,24 @@ public class ESSearchController {
             }
         }
         if (null != searchText && "" != searchText) {
-//            qb.must(QueryBuilders.matchQuery("abstract", searchText));
-            qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
+            if("spec_info".equals(searchType)){
+                qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
+            }else if("comm_dyanimic".equals(searchType)){
+                qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
+            }else if("common_price".equals(searchType)){
+                qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+            }else {
+                BoolQueryBuilder qb2 = QueryBuilders.boolQuery();
+                qb2.should(QueryBuilders.wildcardQuery("abstract.keyword", "*"+searchText+"*"));
+                qb2.should(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                qb.must(qb2);
+//                qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
+            }
+
         }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         sr = srb.setQuery(qb).addSort(sortBuilder).setSize(50).execute().actionGet();
+        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
         /*if(null == searchText || ""== searchText){
             sr = srb.setQuery(QueryBuilders.matchAllQuery()).execute().actionGet(); // 查询所有
         }else{
@@ -124,7 +137,17 @@ public class ESSearchController {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         qb.must(QueryBuilders.termQuery("type", searchType));
         if (null != searchText && "" != searchText) {
-            qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
+            if("spec_info".equals(searchType)){
+                qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
+            }else if("comm_dyanimic".equals(searchType)){
+                qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
+            }else if("common_price".equals(searchType)){
+                qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+            }else {
+                qb.should(QueryBuilders.wildcardQuery("abstract.keyword", "*"+searchText+"*"));
+                qb.should(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+//                qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
+            }
         }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
