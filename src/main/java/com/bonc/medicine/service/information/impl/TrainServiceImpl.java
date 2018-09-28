@@ -111,4 +111,9 @@ public class TrainServiceImpl implements TrainService {
     public int editVideoCourse(Map<String, Object> map) {
         return trainMapper.editVideoCourse(map);
     }
+
+    @Override
+    public List selectSpecialist() {
+        return trainMapper.selectSpecialist();
+    }
 }

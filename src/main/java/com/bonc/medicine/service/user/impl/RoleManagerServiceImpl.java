@@ -6,10 +6,12 @@ import com.bonc.medicine.mapper.user.RoleManagerMapper;
 import com.bonc.medicine.service.user.RoleManagerService;
 import com.bonc.medicine.utils.TimeFormatUtils;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.rmi.MarshalledObject;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -129,4 +131,62 @@ public class RoleManagerServiceImpl implements RoleManagerService {
         }
         System.out.println(reList.toString());
     }*/
+
+    @SuppressWarnings("Duplicates")
+    public List<Map<String, Object>> queryAllMenu(){
+
+       List<Map<String, Object>> meunList = roleManagerMapper.queryAllMenu();
+
+        if (null == meunList || meunList.size() < 1 || null == meunList.get(0)){
+            throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+        }
+        List<Map<String, Object>> reList = new ArrayList<>();
+
+        String parentId = "1";
+        String parentName = null;
+        String parentUrl = null;
+        Map<String, Object> reMap = new HashMap<>();
+        List<Map<String, String>> sonMeunList = new ArrayList<>();
+        for (Map<String, Object> meunMap : meunList) {
+
+            //parentId = meunMap.get("parent_id") + "";
+            //parentName = meunMap.get("parent_menu_name") + "";
+            //parentUrl = meunMap.get("parent_url") + "";
+
+            if (StringUtils.equals(parentId, meunMap.get("parent_id") + "")){
+                reMap.put("parentId", parentId);
+                reMap.put("parentName", meunMap.get("parent_menu_name") + "");
+                reMap.put("parentUrl", meunMap.get("parent_url") + "");
+
+                Map<String, String> sonMap = new HashMap<>();
+                sonMap.put("sonName", meunMap.get("menu_name") + "");
+                sonMap.put("sonId", meunMap.get("id") + "");
+                sonMap.put("sonUrl", meunMap.get("son_url") + "");
+
+                sonMeunList.add(sonMap);
+
+                reMap.put("son", sonMeunList);
+            }else {
+                parentId = meunMap.get("parent_id") + "";
+                reMap = new HashMap();
+                reMap.put("parentId", parentId);
+                reMap.put("parentName", meunMap.get("parent_menu_name") + "");
+                reMap.put("parentUrl", meunMap.get("parent_url") + "");
+
+                sonMeunList = new ArrayList<>();
+
+                Map<String, String> sonMap = new HashMap<>();
+                sonMap.put("sonName", meunMap.get("menu_name") + "");
+                sonMap.put("sonId", meunMap.get("id") + "");
+                sonMap.put("sonUrl", meunMap.get("son_url") + "");
+
+                sonMeunList.add(sonMap);
+
+                reMap.put("son", sonMeunList);
+            }
+            reList.add(reMap);
+        }
+
+        return reList;
+    }
 }

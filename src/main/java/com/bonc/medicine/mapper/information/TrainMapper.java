@@ -32,7 +32,7 @@ public interface TrainMapper {
     List<Map> selectCourseList(Map<String, Object> map);
 
 
-    @Insert("insert into train_appointment(id,object_id,object_type,user_id) values (#{id},#{object_id},#{object_type},#{user_id})")
+    @Insert("insert into train_appointment(object_id,object_type,user_id) values (#{object_id},#{object_type},#{user_id})")
     int addTrainApply(Map<String, Object> map);
 
 
@@ -94,6 +94,11 @@ public interface TrainMapper {
     @UpdateProvider(type = TrainDynaSqlProvider.class,
             method = "editVideoCourse")
     int editVideoCourse(Map<String, Object> map);
+
+
+    @Select("select spec_id,name  from  spec_info")
+    @ResultType(List.class)
+    List<Map> selectSpecialist();
 
 
     class TrainDynaSqlProvider {

@@ -94,6 +94,12 @@ public interface InfoMapper {
                 if (map.get("is_alarm") != null) {
                     VALUES("is_alarm", "#{is_alarm}");
                 }
+                if (map.get("is_real") != null) {
+                    SET("is_real=#{is_real}");
+                }
+                if (map.get("is_pest") != null) {
+                    SET("is_pest=#{is_pest}");
+                }
                 if (map.get("content") != null) {
                     VALUES("content", "#{content}");
                 }
@@ -130,6 +136,12 @@ public interface InfoMapper {
                 }
                 if (map.get("is_alarm") != null) {
                     SET("is_alarm=#{is_alarm}");
+                }
+                if (map.get("is_real") != null) {
+                    SET("is_real=#{is_real}");
+                }
+                if (map.get("is_pest") != null) {
+                    SET("is_pest=#{is_pest}");
                 }
                 if (map.get("content") != null) {
                     SET("content=#{content}");
