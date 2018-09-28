@@ -29,7 +29,7 @@ public class FieldManageServiceImpl implements FieldManageService {
 		if (map != null) {
 			tempData.setUser_name((String) map.get("name"));
 			tempData.setUser_tel((String) map.get("telephone"));
-			tempData.setCoop_name((String) map.get("coop_name"));
+			tempData.setCoop_name( map.get("coop_name")==null? "" : (String) map.get("coop_name"));
 		}
 		tempData.setRegistation_time(new Date());
 		tempData.setState("0");
