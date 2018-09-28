@@ -23,4 +23,6 @@ public interface RoleManagerMapper {
     public int updateRoleInfo(Map<String, String> map);
 
     public int updateRolePermissions();
+
+    public List<Map<String, Object>> queryAllMenu();
 }

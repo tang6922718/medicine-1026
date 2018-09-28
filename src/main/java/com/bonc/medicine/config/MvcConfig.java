@@ -57,7 +57,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
                 .allowedHeaders("*")
                 .allowedOrigins("*")
                 .allowedMethods("*");
-
     }
 
     @Bean

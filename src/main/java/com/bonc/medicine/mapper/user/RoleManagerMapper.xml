@@ -75,5 +75,23 @@
 
 
     </delete>
+    
+    <select id="queryAllMenu" resultType="Map" >
+        SELECT
+            mm.menu_name,
+            mm.id,
+            mm.menu_url as son_url,
+            nn.menu_name AS parent_menu_name,
+            nn.id AS parent_id,
+            nn.menu_url as parent_url
+        FROM
+            common_menu mm
+            LEFT JOIN common_menu nn ON mm.parent_id = nn.id
+        WHERE
+            mm.parent_id IS NOT NULL
+        ORDER BY
+            mm.id
+
+    </select>
 
 </mapper>
