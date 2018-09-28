@@ -98,10 +98,12 @@
 				short_desc=#{item.short_desc},
 				detail_desc=#{item.detail_desc},
 				next_suggestion=#{item.next_suggestion},
-				recommendation=#{item.recommendation}
+                recommendation=#{item.recommendation},
+                audio_url=#{item.audio_url},
+                example_url=#{item.example_url}
 			</set>
-			where sop_id = (SELECT id FROM km_variety_sop WHERE variety_id=#{item.variety_id}) AND
-			step_order=#{item.step_order}
+            where sop_id = (SELECT id FROM km_variety_sop WHERE variety_id=#{item.variety_id}) AND
+            step_order=#{item.step_order}
 		</foreach>
 	</update>
 
