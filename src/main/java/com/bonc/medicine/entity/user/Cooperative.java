@@ -1,12 +1,13 @@
 package com.bonc.medicine.entity.user;
 
 public class Cooperative {
-	private String name;
-	private int official_user_id;
-	private String official_user_name;
-	private String address;
-	private String img_url;
-	private String cultivar;
+	private String name;// 合作社名字
+	private int official_user_id;// 负责人id
+	private String official_user_name;// 负责人名字
+	private String address;// 家庭住址
+	private String img_url;// 合作社图片
+	private String cultivar;// 覆盖品种
+	private String introduce;// 详细介绍
 
 	public String getName() {
 		return name;
@@ -54,6 +55,14 @@ public class Cooperative {
 
 	public void setCultivar(String cultivar) {
 		this.cultivar = cultivar;
+	}
+
+	public String getIntroduce() {
+		return introduce;
+	}
+
+	public void setIntroduce(String introduce) {
+		this.introduce = introduce;
 	}
 
 }
