@@ -222,4 +222,14 @@ public class TrainController {
         return ResultUtil.success(signature);
     }
 
+    /**
+     * @return
+     * @description 查询专家列表 （在创建培训的时候用）
+     */
+    @RequestMapping("/selectSpecialist")
+    public Result selectSpecialist() {
+        return ResultUtil.success(trainService.selectSpecialist());
+    }
+
+
 }

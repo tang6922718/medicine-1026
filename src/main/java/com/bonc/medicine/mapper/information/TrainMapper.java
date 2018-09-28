@@ -96,6 +96,11 @@ public interface TrainMapper {
     int editVideoCourse(Map<String, Object> map);
 
 
+    @Select("select *  from  spec_info")
+    @ResultType(List.class)
+    List<Map> selectSpecialist();
+
+
     class TrainDynaSqlProvider {
         public String createTrain(final Map<String, Object> map) {
             String sql = new SQL() {{

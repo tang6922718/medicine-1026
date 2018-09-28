@@ -42,4 +42,6 @@ public interface TrainService {
     int repealVideoCourse(Map<String,Object> map);
 
     int editVideoCourse(Map<String,Object> map);
+
+    List<Map> selectSpecialist();
 }
