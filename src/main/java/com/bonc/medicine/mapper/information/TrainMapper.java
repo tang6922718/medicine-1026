@@ -353,7 +353,7 @@ public interface TrainMapper {
         public String selectApply(final Map<String, Object> map) {
             return new SQL() {{
                 SELECT("count(id)");
-                FROM("train_appointment where 1=1");
+                FROM("train_appointment");
                 if (map.get("object_id") != null) {
                     WHERE("object_id=#{object_id}");
                 }
@@ -363,7 +363,6 @@ public interface TrainMapper {
                 if (map.get("user_id") != null) {
                     WHERE("user_id=#{user_id}");
                 }
-
 
             }}.toString();
         }
