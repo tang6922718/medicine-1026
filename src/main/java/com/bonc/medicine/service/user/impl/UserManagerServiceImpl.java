@@ -255,7 +255,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 		if (basicinfo.getRole().toString().contains("5")) {
 			Expert expert = new Expert();
 			expert.setSpec_id(id);
-			expert.setName(tempData.get("spec_name").toString());
+			expert.setName(tempData.get("name").toString());
 			expert.setEmployment_age(Integer.parseInt(tempData.get("employment_age").toString()));
 			expert.setEducation(tempData.get("education").toString());
 			expert.setProfessional_direction(tempData.get("professional_direction").toString());
