@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.thumb;
 
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
+import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
@@ -274,15 +275,18 @@ public class AttentionController {
     * @return: com.bonc.medicine.entity.Result
     * @Author: hejiajun
     * @Date: 2018/9/29 
-    */ 
+    */
+    @Authorization
     @GetMapping("/attention/number/attention/v1.0")
     public Result myAttentionNumber (@CurrentUser String userId){
 
         //attNumber
         Map<String, String> reMap = new HashMap<>();
-        if (StringUtils.equals("0", userId)){
+        if (StringUtils.equals("", userId)){
             reMap.put("attNumber", "777");
         }
+        //reMap = attentionService.myAttentionNumber(userId);
+        reMap.put("attNumber", "777");
 
         return ResultUtil.success(reMap);
     }
