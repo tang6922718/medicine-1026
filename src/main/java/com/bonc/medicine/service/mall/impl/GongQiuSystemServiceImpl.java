@@ -137,7 +137,15 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 	
 	@Override
+	@Transactional
 	public Result<Object> marks(Marks marks) {
+		int publish_user_id = gongQiuSystemMapper.queryUserId(marks.getSupply_id());
+		Map map = new HashMap<>();
+		map.put("object_id", marks.getSupply_id());
+		map.put("notice_content", marks.getMark_message());
+		map.put("publish_user_id", marks.getLeave_user_id());
+		map.put("notice_receiver", publish_user_id);
+		gongQiuSystemMapper.addNotice(map);
 		return ResultUtil.success(gongQiuSystemMapper.marks(marks));
 	}
 	
@@ -155,10 +163,10 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 	
 	@Override
-	public Result<Object> supplylist(String goods_name, String goodType,String is_audit,String carriage_status) {
+	public Result<Object> supplylist(String key, String goodType,String is_audit,String carriage_status) {
 		
 		Map map = new HashMap<>();
-		map.put("goods_name", goods_name);
+		map.put("key", key);
 		map.put("goodType", goodType);
 		map.put("is_audit", is_audit);
 		map.put("carriage_status", carriage_status);

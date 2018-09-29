@@ -66,6 +66,7 @@
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND a.notice_type = '3' and a.STATUS = '1' and a.state = '1'
+		order by a.publish_time desc
 	</select>
 
 	<select id="dyanimic" parameterType="Map" resultType="Map">
@@ -87,6 +88,7 @@
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND a.notice_type = '4' and a.STATUS = '1' and a.state = '1'
+		order by a.publish_time desc
 	</select>
 
 	<select id="message" parameterType="Map" resultType="Map">
@@ -112,6 +114,7 @@
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND
 		a.notice_type = '5' and a.STATUS = '1' and a.state = '1'
+		order by a.publish_time desc
 	</select>
 
 </mapper>

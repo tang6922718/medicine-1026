@@ -165,13 +165,18 @@ public class SpecRepertoryController {
 		list.get(0).put("active_count", acount);
 		if(user_id!=null)
 		{
+
+
 			Map param1 = new HashMap<>();
-			param1.put("user_id", user_id);
-			list1 = specialistService.specialIsFollow(param1);
+			param1.put("userId", user_id);
+			param1.put("attedUserId", spec_id);
+			param1.put("type", "1");
+			Map reMap = attentionService.attentionRelation(param1);
+			list.get(0).put("is_follow", reMap.get("followed"));
 			for(int i=0;i<list.size();i++){
 				for(int j=0;j<list1.size();j++){
 					if(list.get(i).get("spec_id").toString().equals(list1.get(j).get("object_id").toString())){
-						list.get(i).put("is_follow", 1);
+						list.get(i).put("is_follow", reMap.get("followed"));
 					}
 				}
 			}

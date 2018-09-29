@@ -7,6 +7,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.TokenModel;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.service.thumb.LogsService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.VerificationUtils;
@@ -38,6 +39,9 @@ public class UserOperController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LogsService logsService;
 
   /*  @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
@@ -74,6 +78,19 @@ public class UserOperController {
         //设置cookie的key和value，key随便字符串，value为token值
         Cookie cookie = new Cookie("kkk", token);
         Cookie[] ss = request.getCookies();*/
+       if(null != result.getData()){
+           String uuuid =  ((Map)result.getData()).get("userId")== null ? "0" :
+                   ((Map)result.getData()).get("userId")+ "";
+           Map map = new HashMap();
+           map.put("userId", uuuid);
+           map.put("status", "1");
+           map.put("ip", request.getRemoteAddr());
+           //System.out.println( request.getRequestURL());
+          // System.out.println(request.getRemoteAddr());
+           //System.out.println(request.getHeader("X-Real-IP"));
+           logsService.addLoginLogs(map);
+       }
+
 
         return result;
 
@@ -153,9 +170,19 @@ public class UserOperController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorization", value = "authorization", required = true, dataType = "string", paramType = "header"),
     })
-    public Result logout(HttpServletRequest request) throws Exception {
+    public Result logout( @CurrentUser String userId, HttpServletRequest request) throws Exception {
         String authorization = request.getHeader(Constants.AUTHORIZATION);
         userService.deleteToken(authorization);
+
+        Map map = new HashMap();
+        map.put("userId", userId);
+        map.put("status", "1");
+        map.put("ip", request.getRemoteAddr());
+        //System.out.println( request.getRequestURL());
+        // System.out.println(request.getRemoteAddr());
+        //System.out.println(request.getHeader("X-Real-IP"));
+        logsService.addLogoutLogs(map);
+
         return ResultUtil.success();
     }
 
@@ -247,6 +274,21 @@ public class UserOperController {
         User user = userService.getUserInfoById(UserId);
 
        return  ResultUtil.success(user);
+    }
+
+    /**
+    * @Description:后台管理系统登陆之后获取当前登录用户的简要信息
+    * @Param: [userId] ： 必须 通过token获取的
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/29
+    */
+    @Authorization
+    @GetMapping("/after/login/info/v1.0")
+    public Result interfaceForBackAfterLogin (@CurrentUser String userId) throws Exception{
+
+
+        return  ResultUtil.success(userService.interfaceForBackAfterLogin(userId));
     }
 
 
