@@ -30,7 +30,7 @@
 	</select>
 		
 	<select id="queryReplies" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  ,cu1.address,GROUP_CONCAT(distinct cv.variety_name) as variety_name
+		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  ,cu1.head_portrait,cu1.address,GROUP_CONCAT(distinct cv.variety_name) as variety_name
 		FROM common_comment cc
 		LEFT JOIN common_user cu1 ON cu1.id = cc.from_uid
 		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
