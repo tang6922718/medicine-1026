@@ -5,7 +5,7 @@
 
 	<select id="notice" parameterType="Map" resultType="Map">
 		select
-		(select count(1) from km_audit where status = '0' ) as zsk ,
+		(select count(1) from km_audit where status is null ) as zsk ,
 		(select count(1) from comm_dyanimic where effect_flag = '2') as dt ,
 		(select count(1) from spec_article where status = '0' and is_audit = '0') as zy ,
 		(select count(1) from spec_article where status = '0') as zl ,
