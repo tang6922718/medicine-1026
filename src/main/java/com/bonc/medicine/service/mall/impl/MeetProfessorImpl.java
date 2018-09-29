@@ -195,4 +195,10 @@ public class MeetProfessorImpl implements MeetProfessorService {
 		map.put("key", key);
 		return meetProfessorMapper.getArticlelist(map);
 	}
+
+	@Override
+	public List<Map> queryArticleList() {
+		
+		return meetProfessorMapper.queryArticleList();
+	}
 }
