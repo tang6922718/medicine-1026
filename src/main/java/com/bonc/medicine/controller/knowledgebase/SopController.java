@@ -1,6 +1,7 @@
 package com.bonc.medicine.controller.knowledgebase;
 
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.service.knowledgebase.AuditService;
 import com.bonc.medicine.service.knowledgebase.SopService;
 import com.bonc.medicine.utils.JacksonMapper;
 import com.bonc.medicine.utils.ResultUtil;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,9 @@ public class SopController {
 
     @Autowired
     private SopService sopService;
+
+    @Autowired
+    private AuditService auditService;
 
     @SuppressWarnings("unchecked")
     @GetMapping("/plantStandardManage/{sop_type}/{record_status}")
@@ -53,6 +58,13 @@ public class SopController {
         for (int i = 0; i < sopStepList.size(); i++) {
             ((Map) sopStepList.get(i)).put("sop_id", id);
         }
+
+        //插入审核表
+        Map auditMap = new HashMap();
+        auditMap.put("km_type","4");
+        auditMap.put("id",sopMap.get("variety_id"));
+        count += auditService.addAudit(auditMap);
+
         count += sopService.sopStepAdd(sopStepList);
         return ResultUtil.success(count);
     }
@@ -70,6 +82,14 @@ public class SopController {
         }
         int count = sopService.sopUpdata(sopMap);
         count += sopService.sopStepUpdata(sopStepList);
+
+        //更改审核表
+        Map auditMap = new HashMap();
+        auditMap.put("km_type","4");
+        auditMap.put("id",variety_id);
+        auditService.czAudit(auditMap);
+        count += auditService.addAudit(auditMap);
+
         return ResultUtil.success(count);
     }
 
