@@ -144,8 +144,11 @@
 		LEFT JOIN
 		common_user b ON a.seller_id = b.id
 		where a.state = '0'
-		<if test="goods_name != null and goods_name != ''">
-			AND a.goods_name like CONCAT('%',#{goods_name},'%')
+		<if test="key != null and key != ''">
+			AND (a.goods_name like CONCAT('%',#{key},'%') OR
+			b.telephone like
+			CONCAT('%',#{key},'%') OR b.NAME like
+			CONCAT('%',#{key},'%'))
 		</if>
 		<if test="is_audit != null and is_audit != ''">
 			AND a.is_audit = #{is_audit}
