@@ -220,17 +220,24 @@ public class UserManagerServiceImpl implements UserManagerService {
 	@Override
 	public Result<Object> updateUserCareVariety(Map<String, Object> params) {
 
-		if (params.get("list")==null || params.get("userID")==null){
+		if ( params.get("userID")==null){
 			return ResultUtil.error(ResultEnum.MISSING_PARA);
 		}
 
 		int userID= Integer.parseInt(params.get("userID").toString()) ;
-		List careVariety= (List) params.get("list");
 
-		int i=userManagerMapper.deleteUserCareVariety(userID);
-		i=userManagerMapper.insertUserCareVariety(careVariety);
+		if (params.get("list")==null){  //关心品种为空时  删除用户关心品种表中的数据
 
-		return ResultUtil.success(i);
+			return ResultUtil.success(userManagerMapper.deleteUserCareVariety(userID));
+
+		}else { // 关心品种不为空时  先删  再插入数据
+
+			List careVariety= (List) params.get("list");
+			int i=userManagerMapper.deleteUserCareVariety(userID);
+			i=userManagerMapper.insertUserCareVariety(careVariety);
+			return ResultUtil.success(i);
+		}
+
 	}
 
 	@Override
