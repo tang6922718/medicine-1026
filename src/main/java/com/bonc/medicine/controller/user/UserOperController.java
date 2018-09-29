@@ -276,5 +276,20 @@ public class UserOperController {
        return  ResultUtil.success(user);
     }
 
+    /**
+    * @Description:后台管理系统登陆之后获取当前登录用户的简要信息
+    * @Param: [userId] ： 必须 通过token获取的
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/29
+    */
+    @Authorization
+    @GetMapping("/after/login/info/v1.0")
+    public Result interfaceForBackAfterLogin (@CurrentUser String userId) throws Exception{
+
+
+        return  ResultUtil.success(userService.interfaceForBackAfterLogin(userId));
+    }
+
 
 }
