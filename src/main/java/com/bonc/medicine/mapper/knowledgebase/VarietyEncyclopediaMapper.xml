@@ -197,7 +197,7 @@
 		LEFT JOIN km_pharmacopoeia_information g ON a.object_id = g.id AND a.km_type = 6
 		WHERE 1=1
 		<if test="keyword != null and keyword != ''">
-			and (b.chinese_name LIKE CONCAT('%',#{keyword},'%') or c.title LIKE CONCAT('%',#{keyword},'%') /*or d.title LIKE CONCAT('%',#{keyword},'%')*/ OR e.step_name LIKE CONCAT('%',#{keyword},'%') OR f.title LIKE CONCAT('%',#{keyword},'%') OR g.name LIKE CONCAT('%',#{keyword},'%'))
+			and (b.chinese_name LIKE CONCAT('%',#{keyword},'%') or c.title LIKE CONCAT('%',#{keyword},'%') /*or d.title LIKE CONCAT('%','','%')*/ OR e.step_name LIKE CONCAT('%',#{keyword},'%') OR f.title LIKE CONCAT('%',#{keyword},'%') OR g.name LIKE CONCAT('%',#{keyword},'%'))
 		</if>
 		<if test="type_code != null and type_code != ''">
 			AND a.km_type = #{type_code}

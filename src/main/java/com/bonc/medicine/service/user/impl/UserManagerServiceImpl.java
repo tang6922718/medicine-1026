@@ -224,7 +224,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			return ResultUtil.error(ResultEnum.MISSING_PARA);
 		}
 
-		int userID= (int) params.get("userID");
+		int userID= Integer.parseInt(params.get("userID").toString()) ;
 		List careVariety= (List) params.get("list");
 
 		int i=userManagerMapper.deleteUserCareVariety(userID);
