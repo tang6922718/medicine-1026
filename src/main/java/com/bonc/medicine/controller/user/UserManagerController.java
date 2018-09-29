@@ -1,6 +1,8 @@
 package com.bonc.medicine.controller.user;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
@@ -203,5 +205,23 @@ public class UserManagerController {
 	public Result<Object> updateUserCareVariety(@RequestBody Map<String, Object> parsms) {
 		return userManagerService.updateUserCareVariety(parsms);
 	}
+
+
+	/**
+	* @Description: 根据用户的id获取当前用户的活跃天数；不是从之前的统计的表去查询。而是去登陆日志表中去统计
+	* @Param: []
+	* @return: com.bonc.medicine.entity.Result
+	 *     reMap.put("acDays", "0");
+	* @Author: hejiajun
+	* @Date: 2018/9/29 
+	*/
+	@Authorization
+	@GetMapping("/user/active/day/v1.0")
+	public Result activeDays (@CurrentUser String userId){
+
+		//System.out.println(userId);
+		return ResultUtil.success(userManagerService.activeDays(userId));
+	}
+
 
 }

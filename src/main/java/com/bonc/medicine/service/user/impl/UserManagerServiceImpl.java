@@ -295,4 +295,11 @@ public class UserManagerServiceImpl implements UserManagerService {
 		}
 	}
 
+	public Map<String, String> activeDays(String userId){
+		Map<String, String> reMap =  userManagerMapper.activeDays(userId);
+		if (reMap == null || reMap.isEmpty()){
+			reMap.put("acDays", "0");
+		}
+		return reMap;
+	}
 }

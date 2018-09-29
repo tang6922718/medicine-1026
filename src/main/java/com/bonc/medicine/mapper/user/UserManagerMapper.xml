@@ -266,4 +266,13 @@
 		</foreach>
 	</insert>
 
+	<select id="activeDays" parameterType="String" resultType="Map">
+		SELECT
+			COUNT( DISTINCT login_time ) AS acDays
+		FROM
+			common_logon_log
+		WHERE
+			user_id = #{userId}
+	</select>
+
 </mapper>

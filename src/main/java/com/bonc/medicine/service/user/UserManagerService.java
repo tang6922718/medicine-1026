@@ -54,4 +54,6 @@ public interface UserManagerService {
 	public Result<Object> updateUserPlantRole(Map<String,String> params);
 
 	public Result<Object> updateUserCareVariety(Map<String,Object> params);
+
+	public Map<String, String> activeDays(String userId);
 }
