@@ -197,8 +197,8 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
-	public List<Map> queryArticleList() {
+	public Result<Object> queryArticleList() {
 		
-		return meetProfessorMapper.queryArticleList();
+		return ResultUtil.success(meetProfessorMapper.queryArticleList());
 	}
 }

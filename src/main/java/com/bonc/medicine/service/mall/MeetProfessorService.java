@@ -52,7 +52,7 @@ public interface MeetProfessorService {
 
 	public void addArticle(Article article);
 	
-	public List<Map> queryArticleList();
+	public Result<Object> queryArticleList();
 
 	public void updateArticle(Article article);
 

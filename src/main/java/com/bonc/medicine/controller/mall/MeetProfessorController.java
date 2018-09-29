@@ -313,14 +313,11 @@ public class MeetProfessorController {
 	/*
 	 * 获取新增专家资源专家信息
 	 */
-	@GetMapping("/meetProfessor/add/Article")
+	@GetMapping("/meetProfessor/queryArticleList")
 	public Result<Object> queryArticleList() {
-		meetProfessorService.queryArticleList();
-		Result<Object> result = new Result<Object>();
-		result.setCode(200);
-		result.setMsg("成功");
-		result.setData("更新完毕");
-		return result;
+		
+		
+		return meetProfessorService.queryArticleList();
 	}
 
 	/*
