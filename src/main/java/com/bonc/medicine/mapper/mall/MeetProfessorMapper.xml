@@ -392,7 +392,7 @@
 		</if>
 	</select>
 	<select id="queryArticleList" parameterType="Map" resultType="Map">
-		SELECT  concat(concat(u.name,"("),u.telephone,")") as name ,u.id
+		SELECT  concat(concat(u.name,"("),u.telephone,")") as name_tel ,u.id,u.name name
 		FROM 
 		common_user u INNER JOIN spec_info s on u.id=s.spec_id
 	</select>
