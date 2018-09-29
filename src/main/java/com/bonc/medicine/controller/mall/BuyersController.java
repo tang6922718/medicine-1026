@@ -62,11 +62,12 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@GetMapping("/purchase/manage")
-	public Result<Object> purchaseList(String name, String cat, String is_audit) {
+	public Result<Object> purchaseList(String name, String cat, String is_audit,String goods_cat_code) {
 		Map params = new HashMap<>();
 		params.put("goods_name", name);
 		params.put("cat_code", cat);
 		params.put("is_aduit", is_audit);
+		params.put("goods_cat_code", goods_cat_code);
 		return ResultUtil.success(buyersService.purchaseList(params));
 	} 
 	
