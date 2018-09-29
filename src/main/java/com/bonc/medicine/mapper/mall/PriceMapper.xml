@@ -101,6 +101,8 @@
 		</if>
 		GROUP BY
 		price_date
+		ORDER BY
+		price_date
 	</select>
 
 	<select id="detail" parameterType="Map" resultType="Map">
