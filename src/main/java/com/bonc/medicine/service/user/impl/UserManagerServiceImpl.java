@@ -255,7 +255,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 		if (basicinfo.getRole().toString().contains("5")) {
 			Expert expert = new Expert();
 			expert.setSpec_id(id);
-			expert.setName(tempData.get("name").toString());
+			expert.setName(tempData.get("spec_name").toString());
 			expert.setEmployment_age(Integer.parseInt(tempData.get("employment_age").toString()));
 			expert.setEducation(tempData.get("education").toString());
 			expert.setProfessional_direction(tempData.get("professional_direction").toString());
@@ -280,7 +280,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			cooperative.setName(tempData.get("coo_name").toString());
 			cooperative.setOfficial_user_id(id);
 			cooperative.setOfficial_user_name(tempData.get("official_user_name").toString());
-			cooperative.setAddress(tempData.get("address").toString());
+			cooperative.setAddress(tempData.get("coo_address").toString());
 			cooperative.setImg_url(tempData.get("img_url").toString());
 			cooperative.setCultivar(tempData.get("cultivar").toString());
 			cooperative.setIntroduce(tempData.get("introduce").toString());
