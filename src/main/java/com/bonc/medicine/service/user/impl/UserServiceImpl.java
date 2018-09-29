@@ -346,5 +346,34 @@ public class UserServiceImpl implements UserService {
         return ResultUtil.success(map);
     }
 
+    public List<Map<String, Object>> interfaceForBackAfterLogin(String userId) throws  Exception{
+        //name;head_portrait;id;login_time;role_id;role_name
+        List<Map<String, Object>> reList  =  userMapper.interfaceForBackAfterLogin(userId);
+        if (reList == null || reList.isEmpty()){
+            Map<String, Object> helloMap = new HashMap<>();
+            helloMap.put("name", "管理员");
+            helloMap.put("head_portrait", "1537932340623980");
+            helloMap.put("role_id", "");
+            helloMap.put("role_name", "");
+            helloMap.put("id", "0");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            helloMap.put("login_time", sdf.format(new Date()));
+
+        }
+        for (Map<String, Object> inMap : reList) {
+            //inMap.get("login_time")
+            System.out.println(inMap.get("name") == null ? inMap.put("name", "管理员") :  null);
+            System.out.println(inMap.get("head_portrait") == null ? inMap.put("head_portrait", "1537932340623980") :  null);
+            System.out.println(inMap.get("role_id") == null ? inMap.put("role_id", "") :  null);
+            System.out.println(inMap.get("role_name") == null ? inMap.put("role_name", "") :  null);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            String tomeNow = inMap.get("login_time") + "";
+            System.out.println(inMap.get("login_time") == null ? inMap.put("login_time", sdf.format(new Date())) :
+                    inMap.put("login_time", sdf.parse(tomeNow)));
+        }
+
+        return reList;
+    }
+
 
 }

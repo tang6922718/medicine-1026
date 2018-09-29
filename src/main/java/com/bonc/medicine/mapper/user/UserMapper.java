@@ -33,4 +33,6 @@ public interface UserMapper {
 
 	public  Map<String, Object> getUserInfoById(String userId);
 
+	public List<Map<String, Object>> interfaceForBackAfterLogin(String userId);
+
 }

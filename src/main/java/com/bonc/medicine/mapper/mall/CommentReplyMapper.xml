@@ -26,14 +26,17 @@
 	</select>
 		
 	<select id="queryReplies" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  
+		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  ,cu1.address,GROUP_CONCAT(cv.variety_name) as variety_name
 		FROM common_comment cc
 		LEFT JOIN common_user cu1 ON cu1.id = cc.from_uid
 		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
+		left join common_user_care_varieties_r cr on cu1.id=cr.user_id
+    	left join common_medicine_variety cv on cr.variety_code=cv.variety_code
 		WHERE cc.comment_id IN 
 		<foreach collection="list" open="(" item="comment_id" separator="," close=")">
 			#{comment_id}
 		</foreach>
+		group by cc.comment_id
 		ORDER BY cc.comment_id ASC, cc.reply_time DESC
 	</select>
 	

@@ -3,6 +3,7 @@ package com.bonc.medicine.mapper.user;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,11 +20,11 @@ public interface UserManagerMapper {
 
 	public int updateField_coop_member(Map map);
 
-	public void addUserRoleRel(int id, int role);
+	public void addUserRoleRel(@Param("user_id") int id, @Param("role_id") int role);
 
-	public void addCatRel(int user_id, int id);
+	public void addCatRel(@Param("id") int user_id, @Param("cat_rel_id") int id);
 
-	public void addSubject_rel(int user_id, int id);
+	public void addSubject_rel(@Param("id") int user_id,@Param("subject_rel_id") int id);
 
 	public void addExpert(Expert expert);
 

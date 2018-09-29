@@ -163,10 +163,10 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 	
 	@Override
-	public Result<Object> supplylist(String goods_name, String goodType,String is_audit,String carriage_status) {
+	public Result<Object> supplylist(String key, String goodType,String is_audit,String carriage_status) {
 		
 		Map map = new HashMap<>();
-		map.put("goods_name", goods_name);
+		map.put("key", key);
 		map.put("goodType", goodType);
 		map.put("is_audit", is_audit);
 		map.put("carriage_status", carriage_status);

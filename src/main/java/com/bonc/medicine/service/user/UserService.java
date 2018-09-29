@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.TokenModel;
 import com.bonc.medicine.entity.user.User;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,6 +76,8 @@ public interface UserService {
     public Map changePassword(Map<String, String> map);
 
     public User getUserInfoById(String userId);
+
+    public List<Map<String, Object>> interfaceForBackAfterLogin(String userId) throws  Exception;
 
 
 

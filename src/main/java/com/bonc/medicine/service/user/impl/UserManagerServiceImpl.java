@@ -224,7 +224,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			return ResultUtil.error(ResultEnum.MISSING_PARA);
 		}
 
-		int userID= (int) params.get("userID");
+		int userID= Integer.parseInt(params.get("userID").toString()) ;
 		List careVariety= (List) params.get("list");
 
 		int i=userManagerMapper.deleteUserCareVariety(userID);
@@ -280,10 +280,11 @@ public class UserManagerServiceImpl implements UserManagerService {
 			cooperative.setName(tempData.get("coo_name").toString());
 			cooperative.setOfficial_user_id(id);
 			cooperative.setOfficial_user_name(tempData.get("official_user_name").toString());
-			cooperative.setAddress(tempData.get("address").toString());
+			cooperative.setAddress(tempData.get("coo_address").toString());
 			cooperative.setImg_url(tempData.get("img_url").toString());
 			cooperative.setCultivar(tempData.get("cultivar").toString());
 			cooperative.setIntroduce(tempData.get("introduce").toString());
+			userManagerMapper.addCooperative(cooperative);
 		}
 	}
 

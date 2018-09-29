@@ -37,8 +37,8 @@
 
 	<insert id="addExpert" parameterType="com.bonc.medicine.entity.user.Expert">
 		Insert into spec_info
-		(spec_id,name,employment_age,education,expertise_field,professional_direction,title,company,expertise_field,detail)
-		values(#{spec_id},#{name},#{employment_age},#{education},#{expertise_field},#{professional_direction},#{title},#{company},#{expertise_field},#{detail});
+		(spec_id,name,employment_age,education,expertise_field,professional_direction,title,company,detail)
+		values(#{spec_id},#{name},#{employment_age},#{education},#{expertise_field},#{professional_direction},#{title},#{company},#{detail});
 	</insert>
 
 	<insert id="addCatRel" parameterType="Map">
