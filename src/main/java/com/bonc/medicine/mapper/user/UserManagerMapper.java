@@ -72,4 +72,6 @@ public interface UserManagerMapper {
 
 	public int insertUserCareVariety(List userCareVariety);
 
+	public Map activeDays(String userId);
+
 }

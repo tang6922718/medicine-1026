@@ -51,7 +51,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
             //从数据库中查询并返回
             return String.valueOf(user.getUserId());
         } else {
-            return "0";
+            return "";
         }
 
         //throw new MedicineRuntimeException(ResultEnum.OUT_OF_TIME);

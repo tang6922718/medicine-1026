@@ -93,7 +93,7 @@ public class DyanimicController {
                 Object attentionTF = attention.get("followed");
 
                // 此处引用 当前用户是否对该条动态点赞
-                int thumbStatus = thumbService.thumbStatus(user_id, "0", attedUserId+"");
+                int thumbStatus = thumbService.thumbStatus(user_id, "0", dyanimicId+"");
 
                 map.put("dyanimic",amap);
                 map.put("thumb",thumbNumber);

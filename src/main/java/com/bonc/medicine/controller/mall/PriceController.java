@@ -73,7 +73,21 @@ public class PriceController {
 	@GetMapping("/price/trend")
 	public Result<Object> trend(String hotword, String market, String product, String specifaction, String start_time,
 			String end_time) {
-		return ResultUtil.success(priceService.trend(hotword, market, product, specifaction, start_time, end_time));
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+		DecimalFormat decimalFormat = new DecimalFormat(".00");
+		list = priceService.trend(hotword, market, product, specifaction, start_time, end_time);
+				String[] name = new String[list.size()];
+		String[] value = new String[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			name[i] = list.get(i).get("price_date").toString();
+			value[i] = decimalFormat.format(Float.parseFloat(list.get(i).get("price").toString()));
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name", name);
+		map.put("value", value);
+		list1.add(map);
+		return ResultUtil.success(list1);
 	}
 
 	/*

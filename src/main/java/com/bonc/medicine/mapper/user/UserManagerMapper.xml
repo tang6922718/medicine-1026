@@ -6,8 +6,8 @@
 	<insert id="addBasic" parameterType="com.bonc.medicine.entity.user.Basicinfo"
 		useGeneratedKeys="true" keyProperty="id">
 		Insert into common_user
-		(telephone,name,password,sex,age,address)
-		values(#{telephone},#{name},#{password},#{sex},#{age},#{address});
+		(telephone,name,password,sex,age,address,log_time)
+		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now());
 	</insert>
 
 	<update id="updateBasic" parameterType="Map">
@@ -265,5 +265,14 @@
 			(#{temp.userID}, #{temp.variety_code})
 		</foreach>
 	</insert>
+
+	<select id="activeDays" parameterType="String" resultType="Map">
+		SELECT
+			COUNT( DISTINCT login_time ) AS acDays
+		FROM
+			common_logon_log
+		WHERE
+			user_id = #{userId}
+	</select>
 
 </mapper>

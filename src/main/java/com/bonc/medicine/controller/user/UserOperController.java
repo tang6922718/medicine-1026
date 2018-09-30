@@ -186,7 +186,7 @@ public class UserOperController {
         return ResultUtil.success();
     }
 
-  /*  @Authorization
+  /*  @Authorization---> 需要登陆验证没有token直接返回登陆超时
     @GetMapping("/testt")
     public String test(@CurrentUser String userid) {
         //
@@ -290,6 +290,7 @@ public class UserOperController {
 
         return  ResultUtil.success(userService.interfaceForBackAfterLogin(userId));
     }
+
 
 
 }

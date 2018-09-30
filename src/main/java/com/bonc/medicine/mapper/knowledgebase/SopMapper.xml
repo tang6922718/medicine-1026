@@ -86,6 +86,7 @@
 			<if test="sop_type != null">sop_type=#{sop_type},</if>
 			<if test="record_user_id != null">record_user_id=#{record_user_id},</if>
 			<if test="update_time != null">update_time=#{update_time},</if>
+			record_status = '2'
 		</set>
 		WHERE variety_id = #{variety_id}
 	</update>

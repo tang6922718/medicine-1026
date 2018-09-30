@@ -12,9 +12,13 @@
 	</insert>
 	
 	<select id="queryComments" parameterType="java.util.Map" resultType="java.util.Map">
-		select cc.*, cu1.name as fname, cu1.head_portrait, cu2.name AS tname from common_comment cc 
+		select cc.*, cu1.name as fname, cu1.head_portrait, cu2.name AS tname,cu1.address,
+				GROUP_CONCAT(distinct cv.variety_name) as variety_name
+		from common_comment cc 
 		left join common_user cu1 ON cc.from_uid = cu1.id
 		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid
+		left join common_user_care_varieties_r cr on cu1.id=cr.user_id
+    	left join common_medicine_variety cv on cr.variety_code=cv.variety_code
 		where cc.object_type = #{object_type} and cc.object_id = #{object_id}
 		order by cc.reply_time desc
 	</select>
@@ -26,7 +30,7 @@
 	</select>
 		
 	<select id="queryReplies" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  ,cu1.address,GROUP_CONCAT(cv.variety_name) as variety_name
+		SELECT cc.*, cu1.name AS fname, cu2.name AS tname  ,cu1.head_portrait,cu1.address,GROUP_CONCAT(distinct cv.variety_name) as variety_name
 		FROM common_comment cc
 		LEFT JOIN common_user cu1 ON cu1.id = cc.from_uid
 		LEFT JOIN common_user cu2 ON cu2.id = cc.to_uid

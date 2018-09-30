@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.thumb;
 
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
+import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
@@ -50,7 +51,8 @@ public class AttentionController {
     * @Date: 2018/9/5
     */
     @GetMapping("/attention/relation/v1.0")
-    public Result attentionRelation(@RequestParam(required = true,name = "userId") String userId,
+    public Result attentionRelation(@CurrentUser String userid,
+                                    @RequestParam(required = true,name = "userId") String userId,
                                     @RequestParam(required = true,name = "attedUserId") String attedUserId,
                                     @RequestParam(required = false,name = "type",defaultValue = "0") String type){
 
@@ -63,8 +65,15 @@ public class AttentionController {
         Map reMap = new HashMap();
 
         reMap.put("followed", isFollowed);*/
+        String uuuid = "";
+        if (StringUtils.equals("", userid)){
+            uuuid = userId;
+        }
+        if (!StringUtils.equals("", userid)){
+            uuuid = userid;
+        }
         Map<String, String> map = new HashMap<>();
-        map.put("userId", userId);
+        map.put("userId", uuuid);
         map.put("attedUserId", attedUserId);
         map.put("type", type);
         validatePram(map);
@@ -80,9 +89,15 @@ public class AttentionController {
     * @Date: 2018/9/4
     */
     @PostMapping("/attention/v1.0")
-    public Result giveAttention(@RequestBody Map<String, String> paramMap){
+    public Result giveAttention(@CurrentUser String userid ,@RequestBody Map<String, String> paramMap){
 
         //String attedUserId, String userid , String type
+        String uuuid = "";
+
+        if (!StringUtils.equals("", userid)){
+            paramMap.put("userId", userid);
+        }
+
         validatePram(paramMap);
 
         long succeed = attentionService.giveAttention(paramMap);
@@ -100,9 +115,12 @@ public class AttentionController {
      * @Date: 2018/9/4
      */
     @PutMapping("/attention/v1.0")
-    public Result removeAttention(@RequestBody Map<String, String> paramMap){
+    public Result removeAttention(@CurrentUser String userid ,@RequestBody Map<String, String> paramMap){
 
         //String attedUserId, String userid , String type
+        if (!StringUtils.equals("", userid)){
+            paramMap.put("userId", userid);
+        }
         validatePram(paramMap);
 
         long succeed = attentionService.removeAttention(paramMap);
@@ -121,12 +139,17 @@ public class AttentionController {
     * @Date: 2018/9/5 
     */ 
     @GetMapping("/attention/list/v1.0/{userId}/{type}")
-    public Result attentionList(@PathVariable String userId,
+    public Result attentionList(@CurrentUser String userid, @PathVariable String userId,
                                 @PathVariable String type){
 
         //String userid , String type
         Map paramMap = new HashMap();
-        paramMap.put("userId", userId);
+        if (!StringUtils.equals("", userid)){
+            paramMap.put("userId", userid);
+        }else{
+
+            paramMap.put("userId", userId);
+        }
         paramMap.put("type", type);
 
         Map succeed = attentionService.attentionList(paramMap);
@@ -241,6 +264,31 @@ public class AttentionController {
         }
 
         return ResultUtil.success(attentionService.fansNum(userId));
+    }
+
+    /**
+    * @Description: 通过用户的id获取当前用户关注了多少用户，数量
+    * @Param: [userId]
+     * data:{
+     *      attNumber : 100
+     * }
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/29 
+    */
+    @Authorization
+    @GetMapping("/attention/number/attention/v1.0")
+    public Result myAttentionNumber (@CurrentUser String userId){
+
+        //attNumber
+        Map<String, String> reMap = new HashMap<>();
+        if (StringUtils.equals("", userId)){
+            reMap.put("attNumber", "0");
+        }
+        reMap = attentionService.myAttentionNumber(userId);
+        //reMap.put("attNumber", "0");
+
+        return ResultUtil.success(reMap);
     }
 
     @RequestMapping("/keys/{pre}")

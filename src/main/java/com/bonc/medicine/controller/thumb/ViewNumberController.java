@@ -65,4 +65,11 @@ public class ViewNumberController {
         return ResultUtil.success(viewNumberService.addOrUpdateViewNumberCord(paramMap));
     }
 
+
+    public Result ddd (){
+        //1 线下培训报名  2 直播报名
+
+        return null;
+    }
+
 }

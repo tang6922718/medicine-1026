@@ -51,6 +51,8 @@ public interface MeetProfessorService {
 	public void aduitArticle(Integer id, String is_audit, String fail_opinion);
 
 	public void addArticle(Article article);
+	
+	public Result<Object> queryArticleList();
 
 	public void updateArticle(Article article);
 
