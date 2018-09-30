@@ -332,8 +332,8 @@ public class MeetProfessorController {
 	@PutMapping("/meetProfessor/update/Article")
 	public Result<Object> updateArticle(@RequestBody Article article) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String publish_time = sdf.format(new Date());
-		article.setPublish_time(publish_time);
+		String update_time = sdf.format(new Date());
+		article.setUpdate_time(update_time);
 		meetProfessorService.updateArticle(article);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);

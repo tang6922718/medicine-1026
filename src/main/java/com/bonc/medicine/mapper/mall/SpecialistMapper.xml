@@ -125,7 +125,7 @@
 		SELECT sa.*, cu.telephone ,cbu.name as create_name FROM spec_article sa
 		left join common_user cu on sa.spec_id = cu.id
 		left join common_backend_user cbu on sa.create_user_id=cbu.id
-		WHERE status = '0'
+		WHERE sa.status = '0'
 		<if test="spec_id != null and spec_id != ''">
 			and sa.spec_id = #{spec_id}
 		</if>

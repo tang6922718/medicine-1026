@@ -384,8 +384,9 @@
 		title = #{title},
 		article_type = #{article_type},
 		author = #{author},
+		spec_id = #{spec_id},
 		content = #{content},
-		update_time = #{update_time}  
+		update_time = #{update_time}
 		<if test="img_url != null and img_url != ''">
 			,img_url = #{img_url}
 		</if>
