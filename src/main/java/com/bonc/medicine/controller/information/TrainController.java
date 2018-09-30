@@ -5,6 +5,7 @@ import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.TrainService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.Signature;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -20,6 +22,9 @@ public class TrainController {
 
     @Autowired
     TrainService trainService;
+
+    @Autowired
+    private ViewNumberService viewNumberService;
 
     /**
      * @param map
@@ -90,6 +95,13 @@ public class TrainController {
      */
     @RequestMapping("/selectCourseList")
     public Result selectCourseList(@RequestBody(required = false)  Map<String, Object> map) {
+
+        if (null != map.get("id") ){
+            Map<String, String> numberMap  = new HashMap();
+            numberMap.put("objectId", map.get("id") + "" );
+            numberMap.put("objectType", "4");
+            viewNumberService.addOrUpdateViewNumberCord(numberMap);
+        }
         return ResultUtil.success(trainService.selectCourseList(map));
     }
 

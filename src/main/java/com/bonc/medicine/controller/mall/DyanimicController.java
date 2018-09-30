@@ -376,6 +376,12 @@ public class DyanimicController {
                 returnList.add(map);
             }
         }
+
+        // 目前先这样增加浏览数
+        Map<String, String> numberMap  = new HashMap();
+        numberMap.put("objectId", id + "");
+        numberMap.put("objectType", "0");
+        viewNumberService.addOrUpdateViewNumberCord(numberMap);
         return ResultUtil.success(returnList);
     }
 
