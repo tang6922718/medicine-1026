@@ -135,7 +135,7 @@
 		price_date
 		ORDER BY
 		price_date
-		limit 0,9
+		limit 0,10
 	</select>
 
 	<select id="todayPrice" parameterType="Map" resultType="Map">

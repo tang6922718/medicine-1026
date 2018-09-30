@@ -40,8 +40,10 @@ public class CommentReplyController {
 		param.put("object_id", object_id);
 		List<Map> result = commentReplyService.queryComments(param);
 		List commentids = new ArrayList<>();
-		for (Map map : result) {
-			commentids.add(map.get("id"));
+		if(result.get(0)==null||!result.get(0).isEmpty()){
+			for (Map map : result) {			
+				commentids.add(map.get("id"));
+			}
 		}
 		List<Map> replies = new ArrayList<>();
 		if (commentids.size()>0) {

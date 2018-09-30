@@ -136,10 +136,10 @@ public class MeetProfessorController {
 				list.get(i).put("reply_time", time);
 			}
 			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).get("from_uid").toString().equals(list.get(i).get("to_uid").toString())) {
-				} else if (list.get(i).get("from_uid").toString().equals(spec_id.toString())) {
-					list.get(i).put("reply_person_msg", "我回复" + list.get(i).get("NAME").toString());
-				} else if (list.get(i).get("to_uid").toString().equals(spec_id.toString())) {
+				if (String.valueOf(list.get(i).get("from_uid")).equals(String.valueOf(list.get(i).get("to_uid")))) {
+				} else if (String.valueOf(list.get(i).get("from_uid")).equals(spec_id.toString())) {
+					list.get(i).put("reply_person_msg", "我回复" + String.valueOf(list.get(i).get("NAME")));
+				} else if (String.valueOf(list.get(i).get("to_uid")).equals(spec_id.toString())) {
 					list.get(i).put("reply_person_msg", list.get(i).get("NAME").toString() + "回复我");
 				}
 			}
