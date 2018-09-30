@@ -145,7 +145,7 @@
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select a.id,a.title,a.author,b.name,concat(concat(b.name,"("),b.telephone,")") as name_tel,a.publish_time,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		select a.id,a.title,a.author,a.spec_id,b.name,concat(concat(b.name,"("),b.telephone,")") as name_tel,a.publish_time,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
 		a.spec_id = b.id where a.id = #{id}
 	</select>
 	
@@ -248,8 +248,9 @@
 	</insert>
 	
 	<select id="videoList" parameterType="java.util.Map" resultType="Map">
-		select tvc.*, cu.telephone from train_video_course tvc
+		select tvc.*, cu.telephone,cbu.name as create_name from train_video_course tvc
 		left join common_user cu on tvc.spec_id = cu.id
+		left join common_backend_user cbu on tvc.user_id=cbu.id
 		WHERE 1=1
 		<if test="spec_id != null and spec_id != ''">
 			and tvc.spec_id = #{spec_id}

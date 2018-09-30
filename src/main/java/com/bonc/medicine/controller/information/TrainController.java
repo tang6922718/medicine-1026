@@ -53,7 +53,9 @@ public class TrainController {
      * @description 新建视频
      */
     @RequestMapping("/createVideo")
-    public Result createVideo(@RequestBody Map<String, Object> map) {
+    @Authorization
+    public Result createVideo(@RequestBody Map<String, Object> map ,@CurrentUser String user_id) {
+    	map.putIfAbsent("user_id", user_id);//获取当前登录者id作为视频的操作人
         return ResultUtil.success(trainService.createVideo(map));
     }
 
