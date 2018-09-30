@@ -15,6 +15,16 @@ public class Article {
 	private String fail_opinion;
 	private String update_time;
 	private String is_audit;
+	private int create_user_id;
+
+	
+	public int getCreate_user_id() {
+		return create_user_id;
+	}
+
+	public void setCreate_user_id(int create_user_id) {
+		this.create_user_id = create_user_id;
+	}
 
 	public int getId() {
 		return id;

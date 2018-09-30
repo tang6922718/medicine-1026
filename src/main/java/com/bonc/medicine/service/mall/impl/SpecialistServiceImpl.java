@@ -6,6 +6,9 @@ import com.bonc.medicine.entity.mall.Specialist;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.mall.SpecialistMapper;
 import com.bonc.medicine.service.mall.SpecialistService;
+import com.bonc.medicine.service.management.CollectionService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,12 @@ import java.util.Map;
 public class SpecialistServiceImpl implements SpecialistService {
 	@Autowired
 	SpecialistMapper specialistMapper;
+	
+	@Autowired
+	ViewNumberService viewNumberService;
+	
+	@Autowired
+	CollectionService collectionService;
 	
 	@Override
 	public int craeteCharactor(Specialist specialist) {
@@ -64,7 +73,16 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public List<Map> articleList(Map param) {
-		return specialistMapper.articleList(param);
+		
+		List<Map> v_list=specialistMapper.articleList(param);
+		param.put("objectType", "5");
+		for (Map map : v_list) {
+			param.put("objectId", map.get("id")+"");
+			Map remap=viewNumberService.queryViewNumber(param);			
+			map.put("viewNumber", remap.get("viewNumber"));
+			map.put("collectionNumber", collectionService.collectCount("4", map.get("id")+""));
+		}
+		return v_list;
 	}
 
 	@Override
@@ -116,7 +134,14 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public List<Map> videoList(Map param) {
-		return specialistMapper.videoList(param);
+		List<Map> v_list=specialistMapper.videoList(param);
+		param.put("objectType", "4");
+		for (Map map : v_list) {
+			param.put("objectId", map.get("id")+"");
+			Map remap=viewNumberService.queryViewNumber(param);					
+			map.put("viewNumber", remap.get("viewNumber"));
+		}
+		return v_list;
 	}
 
 	@Override

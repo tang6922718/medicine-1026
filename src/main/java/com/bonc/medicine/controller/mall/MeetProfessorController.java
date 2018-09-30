@@ -1,6 +1,8 @@
 package com.bonc.medicine.controller.mall;
 
 import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
@@ -8,6 +10,7 @@ import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.utils.ResultUtil;
 
+import org.hibernate.validator.constraints.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -302,7 +305,10 @@ public class MeetProfessorController {
 	 * 新增文章注意审核字段
 	 */
 	@PutMapping("/meetProfessor/add/Article")
-	public Result<Object> addArticle(@RequestBody Article article) {
+	@Authorization
+	public Result<Object> addArticle(@RequestBody Article article,@CurrentUser String crreate_user_id) {
+		article.setCreate_user_id(Integer.valueOf(crreate_user_id));
+		
 		meetProfessorService.addArticle(article);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);
