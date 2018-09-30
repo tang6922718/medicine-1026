@@ -148,9 +148,9 @@
 			GROUP_CONCAT( DISTINCT cccr.role_name ) AS role_name
 		FROM
 			common_logon_log cll
-			RIGHT JOIN common_user cu ON cll.user_id = cu.id
-			LEFT JOIN common_user_role_rel urr ON cu.id = urr.user_id
-			LEFT JOIN common_role cccr ON urr.role_id = cccr.id
+			RIGHT JOIN common_backend_user cu ON cll.user_id = cu.id
+			LEFT JOIN common_backend_user_role_r urr ON cu.id = urr.backend_user_id
+			LEFT JOIN common_backend_user_role cccr ON urr.backend_role_id = cccr.id
 		WHERE
 			cu.id = #{userId}
 

@@ -77,7 +77,7 @@ public interface UserService {
 
     public User getUserInfoById(String userId);
 
-    public List<Map<String, Object>> interfaceForBackAfterLogin(String userId) throws  Exception;
+    public Map<String, Object> interfaceForBackAfterLogin(String userId) throws  Exception;
 
 
 
