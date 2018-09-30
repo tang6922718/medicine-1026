@@ -258,7 +258,7 @@
 			and (tvc.title LIKE CONCAT('%',#{title},'%') or tvc.lecturer_name LIKE CONCAT('%',#{title},'%'))
 		</if>
 		<if test="status != null and status != '' and status != '-1'">
-			AND tvc.is_audit = #{status}
+			AND tvc.operation_status = #{status}
 		</if>
 		<if test="start != null and start != ''">
 			AND tvc.publish_time &gt; #{start}

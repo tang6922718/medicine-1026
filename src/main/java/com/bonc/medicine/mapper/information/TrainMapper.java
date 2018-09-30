@@ -80,7 +80,7 @@ public interface TrainMapper {
     @Select("SELECT COUNT(id)  as bmNum from train_appointment  WHERE object_id=#{comment_id} and object_type=#{Appointment_type}  GROUP BY user_id ")
     Map queryCommentNumber(Map<String, String> map);
 
-    @Update("update train_video_course set is_display='0' where id=#{id}")
+    @Update("update train_video_course set status='0' where id=#{id}")
     int delCourseTrainVideo(Map<String, Object> map);
 
 
@@ -221,7 +221,7 @@ public interface TrainMapper {
                 if (map.get("id") != null) {
                     WHERE("id=#{id}");
                 }
-                WHERE("is_display='1'");
+                WHERE("status='1'");
             }}.toString();
         }
 
