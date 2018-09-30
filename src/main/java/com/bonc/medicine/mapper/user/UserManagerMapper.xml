@@ -275,4 +275,19 @@
 			user_id = #{userId}
 	</select>
 
+	<!-- canshu  proId -->
+	<select id="queryInteractTimes" parameterType="String" resultType="Map" >
+		SELECT
+			tii.user_id,
+			count( tii.user_id )  interact_number
+		FROM
+			train_interact tii
+			LEFT JOIN spec_info ssi ON tii.object_id = ssi.spec_id
+		WHERE
+			tii.user_id IN ( ${proId} )
+		GROUP BY
+			tii.user_id
+
+
+	</select>
 </mapper>

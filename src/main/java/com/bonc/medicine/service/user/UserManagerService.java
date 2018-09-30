@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -56,4 +57,14 @@ public interface UserManagerService {
 	public Result<Object> updateUserCareVariety(Map<String,Object> params);
 
 	public Map<String, String> activeDays(String userId);
+
+	/**
+	* @Description: userId要查询的用户的id  ‘1,2,3,4’ 多个这样用都逗号隔开，必须参数 如果没有就返回null
+	 * queryType:目前已知  1：直播 2：专家
+	* @Param: [userId, queryType]
+	* @return: java.util.List<java.util.Map<java.lang.String,java.lang.String>>
+	* @Author: hejiajun
+	* @Date: 2018/9/30 
+	*/ 
+	public List<Map<String, String>> queryInteractTimes( String userId);
 }

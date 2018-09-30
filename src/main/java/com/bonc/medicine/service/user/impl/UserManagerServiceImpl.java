@@ -11,6 +11,7 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -301,5 +302,41 @@ public class UserManagerServiceImpl implements UserManagerService {
 			reMap.put("acDays", "0");
 		}
 		return reMap;
+	}
+
+	public List<Map<String, String>> queryInteractTimes(String userId){
+		if (StringUtils.isEmpty(userId)){
+			return null;
+		}
+		String [] proIds = userId.split(",");
+		String paramString = userId.trim();
+
+		List<Map<String, Object>> queryList =  userManagerMapper.queryInteractTimes(paramString);
+
+		// 向外返回的list
+		List<Map<String, String>> reList = new ArrayList<>();
+
+		// 如果数据库中没有专家的互动信息，每个专家的互动信息 设置为“0”
+		if (queryList == null || queryList.isEmpty() || queryList.get(0) == null ){
+			for (String  inProdId : proIds) {
+
+				Map<String, String> middleMap = new HashMap();
+				middleMap.put("proId", inProdId);
+				middleMap.put("interactNumber", "0");
+				reList.add(middleMap);
+			}
+		}
+
+		// user_id; interact_number
+		for (Map<String, Object> queryMap : queryList) {
+			Map<String, String> middleMap = new HashMap();
+
+			middleMap.put("proId", queryMap.get("user_id") + "");
+			middleMap.put("interactNumber", queryMap.get("interact_number") == null ? "0"
+					: queryMap.get("interact_number") + "");
+			reList.add(middleMap);
+		}
+
+		return reList;
 	}
 }

@@ -74,4 +74,6 @@ public interface UserManagerMapper {
 
 	public Map activeDays(String userId);
 
+	public List<Map<String, Object>> queryInteractTimes(@Param("proId")String proId);
+
 }
