@@ -11,7 +11,6 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
