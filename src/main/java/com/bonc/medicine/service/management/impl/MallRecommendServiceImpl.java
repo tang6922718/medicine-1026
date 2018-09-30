@@ -5,6 +5,7 @@ import com.bonc.medicine.service.management.MallRecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +39,11 @@ public class MallRecommendServiceImpl implements MallRecommendService {
     }
 
     @Override
-    public Map<String, Object> showGoodsById(String id) {
-        return mallRecommendMapper.showGoodsById(id);
+    public Map<String, Object> showGoodsById(String id,String site) {
+        Map map = new HashMap();
+        map.put("id",id);
+        map.put("site",site);
+        return mallRecommendMapper.showGoodsById(map);
     }
 
     @Override
