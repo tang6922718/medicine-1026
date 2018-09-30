@@ -374,8 +374,8 @@
 
 	<insert id="addArticle" parameterType="com.bonc.medicine.entity.mall.Article">
 		insert into
-		spec_article(title,article_type,author,label,spec_id,publish_time,content,effect_flag,img_url,status,fail_opinion,update_time,is_audit,create_user_id)
-		values(#{title},#{article_type},#{author},#{label},#{spec_id},now(),#{content},#{effect_flag},#{img_url},#{status},#{fail_opinion},#{update_time},#{is_audit},#{create_user_id});
+		spec_article(title,article_type,author,label,spec_id,publish_time,content,effect_flag,img_url,status,fail_opinion,is_audit,create_user_id)
+		values(#{title},#{article_type},#{author},#{label},#{spec_id},now(),#{content},#{effect_flag},#{img_url},'0',#{fail_opinion},'0',#{create_user_id});
 	</insert>
 
 	<update id="updateArticle" parameterType="com.bonc.medicine.entity.mall.Article">
