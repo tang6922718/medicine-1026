@@ -144,7 +144,7 @@
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select a.id,a.title,a.author,b.name,a.publish_time,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		select a.id,a.title,a.author,b.name,concat(concat(b.name,"("),b.telephone,")") as name_tel,a.publish_time,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
 		a.spec_id = b.id where a.id = #{id}
 	</select>
 	

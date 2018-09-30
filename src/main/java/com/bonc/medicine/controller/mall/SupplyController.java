@@ -60,7 +60,7 @@ public class SupplyController {
         map.put("objectType", "3");
         map.put("objectId", id);
         map.put("viewNumber", "1");
-        viewNumberService.queryViewNumber(map);
+        viewNumberService.addOrUpdateViewNumberCord(map);
     	
         return supplyService.getDetails(id);
     }

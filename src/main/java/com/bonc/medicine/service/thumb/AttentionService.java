@@ -24,4 +24,7 @@ public interface AttentionService {
     public long removeAttention(Map<String, String> param);
 
     public Map<String, Object> fansList(String userId);
+
+
+    public Map<String, String> myAttentionNumber(String userId);
 }
