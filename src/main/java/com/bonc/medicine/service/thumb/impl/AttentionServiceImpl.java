@@ -197,4 +197,31 @@ public class AttentionServiceImpl implements AttentionService {
         }
     }
 
+
+    public Map<String, String> myAttentionNumber(String userId){
+        //attNumber
+        long userUmber = 0L;
+        if (jedisAdapter.exists(RedisKeyUtil.getAttentionKey(userId, "0"))){
+            userUmber = jedisAdapter.scard(RedisKeyUtil.getAttentionKey(userId, "0"));
+        }else{
+            Map<String, Object> queryMap = attentionMapper.myAttentionNumberUser(userId);
+            userUmber = queryMap == null ? 0L : Long.parseLong(queryMap.get("attNumber") + "");
+        }
+
+
+        long proNumber = 0L;
+        if (jedisAdapter.exists(RedisKeyUtil.getAttentionKey(userId, "1"))){
+            proNumber = jedisAdapter.scard(RedisKeyUtil.getAttentionKey(userId, "1"));
+        }else{
+            Map<String, Object> queryMap = attentionMapper.myAttentionNumberPro(userId);
+            proNumber = queryMap == null ? 0L : Long.parseLong(queryMap.get("attNumber") + "");
+        }
+
+        long attNumber = userUmber + proNumber;
+
+        Map<String, String> reMap = new HashMap();
+        reMap.put("attNumber", attNumber + "");
+        return reMap;
+    }
+
 }

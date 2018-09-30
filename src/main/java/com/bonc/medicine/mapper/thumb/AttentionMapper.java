@@ -21,6 +21,10 @@ public interface AttentionMapper {
 
 	public List<Map<String, Object>> fansList(String userId);
 
+	public Map<String, Object> myAttentionNumberUser(String userId);
+
+	public Map<String, Object> myAttentionNumberPro(String userId);
+
 	
 
 

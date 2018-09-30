@@ -66,10 +66,10 @@ public class AttentionController {
 
         reMap.put("followed", isFollowed);*/
         String uuuid = "";
-        if (StringUtils.equals("0", userid)){
+        if (StringUtils.equals("", userid)){
             uuuid = userId;
         }
-        if (!StringUtils.equals("0", userid)){
+        if (!StringUtils.equals("", userid)){
             uuuid = userid;
         }
         Map<String, String> map = new HashMap<>();
@@ -94,7 +94,7 @@ public class AttentionController {
         //String attedUserId, String userid , String type
         String uuuid = "";
 
-        if (!StringUtils.equals("0", userid)){
+        if (!StringUtils.equals("", userid)){
             paramMap.put("userId", userid);
         }
 
@@ -118,7 +118,7 @@ public class AttentionController {
     public Result removeAttention(@CurrentUser String userid ,@RequestBody Map<String, String> paramMap){
 
         //String attedUserId, String userid , String type
-        if (!StringUtils.equals("0", userid)){
+        if (!StringUtils.equals("", userid)){
             paramMap.put("userId", userid);
         }
         validatePram(paramMap);
@@ -144,7 +144,7 @@ public class AttentionController {
 
         //String userid , String type
         Map paramMap = new HashMap();
-        if (!StringUtils.equals("0", userid)){
+        if (!StringUtils.equals("", userid)){
             paramMap.put("userId", userid);
         }else{
 
@@ -283,10 +283,10 @@ public class AttentionController {
         //attNumber
         Map<String, String> reMap = new HashMap<>();
         if (StringUtils.equals("", userId)){
-            reMap.put("attNumber", "777");
+            reMap.put("attNumber", "0");
         }
-        //reMap = attentionService.myAttentionNumber(userId);
-        reMap.put("attNumber", "777");
+        reMap = attentionService.myAttentionNumber(userId);
+        //reMap.put("attNumber", "0");
 
         return ResultUtil.success(reMap);
     }

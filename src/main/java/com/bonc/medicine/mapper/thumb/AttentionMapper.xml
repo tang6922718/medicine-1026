@@ -64,4 +64,28 @@
             AND object_id = #{userId}
     </select>
 
+    <select id="myAttentionNumberUser" parameterType="String" resultType="Map">
+        SELECT
+            COUNT( id ) AS attNumber
+        FROM
+            common_follow
+        WHERE
+            follow_user_id = #{userId}
+            AND follow_flag = 1
+            AND object_type =  0
+    </select>
+
+
+    <select id="myAttentionNumberPro" parameterType="String" resultType="Map">
+        SELECT
+            COUNT( id ) AS attNumber
+        FROM
+            common_follow
+        WHERE
+            follow_user_id = #{userId}
+            AND follow_flag = 1
+            AND object_type =  1
+    </select>
+
+
 </mapper>
