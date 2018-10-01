@@ -204,7 +204,7 @@ public class SpecRepertoryController {
 		param.put("spec_id", spec_id);
 		param.put("title", title);
 		param.put("status", status);
-		param.put("start", start);
+		param.put("start", start);   
 		param.put("end", end);
 		return ResultUtil.success(specialistService.articleList(param));
 	}

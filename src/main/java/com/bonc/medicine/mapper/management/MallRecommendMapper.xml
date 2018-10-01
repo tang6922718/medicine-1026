@@ -53,8 +53,34 @@
 		DELETE FROM mall_recommend WHERE id = #{id}
 	</delete>
 
-	<select id="showGoodsById" parameterType="String" resultType="Map">
-		SELECT id,goods_name,linkman,img_url,detail FROM mall_supply WHERE carriage_status = 1 AND state = 0 AND is_audit = 1 AND id=#{id}
+	<select id="showGoodsById" parameterType="Map" resultType="Map">
+		SELECT
+			a.id,
+			a.goods_name,
+			a.linkman,
+			a.detail,
+			CASE WHEN CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)='' THEN a.img_url
+			ELSE CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)
+			END AS img_url
+		FROM
+			mall_supply a
+		LEFT JOIN mall_recommend b ON a.id = b.supply_id1
+		<if test="site != null and site != ''">
+			AND b.site = #{site}
+		</if>
+		LEFT JOIN mall_recommend c ON a.id = c.supply_id2
+		<if test="site != null and site != ''">
+			AND c.site = #{site}
+		</if>
+		LEFT JOIN mall_recommend d ON a.id = d.supply_id3
+		<if test="site != null and site != ''">
+			AND d.site = #{site}
+		</if>
+		WHERE
+			a.carriage_status = 1
+		AND a.state = 0
+		AND a.is_audit = 1
+		AND a.id =#{id}
 	</select>
 
 	<insert id="mallRecommend" parameterType="java.util.Map" useGeneratedKeys="true">

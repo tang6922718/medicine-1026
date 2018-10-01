@@ -1,9 +1,9 @@
 package com.bonc.medicine.controller.information;
 
 
-import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.InfoService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,9 @@ public class InfoController {
 
     @Autowired
     InfoService infoService;
+
+    @Autowired
+    private ViewNumberService viewNumberService;
 
     /**
      * @param catCode
@@ -44,9 +47,9 @@ public class InfoController {
      * @description 添加咨询
      */
     @PostMapping("/addInfo")
-    @com.bonc.medicine.annotation.Authorization
-    public Result addInfo(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
-        map.put("user_id", user_id);
+    /*@com.bonc.medicine.annotation.Authorization*/
+    public Result addInfo(/*@CurrentUser String user_id, */@RequestBody Map<String, Object> map) {
+        /*map.put("user_id", user_id);*/
         return ResultUtil.success(infoService.addInfo(map));
     }
 
@@ -79,6 +82,10 @@ public class InfoController {
      */
     @RequestMapping("/infoDetail")
     public Result infoDetail(@RequestParam String id) {
+        Map<String, String> numberMap  = new HashMap();
+        numberMap.put("objectId", id );
+        numberMap.put("objectType", "2");
+        viewNumberService.addOrUpdateViewNumberCord(numberMap);
         return ResultUtil.success(infoService.infoDetailById(id));
     }
 
@@ -89,9 +96,9 @@ public class InfoController {
      * @description 咨讯编辑
      */
     @RequestMapping("/infoEdit")
-    @com.bonc.medicine.annotation.Authorization
-    public Result infoEdit(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
-        map.putIfAbsent("user_id", user_id);
+    /*@com.bonc.medicine.annotation.Authorization*/
+    public Result infoEdit(/*@CurrentUser String user_id,*/ @RequestBody Map<String, Object> map) {
+        /*map.putIfAbsent("user_id", user_id);*/
         return ResultUtil.success(infoService.infoEditById(map));
     }
 

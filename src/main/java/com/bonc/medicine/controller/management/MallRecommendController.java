@@ -109,8 +109,8 @@ public class MallRecommendController {
      * @return {"code":200,"msg":"成功","data":{"goods_name":"枸杞","img_url":"https://pro.modao.cc/uploads3/images/2060/20603852/raw_1527144746.png","id":1,"detail":"好药无价，谁吃谁知道！","linkman":"彭XX"}}
      */
     @GetMapping("/showGoodsById/{id}")
-    public Result<Object> showGoodsById(@PathVariable String id){
-        return ResultUtil.success(mallRecommendService.showGoodsById(id));
+    public Result<Object> showGoodsById(@PathVariable String id,@RequestParam (required = false) String site){
+        return ResultUtil.success(mallRecommendService.showGoodsById(id,site));
     }
 
     /**

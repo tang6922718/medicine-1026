@@ -80,7 +80,7 @@ public class BuyersController {
         map.put("objectType", "9");
         map.put("objectId", id);
         map.put("viewNumber", "1");
-        viewNumberService.queryViewNumber(map);
+        viewNumberService.addOrUpdateViewNumberCord(map);
 		return ResultUtil.success(buyersService.purchasepDetail(id));
 	} 
 	@SuppressWarnings("unchecked")

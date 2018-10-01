@@ -6,6 +6,7 @@ import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.thumb.ViewNumberMapper;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ViewNumberKeyUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -68,6 +69,10 @@ public class ViewNumberServiceImpl implements ViewNumberService {
 
     @Override
     public Map<String, Object> addOrUpdateViewNumberCord(Map<String, String> map) {
+        if (StringUtils.isEmpty(map.get("viewNumber"))) {
+            map.put("viewNumber", "1");
+        }
+
         String objectId = map.get("objectId");
         String objectType = map.get("objectType");
         boolean exists = queryExistsObject(map);

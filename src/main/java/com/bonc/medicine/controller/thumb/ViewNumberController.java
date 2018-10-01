@@ -58,9 +58,6 @@ public class ViewNumberController {
         if (StringUtils.isEmpty(paramMap.get("objectType")) || StringUtils.isEmpty(paramMap.get("objectId"))) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
-        if (StringUtils.isEmpty(paramMap.get("viewNumber"))) {
-            paramMap.put("viewNumber", "1");
-        }
 
         return ResultUtil.success(viewNumberService.addOrUpdateViewNumberCord(paramMap));
     }
