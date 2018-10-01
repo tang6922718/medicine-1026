@@ -37,7 +37,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 
 	@Override
 	@Transactional
-	public int updateBasic(Integer id, String name ,String sex, Integer age, String address,String img_url) {
+	public int updateBasic(Integer id, String name, String sex, Integer age, String address, String img_url) {
 		Map map = new HashMap<>();
 		map.put("id", id);
 		map.put("name", name);
@@ -197,20 +197,20 @@ public class UserManagerServiceImpl implements UserManagerService {
 
 	@Override
 	public Result<Object> updateUserPlantRole(Map<String, String> params) {
-		if (StringUtils.isEmpty(params.get("userID")) || StringUtils.isEmpty(params.get("isPlant"))){
+		if (StringUtils.isEmpty(params.get("userID")) || StringUtils.isEmpty(params.get("isPlant"))) {
 			return ResultUtil.error(ResultEnum.MISSING_PARA);
 		}
 
-		if (Integer.parseInt(params.get("isPlant"))==0){ // 是否种植户   0 是    1 不是
+		if (Integer.parseInt(params.get("isPlant")) == 0) { // 是否种植户 0 是 1 不是
 			// 先删除 再插入
-			int i=userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID")));
-			i=userManagerMapper.insertUserPlantRole(Integer.parseInt(params.get("userID")));
-			if (i<=0){
+			int i = userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID")));
+			i = userManagerMapper.insertUserPlantRole(Integer.parseInt(params.get("userID")));
+			if (i <= 0) {
 				return ResultUtil.error(ResultEnum.UNKONW_ERROR);
 			}
 			return ResultUtil.success(ResultEnum.SUCCESS);
 
-		}else {
+		} else {
 
 			return ResultUtil.success(userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID"))));
 		}
@@ -220,21 +220,21 @@ public class UserManagerServiceImpl implements UserManagerService {
 	@Override
 	public Result<Object> updateUserCareVariety(Map<String, Object> params) {
 
-		if ( params.get("userID")==null){
+		if (params.get("userID") == null) {
 			return ResultUtil.error(ResultEnum.MISSING_PARA);
 		}
 
-		int userID= Integer.parseInt(params.get("userID").toString()) ;
+		int userID = Integer.parseInt(params.get("userID").toString());
 
-		if (params.get("list")==null){  //关心品种为空时  删除用户关心品种表中的数据
+		if (params.get("list") == null) { // 关心品种为空时 删除用户关心品种表中的数据
 
 			return ResultUtil.success(userManagerMapper.deleteUserCareVariety(userID));
 
-		}else { // 关心品种不为空时  先删  再插入数据
+		} else { // 关心品种不为空时 先删 再插入数据
 
-			List careVariety= (List) params.get("list");
-			int i=userManagerMapper.deleteUserCareVariety(userID);
-			i=userManagerMapper.insertUserCareVariety(careVariety);
+			List careVariety = (List) params.get("list");
+			int i = userManagerMapper.deleteUserCareVariety(userID);
+			i = userManagerMapper.insertUserCareVariety(careVariety);
 			return ResultUtil.success(i);
 		}
 
@@ -247,7 +247,8 @@ public class UserManagerServiceImpl implements UserManagerService {
 		tempData.putAll(json);
 		Basicinfo basicinfo = new Basicinfo();
 		basicinfo.setAddress(tempData.get("address").toString());
-		basicinfo.setAge(Integer.parseInt(tempData.get("age").toString()));
+		basicinfo.setAge(tempData.get("age").toString().equals("".toString()) ? null
+				: Integer.parseInt(tempData.get("age").toString()));
 		basicinfo.setName(tempData.get("name").toString());
 		basicinfo.setPassword(tempData.get("password").toString());
 		basicinfo.setSex(tempData.get("sex").toString());
@@ -263,7 +264,8 @@ public class UserManagerServiceImpl implements UserManagerService {
 			Expert expert = new Expert();
 			expert.setSpec_id(id);
 			expert.setName(tempData.get("name").toString());
-			expert.setEmployment_age(Integer.parseInt(tempData.get("employment_age").toString()));
+			expert.setEmployment_age(tempData.get("employment_age").toString().equals("".toString()) ? null
+					: Integer.parseInt(tempData.get("employment_age").toString()));
 			expert.setEducation(tempData.get("education").toString());
 			expert.setProfessional_direction(tempData.get("professional_direction").toString());
 			expert.setTitle(tempData.get("title").toString());
@@ -295,29 +297,29 @@ public class UserManagerServiceImpl implements UserManagerService {
 		}
 	}
 
-	public Map<String, String> activeDays(String userId){
-		Map<String, String> reMap =  userManagerMapper.activeDays(userId);
-		if (reMap == null || reMap.isEmpty()){
+	public Map<String, String> activeDays(String userId) {
+		Map<String, String> reMap = userManagerMapper.activeDays(userId);
+		if (reMap == null || reMap.isEmpty()) {
 			reMap.put("acDays", "0");
 		}
 		return reMap;
 	}
 
-	public List<Map<String, String>> queryInteractTimes(String userId){
-		if (StringUtils.isEmpty(userId)){
+	public List<Map<String, String>> queryInteractTimes(String userId) {
+		if (StringUtils.isEmpty(userId)) {
 			return null;
 		}
-		String [] proIds = userId.split(",");
+		String[] proIds = userId.split(",");
 		String paramString = userId.trim();
 
-		List<Map<String, Object>> queryList =  userManagerMapper.queryInteractTimes(paramString);
+		List<Map<String, Object>> queryList = userManagerMapper.queryInteractTimes(paramString);
 
 		// 向外返回的list
 		List<Map<String, String>> reList = new ArrayList<>();
 
 		// 如果数据库中没有专家的互动信息，每个专家的互动信息 设置为“0”
-		if (queryList == null || queryList.isEmpty() || queryList.get(0) == null ){
-			for (String  inProdId : proIds) {
+		if (queryList == null || queryList.isEmpty() || queryList.get(0) == null) {
+			for (String inProdId : proIds) {
 
 				Map<String, String> middleMap = new HashMap();
 				middleMap.put("proId", inProdId);
@@ -331,8 +333,8 @@ public class UserManagerServiceImpl implements UserManagerService {
 			Map<String, String> middleMap = new HashMap();
 
 			middleMap.put("proId", queryMap.get("user_id") + "");
-			middleMap.put("interactNumber", queryMap.get("interact_number") == null ? "0"
-					: queryMap.get("interact_number") + "");
+			middleMap.put("interactNumber",
+					queryMap.get("interact_number") == null ? "0" : queryMap.get("interact_number") + "");
 			reList.add(middleMap);
 		}
 
