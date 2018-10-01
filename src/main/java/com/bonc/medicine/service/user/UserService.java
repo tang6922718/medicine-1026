@@ -5,7 +5,6 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.TokenModel;
 import com.bonc.medicine.entity.user.User;
 
-import java.util.List;
 import java.util.Map;
 
 /**

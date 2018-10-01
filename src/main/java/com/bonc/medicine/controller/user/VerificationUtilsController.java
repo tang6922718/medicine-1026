@@ -1,6 +1,5 @@
 package com.bonc.medicine.controller.user;
 
-import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;

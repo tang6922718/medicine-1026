@@ -4,27 +4,20 @@ import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.constants.Constants;
 import com.bonc.medicine.entity.Result;
-import com.bonc.medicine.entity.user.TokenModel;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.thumb.LogsService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
-import com.bonc.medicine.utils.VerificationUtils;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,6 +120,9 @@ public class UserOperController {
         }*/
         int succesNum = userService.signUp(paramMap);
 
+        if(succesNum < 1){
+            return ResultUtil.error(ResultEnum.NET_ERROR);
+        }
         Map reMap = new HashMap();
         reMap.put("succeed", succesNum);
 
@@ -348,6 +344,15 @@ public class UserOperController {
         return  ResultUtil.success(userService.interfaceForBackAfterLogin(userId));
     }
 
+/*
+    public static void main(String[] args) {
+        String p = "13855559999";
+        String pre = p.substring(0, 3);
+        String sub = p.substring(7);
+        System.out.println(pre);
+        System.out.println(sub);
+    }
+*/
 
 
 }

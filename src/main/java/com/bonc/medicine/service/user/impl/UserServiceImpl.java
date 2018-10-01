@@ -15,7 +15,6 @@ import com.bonc.medicine.utils.ResultUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnJava;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,11 +65,12 @@ public class UserServiceImpl implements UserService {
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         paramMap.put("updateTime" , df.format(new Date()));
-
+        paramMap.put("headPortrait", "1537932340623980"); //moren 头像
+        // 1537932340623980
+        //System.out.println(paramMap.get("headPortrait") == null ? paramMap.put("headPortrait", "1537932340623980")  "");
         // TODO 是否校验密码
-        userMapper.signUp(paramMap);
 
-		return 1;
+		return userMapper.signUp(paramMap);
 	}
 
     @Override
@@ -344,6 +344,9 @@ public class UserServiceImpl implements UserService {
         // 6、返回Result包装token。
         Map map = new HashMap();
         map.put("token", token);
+        map.put("oldPhone", user.getTelephone());
+
+        map.put("newPhone", user.getTelephone().substring(0,3) + "****" + user.getTelephone().substring(7));
         map.put("userId", user.getId());
         map.put("roleId", user.getRoles());
         map.put("roleName", user.getRoleName());
