@@ -43,6 +43,9 @@ public class UserOperController {
     @Autowired
     private LogsService logsService;
 
+    @Autowired
+    private  VerificationUtilsController verificationUtilsController;
+
   /*  @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
        // DateFormat dateFormat = new SimpleDateFormat("MM ,DD, YYYY");
@@ -131,13 +134,12 @@ public class UserOperController {
     }
 
     /**
-     * @Description:修改密码通过短信验证码重置密码
-     * @Param: [paramMap] keys:phone;verification;password
+     * @Description:修改密码 -- 通过短信验证码重置密码  门户用
+     * @Param: [paramMap] keys:  phone;verification;password
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/1
      */
-    @Deprecated
     //@Authorization
     @PutMapping("/password/forget/v1.0")
     public Result forgetPassword(@RequestBody Map<String, String> paramMap) {
@@ -145,17 +147,19 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-        if (StringUtils.isEmpty(paramMap.get("phone")) || StringUtils.isEmpty(paramMap.get("password"))){
+        if (StringUtils.isBlank(paramMap.get("phone")) || StringUtils.isBlank(paramMap.get("password"))
+                 || StringUtils.isBlank(paramMap.get("verification"))){
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
+        paramMap.put("code", paramMap.get("verification"));
 
-       /* boolean isCodeValidated = VerificationUtils.validateVerification(paramMap.get("verification"), paramMap.get("phone"));
+       Result re =  verificationUtilsController.validateCode(paramMap);
 
-        if (!isCodeValidated){
-            return ResultUtil.error(ResultEnum.ERROR_VERIFI);
+        if(re.getCode() != 200 || re.getData() == null){
+            return ResultUtil.error(ResultEnum.ERROR_CODE);
         }
-*/
-        int succesNum = userService.updatePassword(paramMap);
+
+        int succesNum = userService.forgetPassword(paramMap);
 
         if(succesNum < 1){
             ResultUtil.error(ResultEnum.NET_ERROR);
@@ -208,7 +212,7 @@ public class UserOperController {
 
 
     /**
-     * @Description:用户通过旧密码修改新密码 通过id或者telephone都可以修改密码  门户用
+     * @Description:用户通过旧密码修改新密码 通过id或者telephone都可以修改密码  门户/APP用
      * @Param: [paramMap] keys:newPassword;oldPassword,secNewPassword,telephone;
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun

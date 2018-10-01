@@ -48,7 +48,7 @@ public interface UserService {
      */
     public int signUpCareVarieties();
 
-    public int updatePassword(Map<String, String> paramMap);
+    public int forgetPassword(Map<String, String> paramMap);
 
     /**
      * @Description:通过电话号码找出电话号码所在的表的名称，来判断。当前修改密码的用户是什么用户

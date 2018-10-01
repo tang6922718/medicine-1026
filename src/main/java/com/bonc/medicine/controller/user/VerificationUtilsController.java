@@ -80,8 +80,8 @@ public class VerificationUtilsController {
     */ 
     @PostMapping("/verification/validate/v1.0")
     public Result validateCode (@RequestBody Map<String, String> map){
-        if(null == map || StringUtils.isEmpty(map.get("phone"))
-                || StringUtils.isEmpty(map.get("code"))){
+        if(null == map || StringUtils.isBlank(map.get("phone"))
+                || StringUtils.isBlank(map.get("code"))){
 
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }

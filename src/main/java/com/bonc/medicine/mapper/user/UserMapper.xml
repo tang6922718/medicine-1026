@@ -168,4 +168,15 @@
 			cu.id = #{userId}
 
 	</select>
+
+	<update id="forgetPassword" parameterType="Map">
+		update
+			${tableName}
+		set
+		password = #{password},
+		update_time = #{updateTime}
+		where
+
+			telephone = #{phone}
+	</update>
 </mapper>

@@ -85,17 +85,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public int updatePassword(Map<String, String> paramMap) {
+    public int forgetPassword(Map<String, String> paramMap) {
 
-        paramMap.put("tableName", getTableByPhone(paramMap.get("phone")));
+        paramMap.put("tableName", "common_user");
         paramMap.put("password", DigestUtils.md5Hex(paramMap.get("password")));
         paramMap.put("phone", paramMap.get("phone"));
 
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         paramMap.put("updateTime" , df.format(new Date()));
+        int rows = userMapper.forgetPassword(paramMap);
 
-        return userMapper.updatePassword(paramMap);
+        return rows;
     }
 
 

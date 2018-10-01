@@ -27,6 +27,8 @@ public interface UserMapper {
 
     public int updatePassword(Map<String, String> paramMap);
 
+    public int forgetPassword(Map<String, String> paramMap);
+
 	public int signUp(Map<String, String> paramMap);
 
 	public  List<Map<String, Object>> getIdByPhone(String phone);
