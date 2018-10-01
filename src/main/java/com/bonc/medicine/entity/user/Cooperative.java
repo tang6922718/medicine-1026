@@ -7,6 +7,7 @@ public class Cooperative {
 	private String address;// 家庭住址
 	private String img_url;// 合作社图片
 	private String cultivar;// 覆盖品种
+	private String establish_date;// 成立时间
 	private String introduce;// 详细介绍
 
 	public String getName() {
@@ -55,6 +56,14 @@ public class Cooperative {
 
 	public void setCultivar(String cultivar) {
 		this.cultivar = cultivar;
+	}
+
+	public String getEstablish_date() {
+		return establish_date;
+	}
+
+	public void setEstablish_date(String establish_date) {
+		this.establish_date = establish_date;
 	}
 
 	public String getIntroduce() {

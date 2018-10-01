@@ -19,8 +19,10 @@
 		a.is_revisited,
 		a.is_public
 		FROM
-		spec_issue a left join spec_issue_association b on a.id = b.issueid
-		left join spec_info c on b.specid = c.spec_id 
+		spec_issue a left join
+		spec_issue_association b on a.id = b.issueid
+		left join spec_info c on
+		b.specid = c.spec_id
 		left join common_user d on d.id = a.issue_user_id
 		WHERE
 		b.is_assigned = '0'
@@ -49,20 +51,31 @@
 
 	<update id="revisited" parameterType="Map">
 		update spec_issue set revisited_mark = #{comment}
-		<if test="close != null and close == '1'"> 
+		<if test="close != null and close == '1'">
 			,issue_status = '3'
 		</if>
 		where id = #{id}
 	</update>
-	
-	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case">
+
+	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case"
+		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		spec_case(title,varieties,content,issue_id,publish_time)
 		values(#{title},#{varieties},#{content},#{issue_id},#{publish_time})
 	</insert>
 
+	<select id="queryIssue" parameterType="Map" resultType="Map">
+		select * from spec_issue where id = #{issue_id}
+	</select>
+
+	<insert id="addCaseNotice" parameterType="Map">
+		insert into common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
+	</insert>
+
 	<update id="setAnli" parameterType="Map">
-		update spec_issue set is_public = '1' where id = #{issue_id}
+		update spec_issue set
+		is_public = '1' where id = #{issue_id}
 	</update>
 
 	<select id="untreated" parameterType="Map" resultType="Map">
@@ -310,7 +323,8 @@
 
 	<update id="setCase" parameterType="Map">
 		update spec_issue set
-		case_detail = #{case_detail} ,case_title = #{case_title} , case_varieties = #{case_varieties}
+		case_detail = #{case_detail} ,case_title = #{case_title} ,
+		case_varieties = #{case_varieties}
 		where id = #{id}
 	</update>
 
@@ -400,8 +414,9 @@
 		</if>
 	</select>
 	<select id="queryArticleList" parameterType="Map" resultType="Map">
-		SELECT  concat(concat(u.name,"("),u.telephone,")") as name_tel ,u.id,u.name name
-		FROM 
+		SELECT concat(concat(u.name,"("),u.telephone,")") as name_tel
+		,u.id,u.name name
+		FROM
 		common_user u INNER JOIN spec_info s on u.id=s.spec_id
 	</select>
 </mapper>
