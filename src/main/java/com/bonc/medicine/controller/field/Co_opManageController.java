@@ -324,7 +324,7 @@ public class Co_opManageController {
 	}
 
 	/*
-	 * 查询公告列表
+	 * 后台查询公告列表
 	 */
 	@GetMapping("/Co_op/noticelist")
 	public Result<Object> noticelist( String msg,  String role,

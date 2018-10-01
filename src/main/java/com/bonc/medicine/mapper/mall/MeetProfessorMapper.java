@@ -20,6 +20,10 @@ public interface MeetProfessorMapper {
 	public int setAnli(Map map);
 	
 	public int anli(Case anli);
+	
+	public Map<String, Object> queryIssue(Map map);
+	
+	public int addCaseNotice(Map map);
 
 	public List<Map<String, Object>> untreated(Map map);
 	

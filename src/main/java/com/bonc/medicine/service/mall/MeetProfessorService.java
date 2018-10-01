@@ -15,8 +15,6 @@ public interface MeetProfessorService {
 
 	public Result<Object> revisited(Integer id, String comment, String close);
 
-	public Result<Object> setAnli(Integer issue_id);
-	
 	public Result<Object> anli(Case anli);
 
 	public List<Map<String, Object>> untreated(Integer spec_id);

@@ -59,7 +59,6 @@ public class MeetProfessorController {
 	 */
 	@PostMapping("/meetProfessor/case")
 	public Result<Object> anli(@RequestBody Case anli) {
-		meetProfessorService.setAnli(anli.getIssue_id());
 		return meetProfessorService.anli(anli);
 	}
 

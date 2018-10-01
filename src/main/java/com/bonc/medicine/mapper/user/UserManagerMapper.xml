@@ -6,8 +6,8 @@
 	<insert id="addBasic" parameterType="com.bonc.medicine.entity.user.Basicinfo"
 		useGeneratedKeys="true" keyProperty="id">
 		Insert into common_user
-		(telephone,name,password,sex,age,address,log_time)
-		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now());
+		(telephone,name,password,sex,age,address,log_time,status)
+		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now(),'1');
 	</insert>
 
 	<update id="updateBasic" parameterType="Map">
@@ -58,8 +58,8 @@
 	<insert id="addCooperative" parameterType="com.bonc.medicine.entity.user.Cooperative">
 		Insert into
 		field_coop
-		(name,official_user_id,official_user_name,address,img_url,cultivar,introduce)
-		values(#{name},#{official_user_id},#{official_user_name},#{address},#{img_url},#{cultivar},#{introduce});
+		(name,official_user_id,official_user_name,address,img_url,cultivar,introduce,establish_date,state,is_audit)
+		values(#{name},#{official_user_id},#{official_user_name},#{address},#{img_url},#{cultivar},#{introduce},#{establish_date},'0','0');
 	</insert>
 
 	<select id="basicInfo" parameterType="Map" resultType="Map">
@@ -268,25 +268,26 @@
 
 	<select id="activeDays" parameterType="String" resultType="Map">
 		SELECT
-			COUNT( DISTINCT login_time ) AS acDays
+		COUNT( DISTINCT login_time ) AS acDays
 		FROM
-			common_logon_log
+		common_logon_log
 		WHERE
-			user_id = #{userId}
+		user_id = #{userId}
 	</select>
 
-	<!-- canshu  proId -->
-	<select id="queryInteractTimes" parameterType="String" resultType="Map" >
+	<!-- canshu proId -->
+	<select id="queryInteractTimes" parameterType="String"
+		resultType="Map">
 		SELECT
-			tii.user_id,
-			count( tii.user_id )  interact_number
+		tii.user_id,
+		count( tii.user_id ) interact_number
 		FROM
-			train_interact tii
-			LEFT JOIN spec_info ssi ON tii.object_id = ssi.spec_id
+		train_interact tii
+		LEFT JOIN spec_info ssi ON tii.object_id = ssi.spec_id
 		WHERE
-			tii.user_id IN ( ${proId} )
+		tii.user_id IN ( ${proId} )
 		GROUP BY
-			tii.user_id
+		tii.user_id
 
 
 	</select>

@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,8 +249,9 @@ public class UserManagerServiceImpl implements UserManagerService {
 		tempData.putAll(json);
 		Basicinfo basicinfo = new Basicinfo();
 		basicinfo.setAddress(tempData.get("address").toString());
-		basicinfo.setAge(tempData.get("age").toString().equals("".toString()) ? null
-				: Integer.parseInt(tempData.get("age").toString()));
+		if (!tempData.get("age").toString().equals("")) {
+			basicinfo.setAge(Integer.parseInt(tempData.get("age").toString()));
+		}
 		basicinfo.setName(tempData.get("name").toString());
 		basicinfo.setPassword(tempData.get("password").toString());
 		basicinfo.setSex(tempData.get("sex").toString());
@@ -264,8 +267,9 @@ public class UserManagerServiceImpl implements UserManagerService {
 			Expert expert = new Expert();
 			expert.setSpec_id(id);
 			expert.setName(tempData.get("name").toString());
-			expert.setEmployment_age(tempData.get("employment_age").toString().equals("".toString()) ? null
-					: Integer.parseInt(tempData.get("employment_age").toString()));
+			if (!tempData.get("employment_age").toString().equals("")) {
+				expert.setEmployment_age(Integer.parseInt(tempData.get("employment_age").toString()));
+			}
 			expert.setEducation(tempData.get("education").toString());
 			expert.setProfessional_direction(tempData.get("professional_direction").toString());
 			expert.setTitle(tempData.get("title").toString());
@@ -276,12 +280,16 @@ public class UserManagerServiceImpl implements UserManagerService {
 			expert.setDetail(tempData.get("detail").toString());
 			userManagerMapper.addExpert(expert);
 			String[] cat_rel = expert.getCat_rel().split(",");
-			for (int i = 0; i < cat_rel.length; i++) {
-				userManagerMapper.addCatRel(id, Integer.parseInt(cat_rel[i]));
+			if (expert.getCat_rel() != null && !expert.getCat_rel().toString().equals("")) {
+				for (int i = 0; i < cat_rel.length; i++) {
+					userManagerMapper.addCatRel(id, Integer.parseInt(cat_rel[i]));
+				}
 			}
-			String[] subject_rel = expert.getSubject_rel().split(",");
-			for (int i = 0; i < subject_rel.length; i++) {
-				userManagerMapper.addSubject_rel(id, Integer.parseInt(subject_rel[i]));
+			if (expert.getSubject_rel() != null && !expert.getSubject_rel().toString().equals("")) {
+				String[] subject_rel = expert.getSubject_rel().split(",");
+				for (int i = 0; i < subject_rel.length; i++) {
+					userManagerMapper.addSubject_rel(id, Integer.parseInt(subject_rel[i]));
+				}
 			}
 		}
 		if (basicinfo.getRole().toString().contains("3")) {
@@ -293,6 +301,10 @@ public class UserManagerServiceImpl implements UserManagerService {
 			cooperative.setImg_url(tempData.get("img_url").toString());
 			cooperative.setCultivar(tempData.get("cultivar").toString());
 			cooperative.setIntroduce(tempData.get("introduce").toString());
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = new Date();
+			String time = format.format(date);
+			cooperative.setEstablish_date(time);
 			userManagerMapper.addCooperative(cooperative);
 		}
 	}
