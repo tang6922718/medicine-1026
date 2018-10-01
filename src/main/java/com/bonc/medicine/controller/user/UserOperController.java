@@ -6,6 +6,7 @@ import com.bonc.medicine.constants.Constants;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.mapper.mall.GongQiuSystemMapper;
 import com.bonc.medicine.service.thumb.LogsService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,6 +40,9 @@ public class UserOperController {
 
     @Autowired
     private  VerificationUtilsController verificationUtilsController;
+
+    @Autowired
+    private GongQiuSystemMapper gongQiuSystemMapper;
 
   /*  @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
@@ -353,6 +358,29 @@ public class UserOperController {
         System.out.println(sub);
     }
 */
+
+    @Authorization
+    @GetMapping("/user/info/mall/number/v1.0")
+    public Result querySupplyPurchNumber (@CurrentUser String userId){
+        Map gongqiuMap = new HashMap();
+        gongqiuMap.put("user_id", userId);
+        List<Map> whatNumber = gongQiuSystemMapper.my_supply_statistics(gongqiuMap);
+        Map<String, String> map = new HashMap<>();
+        int supplyNumber = 0;
+        for (Object coll  :whatNumber.get(0).values()) {
+            supplyNumber += Integer.parseInt(coll + "");
+        }
+        List<Map> whatPurchase_Number = gongQiuSystemMapper.my_purchase_statistics(gongqiuMap);
+
+        int purchaseNumber = 0;
+        for (Object coll  :whatPurchase_Number.get(0).values()) {
+            supplyNumber += Integer.parseInt(coll + "");
+        }
+
+        map.put("supplyNumber", supplyNumber + "");
+        map.put("purchaseNumber", purchaseNumber + "");
+        return ResultUtil.success(map);
+    }
 
 
 }
