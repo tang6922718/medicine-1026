@@ -68,6 +68,26 @@ public class SopServiceImpl implements SopService {
         return sopMapper.getSopLists();
     }
 
+    @Override
+    public Map<String, Object> getStep(Integer variety_id, Integer step_order) {
+        return sopMapper.getStep(variety_id, step_order);
+    }
+
+    @Override
+    public int delStep(Integer variety_id, Integer step_order) {
+        return sopMapper.delStep(variety_id, step_order);
+    }
+
+    @Override
+    public int addStep(Map map) {
+        return sopMapper.addStep(map);
+    }
+
+    @Override
+    public int tombstoneStep(Integer variety_id) {
+        return sopMapper.tombstoneStep(variety_id);
+    }
+
 //    @Override
 //    public int sopStepDelete(Integer id) {
 //        return sopMapper.sopStepDelete(id);

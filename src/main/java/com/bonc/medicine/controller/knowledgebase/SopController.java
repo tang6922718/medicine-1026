@@ -70,18 +70,24 @@ public class SopController {
     }
 
     @SuppressWarnings("unchecked")
-    @PostMapping("/editSop")
+    @PutMapping("/editSop")
     @Transactional
     public Result<Object> editSops(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap((editJson));
         Map sopMap = (Map) map.get("sop");//获取sop基本信息
+
         int variety_id = (int) sopMap.get("variety_id");//获取variety_id
+        //删除当前所有步骤，再重新添加所有信息到sop步骤
+        int delCount = tombstoneStep(variety_id);
+        if (delCount <= 0) {
+            System.out.println("删除原始信息失败");
+        }
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
         for (int i = 0; i < sopStepList.size(); i++) {
             ((Map) sopStepList.get(i)).put("variety_id", variety_id);
         }
         int count = sopService.sopUpdata(sopMap);
-        count += sopService.sopStepUpdata(sopStepList);
+        count += sopService.sopStepAdd(sopStepList);
 
         //更改审核表
         Map auditMap = new HashMap();
@@ -111,4 +117,23 @@ public class SopController {
         return ResultUtil.success(sopService.getSopLists());
     }
 
+    @GetMapping("/getStep")
+    public Result<Object> getStep(Integer variety_id, Integer step_order) {
+        return ResultUtil.success(sopService.getStep(variety_id, step_order));
+    }
+
+    @DeleteMapping("/delStep")
+    public Result<Object> delStep(Integer variety_id, Integer step_order) {
+        return ResultUtil.success(sopService.delStep(variety_id, step_order));
+    }
+
+    @PostMapping("/addStep")
+    public Result<Object> addStep(@RequestBody String editJson) {
+        Map map = JacksonMapper.INSTANCE.readJsonToMap((editJson));
+        return ResultUtil.success(sopService.addStep(map));
+    }
+
+    public int tombstoneStep(Integer variety_id) {
+        return sopService.tombstoneStep(variety_id);
+    }
 }

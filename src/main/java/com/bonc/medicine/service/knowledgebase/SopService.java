@@ -29,4 +29,16 @@ public interface SopService {
 
     //获取品种sop名列表
     List<Map<String, Object>> getSopLists();
+
+    //获取某一步种植信息
+    Map<String, Object> getStep(Integer variety_id, Integer step_order);
+
+    //删除某一步种植信息
+    int delStep(Integer variety_id, Integer step_order);
+
+    //添加某一步种植步骤
+    int addStep(Map map);
+
+    //更新sop前删除所有步骤，再重建所有步骤
+    int tombstoneStep(Integer variety_id);
 }

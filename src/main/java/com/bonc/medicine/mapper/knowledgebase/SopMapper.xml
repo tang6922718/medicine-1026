@@ -26,6 +26,7 @@
         <if test="variety_id != null and variety_id != ''">
             AND kss.sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = ${variety_id} AND sop_status=1)
         </if>
+		AND kss.status = 1
         ORDER BY
             kss.step_order
     </select>
@@ -63,11 +64,13 @@
 			recommendation,
 		step_order,
 		audio_url,
-		example_url
+		example_url,
+		status
 		)
 		VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
-			(#{item.sop_id},
+			(
+			(SELECT id FROM km_variety_sop WHERE variety_id = #{item.variety_id}),
 			#{item.step_name},
 			#{item.short_desc},
 			#{item.detail_desc},
@@ -75,7 +78,8 @@
 			#{item.recommendation},
 			#{item.step_order},
 			#{item.audio_url},
-			#{item.example_url}
+			#{item.example_url},
+			1
 			)
 		</foreach>
 	</insert>
@@ -101,10 +105,11 @@
 				next_suggestion=#{item.next_suggestion},
                 recommendation=#{item.recommendation},
                 audio_url=#{item.audio_url},
-                example_url=#{item.example_url}
+				example_url=#{item.example_url},
+				status=1
 			</set>
             where sop_id = (SELECT id FROM km_variety_sop WHERE variety_id=#{item.variety_id}) AND
-            step_order=#{item.step_order}
+			step_order=#{item.step_order}
 		</foreach>
 	</update>
 
@@ -121,4 +126,29 @@
 	<select id="getSopLists" resultType="Map">
 		SELECT chinese_name,variety_id FROM km_variety_encyclopedia WHERE variety_id NOT IN (SELECT variety_id FROM km_variety_sop WHERE sop_status = 1)
 	</select>
+
+	<select id="getStep" resultType="Map">
+		SELECT * FROM km_sop_step
+		WHERE
+			sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = #{variety_id})
+			AND
+			step_order = #{step_order}
+			AND
+			status = 1
+	</select>
+
+	<update id="delStep">
+		UPDATE km_sop_step SET status = 0
+		WHERE
+			sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = #{variety_id})
+			AND
+			step_order = #{step_order}
+	</update>
+
+	<update id="tombstoneStep">
+		UPDATE km_sop_step SET status = 0
+		WHERE
+			sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = #{variety_id})
+	</update>
+
 </mapper>
