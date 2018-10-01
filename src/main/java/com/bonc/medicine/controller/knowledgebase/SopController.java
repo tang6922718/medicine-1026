@@ -63,6 +63,8 @@ public class SopController {
         Map auditMap = new HashMap();
         auditMap.put("km_type","4");
         auditMap.put("id",sopMap.get("variety_id"));
+        String chinese_name = (String) sopMap.get("chinese_name");
+        auditMap.put("title", chinese_name);
         count += auditService.addAudit(auditMap);
 
         count += sopService.sopStepAdd(sopStepList);
@@ -78,10 +80,7 @@ public class SopController {
 
         int variety_id = (int) sopMap.get("variety_id");//获取variety_id
         //删除当前所有步骤，再重新添加所有信息到sop步骤
-        int delCount = tombstoneStep(variety_id);
-        if (delCount <= 0) {
-            System.out.println("删除原始信息失败");
-        }
+        tombstoneStep(variety_id);
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
         for (int i = 0; i < sopStepList.size(); i++) {
             ((Map) sopStepList.get(i)).put("variety_id", variety_id);
@@ -91,6 +90,8 @@ public class SopController {
 
         //更改审核表
         Map auditMap = new HashMap();
+        String chinese_name = (String) sopMap.get("name");
+        auditMap.put("title", chinese_name);
         auditMap.put("km_type","4");
         auditMap.put("id",variety_id);
         auditService.czAudit(auditMap);
