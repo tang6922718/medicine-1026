@@ -82,6 +82,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
     }
 
     @Override
+    @Transactional
     public Map<String, Object> updateOperationUser(Map<String, String> map) {
         map.put("password", DigestUtils.md5Hex(map.get("password") + ""));
         int row = operatorManagementMapper.updateOperationUserInfo(map);

@@ -57,7 +57,8 @@ public class UserOperController {
    * @return: com.bonc.user.entity.Result
    * @Author: hejiajun
    * @Date: 2018/8/30 
-   */   
+   */
+    @Deprecated
     @PostMapping("/user/login/v1.0")
     public Result login(@RequestBody Map<String, String> paramMap,
                         HttpServletRequest request,
@@ -78,7 +79,7 @@ public class UserOperController {
         //设置cookie的key和value，key随便字符串，value为token值
         Cookie cookie = new Cookie("kkk", token);
         Cookie[] ss = request.getCookies();*/
-       if(null != result.getData()){
+       /*if(null != result.getData()){
            String uuuid =  ((Map)result.getData()).get("userId")== null ? "0" :
                    ((Map)result.getData()).get("userId")+ "";
            Map map = new HashMap();
@@ -90,7 +91,7 @@ public class UserOperController {
            //System.out.println(request.getHeader("X-Real-IP"));
            logsService.addLoginLogs(map);
        }
-
+*/
 
         return result;
 
@@ -130,12 +131,14 @@ public class UserOperController {
     }
 
     /**
-     * @Description:修改密码或者忘记密码接口
+     * @Description:修改密码通过短信验证码重置密码
      * @Param: [paramMap] keys:phone;verification;password
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/1
      */
+    @Deprecated
+    //@Authorization
     @PutMapping("/password/forget/v1.0")
     public Result forgetPassword(@RequestBody Map<String, String> paramMap) {
         if (null == paramMap) {
@@ -205,20 +208,58 @@ public class UserOperController {
 
 
     /**
-     * @Description:用户通过旧密码修改新密码 通过id或者telephone都可以修改密码
-     * @Param: [paramMap] keys:newPassword;oldPassword,secNewPassword,telephone
+     * @Description:用户通过旧密码修改新密码 通过id或者telephone都可以修改密码  门户用
+     * @Param: [paramMap] keys:newPassword;oldPassword,secNewPassword,telephone;
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/1
      */
+    @Authorization
     @PutMapping("/password/update/v1.0")
-    public Result changePassword(@RequestBody Map<String, String> paramMap) {
+    public Result changePassword(@RequestBody Map<String, String> paramMap, @CurrentUser String userId) {
+        if (null == paramMap) {
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
+        if(StringUtils.isBlank(paramMap.get("telephone")) && StringUtils.isBlank(userId)){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+        // TODO 校验账号是不是有效获取用户电话号码
+
+        if (!StringUtils.isBlank(userId)){
+            paramMap.put("userId", userId);
+        }
+
+        Map map = userService.changePassword(paramMap);
+
+        return ResultUtil.success(map);
+
+    }
+
+    /**
+     * @Description:用户通过旧密码修改新密码 通过id或者telephone都可以修改密码  后台用的
+     * @Param: [paramMap] keys:newPassword;oldPassword,secNewPassword,telephone ;
+     * @return: com.bonc.user.entity.Result
+     * @Author: hejiajun
+     * @Date: 2018/9/1
+     */
+    @Authorization
+    @PutMapping("/password/update/back/v1.0")
+    public Result changePasswordBack(@RequestBody Map<String, String> paramMap, @CurrentUser String backId) {
         if (null == paramMap) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
         // TODO 校验账号是不是有效获取用户电话号码
 
-        Map map = userService.changePassword(paramMap);
+        if(StringUtils.isBlank(paramMap.get("telephone")) && StringUtils.isBlank(backId)){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+
+        if(!StringUtils.isBlank(backId)){
+
+            paramMap.put("backId", backId);
+        }
+        Map map = userService.changePasswordBack(paramMap);
 
         return ResultUtil.success(map);
 
@@ -256,7 +297,18 @@ public class UserOperController {
         //设置cookie的key和value，key随便字符串，value为token值
         Cookie cookie = new Cookie("kkk", token);
         Cookie[] ss = request.getCookies();*/
-
+        if(null != result.getData()){
+            String uuuid =  ((Map)result.getData()).get("userId")== null ? "0" :
+                    ((Map)result.getData()).get("userId")+ "";
+            Map map = new HashMap();
+            map.put("userId", uuuid);
+            map.put("status", "1");
+            map.put("ip", request.getRemoteAddr());
+            //System.out.println( request.getRequestURL());
+            // System.out.println(request.getRemoteAddr());
+            //System.out.println(request.getHeader("X-Real-IP"));
+            logsService.addLoginLogs(map);
+        }
 
         return result;
 

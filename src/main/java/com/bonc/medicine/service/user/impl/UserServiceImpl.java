@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Repository
-@Transactional(rollbackFor = Exception.class)
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private int OUT_TIME = 30000;
@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
 	public int signUp(Map<String, String> paramMap) {
 
         //校验用户注册的手机号
@@ -83,6 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public int updatePassword(Map<String, String> paramMap) {
 
         paramMap.put("tableName", getTableByPhone(paramMap.get("phone")));
@@ -220,16 +222,18 @@ public class UserServiceImpl implements UserService {
         }
 
         if(!StringUtils.equals(map.get("newPassword").trim(), map.get("secNewPassword").trim())){
-            throw new MedicineRuntimeException(ResultEnum.PERMISSION);
+            throw new MedicineRuntimeException(ResultEnum.ERROR_PARAM);
         }
 
         Map paramMap = new HashMap();
-        paramMap.put("tableName", getTableByPhone(map.get("telephone")));
+        paramMap.put("tableName", "common_user");
         paramMap.put("phone", map.get("telephone"));
+        paramMap.put("userId", map.get("userId"));
         paramMap.put("password", DigestUtils.md5Hex(map.get("oldPassword").trim()));
-        List<Map<String, Object>> reList = userMapper.login(paramMap);
+        List<Map<String, Object>> reList = userMapper.loginSecond(paramMap);
 
-        if (reList.size() == 0 || reList.get(0).get("telephone") == null) {
+        if (null == reList ||  reList.size() == 0 || reList.get(0) == null  ||
+                 reList.get(0).get("telephone") == null) {
             throw  new MedicineRuntimeException(ResultEnum.MISSING_PARA);
         }
         paramMap.put("password", DigestUtils.md5Hex(map.get("secNewPassword")));
@@ -377,6 +381,47 @@ public class UserServiceImpl implements UserService {
         }
 
         return reList.get(0);
+    }
+
+    @SuppressWarnings("Duplicates")
+    @Override
+    @Transactional
+    public Map changePasswordBack(Map<String, String> map) {
+        //keys:oldPassword;newPassword,secNewPassword,telephone
+        if (StringUtils.isBlank(map.get("oldPassword")) || StringUtils.isBlank(map.get("newPassword")) ||
+                StringUtils.isBlank(map.get("secNewPassword"))){
+            throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+        }
+
+        if(!StringUtils.equals(map.get("newPassword").trim(), map.get("secNewPassword").trim())){
+            throw new MedicineRuntimeException(ResultEnum.ERROR_PARAM);
+        }
+
+        Map paramMap = new HashMap();
+        paramMap.put("tableName", "common_backend_user");
+        paramMap.put("phone", map.get("telephone"));
+        paramMap.put("userId", map.get("backId"));
+        paramMap.put("password", DigestUtils.md5Hex(map.get("oldPassword").trim()));
+        //paramMap.put("equipment", "BACK");
+        List<Map<String, Object>> reList = userMapper.backUser(paramMap);
+
+        if (null == reList || reList.size() == 0  || reList.get(0) == null || reList.get(0).get("telephone") == null) {
+            throw  new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+        }
+        paramMap.put("password", DigestUtils.md5Hex(map.get("secNewPassword")));
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        paramMap.put("updateTime" , df.format(new Date()));
+        int rows =  userMapper.updatePassword(paramMap);
+
+        Map<String, Object> reMap = new HashMap<>();
+
+        if (rows < 1 ){
+            throw  new MedicineRuntimeException(ResultEnum.NET_ERROR);
+        }
+        reMap.put("succeed", 1);
+
+
+        return reMap;
     }
 
 

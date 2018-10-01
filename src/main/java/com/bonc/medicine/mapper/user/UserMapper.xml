@@ -36,8 +36,8 @@
 		<if test="phone != null and phone != ''">
 			and telephone = #{phone}
 		</if>
-		<if test="userid != null and userid != ''">
-			and id = #{userid}
+		<if test="userId != null and userId != ''">
+			and id = #{userId}
 		</if>
 
 
@@ -86,10 +86,17 @@
 			common_user cu
 			LEFT JOIN common_user_role_rel cll ON cu.id = cll.user_id
 			LEFT JOIN common_role crr ON cll.role_id = crr.id
-		WHERE
-			 cu.telephone = #{phone}
+		WHERE  1  = 1
+				<if test="phone != null and phone != ''">
+					and  cu.telephone = #{phone}
+				</if>
+				<if test="userId != null and userId != ''">
+					and  cu.id = #{userId}
+				</if>
+
 			 and cu.password = #{password}
 		ORDER BY cll.role_id
+
 	</select>
 
 	<select id="backUser" parameterType="Map" resultType="Map">
@@ -105,9 +112,15 @@
 			common_backend_user cu
 			LEFT JOIN common_backend_user_role_r cll ON cu.id = cll.backend_user_id
 			LEFT JOIN common_backend_user_role crr ON cll.backend_role_id = crr.id
-		WHERE
-			 cu.telephone = #{phone}
+		WHERE  1 =  1
+
 			 and cu.password = #{password}
+			<if test="phone != null and phone != ''">
+				and  cu.telephone = #{phone}
+			</if>
+			<if test="userId != null and userId != ''">
+				and  cu.id = #{userId}
+			</if>
 		ORDER BY cll.backend_role_id
 	</select>
 

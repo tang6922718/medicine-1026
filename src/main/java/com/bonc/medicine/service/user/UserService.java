@@ -75,6 +75,8 @@ public interface UserService {
 
     public Map changePassword(Map<String, String> map);
 
+    public Map changePasswordBack(Map<String, String> map);
+
     public User getUserInfoById(String userId);
 
     public Map<String, Object> interfaceForBackAfterLogin(String userId) throws  Exception;
