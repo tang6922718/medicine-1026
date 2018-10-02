@@ -19,7 +19,7 @@ public class ResultUtil {
         result.setData(object);
         return result;
     }
-    public static Result successTatol(Object object,long total) {
+    public static Result successTotal(Object object,long total) {
         Result result = new Result();
         result.setCode(200);
         result.setMsg("成功");

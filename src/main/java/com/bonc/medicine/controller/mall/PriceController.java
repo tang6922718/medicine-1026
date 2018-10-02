@@ -138,7 +138,7 @@ public class PriceController {
 		if (pageNum != null && pageSize != null) {
 			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
 		}
-		return ResultUtil.successTatol(list, total);
+		return ResultUtil.successTotal(list, total);
 	}
 
 	/*

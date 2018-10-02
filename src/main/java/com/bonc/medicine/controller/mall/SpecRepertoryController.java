@@ -166,7 +166,7 @@ public class SpecRepertoryController {
 			list.get(i).put("cat", specialistService.cat(param1).toString());
 		}
 		
-		return ResultUtil.successTatol(list, total);
+		return ResultUtil.successTotal(list, total);
 	}
 
 	/**
