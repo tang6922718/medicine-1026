@@ -1,6 +1,7 @@
 package com.bonc.medicine.service.information.impl;
 
 import com.bonc.medicine.mapper.information.InfoMapper;
+import com.bonc.medicine.mapper.knowledgebase.AuditMapper;
 import com.bonc.medicine.service.information.InfoService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +19,8 @@ public class InfoServiceImpl implements InfoService {
     @Autowired(required = false)
     private InfoMapper infoMapper;
 
+    @Autowired
+    private AuditMapper auditMapper;
 
 
     @Override
@@ -29,6 +31,7 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int addInfo(@RequestBody Map<String, Object> map) {
+        auditMapper.addAudit(map);
         return infoMapper.addInfo(map);
     }
 
@@ -39,6 +42,8 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int infoEditById(Map<String, Object> map) {
+        auditMapper.czAudit(map);
+        auditMapper.addAudit(map);
         return infoMapper.infoEditById(map);
     }
 
