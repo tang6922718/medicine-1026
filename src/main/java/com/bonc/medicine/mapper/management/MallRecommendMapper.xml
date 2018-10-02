@@ -190,9 +190,9 @@
 		a.upload_time
 		FROM
 			mall_recommend a
-		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
-		LEFT JOIN mall_supply c ON a.supply_id2 = c.id
-		LEFT JOIN mall_supply d ON a.supply_id3 = d.id
+		LEFT JOIN mall_supply b ON a.supply_id1 = b.id AND b.carriage_status = 1 	AND b.state = 0 AND b.is_audit = 1
+		LEFT JOIN mall_supply c ON a.supply_id2 = c.id AND c.carriage_status = 1 	AND c.state = 0 AND c.is_audit = 1
+		LEFT JOIN mall_supply d ON a.supply_id3 = d.id AND d.carriage_status = 1 	AND d.state = 0 AND d.is_audit = 1
 		LEFT JOIN common_user u1 ON b.seller_id = u1.id
 		LEFT JOIN common_user u2 ON c.seller_id = u2.id
 		LEFT JOIN common_user u3 ON d.seller_id = u3.id

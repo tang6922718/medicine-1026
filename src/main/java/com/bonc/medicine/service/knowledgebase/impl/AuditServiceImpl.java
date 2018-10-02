@@ -27,5 +27,8 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
+    public int updateAudit(Map map){return auditMapper.updateAudit(map);}
+
+    @Override
     public int czAudit(Map map){return auditMapper.czAudit(map);}
 }

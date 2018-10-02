@@ -23,6 +23,10 @@
 			)
 	</insert>
 
+	<update id="updateAudit" parameterType="java.util.Map">
+		UPDATE km_audit SET status = NULL WHERE km_type = #{km_type} AND object_id =#{id}
+	</update>
+
 	<delete id="czAudit" parameterType="java.util.Map">
 		DELETE FROM km_audit WHERE km_type = #{km_type} AND object_id =#{id}
 	</delete>
