@@ -52,7 +52,8 @@
 		SELECT
 			si.spec_id,
 			si.NAME,
-			si.head_portrait,
+			case when si.head_portrait is null or  si.head_portrait=''
+				then '1537932363932658' else si.head_portrait end as head_portrait,
 			si.employment_age,
 			si.expertise_field,
 			IFNULL( sis.interact_count, 0 ) AS interact_count ,
@@ -91,7 +92,19 @@
 	
 	<select id="specDetail" parameterType="java.lang.String" resultType="Map">
 		SELECT
-			si.*,
+			si.spec_id,
+			si.company,
+			si.detail,
+			si.education,
+			si.employment_age,
+			si.expertise_field,
+			si.name,
+			si.professional_direction,
+			si.registration_date,
+			si.title,
+			si.update_time,
+			case when si.head_portrait is null or  si.head_portrait=''
+			then '1537932363932658' else si.head_portrait end as head_portrait,			
 			IFNULL( sis.interact_count, 0 ) AS interact_count,
 			count( cf.id ) AS follow,
 			0 AS is_follow ,
@@ -185,7 +198,7 @@
 		insert into spec_issue (issue_desc,img_url,video_url,is_public,issue_time,issue_address,issue_user_id,
 		issue_status,score,follow_days,is_revisited,revisited_mark,cat_code,sub_code,field_ids) 
 		values (#{issue_desc},#{img_url},#{video_url},#{is_public},#{issue_time},#{issue_address},#{issue_user_id},
-		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids})
+		'0',#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids})
 	</insert>
 	
 	<insert id="insertIssueRel" parameterType="Map">

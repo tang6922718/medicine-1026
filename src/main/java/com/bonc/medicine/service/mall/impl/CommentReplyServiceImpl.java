@@ -18,7 +18,11 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 	
 	@Override
 	public int insertComment(Map param) {
-		return commentReplyMapper.insertComment(param);
+		int num =commentReplyMapper.insertComment(param);
+		if("未处理".equals(param.get("status"))){
+			commentReplyMapper.updateReplyStatus(param);
+		}
+		return num;
 	}
 
 	@Override

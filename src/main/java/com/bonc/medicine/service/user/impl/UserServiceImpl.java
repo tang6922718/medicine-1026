@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
+
     @Override
     public int completeUserInfo(User user) {
         return 0;
@@ -333,8 +334,8 @@ public class UserServiceImpl implements UserService {
         user.setTelephone(reList.get(0).get("telephone") == null ? "" : reList.get(0).get("telephone").toString());
         user.setHeadPortrait(reList.get(0).get("head_portrait") == null ? "" : reList.get(0).get("head_portrait").toString());
         user.setAddress(reList.get(0).get("address") == null ? "" : reList.get(0).get("address").toString());
-        user.setRoles(reList.get(0).get("role_id") == null ? "" : reList.get(0).get("role_id").toString());
-        user.setRoleName(reList.get(0).get("role_name") == null ? "" : reList.get(0).get("role_name").toString());
+        user.setRoles(reList.get(0).get("role_id") == null ? "2" : reList.get(0).get("role_id").toString());
+        user.setRoleName(reList.get(0).get("role_name") == null ? "商户" : reList.get(0).get("role_name").toString());
 
         //String token = UUID.randomUUID().toString();
         String token = UUID.randomUUID().toString().replace("-", "");
