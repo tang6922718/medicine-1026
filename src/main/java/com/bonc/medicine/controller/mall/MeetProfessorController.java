@@ -83,7 +83,7 @@ public class MeetProfessorController {
 			for (int i = 0; i < list.size(); i++) {
 				time1 = Integer.parseInt(list.get(i).get("time").toString());
 				if (time1 < 0) {
-					time = "时间不正确";
+					time = "最近发布";
 				}
 				if (time1 >= 0 && time1 <= 59) {
 					time = time + "秒前";
@@ -121,7 +121,7 @@ public class MeetProfessorController {
 			for (int i = 0; i < list.size(); i++) {
 				time1 = Integer.parseInt(list.get(i).get("reply_time").toString());
 				if (time1 < 0) {
-					time = "时间不正确";
+					time = "最近发布";
 				}
 				if (time1 >= 0 && time1 <= 59) {
 					time = time + "秒前";
@@ -167,7 +167,7 @@ public class MeetProfessorController {
 			for (int i = 0; i < list.size(); i++) {
 				time1 = Integer.parseInt(list.get(i).get("issue_time").toString());
 				if (time1 < 0) {
-					time = "时间不正确";
+					time = "最近发布";
 				}
 				if (time1 >= 0 && time1 <= 59) {
 					time = time + "秒前";
