@@ -38,7 +38,7 @@ public class InfoController {
                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
         List list = infoService.getAllInfo(catCode, pageNum, pageSize, title, status, source_code);
         PageInfo<List> pageInfo = new PageInfo<List>(list);
-        return ResultUtil.successTatol(list,pageInfo.getTotal());
+        return ResultUtil.successTotal(list,pageInfo.getTotal());
     }
 
     /**
