@@ -3,6 +3,8 @@ package com.bonc.medicine.controller.mall;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.mall.PriceService;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,7 +79,7 @@ public class PriceController {
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
 		DecimalFormat decimalFormat = new DecimalFormat(".00");
 		list = priceService.trend(hotword, market, product, specifaction, start_time, end_time);
-				String[] name = new String[list.size()];
+		String[] name = new String[list.size()];
 		String[] value = new String[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			name[i] = list.get(i).get("price_date").toString();
@@ -126,8 +128,17 @@ public class PriceController {
 	 */
 	@GetMapping("/price/pricelist")
 	public Result<Object> pricelist(String hotword, String priceType, String priceState, String start_time,
-			String end_time) {
-		return ResultUtil.success(priceService.pricelist(hotword, priceType, priceState, start_time, end_time));
+			String end_time, Integer pageNum, Integer pageSize) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		list = priceService.pricelist(hotword, priceType, priceState, start_time, end_time);
+		if (pageNum != null && pageSize != null) {
+			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+		}
+		return ResultUtil.successTotal(list, total);
 	}
 
 	/*
