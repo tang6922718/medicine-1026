@@ -82,6 +82,7 @@
 		SELECT
 		a.id,
 		b.NAME,
+		b.head_portrait,
 		a.issue_desc,
 		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) )
 		AS time
@@ -95,11 +96,13 @@
 		AND c.issueid = a.id
 		AND
 		is_assigned = '0'
-		AND c.specid = #{spec_id} UNION ALL
+		AND c.specid = #{spec_id} 
+		UNION ALL
 		SELECT
 		a.id,
 		'邀请我的'
 		AS NAME,
+		b.head_portrait,
 		a.issue_desc,
 		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) ) AS
 		time
@@ -254,7 +257,9 @@
 		LEFT JOIN common_user cu ON
 		temp.from_uid = cu.id
 		WHERE
-		temp.to_uid = #{spec_id}) as temp
+		temp.to_uid = #{spec_id}
+		or temp.from_uid = #{spec_id}
+		) as temp
 	</select>
 
 

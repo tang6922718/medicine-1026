@@ -10,6 +10,9 @@
 		insert into common_comment (comment_id,reply_oid,content,from_uid,to_uid,reply_time) 
 		values (#{comment_id},#{reply_oid},#{content},#{from_uid},#{to_uid},#{reply_time})
 	</insert>
+	<insert id="updateReplyStatus" parameterType="java.util.Map">
+		update spec_issue set  issue_status='1' where id = #{object_id}
+	</insert>
 	
 	<select id="queryComments" parameterType="java.util.Map" resultType="java.util.Map">
 		select cc.*, cu1.name as fname, cu1.head_portrait, cu2.name AS tname,cu1.address,
