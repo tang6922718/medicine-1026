@@ -1,5 +1,21 @@
 package com.bonc.medicine.controller.mall;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Issue;
@@ -12,16 +28,7 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.github.pagehelper.PageHelper;
 
 @RestController
 @RequestMapping("/spec_repertory")
@@ -117,13 +124,18 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/spec_list")
-	public Result specList(String name, String cat_code, String subject_code,String user_id) {
+	public Result specList(String name, String cat_code, String subject_code,String user_id,Integer pageNum,Integer pageSize) {
+		
 		Map param = new HashMap<>();
 		param.put("name", name);
 		param.put("cat_code", cat_code);
 		param.put("subject_code", subject_code);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();//存关注数据
+		//开始分页,不传默认查询全部
+		if(pageNum !=null && pageSize !=null){			
+				PageHelper.startPage(pageNum,pageSize);	
+		}
 		list = specialistService.specialList(param);
 		if(user_id!=null) {
 			for (Map<String,Object> map : list) {
@@ -160,7 +172,7 @@ public class SpecRepertoryController {
 		Map param = new HashMap<>();
 		param.put("spec_id", spec_id);
 		list= specialistService.specDetail(param);
-		User user = userService.getUserInfoById(spec_id);
+		User user = userService.getUserInfoById(user_id);
 		String acount = user.getActive_count();
 		list.get(0).put("active_count", acount);
 		if(user_id!=null)

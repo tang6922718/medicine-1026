@@ -281,6 +281,9 @@ public class UserServiceImpl implements UserService {
     */ 
     private  User getUserMiddleMethod(String userId) {
         Map<String, Object> userMap = userMapper.getUserInfoById(userId);
+        if(userMap ==null ){
+        	return new User();
+        }
         User user = new User();
         user.setId(userMap.get("id") == null ? 0 : Integer.parseInt(userMap.get("id") + ""));
         user.setName(userMap.get("name") == null ? "无名氏" : userMap.get("name").toString());
