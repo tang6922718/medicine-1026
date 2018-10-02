@@ -2,6 +2,8 @@ package com.bonc.medicine.controller.mall;
 
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.mall.HomePageService;
+import com.bonc.medicine.utils.ResultUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +23,7 @@ public class HomePageController {
 	 */
 	@GetMapping("/homePage/notice")
 	public Result<Object> notice() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = homePageService.notice();
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(homePageService.notice());
 	}
 	
 	/*
@@ -33,11 +31,7 @@ public class HomePageController {
 	 */
 	@GetMapping("/homePage/today")
 	public Result<Object> today() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = homePageService.today();
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(homePageService.today());
 	}
 
 }
