@@ -198,7 +198,9 @@
 		LEFT JOIN common_user u1 ON b.seller_id = u1.id
 		LEFT JOIN common_user u2 ON c.seller_id = u2.id
 		LEFT JOIN common_user u3 ON d.seller_id = u3.id
-		WHERE a.site in
+		WHERE
+		a.state = 0 AND
+		a.site in
 			<foreach collection="array" item="site" index="index"
 					 open="(" close=")" separator=",">
 				#{site}
