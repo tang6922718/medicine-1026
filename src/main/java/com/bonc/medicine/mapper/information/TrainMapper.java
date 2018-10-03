@@ -126,6 +126,9 @@ public interface TrainMapper {
                 if (map.get("train_time") != null) {
                     VALUES("train_time", "#{train_time}");
                 }
+                if (map.get("spec_id") != null) {
+                    VALUES("spec_id", "#{spec_id}");
+                }
                 if (map.get("duration") != null) {
                     VALUES("duration", "#{duration}");
                 }
@@ -257,7 +260,9 @@ public interface TrainMapper {
                 if (map.get("train_introduce") != null) {
                     SET("train_introduce=#{train_introduce}");
                 }
-
+                if (map.get("spec_id") != null) {
+                    VALUES("spec_id", "#{spec_id}");
+                }
                 if (map.get("lecturer_introduce") != null) {
                     SET("lecturer_introduce=#{lecturer_introduce}");
                 }
@@ -344,7 +349,7 @@ public interface TrainMapper {
                     SET("img_url=#{img_url}");
                 }
 
-                SET("operation_status='1selectTrainList'");
+                SET("operation_status='1'");
 
                 WHERE("id=#{id}");
             }}.toString();
