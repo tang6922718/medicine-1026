@@ -37,4 +37,6 @@ public interface UserMapper {
 
 	public List<Map<String, Object>> interfaceForBackAfterLogin(String userId);
 
+	public int updateUserTelephoneNumber(Map<String, String> paramMap);
+
 }

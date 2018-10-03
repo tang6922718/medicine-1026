@@ -179,4 +179,9 @@
 
 			telephone = #{phone}
 	</update>
+
+	<update id="updateUserTelephoneNumber" parameterType="Map">
+
+
+	</update>
 </mapper>
