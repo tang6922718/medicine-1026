@@ -44,6 +44,21 @@
       where object_type = #{objectType}
         and object_id =  #{objectId}
     </update>
+    
+    <select id="videoDetailNumberStatistical" parameterType="Map" resultType="Map">
+        SELECT
+            tll.id,
+            sum( CASE WHEN taa.id IS NULL THEN 0 ELSE 1 END ) as appoint_number
+
+        FROM
+            train_live tll
+            LEFT JOIN train_appointment taa ON tll.id = taa.object_id
+            AND taa.object_type = #{type}
+        WHERE
+            tll.id IN ( ${videoIds} )
+        GROUP BY
+            tll.id
+    </select>
 
 
 </mapper>
