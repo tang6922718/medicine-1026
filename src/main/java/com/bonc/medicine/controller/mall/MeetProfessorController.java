@@ -1,5 +1,20 @@
 package com.bonc.medicine.controller.mall;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
@@ -7,25 +22,15 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
 import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.utils.ResultUtil;
-
-import org.hibernate.validator.constraints.Currency;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class MeetProfessorController {
 
 	@Autowired
 	private MeetProfessorService meetProfessorService;
-
 	/*
 	 * 答疑管理 疑问列表msg是内容recisited是否回访0否1是
 	 */
@@ -239,6 +244,9 @@ public class MeetProfessorController {
 	@GetMapping("/meetProfessor/add/Invitation")
 	public Result<Object> Invitation(Integer id, String expert) {
 		meetProfessorService.deleteInvitation(id);
+		//问题状态修改，邀请专家将未处理改为进行中
+		Map param=new HashMap();
+		param.put("object_id", id);
 		String[] a = expert.split(",");
 		for (int i = 0; i < a.length; i++) {
 			meetProfessorService.Invitation(id, a[i]);

@@ -22,6 +22,7 @@ import com.bonc.medicine.entity.mall.Issue;
 import com.bonc.medicine.entity.mall.Specialist;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.service.mall.SpecialistService;
 import com.bonc.medicine.service.thumb.AttentionService;
@@ -44,7 +45,9 @@ public class SpecRepertoryController {
 	private AttentionService attentionService;
 	@Autowired
 	private UserService userService;
-
+	@Autowired
+	private CommentReplyService commentReplyService;
+	
 	/**
 	 * 新建专家角色
 	 * 
@@ -382,6 +385,10 @@ public class SpecRepertoryController {
 		one.put("is_assigned", "1");
 		list.add(one);
 		specialistService.insertIssueRel(list);
+		//更新common_comment状态
+//		Map param=new HashMap();
+//		param.put("object_id", issueid);
+//		commentReplyService.updateReplyStatus(param);
 		return meetProfessorService.expert(Integer.parseInt(issueid));
 	}
 

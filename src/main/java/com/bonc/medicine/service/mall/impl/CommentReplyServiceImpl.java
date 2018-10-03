@@ -1,14 +1,16 @@
 package com.bonc.medicine.service.mall.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.mall.CommentReplyMapper;
 import com.bonc.medicine.service.mall.CommentReplyService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class CommentReplyServiceImpl implements CommentReplyService {
@@ -20,13 +22,29 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 	public int insertComment(Map param) {
 		int num =commentReplyMapper.insertComment(param);
 		if("未处理".equals(param.get("status"))){
-			commentReplyMapper.updateReplyStatus(param);
+			updateReplyStatus(param);
 		}
+		//评论时往common_notice插入信息
+		Map notice_param=new HashMap();
+		notice_param.put("notice_type", "3");
+		notice_param.put("object_id", param.get("object_id")==null?"0":param.get("object_id"));
+		notice_param.put("notice_content", param.get("content"));
+		notice_param.put("publish_user_id", param.get("from_uid"));
+		notice_param.put("notice_receiver", param.get("issue_user_id"));
+		insertNoticeCommentOrReply(notice_param);
 		return num;
 	}
 
 	@Override
 	public int insertReply(Map param) {
+		//回复时向common_notice插入信息
+		Map notice_param=new HashMap();
+		notice_param.put("notice_type", "3");
+		notice_param.put("object_id", param.get("object_id")==null?"0":param.get("object_id"));
+		notice_param.put("notice_content", param.get("content"));
+		notice_param.put("publish_user_id", param.get("from_uid"));
+		notice_param.put("notice_receiver", param.get("issue_user_id"));
+		insertNoticeCommentOrReply(notice_param);
 		return commentReplyMapper.insertReply(param);
 	}
 
@@ -56,6 +74,17 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 			throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
 		}
 		return rows;
+	}
+
+	@Override
+	public void updateReplyStatus(Map param) {
+		commentReplyMapper.updateReplyStatus(param);
+	}
+
+	@Override
+	public int insertNoticeCommentOrReply(Map param) {
+		
+		return commentReplyMapper.insertNoticeCommentOrReply(param);
 	}
 
 }

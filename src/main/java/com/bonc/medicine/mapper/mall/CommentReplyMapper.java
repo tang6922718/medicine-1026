@@ -14,4 +14,5 @@ public interface CommentReplyMapper {
 	public List<Map> commentsCount(Map param);
 	public List<Map> queryReplies(List comment_ids);
 	public int deleteComment(String id);
+	public int insertNoticeCommentOrReply(Map param);
 }

@@ -1,17 +1,25 @@
 package com.bonc.medicine.controller.mall;
 
-import com.bonc.medicine.entity.Result;
-import com.bonc.medicine.service.mall.CommentReplyService;
-import com.bonc.medicine.utils.ResultUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.service.mall.CommentReplyService;
+import com.bonc.medicine.utils.ResultUtil;
 
 @RestController
 @RequestMapping("/com_reply")
@@ -20,9 +28,10 @@ public class CommentReplyController {
 	CommentReplyService commentReplyService;
 	
 	@PostMapping("/comment")
-	public Result releaseComment(@RequestBody Map param) {
+	public Result releaseComment(@RequestBody Map param ) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		param.put("reply_time", sdf.format(new Date().getTime()));
+		//param.put("user_id", user_id);
 		return ResultUtil.success(commentReplyService.insertComment(param));
 	}
 	
@@ -30,6 +39,7 @@ public class CommentReplyController {
 	public Result releaseReply(@RequestBody Map param) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		param.put("reply_time", sdf.format(new Date().getTime()));
+		//param.put("user_id", user_id);
 		return ResultUtil.success(commentReplyService.insertReply(param));
 	}
 	
@@ -40,7 +50,7 @@ public class CommentReplyController {
 		param.put("object_id", object_id);
 		List<Map> result = commentReplyService.queryComments(param);
 		List commentids = new ArrayList<>();
-		if(result.get(0)!=null && !result.get(0).isEmpty()){
+		if(result.size()>0 && result.get(0)!=null && !result.get(0).isEmpty()){
 			for (Map map : result) {			
 				commentids.add(map.get("id"));
 			}

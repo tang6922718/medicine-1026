@@ -76,8 +76,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		List<Map> list=new ArrayList<Map>();
 		list=co_opManageMapper.queryCo_opByCondition(params);
 		if (list.size()>0){
-			for (Map obj:list
-					) {
+			for (Map obj:list ) {
 				obj.putAll(co_opManageMapper.queryCo_opMemberNum((int)obj.get("coopID")));
 				obj.putAll(co_opManageMapper.queryPlantNum((int)obj.get("coopID")));
 				obj.putAll(co_opManageMapper.queryAssistantNum((int)obj.get("coopID")));
