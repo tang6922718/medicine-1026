@@ -100,7 +100,7 @@ public class LogsController {
     @Authorization
     @PutMapping("/logs/unnormal/v1.0/{logId}")
     public Result updateOperLogsUnnormal(@PathVariable String logId) {
-        if (StringUtils.isEmpty(logId)) {
+        if (StringUtils.isBlank(logId)) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
