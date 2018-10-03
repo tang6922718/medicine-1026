@@ -37,14 +37,14 @@ public interface SopMapper {
     List<Map<String, Object>> getSopLists();
 
     //获取某一步的种植步骤
-    Map<String, Object> getStep(@Param("variety_id") Integer variety_id, @Param("step_order") Integer step_order);
+    Map<String, Object> getStep(@Param("id") Integer variety_id, @Param("step_order") Integer step_order);
 
     //删除某一步的种植步骤
-    int delStep(@Param("variety_id") Integer variety_id, @Param("step_order") Integer step_order);
+    int delStep(@Param("id") Integer variety_id, @Param("step_order") Integer step_order);
 
     //添加某一步的种植步骤
     int addStep(Map map);
 
     // 更新sop前删除所有步骤，再重建所有步骤
-    int tombstoneStep(Integer variety_id);
+    int tombstoneStep(Integer id);
 }
