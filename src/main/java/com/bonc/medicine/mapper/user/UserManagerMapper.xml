@@ -62,8 +62,8 @@
 	<insert id="addCooperative" parameterType="com.bonc.medicine.entity.user.Cooperative">
 		Insert into
 		field_coop
-		(name,official_user_id,official_user_name,address,img_url,cultivar,introduce,establish_date,state,is_audit)
-		values(#{name},#{official_user_id},#{official_user_name},#{address},#{img_url},#{cultivar},#{introduce},#{establish_date},'0','0');
+		(name,official_user_id,official_user_name,address,img_url,cultivar,telephone,introduce,establish_date,state,is_audit)
+		values(#{name},#{official_user_id},#{official_user_name},#{address},#{img_url},#{cultivar},#{telephone},#{introduce},#{establish_date},'0','0');
 	</insert>
 
 	<select id="basicInfo" parameterType="Map" resultType="Map">

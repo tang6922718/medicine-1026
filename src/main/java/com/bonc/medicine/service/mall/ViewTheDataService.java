@@ -19,6 +19,8 @@ public interface ViewTheDataService {
     public List<Map<String, Object>> collection();
     
     public List<Map<String, Object>> issue();
+    
+    public List<Map<String, Object>> myResources(Integer user_id);
 
     public List<Map<String, Object>> problemStatistics(Integer user_id);
 
