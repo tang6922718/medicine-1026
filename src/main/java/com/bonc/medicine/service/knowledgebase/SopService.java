@@ -7,7 +7,7 @@ public interface SopService {
     //sop标准
     List<Map<String,Object>> sopStandardList(Integer sop_type, Integer record_status);
     //sop标准种植详细信息
-    List<Map<String,Object>> sopPlantList(Integer variety_id);
+    List<Map<String, Object>> sopPlantList(Integer id);
 
     //sop添加
     int sopAdd(Map map);
@@ -31,14 +31,14 @@ public interface SopService {
     List<Map<String, Object>> getSopLists();
 
     //获取某一步种植信息
-    Map<String, Object> getStep(Integer variety_id, Integer step_order);
+    Map<String, Object> getStep(Integer id, Integer step_order);
 
     //删除某一步种植信息
-    int delStep(Integer variety_id, Integer step_order);
+    int delStep(Integer id, Integer step_order);
 
     //添加某一步种植步骤
     int addStep(Map map);
 
     //更新sop前删除所有步骤，再重建所有步骤
-    int tombstoneStep(Integer variety_id);
+    int tombstoneStep(Integer id);
 }

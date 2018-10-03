@@ -32,9 +32,9 @@ public class SopController {
     }
 
     @SuppressWarnings("unchecked")
-    @GetMapping("/plantDetail/{variety_id}")
-    public Result<Object> getSopPlants(@PathVariable(required = false) Integer variety_id) {
-        return ResultUtil.success(sopService.sopPlantList(variety_id));
+    @GetMapping("/plantDetail/{id}")
+    public Result<Object> getSopPlants(@PathVariable(required = false) Integer id) {
+        return ResultUtil.success(sopService.sopPlantList(id));
     }
 
     @SuppressWarnings("unchecked")
@@ -44,29 +44,28 @@ public class SopController {
          //addJson传入两部分，一部分为sop基本信息，一部分为sop步骤信息
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
         Map sopMap = (Map) map.get("sop");//获取sop基本信息
-        //时间
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String addTime = df.format(new Date());
-        sopMap.put("record_time", addTime);
         //sop状态
         sopMap.put("sop_status", 1);
         //审核状态
         sopMap.put("record_status", 2);
-        List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
         int count = sopService.sopAdd(sopMap);
+        //从mybatis获取自增主键
         Long id = (Long) sopMap.get("id");
+        System.out.println("*******" + id);
+        //获取sop步骤信息
+        List sopStepList = (List) map.get("sopStep");
         for (int i = 0; i < sopStepList.size(); i++) {
             ((Map) sopStepList.get(i)).put("sop_id", id);
+            ((Map) sopStepList.get(i)).put("status", '1');
         }
 
         //插入审核表
         Map auditMap = new HashMap();
         auditMap.put("km_type","4");
-        auditMap.put("id",sopMap.get("variety_id"));
+        auditMap.put("id", id);
         String chinese_name = (String) sopMap.get("chinese_name");
         auditMap.put("title", chinese_name);
         count += auditService.addAudit(auditMap);
-
         count += sopService.sopStepAdd(sopStepList);
         return ResultUtil.success(count);
     }
@@ -77,13 +76,12 @@ public class SopController {
     public Result<Object> editSops(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap((editJson));
         Map sopMap = (Map) map.get("sop");//获取sop基本信息
-
-        int variety_id = (int) sopMap.get("variety_id");//获取variety_id
+        int id = (int) sopMap.get("id");//获取id
         //删除当前所有步骤，再重新添加所有信息到sop步骤
-        tombstoneStep(variety_id);
+        tombstoneStep(id);
         List sopStepList = (List) map.get("sopStep");//获取sop步骤信息
         for (int i = 0; i < sopStepList.size(); i++) {
-            ((Map) sopStepList.get(i)).put("variety_id", variety_id);
+            ((Map) sopStepList.get(i)).put("sop_id", id);
         }
         int count = sopService.sopUpdata(sopMap);
         count += sopService.sopStepAdd(sopStepList);
@@ -93,23 +91,22 @@ public class SopController {
         String chinese_name = (String) sopMap.get("name");
         auditMap.put("title", chinese_name);
         auditMap.put("km_type","4");
-        auditMap.put("id",variety_id);
+        auditMap.put("id", id);
         auditService.czAudit(auditMap);
         count += auditService.addAudit(auditMap);
-
         return ResultUtil.success(count);
     }
 
     @SuppressWarnings("unchecked")
-    @DeleteMapping("/delSop/{variety_id}")
-    public Result<Object> deleteSops(@PathVariable(required = false) Integer variety_id) {
-        int count = sopService.sopDelete(variety_id);//sop基本信息删除
+    @DeleteMapping("/delSop/{id}")
+    public Result<Object> deleteSops(@PathVariable(required = false) Integer id) {
+        int count = sopService.sopDelete(id);//sop基本信息删除
         return ResultUtil.success(count);
     }
 
-    @GetMapping("/cancelSop/{variety_id}")
-    public Result<Object> cancelSop(@PathVariable(required = false) Integer variety_id) {
-        int count = sopService.sopCancle(variety_id);
+    @GetMapping("/cancelSop/{id}")
+    public Result<Object> cancelSop(@PathVariable(required = false) Integer id) {
+        int count = sopService.sopCancle(id);
         return ResultUtil.success(count);
     }
 
@@ -119,13 +116,13 @@ public class SopController {
     }
 
     @GetMapping("/getStep")
-    public Result<Object> getStep(Integer variety_id, Integer step_order) {
-        return ResultUtil.success(sopService.getStep(variety_id, step_order));
+    public Result<Object> getStep(Integer id, Integer step_order) {
+        return ResultUtil.success(sopService.getStep(id, step_order));
     }
 
     @DeleteMapping("/delStep")
-    public Result<Object> delStep(Integer variety_id, Integer step_order) {
-        return ResultUtil.success(sopService.delStep(variety_id, step_order));
+    public Result<Object> delStep(Integer id, Integer step_order) {
+        return ResultUtil.success(sopService.delStep(id, step_order));
     }
 
     @PostMapping("/addStep")
@@ -134,7 +131,7 @@ public class SopController {
         return ResultUtil.success(sopService.addStep(map));
     }
 
-    public int tombstoneStep(Integer variety_id) {
-        return sopService.tombstoneStep(variety_id);
+    public int tombstoneStep(Integer id) {
+        return sopService.tombstoneStep(id);
     }
 }
