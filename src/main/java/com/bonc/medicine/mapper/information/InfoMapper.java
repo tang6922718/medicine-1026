@@ -30,6 +30,7 @@ public interface InfoMapper {
 
     @InsertProvider(type=InfoDynaSqlProvider.class,
             method="addInfo")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int addInfo(Map<String, Object> map);
 
 

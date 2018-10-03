@@ -219,7 +219,7 @@
 	</update>
 
 	<update id="changeInfoStatus" parameterType="java.util.Map">
-		UPDATE info_basic SET status = #{iv_status} WHERE id = #{object_id}
+		UPDATE info_basic SET status = #{km_status} WHERE id = #{object_id}
 	</update>
 
 	<update id="changeVedioStatus" parameterType="java.util.Map">
