@@ -1,5 +1,7 @@
 package com.bonc.medicine.controller.user;
 
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.RoleManagerService;
@@ -30,20 +32,22 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */
+    @Authorization
     @PostMapping("/role/new/v1.0")
-    public Result createNewRole(@RequestBody Map<String, String> param){
+    public Result createNewRole(@RequestBody Map<String, String> param , @CurrentUser String userId){
         if(null == param){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
 
-        if (StringUtils.isEmpty(param.get("roleName")) || StringUtils.isEmpty(param.get("createUserId"))){
+        if (StringUtils.isEmpty(param.get("roleName")) ){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
         if(StringUtils.isEmpty(param.get("isWork"))){
             param.put("isWork", "1");
         }
+        param.put("createUserId", userId);
 
         Map<String, Object> reMap = roleManagerService.createNewRole(param);
 
