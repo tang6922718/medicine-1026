@@ -10,6 +10,8 @@ import com.bonc.medicine.mapper.user.UserManagerMapper;
 import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -253,7 +255,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			basicinfo.setAge(Integer.parseInt(tempData.get("age").toString()));
 		}
 		basicinfo.setName(tempData.get("name").toString());
-		basicinfo.setPassword(tempData.get("password").toString());
+		basicinfo.setPassword(DigestUtils.md5Hex(tempData.get("password").toString()));
 		basicinfo.setSex(tempData.get("sex").toString());
 		basicinfo.setTelephone(tempData.get("telephone").toString());
 		basicinfo.setRole(tempData.get("role").toString());
