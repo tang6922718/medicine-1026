@@ -17,9 +17,10 @@ public class Pricelmpl implements PriceService {
 	private PriceMapper priceMapper;
 
 	@Override
-	public List<Map<String, Object>> getArieties() {
+	public List<Map<String, Object>> getArieties(String hotword) {
 
 		Map map = new HashMap<>();
+		map.put("hotword", hotword);
 		return priceMapper.getArieties(map);
 	}
 
