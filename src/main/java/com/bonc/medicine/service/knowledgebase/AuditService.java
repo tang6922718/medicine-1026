@@ -7,5 +7,7 @@ public interface AuditService {
 
 	public int addAudit(Map map);
 
+	public int updateAudit(Map map);
+
 	public int czAudit(Map map);
 }

@@ -14,6 +14,8 @@ public interface UserManagerMapper {
 
 	public void addBasic(Basicinfo basicinfo);
 
+	public int getTel(Map map);
+	
 	public int updateBasic(Map map);
 
 	public int updateField_coop(Map map);

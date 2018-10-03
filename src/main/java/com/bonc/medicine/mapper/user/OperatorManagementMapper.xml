@@ -14,6 +14,7 @@
             ccu.telephone,
             ccu.is_allowed,
             cro.role_name,
+            cro.id as role_id,
             ccc.name as craete_name,
             ccu.`password`,
             ccu.email,

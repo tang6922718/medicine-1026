@@ -382,5 +382,42 @@ public class UserOperController {
         return ResultUtil.success(map);
     }
 
+    /**
+    * @Description: 普通用户经过了登陆验证之后，可以修改当前用户的手机号码
+    * @Param: reqMap ---key: phone:电话号码; code:验证码
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/10/3 
+    */ 
+    @Authorization
+    @PutMapping("/user/update/phone/v1.0")
+    public Result updateUserTelephoneNumber (@CurrentUser String userId, @RequestBody Map<String, String> reqMap){
+
+        if (StringUtils.isBlank(userId)){
+            return ResultUtil.error(ResultEnum.PERMISSION);
+        }
+
+        if (StringUtils.isBlank(reqMap.get("phone")) || StringUtils.isBlank(reqMap.get("code"))){
+            return ResultUtil.error(ResultEnum.PERMISSION);
+        }
+
+        /*if (StringUtils.isBlank(paramMap.get("phone")) || StringUtils.isBlank(paramMap.get("password"))
+                || StringUtils.isBlank(paramMap.get("verification"))){
+            return ResultUtil.error(ResultEnum.MISSING_PARA);
+        }
+        paramMap.put("code", paramMap.get("verification"));*/
+
+        Result re =  verificationUtilsController.validateCode(reqMap);
+
+        if(re.getCode() != 200 || re.getData() == null){
+            return ResultUtil.error(ResultEnum.ERROR_CODE);
+        }
+
+        // 上面就是验证码已经通过验证了
+
+        reqMap.put("userId", userId);
+        return ResultUtil.success(userService.updateUserTelephoneNumber(reqMap));
+        
+    }
 
 }

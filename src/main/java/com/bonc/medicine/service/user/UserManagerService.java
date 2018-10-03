@@ -13,7 +13,9 @@ import java.util.Map;
 public interface UserManagerService {
 
 	public void addBasic(Basicinfo basicinfo);
-	
+
+	public int getTel(String tel);
+
 	public void addUser(JSONObject json);
 
 	public int updateBasic(Integer id, String name, String sex, Integer age, String address, String img_url);
@@ -52,19 +54,19 @@ public interface UserManagerService {
 
 	public Result<Object> queryUserInfo(int userID);
 
-	public Result<Object> updateUserPlantRole(Map<String,String> params);
+	public Result<Object> updateUserPlantRole(Map<String, String> params);
 
-	public Result<Object> updateUserCareVariety(Map<String,Object> params);
+	public Result<Object> updateUserCareVariety(Map<String, Object> params);
 
 	public Map<String, String> activeDays(String userId);
 
 	/**
-	* @Description: userId要查询的用户的id  ‘1,2,3,4’ 多个这样用都逗号隔开，必须参数 如果没有就返回null
-	 * queryType:目前已知  1：直播 2：专家
-	* @Param: [userId, queryType]
-	* @return: java.util.List<java.util.Map<java.lang.String,java.lang.String>>
-	* @Author: hejiajun
-	* @Date: 2018/9/30 
-	*/ 
-	public List<Map<String, String>> queryInteractTimes( String userId);
+	 * @Description: userId要查询的用户的id ‘1,2,3,4’ 多个这样用都逗号隔开，必须参数 如果没有就返回null
+	 *               queryType:目前已知 1：直播 2：专家
+	 * @Param: [userId, queryType]
+	 * @return: java.util.List<java.util.Map<java.lang.String,java.lang.String>>
+	 * @Author: hejiajun
+	 * @Date: 2018/9/30
+	 */
+	public List<Map<String, String>> queryInteractTimes(String userId);
 }

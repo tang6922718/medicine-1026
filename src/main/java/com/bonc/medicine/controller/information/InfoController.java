@@ -55,8 +55,10 @@ public class InfoController {
     /*@com.bonc.medicine.annotation.Authorization*/
     public Result addInfo(/*@CurrentUser String user_id, */@RequestBody Map<String, Object> map) {
         /*map.put("user_id", user_id);*/
-        auditService.addAudit(map);
-        return ResultUtil.success(infoService.addInfo(map));
+        int count = infoService.addInfo(map);
+        map.put("km_type","2");
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
 
@@ -105,7 +107,11 @@ public class InfoController {
     /*@com.bonc.medicine.annotation.Authorization*/
     public Result infoEdit(/*@CurrentUser String user_id,*/ @RequestBody Map<String, Object> map) {
         /*map.putIfAbsent("user_id", user_id);*/
-        return ResultUtil.success(infoService.infoEditById(map));
+        int count = infoService.infoEditById(map);
+        map.put("km_type","2");
+        count += auditService.czAudit(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**

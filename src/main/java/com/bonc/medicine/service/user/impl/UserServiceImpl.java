@@ -432,5 +432,20 @@ public class UserServiceImpl implements UserService {
         return reMap;
     }
 
+    @Transactional
+    public Map<String, Object> updateUserTelephoneNumber(Map<String, String> paramMap){
+        // userId;phone
+        int succedRow = userMapper.updateUserTelephoneNumber(paramMap);
+
+        if (succedRow != 1){
+            throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
+        }
+
+        Map<String, Object> reMap = new HashMap<>();
+        reMap.put("succeed", succedRow);
+
+        return reMap;
+    }
+
 
 }

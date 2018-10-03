@@ -10,8 +10,12 @@
 		insert into common_comment (comment_id,reply_oid,content,from_uid,to_uid,reply_time) 
 		values (#{comment_id},#{reply_oid},#{content},#{from_uid},#{to_uid},#{reply_time})
 	</insert>
-	<insert id="updateReplyStatus" parameterType="java.util.Map">
+	<update id="updateReplyStatus" parameterType="java.util.Map">
 		update spec_issue set  issue_status='1' where id = #{object_id}
+	</update>
+	<insert id="insertNoticeCommentOrReply" parameterType="java.util.Map">
+		insert into common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state)
+		values(#{notice_type},#{object_id},#{notice_content},#{publish_user_id},#{notice_receiver},now(),'1','1')
 	</insert>
 	
 	<select id="queryComments" parameterType="java.util.Map" resultType="java.util.Map">

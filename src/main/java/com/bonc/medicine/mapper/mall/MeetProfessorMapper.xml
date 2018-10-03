@@ -135,14 +135,10 @@
 		FROM
 		spec_info a
 		LEFT JOIN
-		spec_issue_association b ON a.spec_id
-		= b.specid
-		AND ( b.is_assigned =
-		'0' OR b.is_assigned = '1' )
+		spec_issue_association b ON a.spec_id = b.specid AND ( b.is_assigned = '0' OR b.is_assigned = '1' )
 		LEFT JOIN
 		spec_issue c ON b.issueid = c.id
-		AND ( c.issue_status = '2' OR
-		c.issue_status = '3' )
+		AND ( c.issue_status = '2' OR c.issue_status = '3' )
 		LEFT JOIN
 		common_user d ON c.issue_user_id = d.id
 		WHERE
@@ -162,48 +158,52 @@
 		temp.content,
 		cu.NAME,
 		cu.head_portrait,
-		cu.address
+		cu.address,
+		GROUP_CONCAT(DISTINCT cmv.variety_name) as variety_name
 		FROM
 		(
-		SELECT
-		b.*,
-		p.from_uid,
-		p.to_uid,
-		p.reply_time,
-		p.content
-		FROM
-		(
-		SELECT
-		issue_desc,
-		(
-		SELECT
-		cc.id AS issue_id
-		FROM
-		common_comment cc
-		WHERE
-		cc.object_id = a.id
-		AND cc.object_type = '1'
-		ORDER BY
-		cc.reply_time DESC
-		LIMIT 1
-		) id
-		FROM
-		spec_issue a
-		WHERE
-		EXISTS (
-		SELECT 1 FROM common_comment t WHERE
-		t.object_id = a.id AND
-		t.object_type = '1' )
-		) b
+			SELECT
+			b.*,
+			p.from_uid,
+			p.to_uid,
+			p.reply_time,
+			p.content
+			FROM
+			(
+				SELECT
+				issue_desc,
+					(
+						SELECT
+						cc.id AS issue_id
+						FROM
+						common_comment cc
+						WHERE
+						cc.object_id = a.id
+						AND cc.object_type = '1'
+						ORDER BY
+						cc.reply_time DESC
+						LIMIT 1
+					) id
+				FROM
+				spec_issue a
+				WHERE
+					EXISTS (
+						SELECT 1 FROM common_comment t WHERE
+						t.object_id = a.id AND
+						t.object_type = '1'
+					 )
+			) b
 		INNER JOIN
 		common_comment p ON p.id = b.id
 		)
 		temp
-		LEFT JOIN common_user cu ON
-		temp.from_uid = cu.id
+		LEFT JOIN common_user cu ON temp.from_uid = cu.id
+		LEFT JOIN common_user_care_varieties_r ccv on cu.id=ccv.user_id
+		LEFT JOIN common_medicine_variety cmv on ccv.variety_code=cmv.variety_code
 		WHERE
 		temp.to_uid =
 		#{spec_id} or temp.from_uid = #{spec_id}
+		group by temp.id
 	</select>
 
 	<select id="issue_statistics_solving" parameterType="Map"
@@ -405,7 +405,8 @@
 		author = #{author},
 		spec_id = #{spec_id},
 		content = #{content},
-		update_time = #{update_time}
+		update_time = #{update_time},
+		is_audit = '0'
 		<if test="img_url != null and img_url != ''">
 			,img_url = #{img_url}
 		</if>

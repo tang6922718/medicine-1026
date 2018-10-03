@@ -25,8 +25,8 @@ public class PriceController {
 	 * 获取品种
 	 */
 	@GetMapping("/price/get/arieties")
-	public Result<Object> getArieties() {
-		return ResultUtil.success(priceService.getArieties());
+	public Result<Object> getArieties(String hotword) {
+		return ResultUtil.success(priceService.getArieties(hotword));
 	}
 
 	/*
@@ -57,8 +57,17 @@ public class PriceController {
 	 * 市场价格
 	 */
 	@GetMapping("/price/market")
-	public Result<Object> market(String hotword, String market) {
-		return ResultUtil.success(priceService.market(hotword, market));
+	public Result<Object> market(String hotword, String market,Integer pageNum, Integer pageSize) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		list = priceService.market(hotword, market);
+		if (pageNum != null && pageSize != null) {
+			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+		}
+		return ResultUtil.successTotal(list, total);
 	}
 
 	/*

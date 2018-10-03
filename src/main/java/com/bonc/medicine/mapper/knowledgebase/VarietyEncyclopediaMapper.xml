@@ -171,7 +171,7 @@
 	<select id="kmAuditList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.object_id,
-			CONCAT_WS('',b.chinese_name,c.title,/*d.title,*/e.step_name,f.title,g.name) AS title,
+			/*CONCAT_WS('',b.chinese_name,c.title,*//*d.title,*//*e.step_name,f.title,g.name) AS*/ a.title,
 			CONCAT_WS('',b.variety_id,e.sop_id,g.cat_code) AS variety_id,
 			a.km_type,
 			CASE WHEN a.km_type = 1 THEN '品种百科'
@@ -219,7 +219,7 @@
 	</update>
 
 	<update id="changeInfoStatus" parameterType="java.util.Map">
-		UPDATE info_basic SET status = #{iv_status} WHERE id = #{object_id}
+		UPDATE info_basic SET status = #{km_status} WHERE id = #{object_id}
 	</update>
 
 	<update id="changeVedioStatus" parameterType="java.util.Map">

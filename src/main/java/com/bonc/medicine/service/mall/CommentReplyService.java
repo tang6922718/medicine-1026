@@ -10,4 +10,6 @@ public interface CommentReplyService {
 	public int commentsCount(Map param);
 	public List<Map> queryReplies(List comment_ids);
 	public int deleteComment(String id);
+	public void updateReplyStatus(Map param);
+	public int insertNoticeCommentOrReply(Map param);
 }

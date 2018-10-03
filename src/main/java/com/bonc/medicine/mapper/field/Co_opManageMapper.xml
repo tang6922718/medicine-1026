@@ -64,9 +64,13 @@
 			)
 		</if>
 
-		<if test='start_time != null and start_time != "" and end_time != null and end_time != "" '>
-			AND A.establish_date >= #{start_time}  AND #{end_time} >= A.establish_date
+		<if test='start_time != null and start_time != "" '>
+			AND A.establish_date >= #{start_time}  
 		</if>
+		<if test=' end_time != null and end_time != "" '>
+			AND #{end_time} >= A.establish_date
+		</if>
+		
 
 	</select>
 

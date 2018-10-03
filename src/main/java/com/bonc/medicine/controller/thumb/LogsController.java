@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.thumb;
 
+import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.thumb.LogsService;
@@ -73,15 +74,16 @@ public class LogsController {
     }
 
     /**
-     * @Description:标记操作日志正常 logId：是必须的没有返回缺失参数
+     * @Description:标记操作日志正常 logId：是必须的没有返回缺失参数 多个用英文的逗号分开
      * @Param: [paramMap]
      * @return: com.bonc.thumb.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/9
      */
-    @PutMapping("/logs/normal/v1.0/{logId}")
-    public Result updateOperLogsNormal(@PathVariable String logId) {
-        if (StringUtils.isEmpty(logId)) {
+    @Authorization
+    @PutMapping("/logs/normal/v1.0")
+    public Result updateOperLogsNormal(@RequestParam String logId) {
+        if (StringUtils.isBlank(logId)) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
@@ -89,15 +91,16 @@ public class LogsController {
     }
 
     /**
-     * @Description:标记操作日志不正常 logId：是必须的没有返回缺失参数
+     * @Description:标记操作日志不正常 logId：是必须的没有返回缺失参数 多个用英文的逗号分开
      * @Param: [paramMap]
      * @return: com.bonc.thumb.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/9
      */
+    @Authorization
     @PutMapping("/logs/unnormal/v1.0/{logId}")
     public Result updateOperLogsUnnormal(@PathVariable String logId) {
-        if (StringUtils.isEmpty(logId)) {
+        if (StringUtils.isBlank(logId)) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 

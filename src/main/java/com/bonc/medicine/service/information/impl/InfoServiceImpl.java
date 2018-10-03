@@ -31,7 +31,6 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int addInfo(@RequestBody Map<String, Object> map) {
-        auditMapper.addAudit(map);
         return infoMapper.addInfo(map);
     }
 
@@ -42,8 +41,8 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int infoEditById(Map<String, Object> map) {
-        auditMapper.czAudit(map);
-        auditMapper.addAudit(map);
+//        auditMapper.czAudit(map);
+//        auditMapper.addAudit(map);
         return infoMapper.infoEditById(map);
     }
 

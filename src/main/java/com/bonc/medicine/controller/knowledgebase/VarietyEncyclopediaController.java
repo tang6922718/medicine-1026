@@ -188,7 +188,7 @@ public class VarietyEncyclopediaController {
             String km_status = "1".equals(status)?"3":"4";
             String ve_status = "1".equals(status)?"3":"2";
             map.put("km_status",km_status);
-            map.put("iv_status",km_status);
+            map.put("iv_status",ve_status);
             if("1".equals(km_type)){
                 varietyEncyclopediaService.changeStatus(map);
             }else if("6".equals(km_type)){

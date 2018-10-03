@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @program: medicine
- * @description: 互动数获取和活跃天数获取的控制类
+ * @description: 互动数获取和活跃天数获取的控制类 接口实现替换掉之前的活跃天数和互动数
  * @author: hejiajun
  * @create: 2018-09-30 17:05
  **/

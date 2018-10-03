@@ -80,6 +80,7 @@ public interface UserService {
 
     public Map<String, Object> interfaceForBackAfterLogin(String userId) throws  Exception;
 
+    public Map<String, Object> updateUserTelephoneNumber(Map<String, String> paramMap);
 
 
 

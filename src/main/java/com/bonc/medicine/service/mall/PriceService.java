@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface PriceService {
 
-	public List<Map<String, Object>> getArieties();
+	public List<Map<String, Object>> getArieties(String hotword);
 
 	public List<Map<String, Object>> getMarket(String hotword);
 

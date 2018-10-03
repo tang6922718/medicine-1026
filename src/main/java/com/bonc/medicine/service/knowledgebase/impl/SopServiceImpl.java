@@ -27,9 +27,9 @@ public class SopServiceImpl implements SopService {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public List<Map<String, Object>> sopPlantList(Integer variety_id) {
+    public List<Map<String, Object>> sopPlantList(Integer id) {
         LinkedHashMap map = new LinkedHashMap();
-        map.put("variety_id",variety_id);
+        map.put("id", id);
         return sopMapper.getSopPlants(map);
     }
 
@@ -69,13 +69,13 @@ public class SopServiceImpl implements SopService {
     }
 
     @Override
-    public Map<String, Object> getStep(Integer variety_id, Integer step_order) {
-        return sopMapper.getStep(variety_id, step_order);
+    public Map<String, Object> getStep(Integer id, Integer step_order) {
+        return sopMapper.getStep(id, step_order);
     }
 
     @Override
-    public int delStep(Integer variety_id, Integer step_order) {
-        return sopMapper.delStep(variety_id, step_order);
+    public int delStep(Integer id, Integer step_order) {
+        return sopMapper.delStep(id, step_order);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class SopServiceImpl implements SopService {
     }
 
     @Override
-    public int tombstoneStep(Integer variety_id) {
-        return sopMapper.tombstoneStep(variety_id);
+    public int tombstoneStep(Integer id) {
+        return sopMapper.tombstoneStep(id);
     }
 
 //    @Override
