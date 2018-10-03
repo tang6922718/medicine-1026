@@ -182,6 +182,11 @@
 
 	<update id="updateUserTelephoneNumber" parameterType="Map">
 
+		update
+			common_user
+		set telephone = #{phone}
+		where
+			id = #{userId}
 
 	</update>
 </mapper>
