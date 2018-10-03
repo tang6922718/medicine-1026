@@ -10,6 +10,10 @@
 		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now(),'1');
 	</insert>
 
+	<select id="getTel" parameterType="Map" resultType="Integer">
+		select count(1) as exist from common_user where telephone = #{tel}
+	</select>
+
 	<update id="updateBasic" parameterType="Map">
 		update common_user set
 		name = #{name} ,sex = #{sex} ,age = #{age} , address = #{address},
