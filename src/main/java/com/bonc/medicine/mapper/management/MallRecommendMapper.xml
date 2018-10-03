@@ -61,7 +61,9 @@
 			a.detail,
 			CASE WHEN CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)='' THEN a.img_url
 			ELSE CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)
-			END AS img_url
+			END AS img_url,
+			CASE WHEN CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3) != '' THEN '已存在'
+			END AS exist
 		FROM
 			mall_supply a
 		LEFT JOIN mall_recommend b ON a.id = b.supply_id1

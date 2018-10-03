@@ -25,8 +25,8 @@ public class PriceController {
 	 * 获取品种
 	 */
 	@GetMapping("/price/get/arieties")
-	public Result<Object> getArieties() {
-		return ResultUtil.success(priceService.getArieties());
+	public Result<Object> getArieties(String hotword) {
+		return ResultUtil.success(priceService.getArieties(hotword));
 	}
 
 	/*

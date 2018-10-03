@@ -6,6 +6,9 @@
 	<select id="getArieties" parameterType="Map" resultType="Map">
 		select
 		distinct cat_name from common_price where state = '1' and status = '1'
+		<if test="hotword != null and hotword != ''">
+			and cat_name like CONCAT('%',#{hotword},'%')
+		</if>
 	</select>
 
 	<select id="getMarket" parameterType="Map" resultType="Map">
