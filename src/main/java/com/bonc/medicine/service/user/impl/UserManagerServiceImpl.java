@@ -62,6 +62,13 @@ public class UserManagerServiceImpl implements UserManagerService {
 	}
 
 	@Override
+	public int getTel(String tel) {
+		Map map = new HashMap<>();
+		map.put("tel", tel);
+		return userManagerMapper.getTel(map);
+	}
+	
+	@Override
 	public void addExpert(Expert expert) {
 		userManagerMapper.addExpert(expert);
 	}

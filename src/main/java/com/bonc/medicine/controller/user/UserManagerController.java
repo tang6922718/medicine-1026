@@ -33,6 +33,14 @@ public class UserManagerController {
 		return ResultUtil.success("成功");
 	}
 
+	/*
+	 * 查询数据手机号是否存在，有返回0以外的数字
+	 */
+	@GetMapping("/userManager/get/tel")
+	public Result<Object> getTel(String tel) {
+		return ResultUtil.success(userManagerService.getTel(tel));
+	}
+	
 	@GetMapping("/userManager/update/Basic")
 	public Result<Object> updateBasic(Integer id, String name, String sex, Integer age, String address,
 			String img_url) {
