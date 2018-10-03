@@ -4,7 +4,7 @@
 <mapper namespace="com.bonc.medicine.mapper.knowledgebase.SopMapper">
     <select id="getSopStandards" resultType="Map">
 		SELECT
-		kvs.id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name
+		kvs.id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name,cbu.id
 		FROM
 		km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.id LEFT JOIN
         common_backend_user cbu ON kvs.record_user_id = cbu.id
