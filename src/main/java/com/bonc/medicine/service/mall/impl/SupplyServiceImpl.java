@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Supply;
 import com.bonc.medicine.mapper.mall.SupplyMapper;
 import com.bonc.medicine.service.mall.SupplyService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,21 @@ public class SupplyServiceImpl implements SupplyService {
     @Autowired
     private SupplyMapper supplyMapper;  // 相当于DAO工具类
 
+    @Autowired
+    private  IntegralService integralService;
+
     @Override
     public Result<Object> releaseSupply(Supply tempData) {
+        Map<String, String> ppparamMap = new HashMap<>();
+        //userId;actionCode
+        ppparamMap.put("userId", tempData.getSeller_id() + "");
+        ppparamMap.put("actionCode", "RELEASE_SUPPLY");
+        try{
+
+            integralService.addIntegralHistory(ppparamMap);
+        }catch (Exception e){
+            System.out.println("ERROR ：发布供应操作中---增加积分异常");
+        }
         tempData.setPublic_time(new Date()); // 时间暂时以后台为准
         return ResultUtil.success(supplyMapper.insertSupply(tempData));
     }

@@ -136,7 +136,7 @@ public class UserOperController {
 
     /**
      * @Description:修改密码 -- 通过短信验证码重置密码  门户用
-     * @Param: [paramMap] keys:  phone;verification;password
+     * @Param: [paramMap] keys:  phone;verification;password; 后太管理多传一个equipment=BACK
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/9/1

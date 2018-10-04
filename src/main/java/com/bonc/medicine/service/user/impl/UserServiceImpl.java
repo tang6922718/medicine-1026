@@ -95,6 +95,9 @@ public class UserServiceImpl implements UserService {
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         paramMap.put("updateTime" , df.format(new Date()));
+        if(StringUtils.equals("BACK", paramMap.get("equipment"))){
+            paramMap.put("tableName", "common_backend_user");
+        }
         int rows = userMapper.forgetPassword(paramMap);
 
         return rows;

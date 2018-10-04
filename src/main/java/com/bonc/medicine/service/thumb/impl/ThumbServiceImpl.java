@@ -3,6 +3,7 @@ package com.bonc.medicine.service.thumb.impl;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.adapter.ThumbAdapter;
 import com.bonc.medicine.mapper.thumb.ThumbMapper;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.utils.RedisKeyUtil;
 import org.apache.commons.lang.StringUtils;
@@ -35,11 +36,27 @@ public class ThumbServiceImpl implements ThumbService {
     @Autowired
     private JedisAdapter jedisAdapter;
 
+    @Autowired
+    private IntegralService integralService;
+
     @Override
     public Map<String, Object> giveThumb(Map<String, String> paramMap) {
         String giveThumbId = paramMap.get("giveThumbId");
         String acceptThumbId = paramMap.get("acceptThumbId");
         String type = paramMap.get("type");
+
+        //积分代码
+        Map<String, String> ppparamMap = new HashMap<>();
+        //userId;actionCode
+        ppparamMap.put("userId", giveThumbId);
+        ppparamMap.put("actionCode", "DO_THUMB");
+        try{
+
+            integralService.addIntegralHistory(ppparamMap);
+        }catch (Exception e){
+            System.out.println("ERROR ：点赞操作中---增加积分异常");
+        }
+
         Map<String, Object> reMap = new HashMap<>();
         synchronized (reMap){
             thumbMapper.giveThumb(paramMap);
@@ -47,6 +64,8 @@ public class ThumbServiceImpl implements ThumbService {
             thumbAdapter.expire(acceptThumbId, type);
             return reMap;
         }
+
+
     }
 
     @Override
