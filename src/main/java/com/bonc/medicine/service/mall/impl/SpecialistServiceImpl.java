@@ -7,11 +7,13 @@ import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.mall.SpecialistMapper;
 import com.bonc.medicine.service.mall.SpecialistService;
 import com.bonc.medicine.service.management.CollectionService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,10 @@ import java.util.Map;
 public class SpecialistServiceImpl implements SpecialistService {
 	@Autowired
 	SpecialistMapper specialistMapper;
-	
+
+	@Autowired
+	IntegralService integralService;
+
 	@Autowired
 	ViewNumberService viewNumberService;
 	
@@ -110,6 +115,19 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public int releaseIssue(Issue issue) {
+
+		//积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", issue.getIssue_user_id() + "");
+		ppparamMap.put("actionCode", "REGISTER_PLANTIN");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+		}
+
 		return specialistMapper.insertIssue(issue);
 	}
 

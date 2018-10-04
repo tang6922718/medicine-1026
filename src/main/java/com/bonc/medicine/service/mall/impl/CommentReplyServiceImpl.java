@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bonc.medicine.service.thumb.IntegralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 
 	@Autowired
 	CommentReplyMapper commentReplyMapper;
+
+	@Autowired
+	private IntegralService integralService;
 	
 	@Override
 	public int insertComment(Map param) {
@@ -32,6 +36,18 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 		notice_param.put("publish_user_id", param.get("from_uid"));
 		notice_param.put("notice_receiver", param.get("issue_user_id"));
 		insertNoticeCommentOrReply(notice_param);
+
+		//积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", param.get("from_uid") + "");
+		ppparamMap.put("actionCode", "DO_REPLY");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+		}
 		return num;
 	}
 

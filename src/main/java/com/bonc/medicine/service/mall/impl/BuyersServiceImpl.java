@@ -5,6 +5,7 @@ import com.bonc.medicine.entity.mall.Purchase;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.mall.BuyersMapper;
 import com.bonc.medicine.service.mall.BuyersService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,24 @@ public class BuyersServiceImpl implements BuyersService {
 	
 	@Autowired
 	BuyersMapper buyersMapper;
+
+	@Autowired
+	IntegralService integralService;
 	
 	@Override
 	public int releasePurchase(Purchase tempData) {
+
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", tempData.getUser_id() + "");
+		ppparamMap.put("actionCode", "RELEASE_PURCHASE");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：发布求购操作中---增加积分异常");
+		}
+
 		return buyersMapper.insertPurchase(tempData);
 	}
 
