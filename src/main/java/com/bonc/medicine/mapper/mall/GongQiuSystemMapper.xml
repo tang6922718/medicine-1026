@@ -14,6 +14,17 @@
 		is_audit = #{result},comment = #{comment} where id = #{supplyId}
 	</update>
 
+	<insert id="addSupplyNotice" parameterType="Map">
+		insert into
+		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1');
+	</insert>
+
+	<select id="querySupply" parameterType="Map" resultType="Map">
+		select
+		id,goods_name,seller_id,IFNULL(comment,'') AS comment from mall_supply where id = #{supplyId}
+	</select>
+
 	<update id="auditSPurchase" parameterType="Map">
 		update mall_purchase
 		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}

@@ -59,6 +59,9 @@
 			a.goods_name,
 			a.linkman,
 			a.detail,
+			b.description1,
+			b.description2,
+			b.description3,
 			CASE WHEN CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)='' THEN a.img_url
 			ELSE CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)
 			END AS img_url,
@@ -86,7 +89,7 @@
 	</select>
 
 	<insert id="mallRecommend" parameterType="java.util.Map" useGeneratedKeys="true">
-		INSERT INTO mall_recommend(site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time)
+		INSERT INTO mall_recommend(site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time,description1,description2,description3)
 		VALUES(
 		#{site},
 		#{supply_id1},
@@ -96,7 +99,10 @@
 		#{supply_id3},
 		#{img_url3},
 		#{state},
-		now()
+		now(),
+		#{description1},
+		#{description2},
+		#{description3}
 		)
 	</insert>
 
@@ -111,6 +117,9 @@
 			<if test="supply_id3 != null and supply_id3 != ''">`supply_id3`=#{supply_id3},</if>
 			<if test="img_url3 != null and img_url3 != ''">img_url3=#{img_url3},</if>
 			<if test="state != null and state != ''">state=#{state},</if>
+			<if test="description1 != null">description1=#{description1},</if>
+			<if test="description2 != null">description2=#{description2},</if>
+			<if test="description3 != null">description3=#{description3},</if>
 			upload_time=now()
 		</set>
 		where id = #{id}
@@ -136,7 +145,10 @@
 			d.goods_name,
 			d.detail,
 			a.state,
-			a.upload_time
+			a.upload_time,
+			a.description1,
+			a.description2,
+			a.description3
 		FROM
 			mall_recommend a
 		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
@@ -189,7 +201,10 @@
 		u3.head_portrait AS head_portrait3,
 		u3.`name` AS name3,
 		a.state,
-		a.upload_time
+		a.upload_time,
+		a.description1,
+		a.description2,
+		a.description3
 		FROM
 			mall_recommend a
 		LEFT JOIN mall_supply b ON a.supply_id1 = b.id AND b.carriage_status = 1 	AND b.state = 0 AND b.is_audit = 1

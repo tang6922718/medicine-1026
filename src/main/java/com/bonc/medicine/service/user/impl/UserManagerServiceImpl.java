@@ -8,6 +8,7 @@ import com.bonc.medicine.entity.user.Expert;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.user.UserManagerMapper;
 import com.bonc.medicine.service.thumb.AttentionService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
 
@@ -33,6 +34,9 @@ public class UserManagerServiceImpl implements UserManagerService {
 
 	@Autowired
 	private AttentionService attentionService;
+
+	@Autowired
+	private IntegralService integralService;
 
 	@Override
 	public void addBasic(Basicinfo basicinfo) {
@@ -268,6 +272,19 @@ public class UserManagerServiceImpl implements UserManagerService {
 		basicinfo.setRole(tempData.get("role").toString());
 		userManagerMapper.addBasic(basicinfo);
 		int id = basicinfo.getId();// user_id
+
+		// 积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", id + "");
+		ppparamMap.put("actionCode", "COMPLETE_INFORMA");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+		}
+
 		String[] role = basicinfo.getRole().split(",");
 		for (int i = 0; i < role.length; i++) {
 			userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
@@ -310,7 +327,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			cooperative.setImg_url(tempData.get("img_url").toString());
 			cooperative.setCultivar(tempData.get("cultivar").toString());
 			cooperative.setIntroduce(tempData.get("introduce").toString());
-			cooperative.setIntroduce(tempData.get("telephone").toString());
+			cooperative.setTelphone(tempData.get("telephone").toString());
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = new Date();
 			String time = format.format(date);

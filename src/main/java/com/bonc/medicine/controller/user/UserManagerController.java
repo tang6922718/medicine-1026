@@ -4,12 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
-import com.bonc.medicine.entity.user.Basicinfo;
-import com.bonc.medicine.entity.user.Cooperative;
-import com.bonc.medicine.entity.user.Expert;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +27,8 @@ public class UserManagerController {
 	@PostMapping("/userManager/addBasic")
 	public Result<Object> addUser(@RequestBody JSONObject json) {
 		userManagerService.addUser(json);
+
+
 		return ResultUtil.success("成功");
 	}
 

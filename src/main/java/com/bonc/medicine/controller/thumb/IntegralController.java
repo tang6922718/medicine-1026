@@ -1,5 +1,7 @@
 package com.bonc.medicine.controller.thumb;
 
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.RedisService;
@@ -123,15 +125,19 @@ public class IntegralController {
      * @Author: hejiajun
      * @Date: 2018/9/8
      */
+    @Authorization
     @PostMapping("/integral/v1.0")
-    public Result addIntegralHistoryUpdateScore(@RequestBody Map<String, String> paramMap) throws Exception{
-        if (StringUtils.isEmpty(paramMap.get("userId")) || StringUtils.isEmpty(paramMap.get("actionCode"))) {
+    public Result addIntegralHistoryUpdateScore(@RequestBody Map<String, String> paramMap,
+                                                @CurrentUser String userId) throws Exception{
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(paramMap.get("actionCode"))) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
         Map<String, String> reMap = null;
         /*try {*/
-            reMap = integralService.addIntegralHistory(paramMap);
-            return ResultUtil.success(reMap);
+        //Map<String, String> ppparamMap = new HashMap<>();
+        // userId;actionCode
+        reMap = integralService.addIntegralHistory(paramMap);
+        return ResultUtil.success(reMap);
        /* } catch (Exception e) {
             //reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));
             *//*reMap = integralService.queryIntegralByUserId(paramMap.get("userId"));

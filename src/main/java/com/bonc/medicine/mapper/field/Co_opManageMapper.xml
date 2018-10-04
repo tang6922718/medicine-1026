@@ -26,7 +26,7 @@
 		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area ,A.img_url,A.portrait,
 		       A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
 		       A.official_user_name AS adminName,A.establish_date,A.photo_url,A.is_audit,
-		       A.comment    ,D.role
+		       A.comment    ,D.role,(SELECT NAME FROM common_user E WHERE E.id=A.`official_user_id`) AS NAME
 		FROM field_coop A ,
 		( SELECT B.user_id,GROUP_CONCAT(C.role_name) AS role
 		  FROM common_user_role_rel B , common_role C
@@ -316,5 +316,17 @@
 		INSERT common_user_role_rel (user_id,role_id)
 		VALUES (( SELECT official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
 	</insert>
+
+	<delete id="deleteRole" parameterType="Integer">
+		DELETE FROM common_user_role_rel WHERE user_id = #{user_id} AND role_id= #{role_id}
+	</delete>
+
+	<insert id="insertRole" parameterType="Integer">
+		INSERT  common_user_role_rel (user_id,role_id) VALUES (#{user_id},#{role_id})
+	</insert>
+
+	<select id="queryIsAlreadyAssistantOtherCoop" parameterType="Integer" resultType="Map">
+		SELECT count(*) as NUM FROM field_coop_member WHERE assistant = 0 AND user_id = #{user_ID}
+	</select>
 
 </mapper>

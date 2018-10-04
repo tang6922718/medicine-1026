@@ -42,7 +42,7 @@ public class LogsServiceImpl implements LogsService {
     public Map<String, Object> updateOperLogsNormal(String logId) {
         String [] ids = logId.split(",");
         int succeedRow = logsMapper.updateOperLogsNormal(logId);
-        Integer failedRow = ids.length == succeedRow ? null : ids.length - succeedRow;
+        Integer failedRow = ids.length == succeedRow ? 0 : ids.length - succeedRow;
         return mapReturnUtil("succeed", succeedRow, failedRow);
     }
 
@@ -50,7 +50,7 @@ public class LogsServiceImpl implements LogsService {
     public Map<String, Object> updateOperLogsUnnormal(String logId) {
         String [] ids = logId.split(",");
         int succeedRow = logsMapper.updateOperLogsUnnormal(logId);
-        Integer failedRow = ids.length == succeedRow ? null : ids.length - succeedRow;
+        Integer failedRow = ids.length == succeedRow ? 0 : ids.length - succeedRow;
         return mapReturnUtil("succeed", succeedRow, failedRow);
     }
 

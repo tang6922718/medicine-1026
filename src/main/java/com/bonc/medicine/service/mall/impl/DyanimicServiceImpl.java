@@ -3,9 +3,11 @@ package com.bonc.medicine.service.mall.impl;
 import com.bonc.medicine.entity.mall.Dyanimic;
 import com.bonc.medicine.mapper.mall.DyanimicMapper;
 import com.bonc.medicine.service.mall.DyanimicService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +17,23 @@ public class DyanimicServiceImpl implements DyanimicService {
 	@Autowired
 	DyanimicMapper dyanimicMapper;
 
+	@Autowired
+	private IntegralService integralService;
+
 	@Override
 	public int insertDyanimic(Dyanimic dyanimic) {
+
+		//积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", dyanimic.getPublish_user_id() + "");
+		ppparamMap.put("actionCode", "RELEASE_DYNAMIC");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+		}
 		return dyanimicMapper.insertDyanimic(dyanimic);
 	}
 
