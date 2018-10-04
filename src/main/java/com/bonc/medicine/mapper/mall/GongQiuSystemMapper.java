@@ -15,7 +15,11 @@ public interface GongQiuSystemMapper {
 	public int auditSSupply(Map map);
 
 	public int auditFSupply(Map map);
+	
+	public int addSupplyNotice(Map map);
 
+	public Map querySupply(Map map);
+	
 	public int auditSPurchase(Map map);
 
 	public int auditFPurchase(Map map);

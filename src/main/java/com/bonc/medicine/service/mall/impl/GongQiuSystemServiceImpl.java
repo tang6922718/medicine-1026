@@ -24,22 +24,37 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	private GongQiuSystemMapper gongQiuSystemMapper;
 
 	@Override
+	@Transactional
 	public Result<Object> auditSSupply(Integer supplyId, String result, String comment) {
 
 		Map map = new HashMap<>();
 		map.put("supplyId", supplyId);
 		map.put("result", result);
 		map.put("comment", comment);
+		Map<String, Object> supplyData = gongQiuSystemMapper.querySupply(map);
+		Map map2 = new HashMap<>();
+		map2.put("object_id", supplyId);
+		map2.put("notice_content", "您发布的供应信息《" + supplyData.get("goods_name").toString() + "》已审核通过，可以正常提供服务。");
+		map2.put("notice_receiver", supplyData.get("seller_id").toString());
+		gongQiuSystemMapper.addSupplyNotice(map2);
 		return ResultUtil.success(gongQiuSystemMapper.auditSSupply(map));
 	}
 
 	@Override
+	@Transactional
 	public Result<Object> auditFSupply(Integer supplyId, String result, String comment) {
 
 		Map map = new HashMap<>();
 		map.put("supplyId", supplyId);
 		map.put("result", result);
 		map.put("comment", comment);
+		Map<String, Object> supplyData = gongQiuSystemMapper.querySupply(map);
+		Map map2 = new HashMap<>();
+		map2.put("object_id", supplyId);
+		map2.put("notice_content", "您发布的供应信息《" + supplyData.get("goods_name").toString() + "》已审核不通过，原因是"
+				+ supplyData.get("comment").toString() + "。");
+		map2.put("notice_receiver", supplyData.get("seller_id").toString());
+		gongQiuSystemMapper.addSupplyNotice(map2);
 		return ResultUtil.success(gongQiuSystemMapper.auditFSupply(map));
 	}
 
@@ -118,24 +133,24 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 		map.put("sellerId", sellerId);
 		return ResultUtil.success(gongQiuSystemMapper.goodsRatio(map));
 	}
-	
+
 	@Override
-	public Result<Object> log(Integer user_id,String result) {
-		
+	public Result<Object> log(Integer user_id, String result) {
+
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		map.put("result", result);
 		return ResultUtil.success(gongQiuSystemMapper.log(map));
 	}
-	
+
 	@Override
 	public Result<Object> range(Integer sellerId) {
-		
+
 		Map map = new HashMap<>();
 		map.put("sellerId", sellerId);
 		return ResultUtil.success(gongQiuSystemMapper.range(map));
 	}
-	
+
 	@Override
 	@Transactional
 	public Result<Object> marks(Marks marks) {
@@ -148,23 +163,23 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 		gongQiuSystemMapper.addNotice(map);
 		return ResultUtil.success(gongQiuSystemMapper.marks(marks));
 	}
-	
+
 	@Override
 	public Result<Object> reply(Reply reply) {
 		return ResultUtil.success(gongQiuSystemMapper.reply(reply));
 	}
-	
+
 	@Override
 	public Result<Object> msglist(Integer id) {
-		
+
 		Map map = new HashMap<>();
 		map.put("id", id);
 		return ResultUtil.success(gongQiuSystemMapper.msglist(map));
 	}
-	
+
 	@Override
-	public Result<Object> supplylist(String key, String goodType,String is_audit,String carriage_status) {
-		
+	public Result<Object> supplylist(String key, String goodType, String is_audit, String carriage_status) {
+
 		Map map = new HashMap<>();
 		map.put("key", key);
 		map.put("goodType", goodType);
@@ -172,44 +187,44 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 		map.put("carriage_status", carriage_status);
 		return ResultUtil.success(gongQiuSystemMapper.supplylist(map));
 	}
-	
+
 	@Override
 	public Result<Object> purchaselist(String key, String goodType) {
-		
+
 		Map map = new HashMap<>();
 		map.put("key", key);
 		map.put("goodType", goodType);
 		return ResultUtil.success(gongQiuSystemMapper.purchaselist(map));
 	}
-	
+
 	@Override
 	public Result<Object> my_supply_statistics(Integer user_id) {
-		
+
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		return ResultUtil.success(gongQiuSystemMapper.my_supply_statistics(map));
 	}
-	
+
 	@Override
-	public Result<Object> my_supply_type(Integer user_id,String type) {
-		
+	public Result<Object> my_supply_type(Integer user_id, String type) {
+
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		map.put("type", type);
 		return ResultUtil.success(gongQiuSystemMapper.my_supply_type(map));
 	}
-	
+
 	@Override
 	public Result<Object> my_purchase_statistics(Integer user_id) {
-		
+
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		return ResultUtil.success(gongQiuSystemMapper.my_purchase_statistics(map));
 	}
-	
+
 	@Override
-	public Result<Object> my_purchase_type(Integer user_id,String type) {
-		
+	public Result<Object> my_purchase_type(Integer user_id, String type) {
+
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		map.put("type", type);

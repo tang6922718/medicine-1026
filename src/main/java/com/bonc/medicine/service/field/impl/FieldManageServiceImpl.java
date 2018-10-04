@@ -9,6 +9,7 @@ import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class FieldManageServiceImpl implements FieldManageService {
 	FieldManageMapper fieldManageMapper;
 
 	@Override
+	@Transactional
 	public Result<Object> addField(Field tempData) {
 		// // 所有品种信息
 		// List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
