@@ -78,4 +78,10 @@ public interface Co_opManageMapper {
     public int updateCoopTotalAreaReduce(int ID);
 
     public int insertCommon_user_role_rel(int coopID);
+
+    public int deleteRole(@Param("user_id") int user_id,@Param("role_id") int role_id);  // 删除指定用户指定角色
+
+    public int insertRole(@Param("user_id") int user_id,@Param("role_id") int role_id);  // 插入指定用户指定角色
+
+    public Map queryIsAlreadyAssistantOtherCoop(int user_ID); // 查询用户是否已经是其它合作社的技术员
 }

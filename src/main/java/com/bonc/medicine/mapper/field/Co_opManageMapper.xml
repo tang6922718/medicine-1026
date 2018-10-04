@@ -317,4 +317,16 @@
 		VALUES (( SELECT official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
 	</insert>
 
+	<delete id="deleteRole" parameterType="Integer">
+		DELETE FROM common_user_role_rel WHERE user_id = #{user_id} AND role_id= #{role_id}
+	</delete>
+
+	<insert id="insertRole" parameterType="Integer">
+		INSERT  common_user_role_rel (user_id,role_id) VALUES (#{user_id},#{role_id})
+	</insert>
+
+	<select id="queryIsAlreadyAssistantOtherCoop" parameterType="Integer" resultType="Map">
+		SELECT count(*) as NUM FROM field_coop_member WHERE assistant = 0 AND user_id = #{user_ID}
+	</select>
+
 </mapper>
