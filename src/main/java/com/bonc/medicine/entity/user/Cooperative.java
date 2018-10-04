@@ -9,6 +9,7 @@ public class Cooperative {
 	private String cultivar;// 覆盖品种
 	private String establish_date;// 成立时间
 	private String introduce;// 详细介绍
+	private String telphone;//电话号码
 
 	public String getName() {
 		return name;
@@ -74,4 +75,11 @@ public class Cooperative {
 		this.introduce = introduce;
 	}
 
+	public String getTelphone() {
+		return telphone;
+	}
+
+	public void setTelphone(String telphone) {
+		this.telphone = telphone;
+	}
 }

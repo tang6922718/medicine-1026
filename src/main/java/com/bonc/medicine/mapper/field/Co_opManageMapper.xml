@@ -26,7 +26,7 @@
 		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area ,A.img_url,A.portrait,
 		       A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
 		       A.official_user_name AS adminName,A.establish_date,A.photo_url,A.is_audit,
-		       A.comment    ,D.role
+		       A.comment    ,D.role,(SELECT NAME FROM common_user E WHERE E.id=A.`official_user_id`) AS NAME
 		FROM field_coop A ,
 		( SELECT B.user_id,GROUP_CONCAT(C.role_name) AS role
 		  FROM common_user_role_rel B , common_role C

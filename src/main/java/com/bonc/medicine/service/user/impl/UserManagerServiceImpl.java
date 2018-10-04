@@ -310,7 +310,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			cooperative.setImg_url(tempData.get("img_url").toString());
 			cooperative.setCultivar(tempData.get("cultivar").toString());
 			cooperative.setIntroduce(tempData.get("introduce").toString());
-			cooperative.setIntroduce(tempData.get("telephone").toString());
+			cooperative.setTelphone(tempData.get("telephone").toString());
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = new Date();
 			String time = format.format(date);
