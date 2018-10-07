@@ -202,4 +202,16 @@ public class SpecialistServiceImpl implements SpecialistService {
 		return specialistMapper.is_downloaded(id);
 	}
 
+	@Override
+	public List<Map> catalogListAll(Map param) {
+		// TODO Auto-generated method stub
+		return specialistMapper.catalogListAll(param);
+	}
+
+	@Override
+	public List<Map> subjectListAll(Map param) {
+		// TODO Auto-generated method stub
+		return specialistMapper.subjectListAll(param);
+	}
+
 }

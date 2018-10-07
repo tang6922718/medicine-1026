@@ -61,12 +61,12 @@
 		common_notice a
 		LEFT JOIN common_user b
 		ON a.publish_user_id = b.id
-		LEFT JOIN spec_issue c ON a.object_id =
+		inner JOIN spec_issue c ON a.object_id =
 		c.id
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND a.notice_type = '3' and a.STATUS = '1' and a.state = '1'
-		order by a.publish_time desc
+		order by a.publish_time desc limit 1
 	</select>
 
 	<select id="dyanimic" parameterType="Map" resultType="Map">

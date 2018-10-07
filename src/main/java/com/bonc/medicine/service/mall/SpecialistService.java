@@ -17,6 +17,8 @@ public interface SpecialistService {
 	public int updateInfo(Specialist specialist);
 	public List<Map> catalogList(Map param);
 	public List<Map> subjectList();
+	public List<Map> catalogListAll(Map param);
+	public List<Map> subjectListAll(Map param);
 	public List<Map<String, Object>> specialList(Map param);
 	public List<Map<String, Object>> specialIsFollow(Map param);
 	public List<Map<String, Object>> specDetail(Map param);

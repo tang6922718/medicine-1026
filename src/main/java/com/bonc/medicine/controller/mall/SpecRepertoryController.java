@@ -118,6 +118,25 @@ public class SpecRepertoryController {
 
 		return ResultUtil.success(result);
 	}
+	/**
+	 * 获取品类和学科列表
+	 * 
+	 * @param limit
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/cat_subList_all")
+	public Result cat_subList_all(String limit) {
+		Map result = new HashMap();
+		Map param = new HashMap<>();
+		if (limit != null && !"".equals(limit)) {
+			param.put("limit", Integer.parseInt(limit));
+		}
+		result.put("catListAll", specialistService.catalogListAll(param));
+		result.put("subListAll", specialistService.subjectListAll(param));
+		
+		return ResultUtil.success(result);
+	}
 
 	/**
 	 * 专家列表

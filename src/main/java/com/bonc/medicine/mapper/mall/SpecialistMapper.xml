@@ -40,9 +40,24 @@
 	<select id="subjectList" resultType="Map">
 		SELECT subject_code as id , subject_name as name FROM dict_subject
 	</select>
-	
+	<select id="subjectListAll" resultType="Map">
+		select DISTINCT ds.subject_name as name,subject_code as id  from spec_subject_rel ssr inner join dict_subject ds 
+		on ssr.subject_id = ds.subject_code
+		<if test="limit != null and limit != ''">
+			limit 0,#{limit}
+		</if>
+	</select>
 	<select id="catalogList" resultType="Map">
 		SELECT variety_code as id, variety_name as name FROM common_medicine_variety
+		<if test="limit != null and limit != ''">
+			limit 0,#{limit}
+		</if>
+	</select>
+	<select id="catalogListAll" resultType="Map">
+		SELECT DISTINCT cmv.variety_name as name ,
+		variety_code as id
+		from spec_cat_rel scr inner join common_medicine_variety cmv 
+		on scr.cat_id = cmv.variety_code
 		<if test="limit != null and limit != ''">
 			limit 0,#{limit}
 		</if>

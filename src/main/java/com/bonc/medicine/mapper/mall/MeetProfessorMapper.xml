@@ -183,7 +183,8 @@
 						ORDER BY
 						cc.reply_time DESC
 						LIMIT 1
-					) id
+					) common_id,
+					a.id as id
 				FROM
 				spec_issue a
 				WHERE
@@ -194,7 +195,7 @@
 					 )
 			) b
 		INNER JOIN
-		common_comment p ON p.id = b.id
+		common_comment p ON p.id = b.common_id
 		)
 		temp
 		LEFT JOIN common_user cu ON temp.from_uid = cu.id
