@@ -136,6 +136,7 @@ public class IntegralController {
         /*try {*/
         //Map<String, String> ppparamMap = new HashMap<>();
         // userId;actionCode
+        paramMap.put("userId", userId);
         reMap = integralService.addIntegralHistory(paramMap);
         return ResultUtil.success(reMap);
        /* } catch (Exception e) {

@@ -120,7 +120,7 @@ public class SpecialistServiceImpl implements SpecialistService {
 		Map<String, String> ppparamMap = new HashMap<>();
 		//userId;actionCode
 		ppparamMap.put("userId", issue.getIssue_user_id() + "");
-		ppparamMap.put("actionCode", "REGISTER_PLANTIN");
+		ppparamMap.put("actionCode", "ASK_EXPERTS");
 		try{
 
 			integralService.addIntegralHistory(ppparamMap);
