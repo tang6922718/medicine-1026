@@ -20,12 +20,13 @@ public class Offer {
 	private String linkman; // 联系人
 	private String telephone; // 联系人电话
 	private char state; // 数据状态:0失效1能用
-	private int user_id; // 用户编号
+	private String user_id; // 用户编号
 	
-	public int getUser_id() {
+	
+	public String getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(int user_id) {
+	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
 	public int getId() {

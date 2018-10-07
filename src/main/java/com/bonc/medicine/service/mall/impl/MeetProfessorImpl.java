@@ -139,11 +139,35 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
+	public void setSolving(Integer id) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		ResultUtil.success(meetProfessorMapper.setSolving(map));
+	}
+
+	@Override
 	public void Invitation(Integer id, String expert_id) {
 		Map map = new HashMap<>();
 		map.put("id", id);
 		map.put("expert_id", expert_id);
 		ResultUtil.success(meetProfessorMapper.Invitation(map));
+	}
+
+	@Override
+	public void addInvitationNotice(Integer id, String expert, String issue_desc, Integer user_id) {
+		Map map = new HashMap<>();
+		map.put("id", id);
+		map.put("expert", expert);
+		map.put("notice_content", "邀请您来解答" + issue_desc);
+		map.put("user_id", user_id);
+		ResultUtil.success(meetProfessorMapper.addInvitationNotice(map));
+	}
+
+	@Override
+	public Map<String, Object> queryIssue(Integer id) {
+		Map map = new HashMap<>();
+		map.put("issue_id", id);
+		return meetProfessorMapper.queryIssue(map);
 	}
 
 	@Override
