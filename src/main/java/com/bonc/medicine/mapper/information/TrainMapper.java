@@ -41,7 +41,7 @@ public interface TrainMapper {
     List<Map> selectTrainList(Map<String, Object> map);
 
 
-    @Insert("insert into train_offline_video(id,train_id,video_url,upload_user_id) values (#{id},#{train_id},#{video_url},#{upload_user_id}) ")
+    @Insert("insert into train_offline_video(train_id,video_url,upload_user_id) values (#{train_id},#{video_url},#{user_id}) ")
     int editOfflineTrainVideo(Map<String, Object> map);
 
 
@@ -344,7 +344,7 @@ public interface TrainMapper {
                     SET("img_url=#{img_url}");
                 }
 
-                SET("operation_status='1selectTrainList'");
+                SET("operation_status='1'");
 
                 WHERE("id=#{id}");
             }}.toString();
