@@ -245,6 +245,14 @@
 		INSERT INTO history_search_text(search_text,search_date) VALUES(#{search_text},now());
 	</insert>
 
+	<update id="updateHistoryTextDate" parameterType="String">
+		UPDATE history_search_text SET search_date = now() WHERE search_text = #{search_text}
+	</update>
+
+	<select id="historyTextIsExist" parameterType="String" resultType="Integer">
+		SELECT count(1) FROM history_search_text WHERE search_text = #{search_text}
+	</select>
+
 	<select id="searchHistoryText" resultType="Map">
 		SELECT id,search_text,search_date FROM history_search_text ORDER BY search_date DESC LIMIT 20
 	</select>

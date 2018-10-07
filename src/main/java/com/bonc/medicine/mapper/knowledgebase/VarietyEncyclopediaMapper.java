@@ -42,6 +42,10 @@ public interface VarietyEncyclopediaMapper {
 
     public List<Map<String,Object>> sourceDistribution();
 
+    public int  historyTextIsExist(String search_text);
+
+    public int updateHistoryTextDate(String search_text);
+
     public int addHistoryText(String search_text);
 
     public List<Map<String,Object>> searchHistoryText();
