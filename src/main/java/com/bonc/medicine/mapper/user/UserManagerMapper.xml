@@ -182,7 +182,7 @@
 		) AS temp
 		WHERE 1 = 1
 		<if test="role !='' and role != null">
-			AND a_role LIKE CONCAT( '%', #{role}, '%' )
+			AND a_role =  #{role} 
 		</if>
 		ORDER BY
 		user_id

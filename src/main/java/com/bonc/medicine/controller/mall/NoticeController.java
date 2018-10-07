@@ -2,6 +2,8 @@ package com.bonc.medicine.controller.mall;
 
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.mall.NoticeService;
+import com.bonc.medicine.utils.ResultUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,9 +44,7 @@ public class NoticeController {
 		notice_role_type = notice_role_type.substring(0, notice_role_type.length() - 1);
 		String []  notice_role_type_array =  notice_role_type.split(",");
 		list = noticeService.systemInfo(user_id,notice_role_type_array);
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(list);
 	}
 
 	/*
@@ -54,9 +54,7 @@ public class NoticeController {
 	public Result<Object> meetProfessor(@PathVariable Integer user_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = noticeService.meetProfessor(user_id);
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(list);
 	}
 
 	/*
@@ -66,9 +64,7 @@ public class NoticeController {
 	public Result<Object> dyanimic(@PathVariable Integer user_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = noticeService.dyanimic(user_id);
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(list);
 	}
 
 	/*
@@ -78,9 +74,7 @@ public class NoticeController {
 	public Result<Object> message(@PathVariable Integer user_id) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = noticeService.message(user_id);
-		Result result = new Result();
-		result.setData(list);
-		return result;
+		return ResultUtil.success(list);
 	}
 
 }
