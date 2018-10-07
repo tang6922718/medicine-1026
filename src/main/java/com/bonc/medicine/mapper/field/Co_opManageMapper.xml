@@ -157,8 +157,9 @@
 
 
 	<select id="affiliatedCo_op" resultType="Map" parameterType="Integer">
-		select coop_id,name,img_url,assistant,0 as total from
-		field_coop_member where user_id = #{user_id}
+		select m.coop_id,fc.name,fc.img_url,m.assistant,0 as total from
+		field_coop_member m
+        inner join field_coop fc on m.coop_id=fc.id where m.user_id = #{user_id}
 	</select>
 
 	<select id="co_opTotal" resultType="Map" parameterType="Integer">
