@@ -11,7 +11,9 @@ import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -76,8 +78,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		List<Map> list=new ArrayList<Map>();
 		list=co_opManageMapper.queryCo_opByCondition(params);
 		if (list.size()>0){
-			for (Map obj:list
-					) {
+			for (Map obj:list ) {
 				obj.putAll(co_opManageMapper.queryCo_opMemberNum((int)obj.get("coopID")));
 				obj.putAll(co_opManageMapper.queryPlantNum((int)obj.get("coopID")));
 				obj.putAll(co_opManageMapper.queryAssistantNum((int)obj.get("coopID")));
@@ -92,6 +93,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 
 	@Override
+	@Transactional
 	public Result<Object> updateCo_op(Co_op tempData) {
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
 
@@ -109,10 +111,10 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	}
 
 	@Override
+	@Transactional
 	public Result<Object> addCo_opMember(Co_op_Member tempData) {
 		// 查询所有品种信息
 		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
-
 
 		//根据tel 判断是否为平台用户
 		Map map = new HashMap();
@@ -122,15 +124,34 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			tempData.setUser_id(String.valueOf(map.get("id")));
 		}
 
-
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 
-		if (tempData.getAssistant()!=null && tempData.getAssistant()!=""){
-			;
-		}else {
+		if (tempData.getAssistant()!=null && tempData.getAssistant()!=""){  // 后台管理新增社员时可以指定是否为技术员
+
+			if ("0".equals(tempData.getAssistant())){ //新增的社员被指定为技术员   这里为该社员添加技术员身份(注意技术员必须为平台用户 技术员只能属于一个合作社)
+
+				if (map != null) {
+
+					Map isAlreadyAssistantOtherCoopMap=co_opManageMapper.queryIsAlreadyAssistantOtherCoop((int)map.get("id"));
+
+					int num=Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
+
+					if (num>0){
+						return ResultUtil.error(500,"该用户已经是其它合作社的技术员了");
+					}
+
+					//为该合作社成员添加技术员角色  先删再插入
+					int i=co_opManageMapper.deleteRole((Integer) map.get("id"),4);
+					i=co_opManageMapper.insertRole((Integer) map.get("id"),4);
+
+				}else {
+					return ResultUtil.error(500,"技术员必须为本平台用户");
+				}
+
+			}
+		}else { // APP段新增社员时没有指定是否技术员  默认不是技术员
 			tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
 		}
-
 
 
 		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(),categroyList));
@@ -166,8 +187,38 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	}
 
 	@Override
+	@Transactional
 	public Result<Object> updateCo_opMember(Co_op_Member tempData) {
+
+		//先查询该社员之前的详细信息
+		Map coopMemberInfo=co_opManageMapper.queryCo_opMember(tempData.getId());
+
+		if (tempData.getAssistant()!=null){
+
+			if ("0".equals(tempData.getAssistant())){ // 社员变更为技术员时  要判断其是不是平台用户   是否是其它合作社的技术员
+				if (coopMemberInfo.get("user_id") !=null && coopMemberInfo.get("user_id") !=""){
+
+					Map isAlreadyAssistantOtherCoopMap=
+							co_opManageMapper.queryIsAlreadyAssistantOtherCoop((int)coopMemberInfo.get("user_id"));
+					int num=Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
+					if (num>0){
+						return ResultUtil.error(500,"该用户已经是其它合作社的技术员了");
+					}
+
+					//为该合作社成员添加技术员角色  先删再插入
+					int i=co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"),4);
+					i=co_opManageMapper.insertRole((Integer) coopMemberInfo.get("user_id"),4);
+
+				}else {
+					return ResultUtil.error(500,"技术员必须为本平台用户");
+				}
+			}else {
+				co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"),4);
+			}
+		}
+
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
+
 		return ResultUtil.success(co_opManageMapper.updateCo_opMember(tempData));
 	}
 

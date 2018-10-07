@@ -4,9 +4,9 @@
 <mapper namespace="com.bonc.medicine.mapper.knowledgebase.SopMapper">
     <select id="getSopStandards" resultType="Map">
 		SELECT
-        kvs.variety_id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name
+		kvs.id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name,cbu.id
 		FROM
-        km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.variety_id LEFT JOIN
+		km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.id LEFT JOIN
         common_backend_user cbu ON kvs.record_user_id = cbu.id
         WHERE sop_status=1
         <if test="sop_type != null and sop_type != '' and sop_type != -1">
@@ -18,16 +18,13 @@
 	</select>
 
     <select id="getSopPlants" resultType="com.bonc.medicine.entity.knowledgebase.SopStep">
-        SELECT
-		kss.sop_id,kss.step_order,kss.step_name,kss.short_desc,kss.detail_desc,kss.next_suggestion,kss.recommendation,kss.audio_url
-        FROM
-            km_sop_step kss
-        WHERE 1=1
-        <if test="variety_id != null and variety_id != ''">
-            AND kss.sop_id = (SELECT id FROM km_variety_sop WHERE variety_id = ${variety_id} AND sop_status=1)
-        </if>
+		SELECT * FROM km_sop_step,km_variety_sop
+		WHERE km_sop_step.sop_id = #{id}
+		AND sop_id =km_variety_sop.id
+		AND km_variety_sop.sop_status=1
+		AND km_sop_step.status=1
         ORDER BY
-            kss.step_order
+		km_sop_step.step_order
     </select>
 
 	<insert id="sopAdd" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
@@ -38,19 +35,17 @@
 			sop_type,
 			record_status,
 			fail_opinion,
-		update_time,
 		sop_status
 		)
 		VALUES
 			(#{variety_id},
-			#{record_time},
+		now(),
 			#{record_user_id},
 			#{sop_type},
 			#{record_status},
 			#{fail_opinion},
-		#{update_time},
 		#{sop_status}
-			)
+		)
 	</insert>
 
 	<insert id="sopStepAdd" parameterType="java.util.Map" useGeneratedKeys="true">
@@ -63,11 +58,13 @@
 			recommendation,
 		step_order,
 		audio_url,
-		example_url
+		example_url,
+		status
 		)
 		VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
-			(#{item.sop_id},
+			(
+			#{item.sop_id},
 			#{item.step_name},
 			#{item.short_desc},
 			#{item.detail_desc},
@@ -75,7 +72,8 @@
 			#{item.recommendation},
 			#{item.step_order},
 			#{item.audio_url},
-			#{item.example_url}
+			#{item.example_url},
+			1
 			)
 		</foreach>
 	</insert>
@@ -85,9 +83,10 @@
 		<set>
 			<if test="sop_type != null">sop_type=#{sop_type},</if>
 			<if test="record_user_id != null">record_user_id=#{record_user_id},</if>
-			<if test="update_time != null">update_time=#{update_time},</if>
+			<if test="update_time != null">update_time=now(),</if>
+			record_status = '2'
 		</set>
-		WHERE variety_id = #{variety_id}
+		WHERE id = #{id}
 	</update>
 
 	<update id="sopStepUpdata"  parameterType="java.util.Map">
@@ -98,24 +97,53 @@
 				short_desc=#{item.short_desc},
 				detail_desc=#{item.detail_desc},
 				next_suggestion=#{item.next_suggestion},
-				recommendation=#{item.recommendation}
+                recommendation=#{item.recommendation},
+                audio_url=#{item.audio_url},
+				example_url=#{item.example_url},
+				status=1
 			</set>
-			where sop_id = (SELECT id FROM km_variety_sop WHERE variety_id=#{item.variety_id}) AND
+			where sop_id = #{id}) AND
 			step_order=#{item.step_order}
 		</foreach>
 	</update>
 
     <update id="sopDelete" parameterType="java.lang.Integer">
 		UPDATE km_variety_sop SET sop_status = 0
-		WHERE variety_id = #{variety_id}
+		WHERE id = #{id}
 	</update>
 
     <update id="sopCancel" parameterType="java.lang.Integer">
         UPDATE km_variety_sop SET record_status=5
-        WHERE variety_id = #{variety_id}
+		WHERE id = #{id}
     </update>
 
 	<select id="getSopLists" resultType="Map">
-		SELECT chinese_name,variety_id FROM km_variety_encyclopedia WHERE variety_id NOT IN (SELECT variety_id FROM km_variety_sop WHERE sop_status = 1)
+		SELECT chinese_name,id FROM km_variety_encyclopedia WHERE id NOT IN (SELECT variety_id FROM km_variety_sop WHERE
+		sop_status = 1)
 	</select>
+
+	<select id="getStep" resultType="Map">
+		SELECT * FROM km_sop_step
+		WHERE
+		sop_id = #{id}
+			AND
+			step_order = #{step_order}
+			AND
+			status = 1
+	</select>
+
+	<update id="delStep">
+		UPDATE km_sop_step SET status = 0
+		WHERE
+		sop_id = #{id}
+			AND
+			step_order = #{step_order}
+	</update>
+
+	<update id="tombstoneStep">
+		UPDATE km_sop_step SET status = 0
+		WHERE
+		sop_id = #{id}
+	</update>
+
 </mapper>

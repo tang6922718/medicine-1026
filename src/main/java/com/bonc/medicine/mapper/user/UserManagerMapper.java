@@ -3,6 +3,7 @@ package com.bonc.medicine.mapper.user;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,18 +13,20 @@ import java.util.Map;
 public interface UserManagerMapper {
 
 	public void addBasic(Basicinfo basicinfo);
+
+	public int getTel(Map map);
 	
 	public int updateBasic(Map map);
-	
+
 	public int updateField_coop(Map map);
-	
+
 	public int updateField_coop_member(Map map);
 
-	public void addUserRoleRel(Map map);
+	public void addUserRoleRel(@Param("user_id") int id, @Param("role_id") int role);
 
-	public void addCatRel(Map map);
+	public void addCatRel(@Param("id") int user_id, @Param("cat_rel_id") int id);
 
-	public void addSubject_rel(Map map);
+	public void addSubject_rel(@Param("id") int user_id,@Param("subject_rel_id") int id);
 
 	public void addExpert(Expert expert);
 
@@ -70,5 +73,9 @@ public interface UserManagerMapper {
 	public int deleteUserCareVariety(int userID);
 
 	public int insertUserCareVariety(List userCareVariety);
+
+	public Map activeDays(String userId);
+
+	public List<Map<String, Object>> queryInteractTimes(@Param("proId")String proId);
 
 }

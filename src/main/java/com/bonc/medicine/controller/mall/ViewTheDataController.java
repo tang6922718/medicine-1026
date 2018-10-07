@@ -217,6 +217,22 @@ public class ViewTheDataController {
 		throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
 	}
 
+	
+	
+	/*
+	 * 查看数据-我的资源
+	 */
+	@GetMapping("/viewTheData/myResources")
+	public Result<Object> myResources(Integer user_id) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list = viewTheDataService.myResources(user_id);
+		Result result = new Result();
+		result.setData(list);
+		result.setCode(200);
+		result.setMsg("成功");
+		return result;
+	}
+	
 	/*
 	 * 问题统计
 	 */

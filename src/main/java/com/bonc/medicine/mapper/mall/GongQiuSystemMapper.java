@@ -15,7 +15,11 @@ public interface GongQiuSystemMapper {
 	public int auditSSupply(Map map);
 
 	public int auditFSupply(Map map);
+	
+	public int addSupplyNotice(Map map);
 
+	public Map querySupply(Map map);
+	
 	public int auditSPurchase(Map map);
 
 	public int auditFPurchase(Map map);
@@ -35,6 +39,10 @@ public interface GongQiuSystemMapper {
 	public List<Map> range(Map map);
 
 	public int marks(Marks marks);
+	
+	public int queryUserId(Integer supply_id);
+	
+	public int addNotice(Map map);
 
 	public int reply(Reply reply);
 	

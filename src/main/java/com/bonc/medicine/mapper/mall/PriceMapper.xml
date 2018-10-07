@@ -6,6 +6,9 @@
 	<select id="getArieties" parameterType="Map" resultType="Map">
 		select
 		distinct cat_name from common_price where state = '1' and status = '1'
+		<if test="hotword != null and hotword != ''">
+			and cat_name like CONCAT('%',#{hotword},'%')
+		</if>
 	</select>
 
 	<select id="getMarket" parameterType="Map" resultType="Map">
@@ -101,6 +104,8 @@
 		</if>
 		GROUP BY
 		price_date
+		ORDER BY
+		price_date
 	</select>
 
 	<select id="detail" parameterType="Map" resultType="Map">
@@ -133,7 +138,7 @@
 		price_date
 		ORDER BY
 		price_date
-		limit 0,9
+		limit 0,10
 	</select>
 
 	<select id="todayPrice" parameterType="Map" resultType="Map">

@@ -1,5 +1,7 @@
 package com.bonc.medicine.controller.mall;
 
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Offer;
 import com.bonc.medicine.service.mall.OfferService;
@@ -21,7 +23,9 @@ public class OfferController {
 	
 	@SuppressWarnings("unchecked")
 	@PostMapping("/offer")
-	public Result<Object> realseOffer(@RequestBody Offer offer) {
+	@Authorization
+	public Result<Object> realseOffer(@RequestBody Offer offer,@CurrentUser String user_id) {
+		offer.setUser_id(Integer.parseInt(user_id));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String publish_time = sdf.format(new Date());
 		offer.setPublish_time(publish_time);

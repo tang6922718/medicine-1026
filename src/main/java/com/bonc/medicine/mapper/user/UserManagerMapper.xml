@@ -6,20 +6,30 @@
 	<insert id="addBasic" parameterType="com.bonc.medicine.entity.user.Basicinfo"
 		useGeneratedKeys="true" keyProperty="id">
 		Insert into common_user
-		(telephone,name,password,sex,age,address)
-		values(#{telephone},#{name},#{password},#{sex},#{age},#{address});
+		(telephone,name,password,sex,age,address,log_time,status)
+		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now(),'1');
 	</insert>
 
+	<select id="getTel" parameterType="Map" resultType="Integer">
+		select count(1) as exist from common_user where telephone = #{tel}
+	</select>
+
 	<update id="updateBasic" parameterType="Map">
-		update common_user set name = #{name} ,sex = #{sex} ,age = #{age} , address = #{address}, head_portrait = #{img_url} where id = #{id}
+		update common_user set
+		name = #{name} ,sex = #{sex} ,age = #{age} , address = #{address},
+		head_portrait = #{img_url} where id = #{id}
 	</update>
-	
+
 	<update id="updateField_coop" parameterType="Map">
-		update field_coop set age = #{age} , address = #{address} ,official_user_name = #{name} where official_user_id = #{id}
+		update field_coop
+		set age = #{age} , address = #{address} ,official_user_name = #{name}
+		where official_user_id = #{id}
 	</update>
-	
+
 	<update id="updateField_coop_member" parameterType="Map">
-		update field_coop_member set name = #{name} ,sex = #{sex}, age = #{age} ,address = #{address} ,img_url = #{img_url} where user_id = #{id}
+		update
+		field_coop_member set name = #{name} ,sex = #{sex}, age = #{age}
+		,address = #{address} ,img_url = #{img_url} where user_id = #{id}
 	</update>
 
 	<insert id="addUserRoleRel" parameterType="Map">
@@ -31,8 +41,8 @@
 
 	<insert id="addExpert" parameterType="com.bonc.medicine.entity.user.Expert">
 		Insert into spec_info
-		(name,employment_age,education,expertise_field,detail)
-		values(#{name},#{employment_age},#{education},#{expertise_field},#{detail});
+		(spec_id,name,employment_age,education,expertise_field,professional_direction,title,company,detail)
+		values(#{spec_id},#{name},#{employment_age},#{education},#{expertise_field},#{professional_direction},#{title},#{company},#{detail});
 	</insert>
 
 	<insert id="addCatRel" parameterType="Map">
@@ -52,8 +62,8 @@
 	<insert id="addCooperative" parameterType="com.bonc.medicine.entity.user.Cooperative">
 		Insert into
 		field_coop
-		(name,official_user_name,address,img_url,cultivar)
-		values(#{name},#{official_user_name},#{address},#{img_url},#{cultivar});
+		(name,official_user_id,official_user_name,address,img_url,cultivar,telephone,introduce,establish_date,state,is_audit)
+		values(#{name},#{official_user_id},#{official_user_name},#{address},#{img_url},#{cultivar},#{telphone},#{introduce},#{establish_date},'0','0');
 	</insert>
 
 	<select id="basicInfo" parameterType="Map" resultType="Map">
@@ -67,15 +77,19 @@
 		a.log_time,
 		GROUP_CONCAT( DISTINCT (
 		c.chinese_name ) ) AS care_name,
-		GROUP_CONCAT( DISTINCT ( e.role_name )
+		GROUP_CONCAT(
+		DISTINCT ( e.role_name )
 		) AS role_name,
 		a.head_portrait
 		FROM
-		common_user a left join 
-		common_user_care_varieties_r b on a.id = b.user_id left join 
-		km_variety_encyclopedia c on b.variety_code = c.id left join 
-		common_user_role_rel d on a.id = d.user_id left join 
-		common_role e on d.role_id = e.id where a.id = #{id}
+		common_user
+		a left join
+		common_user_care_varieties_r b on a.id = b.user_id left
+		join
+		km_variety_encyclopedia c on b.variety_code = c.id left join
+		common_user_role_rel d on a.id = d.user_id left join
+		common_role e on
+		d.role_id = e.id where a.id = #{id}
 	</select>
 
 	<update id="userStatus" parameterType="Map">
@@ -84,62 +98,73 @@
 	</update>
 
 	<select id="fans" parameterType="Map" resultType="Map">
-		select IFNULL(count(1),0) as fans from common_follow where object_id = #{id}
+		select
+		IFNULL(count(1),0) as fans from common_follow where object_id = #{id}
 	</select>
 
 	<select id="care" parameterType="Map" resultType="Map">
-		select IFNULL(count(1),0)
-		as care from common_follow where follow_user_id = #{id}
+		select
+		IFNULL(count(1),0)
+		as care from common_follow where follow_user_id =
+		#{id}
 	</select>
 
 	<select id="integral" parameterType="Map" resultType="Map">
 		select
-		IFNULL(sum(current_integral),0) as current_integral from common_integral where user_id = #{id} 
+		IFNULL(sum(current_integral),0) as current_integral from
+		common_integral where user_id = #{id}
 	</select>
 
 	<select id="issue" parameterType="Map" resultType="Map">
 		select
-		IFNULL(count(1),0) as issue from spec_issue where issue_user_id = #{id}
+		IFNULL(count(1),0) as issue from spec_issue where issue_user_id =
+		#{id}
 	</select>
 
 	<select id="supply" parameterType="Map" resultType="Map">
 		select
-		IFNULL(count(1),0) as supply from mall_supply where state ='0' and seller_id =
+		IFNULL(count(1),0) as supply from mall_supply where state ='0' and
+		seller_id =
 		#{id}
 	</select>
 
 	<select id="purchase" parameterType="Map" resultType="Map">
 		select
-		IFNULL(count(1),0) as purchase from mall_purchase where state ='1' and user_id =
+		IFNULL(count(1),0) as purchase from mall_purchase where state ='1' and
+		user_id =
 		#{id}
 	</select>
 
 	<select id="field" parameterType="Map" resultType="Map">
 		select
-		IFNULL(count(1),0) as field from field_info where state ='1' and user_id = #{id}
+		IFNULL(count(1),0) as field from field_info where state ='1' and
+		user_id = #{id}
 	</select>
 
 	<select id="userlist" parameterType="Map" resultType="Map">
 		SELECT
-			* 
+		*
 		FROM
-			(
-			SELECT
-				a.id AS user_id,
-				a.NAME,
-				IFNULL( GROUP_CONCAT( c.role_name ORDER BY c.role_name DESC ), '' ) AS a_role,
-				a.telephone,
-				'' AS coop,
-				'' AS HELP,
-				'' AS integral,
-				'' AS supply,
-				'' AS purchase,
-			STATUS 
-				FROM
-				common_user a
-				LEFT JOIN common_user_role_rel b ON a.id = b.user_id
-				LEFT JOIN common_role c ON b.role_id = c.id 
-				where 1 = 1
+		(
+		SELECT
+		a.id AS user_id,
+		a.NAME,
+		IFNULL( GROUP_CONCAT(
+		c.role_name ORDER BY c.role_name DESC ), '' ) AS
+		a_role,
+		a.telephone,
+		''
+		AS coop,
+		'' AS HELP,
+		'' AS integral,
+		'' AS supply,
+		'' AS purchase,
+		STATUS
+		FROM
+		common_user a
+		LEFT JOIN common_user_role_rel b ON a.id = b.user_id
+		LEFT JOIN common_role c ON b.role_id = c.id
+		where 1 = 1
 		<if test="tel != '' and tel != null">
 			and a.telephone LIKE CONCAT( '%', #{tel}, '%' )
 		</if>
@@ -152,74 +177,90 @@
 			AND str_to_date(#{endTime},'%Y-%m-%d') <![CDATA[ > ]]>
 			log_time
 		</if>
-			GROUP BY
-				a.id 
-			) AS temp 
-			WHERE 1 = 1 
+		GROUP BY
+		a.id
+		) AS temp
+		WHERE 1 = 1
 		<if test="role !='' and role != null">
 			AND a_role LIKE CONCAT( '%', #{role}, '%' )
 		</if>
-			ORDER BY
-				user_id
+		ORDER BY
+		user_id
 	</select>
 
 	<select id="coop_hrlp_list" resultType="Map">
-		select IFNULL(a.user_id,'') AS user_id , b.name , a.assistant from field_coop_member a left join field_coop b on a.coop_id = b.id 
+		select
+		IFNULL(a.user_id,'') AS user_id , b.name , a.assistant from
+		field_coop_member a left join field_coop b on a.coop_id = b.id
 	</select>
 
 	<select id="integrallist" resultType="Map">
-		select user_id,current_integral from common_integral
+		select
+		user_id,current_integral from common_integral
 	</select>
 
 	<select id="supplylist" resultType="Map">
-		select seller_id as user_id,count(1) as supply from mall_supply where state = '0' and is_audit = '1' and carriage_status = '1'  GROUP BY (seller_id)
+		select seller_id as
+		user_id,count(1) as supply from mall_supply where state = '0' and
+		is_audit = '1' and carriage_status = '1' GROUP BY (seller_id)
 	</select>
 
 	<select id="purchaselist" resultType="Map">
-		select user_id,count(1) as purchase from mall_purchase where state = '1' and is_aduit = '1' group by user_id
+		select user_id,count(1) as
+		purchase from mall_purchase where state = '1' and is_aduit = '1' group
+		by user_id
 	</select>
 
 	<select id="queryUserInfo" resultType="Map" parameterType="Integer">
-        SELECT id,head_portrait,name,sex,age,address,telephone,
-        CASE  WHEN  LOCATE(5,GROUP_CONCAT(B.role_id))=0 THEN 0 ELSE 1 END  as isSpc,
-        CASE  WHEN  LOCATE(1,GROUP_CONCAT(B.role_id))=0 THEN 0 ELSE 1 END  as isPlant
-        FROM common_user A , common_user_role_rel B
+		SELECT id,head_portrait,name,sex,age,address,telephone,
+		CASE WHEN
+		LOCATE(5,GROUP_CONCAT(B.role_id))=0 THEN 0 ELSE 1 END as isSpc,
+		CASE
+		WHEN LOCATE(1,GROUP_CONCAT(B.role_id))=0 THEN 0 ELSE 1 END as
+		isPlant
+		FROM common_user A , common_user_role_rel B
 
-        WHERE id= #{userID} AND A.id=B.user_id
+		WHERE id= #{userID} AND
+		A.id=B.user_id
 
 	</select>
 
 	<select id="getActiveAndhudong" resultType="Map" parameterType="Integer">
 		SELECT
-			interact_count,
-			active_count
+		interact_count,
+		active_count
 		FROM
-			spec_interact_stats
+		spec_interact_stats
 		WHERE
-			spec_id = #{userId}
+		spec_id =
+		#{userId}
 	</select>
 
-    <select id="getUserCarePinZhong" resultType="Map" parameterType="Integer">
+	<select id="getUserCarePinZhong" resultType="Map" parameterType="Integer">
 		SELECT
-            GROUP_CONCAT(variety_name) as loveMedicineName,
-            GROUP_CONCAT(ccr.variety_code) as loveMedicineID
-        FROM
-            common_user_care_varieties_r ccr
-            LEFT JOIN common_medicine_variety cv ON ccr.variety_code = cv.variety_code
-        WHERE
-            ccr.user_id =  #{userId}
+		GROUP_CONCAT(variety_name) as loveMedicineName,
+		GROUP_CONCAT(ccr.variety_code) as loveMedicineID
+		FROM
+		common_user_care_varieties_r ccr
+		LEFT JOIN common_medicine_variety cv
+		ON ccr.variety_code = cv.variety_code
+		WHERE
+		ccr.user_id = #{userId}
 	</select>
 
 	<delete id="deleteUserPlantRole" parameterType="Integer">
-		DELETE FROM common_user_role_rel WHERE user_id= #{userID} AND role_id=1
+		DELETE FROM
+		common_user_role_rel WHERE user_id= #{userID} AND role_id=1
 	</delete>
 
 	<insert id="insertUserPlantRole" parameterType="Integer">
-		INSERT INTO common_user_role_rel(user_id,role_id) VALUES (#{userID},1)
+		INSERT INTO
+		common_user_role_rel(user_id,role_id) VALUES (#{userID},1)
 	</insert>
 
 	<delete id="deleteUserCareVariety" parameterType="Integer">
-		DELETE FROM common_user_care_varieties_r WHERE user_id = #{userID}
+		DELETE FROM
+		common_user_care_varieties_r WHERE user_id = #{userID}
 	</delete>
 
 	<insert id="insertUserCareVariety">
@@ -229,4 +270,29 @@
 		</foreach>
 	</insert>
 
+	<select id="activeDays" parameterType="String" resultType="Map">
+		SELECT
+		COUNT( DISTINCT login_time ) AS acDays
+		FROM
+		common_logon_log
+		WHERE
+		user_id = #{userId}
+	</select>
+
+	<!-- canshu proId -->
+	<select id="queryInteractTimes" parameterType="String"
+		resultType="Map">
+		SELECT
+		tii.user_id,
+		count( tii.user_id ) interact_number
+		FROM
+		train_interact tii
+		LEFT JOIN spec_info ssi ON tii.object_id = ssi.spec_id
+		WHERE
+		tii.user_id IN ( ${proId} )
+		GROUP BY
+		tii.user_id
+
+
+	</select>
 </mapper>

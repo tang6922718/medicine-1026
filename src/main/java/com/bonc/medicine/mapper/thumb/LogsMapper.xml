@@ -25,7 +25,7 @@
         set
           op_status = 1
         where
-          id = #{logId}
+          id in ( ${logId} )
     </update>
 
     <update id="updateOperLogsUnnormal" parameterType="String">
@@ -34,7 +34,7 @@
         set
           op_status = 0
         where
-          id = #{logId}
+          id in  ( ${logId} )
     </update>
 
     <select id="queryLoginOutLogs" parameterType="Map" resultType="Map">

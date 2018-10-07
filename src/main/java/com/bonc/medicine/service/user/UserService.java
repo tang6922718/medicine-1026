@@ -47,7 +47,7 @@ public interface UserService {
      */
     public int signUpCareVarieties();
 
-    public int updatePassword(Map<String, String> paramMap);
+    public int forgetPassword(Map<String, String> paramMap);
 
     /**
      * @Description:通过电话号码找出电话号码所在的表的名称，来判断。当前修改密码的用户是什么用户
@@ -74,8 +74,13 @@ public interface UserService {
 
     public Map changePassword(Map<String, String> map);
 
+    public Map changePasswordBack(Map<String, String> map);
+
     public User getUserInfoById(String userId);
 
+    public Map<String, Object> interfaceForBackAfterLogin(String userId) throws  Exception;
+
+    public Map<String, Object> updateUserTelephoneNumber(Map<String, String> paramMap);
 
 
 

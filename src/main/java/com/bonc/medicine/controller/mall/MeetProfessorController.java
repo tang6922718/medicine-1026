@@ -1,28 +1,36 @@
 package com.bonc.medicine.controller.mall;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
 import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.utils.ResultUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class MeetProfessorController {
 
 	@Autowired
 	private MeetProfessorService meetProfessorService;
-
 	/*
 	 * 答疑管理 疑问列表msg是内容recisited是否回访0否1是
 	 */
@@ -56,7 +64,6 @@ public class MeetProfessorController {
 	 */
 	@PostMapping("/meetProfessor/case")
 	public Result<Object> anli(@RequestBody Case anli) {
-		meetProfessorService.setAnli(anli.getIssue_id());
 		return meetProfessorService.anli(anli);
 	}
 
@@ -81,7 +88,7 @@ public class MeetProfessorController {
 			for (int i = 0; i < list.size(); i++) {
 				time1 = Integer.parseInt(list.get(i).get("time").toString());
 				if (time1 < 0) {
-					time = "时间不正确";
+					time = "最近发布";
 				}
 				if (time1 >= 0 && time1 <= 59) {
 					time = time + "秒前";
@@ -103,7 +110,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;
+		return ResultUtil.error(ResultEnum.NO_CONTENT);
 	}
 
 	/*
@@ -119,7 +126,7 @@ public class MeetProfessorController {
 			for (int i = 0; i < list.size(); i++) {
 				time1 = Integer.parseInt(list.get(i).get("reply_time").toString());
 				if (time1 < 0) {
-					time = "时间不正确";
+					time = "最近发布";
 				}
 				if (time1 >= 0 && time1 <= 59) {
 					time = time + "秒前";
@@ -136,10 +143,10 @@ public class MeetProfessorController {
 				list.get(i).put("reply_time", time);
 			}
 			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).get("from_uid").toString().equals(list.get(i).get("to_uid").toString())) {
-				} else if (list.get(i).get("from_uid").toString().equals(spec_id.toString())) {
-					list.get(i).put("reply_person_msg", "我回复" + list.get(i).get("NAME").toString());
-				} else if (list.get(i).get("to_uid").toString().equals(spec_id.toString())) {
+				if (String.valueOf(list.get(i).get("from_uid")).equals(String.valueOf(list.get(i).get("to_uid")))) {
+				} else if (String.valueOf(list.get(i).get("from_uid")).equals(spec_id.toString())) {
+					list.get(i).put("reply_person_msg", "我回复" + String.valueOf(list.get(i).get("NAME")));
+				} else if (String.valueOf(list.get(i).get("to_uid")).equals(spec_id.toString())) {
 					list.get(i).put("reply_person_msg", list.get(i).get("NAME").toString() + "回复我");
 				}
 			}
@@ -149,7 +156,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;
+		return ResultUtil.error(ResultEnum.NO_CONTENT);
 	}
 
 	/*
@@ -165,7 +172,7 @@ public class MeetProfessorController {
 			for (int i = 0; i < list.size(); i++) {
 				time1 = Integer.parseInt(list.get(i).get("issue_time").toString());
 				if (time1 < 0) {
-					time = "时间不正确";
+					time = "最近发布";
 				}
 				if (time1 >= 0 && time1 <= 59) {
 					time = time + "秒前";
@@ -187,7 +194,7 @@ public class MeetProfessorController {
 			result.setData(list);
 			return result;
 		}
-		return null;
+		return ResultUtil.error(ResultEnum.NO_CONTENT);
 	}
 
 	/*
@@ -237,6 +244,9 @@ public class MeetProfessorController {
 	@GetMapping("/meetProfessor/add/Invitation")
 	public Result<Object> Invitation(Integer id, String expert) {
 		meetProfessorService.deleteInvitation(id);
+		//问题状态修改，邀请专家将未处理改为进行中
+		Map param=new HashMap();
+		param.put("object_id", id);
 		String[] a = expert.split(",");
 		for (int i = 0; i < a.length; i++) {
 			meetProfessorService.Invitation(id, a[i]);
@@ -302,13 +312,25 @@ public class MeetProfessorController {
 	 * 新增文章注意审核字段
 	 */
 	@PutMapping("/meetProfessor/add/Article")
-	public Result<Object> addArticle(@RequestBody Article article) {
+	@Authorization
+	public Result<Object> addArticle(@RequestBody Article article,@CurrentUser String crreate_user_id) {
+		article.setCreate_user_id(Integer.valueOf(crreate_user_id));
+		
 		meetProfessorService.addArticle(article);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);
 		result.setMsg("成功");
 		result.setData("更新完毕");
 		return result;
+	}
+	/*
+	 * 获取新增专家资源专家信息
+	 */
+	@GetMapping("/meetProfessor/queryArticleList")
+	public Result<Object> queryArticleList() {
+		
+		
+		return meetProfessorService.queryArticleList();
 	}
 
 	/*
@@ -317,8 +339,8 @@ public class MeetProfessorController {
 	@PutMapping("/meetProfessor/update/Article")
 	public Result<Object> updateArticle(@RequestBody Article article) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String publish_time = sdf.format(new Date());
-		article.setPublish_time(publish_time);
+		String update_time = sdf.format(new Date());
+		article.setUpdate_time(update_time);
 		meetProfessorService.updateArticle(article);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);

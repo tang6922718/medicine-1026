@@ -6,9 +6,14 @@ import com.bonc.medicine.entity.mall.Specialist;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.mall.SpecialistMapper;
 import com.bonc.medicine.service.mall.SpecialistService;
+import com.bonc.medicine.service.management.CollectionService;
+import com.bonc.medicine.service.thumb.IntegralService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +21,15 @@ import java.util.Map;
 public class SpecialistServiceImpl implements SpecialistService {
 	@Autowired
 	SpecialistMapper specialistMapper;
+
+	@Autowired
+	IntegralService integralService;
+
+	@Autowired
+	ViewNumberService viewNumberService;
+	
+	@Autowired
+	CollectionService collectionService;
 	
 	@Override
 	public int craeteCharactor(Specialist specialist) {
@@ -41,6 +55,10 @@ public class SpecialistServiceImpl implements SpecialistService {
 	public List<Map<String, Object>> specialList(Map param) {
 		return specialistMapper.specialList(param);
 	}
+	@Override
+	public List<Map<String, Object>> specialListAll(Map param) {
+		return specialistMapper.specialListAll(param);
+	}
 	
 	@Override
 	public List<Map<String, Object>> specialIsFollow(Map param) {
@@ -64,7 +82,16 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public List<Map> articleList(Map param) {
-		return specialistMapper.articleList(param);
+		
+		List<Map> v_list=specialistMapper.articleList(param);
+		param.put("objectType", "5");
+		for (Map map : v_list) {
+			param.put("objectId", map.get("id")+"");
+			Map remap=viewNumberService.queryViewNumber(param);			
+			map.put("viewNumber", remap.get("viewNumber"));
+			map.put("collectionNumber", collectionService.collectCount("4", map.get("id")+""));
+		}
+		return v_list;
 	}
 
 	@Override
@@ -92,6 +119,19 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public int releaseIssue(Issue issue) {
+
+		//积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", issue.getIssue_user_id() + "");
+		ppparamMap.put("actionCode", "ASK_EXPERTS");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+		}
+
 		return specialistMapper.insertIssue(issue);
 	}
 
@@ -116,7 +156,14 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public List<Map> videoList(Map param) {
-		return specialistMapper.videoList(param);
+		List<Map> v_list=specialistMapper.videoList(param);
+		param.put("objectType", "4");
+		for (Map map : v_list) {
+			param.put("objectId", map.get("id")+"");
+			Map remap=viewNumberService.queryViewNumber(param);					
+			map.put("viewNumber", remap.get("viewNumber"));
+		}
+		return v_list;
 	}
 
 	@Override
@@ -157,6 +204,18 @@ public class SpecialistServiceImpl implements SpecialistService {
 	@Override
 	public int is_downloaded(String id) {
 		return specialistMapper.is_downloaded(id);
+	}
+
+	@Override
+	public List<Map> catalogListAll(Map param) {
+		// TODO Auto-generated method stub
+		return specialistMapper.catalogListAll(param);
+	}
+
+	@Override
+	public List<Map> subjectListAll(Map param) {
+		// TODO Auto-generated method stub
+		return specialistMapper.subjectListAll(param);
 	}
 
 }

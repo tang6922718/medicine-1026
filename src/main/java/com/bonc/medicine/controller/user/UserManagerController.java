@@ -1,16 +1,17 @@
 package com.bonc.medicine.controller.user;
 
+import com.alibaba.fastjson.JSONObject;
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
-import com.bonc.medicine.entity.user.Basicinfo;
-import com.bonc.medicine.entity.user.Cooperative;
-import com.bonc.medicine.entity.user.Expert;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,54 +22,28 @@ public class UserManagerController {
 	private UserManagerService userManagerService;
 
 	/*
-	 * 添加基础信息，返回账号id,前台必须传2018-01-10格式的字符串时间作为注册时间 角色id用英文逗号隔开1,3,4
+	 * 添加基础信息
 	 */
 	@PostMapping("/userManager/addBasic")
-	public int addBasic(@RequestBody Basicinfo basicinfo) {
-		userManagerService.addBasic(basicinfo);
-		int id = basicinfo.getId();
-		String[] role = basicinfo.getRole().split(",");
-		for (int i = 0; i < role.length; i++) {
-			userManagerService.addUserRoleRel(id, Integer.parseInt(role[i]));
-		}
-		return id;
+	public Result<Object> addUser(@RequestBody JSONObject json) {
+		userManagerService.addUser(json);
+
+
+		return ResultUtil.success("成功");
 	}
 
+	/*
+	 * 查询数据手机号是否存在，有返回0以外的数字
+	 */
+	@GetMapping("/userManager/get/tel")
+	public Result<Object> getTel(String tel) {
+		return ResultUtil.success(userManagerService.getTel(tel));
+	}
+	
 	@GetMapping("/userManager/update/Basic")
 	public Result<Object> updateBasic(Integer id, String name, String sex, Integer age, String address,
 			String img_url) {
 		return ResultUtil.success(userManagerService.updateBasic(id, name, sex, age, address, img_url));
-	}
-
-	/*
-	 * 添加专家信息
-	 */
-	@PostMapping("/userManager/addExpert")
-	public Result<Object> addExpert(@RequestBody Expert expert) {
-		userManagerService.addExpert(expert);
-		String[] cat_rel = expert.getCat_rel().split(",");
-		int id = expert.getSpec_id();
-		for (int i = 0; i < cat_rel.length; i++) {
-			userManagerService.addCatRel(id, Integer.parseInt(cat_rel[i]));
-		}
-		String[] subject_rel = expert.getSubject_rel().split(",");
-		for (int i = 0; i < subject_rel.length; i++) {
-			userManagerService.addSubject_rel(id, Integer.parseInt(subject_rel[i]));
-		}
-		Result result = new Result();
-		result.setData("成功");
-		return result;
-	}
-
-	/*
-	 * 添加合作社信息
-	 */
-	@PostMapping("/userManager/addCooperative")
-	public Result<Object> addCooperative(@RequestBody Cooperative cooperative) {
-		userManagerService.addCooperative(cooperative);
-		Result result = new Result();
-		result.setData("成功");
-		return result;
 	}
 
 	/*
@@ -206,28 +181,54 @@ public class UserManagerController {
 		return userManagerService.queryUserInfo(userID);
 	}
 
-
-	/* *
-	 * @Description 修改用户的种植户角色    种植户角色不需要审核
+	/*
+	 * *
+	 * 
+	 * @Description 修改用户的种植户角色 种植户角色不需要审核
+	 * 
 	 * @Date 10:53 2018/9/26
+	 * 
 	 * @Param [params]
+	 * 
 	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
 	 */
 	@PutMapping("/userManager/updatePlantRole")
-	public Result<Object> updateUserPlantRole(@RequestBody Map<String,String> params){
+	public Result<Object> updateUserPlantRole(@RequestBody Map<String, String> params) {
 		return userManagerService.updateUserPlantRole(params);
 	}
 
-
-	/* *
+	/*
+	 * *
+	 * 
 	 * @Description 修改用户关心品种
+	 * 
 	 * @Date 17:17 2018/9/26
+	 * 
 	 * @Param [parsms]
+	 * 
 	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
 	 */
 	@PutMapping("/userManager/updateCareVariety")
-	public Result<Object> updateUserCareVariety(@RequestBody Map<String,Object> parsms){
+	public Result<Object> updateUserCareVariety(@RequestBody Map<String, Object> parsms) {
 		return userManagerService.updateUserCareVariety(parsms);
 	}
+
+
+	/**
+	* @Description: 根据用户的id获取当前用户的活跃天数；不是从之前的统计的表去查询。而是去登陆日志表中去统计
+	* @Param: []
+	* @return: com.bonc.medicine.entity.Result
+	 *     reMap.put("acDays", "0");
+	* @Author: hejiajun
+	* @Date: 2018/9/29 
+	*/
+	@Authorization
+	@GetMapping("/user/active/day/v1.0")
+	public Result activeDays (@CurrentUser String userId){
+
+		//System.out.println(userId);
+		return ResultUtil.success(userManagerService.activeDays(userId));
+	}
+
 
 }

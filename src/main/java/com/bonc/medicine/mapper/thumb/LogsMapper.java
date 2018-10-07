@@ -1,5 +1,6 @@
 package com.bonc.medicine.mapper.thumb;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public interface LogsMapper {
 
     public int addLogoutLogs(Map<String, String> paramMap);
 
-    public int updateOperLogsNormal(String logId);
+    public int updateOperLogsNormal(@Param("logId") String logId);
 
-    public int updateOperLogsUnnormal(String logId);
+    public int updateOperLogsUnnormal(@Param("logId") String logId);
 
     public List<Map<String, Object>> queryLoginOutLogs(Map<String, String> paramMap);
 

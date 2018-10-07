@@ -87,6 +87,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
     }
 
     @Override
+    @Transactional
     public Map<String, Object> updateRoleInfo(Map<String, String> map) {
 
         int row = roleManagerMapper.updateRoleInfo(map);
@@ -104,6 +105,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
     }
 
     @Override
+    @Transactional
     public Map<String, Object> updateRolePermissions() {
         return null;
     }

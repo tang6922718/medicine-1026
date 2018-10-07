@@ -82,6 +82,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
     }
 
     @Override
+    @Transactional
     public Map<String, Object> updateOperationUser(Map<String, String> map) {
         map.put("password", DigestUtils.md5Hex(map.get("password") + ""));
         int row = operatorManagementMapper.updateOperationUserInfo(map);
@@ -107,7 +108,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
         Map map = new HashMap();
         map.put("opid", opid);
         List<Map> reList = operatorManagementMapper.queryOperaterTable(map);
-        if (null == reList || null == reList.get(0).get("telephone")){
+        if (null == reList || reList.size() < 1 || null == reList.get(0) || null == reList.get(0).get("telephone")){
             throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
         }
 

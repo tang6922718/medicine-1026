@@ -15,8 +15,6 @@ public interface MeetProfessorService {
 
 	public Result<Object> revisited(Integer id, String comment, String close);
 
-	public Result<Object> setAnli(Integer issue_id);
-	
 	public Result<Object> anli(Case anli);
 
 	public List<Map<String, Object>> untreated(Integer spec_id);
@@ -51,6 +49,8 @@ public interface MeetProfessorService {
 	public void aduitArticle(Integer id, String is_audit, String fail_opinion);
 
 	public void addArticle(Article article);
+	
+	public Result<Object> queryArticleList();
 
 	public void updateArticle(Article article);
 

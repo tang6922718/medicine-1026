@@ -15,7 +15,7 @@ public interface MallRecommendService {
 
     public int deleteMallRecommend(String id);
 
-    public Map<String,Object> showGoodsById(String id);
+    public Map<String,Object> showGoodsById(String id,String site);
 
     public int mallRecommend(Map map);
 

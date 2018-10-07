@@ -9,8 +9,10 @@ import java.util.Map;
 public interface CommentReplyMapper {
 	public int insertComment(Map param);
 	public int insertReply(Map param);
+	public void updateReplyStatus(Map param);
 	public List<Map> queryComments(Map param);
 	public List<Map> commentsCount(Map param);
 	public List<Map> queryReplies(List comment_ids);
 	public int deleteComment(String id);
+	public int insertNoticeCommentOrReply(Map param);
 }

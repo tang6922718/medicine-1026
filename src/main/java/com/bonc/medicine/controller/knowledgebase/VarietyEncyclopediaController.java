@@ -109,7 +109,10 @@ public class VarietyEncyclopediaController {
     @PostMapping("/updetePharaDetail")
     public Result<Object> updatePharaDetail(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(editJson);
+        map.put("km_status","2");
+        map.put("object_id",map.get("id"));
         int count = pharmacopoeiaInfoService.updatePharaDetail(map);
+        count += varietyEncyclopediaService.changePhaStatus(map);
         auditService.czAudit(map);
         count += auditService.addAudit(map);
         return ResultUtil.success(count);
@@ -137,15 +140,6 @@ public class VarietyEncyclopediaController {
     @GetMapping("/breedInfo/{id}")
     public Result<Object> selectBreedDetail(@PathVariable String id) throws Exception{
         Map map = varietyEncyclopediaService.selectBreedDetail(id);
-       /* String keys = (String) map.get("graph_url");
-        if(null!=keys && ""!=keys){
-            String[] keyList = keys.split(",");
-            List imgList = new ArrayList();
-            for (String key:keyList) {
-                imgList.add(file.readImgByByte(key));
-            }
-            map.put("graph_url",imgList);
-        }*/
         return ResultUtil.success(map);
     }
 
@@ -194,7 +188,7 @@ public class VarietyEncyclopediaController {
             String km_status = "1".equals(status)?"3":"4";
             String ve_status = "1".equals(status)?"3":"2";
             map.put("km_status",km_status);
-            map.put("iv_status",km_status);
+            map.put("iv_status",ve_status);
             if("1".equals(km_type)){
                 varietyEncyclopediaService.changeStatus(map);
             }else if("6".equals(km_type)){

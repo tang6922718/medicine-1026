@@ -27,10 +27,16 @@ public interface UserMapper {
 
     public int updatePassword(Map<String, String> paramMap);
 
+    public int forgetPassword(Map<String, String> paramMap);
+
 	public int signUp(Map<String, String> paramMap);
 
 	public  List<Map<String, Object>> getIdByPhone(String phone);
 
 	public  Map<String, Object> getUserInfoById(String userId);
+
+	public List<Map<String, Object>> interfaceForBackAfterLogin(String userId);
+
+	public int updateUserTelephoneNumber(Map<String, String> paramMap);
 
 }

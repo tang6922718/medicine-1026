@@ -14,6 +14,17 @@
 		is_audit = #{result},comment = #{comment} where id = #{supplyId}
 	</update>
 
+	<insert id="addSupplyNotice" parameterType="Map">
+		insert into
+		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1');
+	</insert>
+
+	<select id="querySupply" parameterType="Map" resultType="Map">
+		select
+		id,goods_name,seller_id,IFNULL(comment,'') AS comment from mall_supply where id = #{supplyId}
+	</select>
+
 	<update id="auditSPurchase" parameterType="Map">
 		update mall_purchase
 		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}
@@ -32,8 +43,9 @@
 
 	<update id="delGoods" parameterType="Map">
 		update mall_supply set state
-		= #{result} where id in 
-		<foreach collection="id" item="id" open="(" separator="," close=")">#{id}</foreach>
+		= #{result} where id in
+		<foreach collection="id" item="id" open="(" separator=","
+			close=")">#{id}</foreach>
 	</update>
 
 	<update id="goodsOn" parameterType="Map">
@@ -48,13 +60,18 @@
 
 	<select id="goodsRatio" parameterType="Map" resultType="Map">
 		SELECT
-		( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
+		(
+		SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
 		carriage_status = '1' AND is_audit = '1' AND state = '0' ) AS
 		shangjia,
-		( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
-		carriage_status = '2' AND is_audit = '1' AND state = '0' ) AS xiajia,
-		( SELECT count( * ) FROM mall_supply WHERE seller_id = #{sellerId} AND
-		carriage_status = '0' AND is_audit = '0' AND state = '0' ) AS
+		( SELECT count( * ) FROM mall_supply WHERE seller_id =
+		#{sellerId} AND
+		carriage_status = '2' AND is_audit = '1' AND state =
+		'0' ) AS xiajia,
+		( SELECT count( * ) FROM mall_supply WHERE seller_id =
+		#{sellerId} AND
+		carriage_status = '0' AND is_audit = '0' AND state =
+		'0' ) AS
 		weishenhe
 	</select>
 
@@ -75,6 +92,16 @@
 		values(#{supply_id},#{owner_user_id},#{leave_user_id},#{mark_url},#{mark_message},now())
 	</insert>
 
+	<select id="queryUserId" parameterType="Integer" resultType="Integer">
+		select seller_id from mall_supply where id = #{supply_id}
+	</select>
+
+	<insert id="addNotice" parameterType="Map">
+		insert into
+		common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state)
+		values('5',#{object_id},#{notice_content},#{publish_user_id},#{notice_receiver},now(),'1','1')
+	</insert>
+
 	<insert id="reply" parameterType="com.bonc.medicine.entity.mall.Reply">
 		insert into
 		mall_business_marks_reply(leave_user_id,mark_message_r,mark_time,is_read,mark_id)
@@ -92,7 +119,8 @@
 		b.reply_user_id AS id
 		FROM
 		mall_business_marks a
-		LEFT JOIN mall_business_marks_reply b ON a.id =
+		LEFT JOIN mall_business_marks_reply b ON a.id
+		=
 		b.mark_id
 		WHERE
 		a.id = #{id} UNION ALL
@@ -124,92 +152,116 @@
 		a.is_audit
 		FROM
 		mall_supply a
-		LEFT JOIN common_user b ON a.seller_id = b.id
+		LEFT JOIN
+		common_user b ON a.seller_id = b.id
 		where a.state = '0'
-		<if test="goods_name != null and goods_name != ''">
-            AND a.goods_name like CONCAT('%',#{goods_name},'%') 
-        </if>
-		<if test="is_audit != null and is_audit != ''">
-            AND a.is_audit =  #{is_audit} 
-        </if>
-		<if test="carriage_status != null and carriage_status != ''">
-            AND a.carriage_status = #{carriage_status}
-        </if>
-		<if test="goodType != null and goodType != ''">
-            AND a.supply_cat_code = #{goodType}
-        </if>
-	</select>
-	
-	<select id="purchaselist" parameterType="Map" resultType="Map">
-		SELECT
-			a.id,
-			a.goods_name,
-			b.NAME,
-			a.purchase_cat_code,
-			b.telephone,
-			a.specification,
-			a.purchase_quantity,
-			a.unit,
-			a.img_url,
-			a.is_aduit 
-		FROM
-			mall_purchase a
-			LEFT JOIN common_user b ON a.user_id = b.id 
-		WHERE
-			a.state = '1' 
-			AND a.is_aduit = '0'
 		<if test="key != null and key != ''">
-            AND (a.goods_name like CONCAT('%',#{key},'%') OR b.telephone like CONCAT('%',#{key},'%') OR b.NAME like CONCAT('%',#{key},'%'))
-        </if>
+			AND (a.goods_name like CONCAT('%',#{key},'%') OR
+			b.telephone like
+			CONCAT('%',#{key},'%') OR b.NAME like
+			CONCAT('%',#{key},'%'))
+		</if>
+		<if test="is_audit != null and is_audit != ''">
+			AND a.is_audit = #{is_audit}
+		</if>
+		<if test="carriage_status != null and carriage_status != ''">
+			AND a.carriage_status = #{carriage_status}
+		</if>
 		<if test="goodType != null and goodType != ''">
-            AND a.purchase_cat_code = #{goodType}
-        </if>
+			AND a.supply_cat_code = #{goodType}
+		</if>
 	</select>
 
-	<select id="my_supply_statistics" parameterType="Map" resultType="Map">
-		select (select count(1) from mall_supply where seller_id = #{user_id} and carriage_status = '1' and state = '0') as zsz , 
-			 (select count(1) from mall_supply where seller_id = #{user_id} and carriage_status = '2' and state = '0') as yxj ,
-			 (select count(1) from mall_supply where seller_id = #{user_id} and is_audit = '0' and state = '0') as shz ,
-			 (select count(1) from mall_supply where seller_id = #{user_id} and is_audit = '2' and state = '0') as shsb
+	<select id="purchaselist" parameterType="Map" resultType="Map">
+		SELECT
+		a.id,
+		a.goods_name,
+		b.NAME,
+		a.purchase_cat_code,
+		b.telephone,
+		a.specification,
+		a.purchase_quantity,
+		a.unit,
+		a.img_url,
+		a.is_aduit
+		FROM
+		mall_purchase a
+		LEFT JOIN common_user b ON a.user_id = b.id
+		WHERE
+		a.state = '1'
+		AND a.is_aduit = '0'
+		<if test="key != null and key != ''">
+			AND (a.goods_name like CONCAT('%',#{key},'%') OR
+			b.telephone like
+			CONCAT('%',#{key},'%') OR b.NAME like
+			CONCAT('%',#{key},'%'))
+		</if>
+		<if test="goodType != null and goodType != ''">
+			AND a.purchase_cat_code = #{goodType}
+		</if>
 	</select>
-	
+
+	<select id="my_supply_statistics" parameterType="Map"
+		resultType="Map">
+		select (select count(1) from mall_supply where seller_id =
+		#{user_id} and carriage_status = '1' and state = '0') as zsz ,
+		(select
+		count(1) from mall_supply where seller_id = #{user_id} and
+		carriage_status = '2' and state = '0') as yxj ,
+		(select count(1) from
+		mall_supply where seller_id = #{user_id} and is_audit =
+		'0' and state =
+		'0') as shz ,
+		(select count(1) from mall_supply where seller_id =
+		#{user_id} and is_audit =
+		'2' and state = '0') as shsb
+	</select>
+
 	<select id="my_supply_type" parameterType="Map" resultType="Map">
 		select * from mall_supply where state = '0' and seller_id = #{user_id}
 		<if test="type != null and type == 1">
-            AND carriage_status = '1'
-        </if>
-        <if test="type != null and type == 2">
-            AND carriage_status = '2'
-        </if>
-        <if test="type != null and type == 3">
-            AND is_audit = '0'
-        </if>
-        <if test="type != null and type == 4">
-            AND is_audit = '2'
-        </if>
+			AND carriage_status = '1'
+		</if>
+		<if test="type != null and type == 2">
+			AND carriage_status = '2'
+		</if>
+		<if test="type != null and type == 3">
+			AND is_audit = '0'
+		</if>
+		<if test="type != null and type == 4">
+			AND is_audit = '2'
+		</if>
 	</select>
-	
-	<select id="my_purchase_statistics" parameterType="Map" resultType="Map">
-		select (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '1' and state = '1') as qgz , 
-			 (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '3' and state = '1') as ycx ,
-			 (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '0' and state = '1') as shz ,
-			 (select count(1) from mall_purchase where user_id = #{user_id} and is_aduit = '2' and state = '1') as shsb
+
+	<select id="my_purchase_statistics" parameterType="Map"
+		resultType="Map">
+		select (select count(1) from mall_purchase where user_id =
+		#{user_id} and is_aduit = '1' and state = '1') as qgz ,
+		(select
+		count(1) from mall_purchase where user_id = #{user_id} and is_aduit =
+		'3' and state = '1') as ycx ,
+		(select count(1) from mall_purchase where
+		user_id = #{user_id} and is_aduit =
+		'0' and state = '1') as shz ,
+		(select count(1) from mall_purchase where user_id = #{user_id} and
+		is_aduit =
+		'2' and state = '1') as shsb
 	</select>
-	
+
 	<select id="my_purchase_type" parameterType="Map" resultType="Map">
 		select * from mall_purchase where state = '1' and user_id = #{user_id}
 		<if test="type != null and type == 1">
-            AND is_aduit = '1'
-        </if>
-        <if test="type != null and type == 2">
-            AND is_aduit = '3'
-        </if>
-        <if test="type != null and type == 3">
-            AND is_aduit = '0'
-        </if>
-        <if test="type != null and type == 4">
-            AND is_aduit = '2'
-        </if>
+			AND is_aduit = '1'
+		</if>
+		<if test="type != null and type == 2">
+			AND is_aduit = '3'
+		</if>
+		<if test="type != null and type == 3">
+			AND is_aduit = '0'
+		</if>
+		<if test="type != null and type == 4">
+			AND is_aduit = '2'
+		</if>
 	</select>
 
 </mapper>

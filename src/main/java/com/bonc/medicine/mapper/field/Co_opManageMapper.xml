@@ -26,7 +26,7 @@
 		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area ,A.img_url,A.portrait,
 		       A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
 		       A.official_user_name AS adminName,A.establish_date,A.photo_url,A.is_audit,
-		       A.comment    ,D.role
+		       A.comment    ,D.role,(SELECT NAME FROM common_user E WHERE E.id=A.`official_user_id`) AS NAME
 		FROM field_coop A ,
 		( SELECT B.user_id,GROUP_CONCAT(C.role_name) AS role
 		  FROM common_user_role_rel B , common_role C
@@ -64,9 +64,13 @@
 			)
 		</if>
 
-		<if test='start_time != null and start_time != "" and end_time != null and end_time != "" '>
-			AND A.establish_date >= #{start_time}  AND #{end_time} >= A.establish_date
+		<if test='start_time != null and start_time != "" '>
+			AND A.establish_date >= #{start_time}  
 		</if>
+		<if test=' end_time != null and end_time != "" '>
+			AND #{end_time} >= A.establish_date
+		</if>
+		
 
 	</select>
 
@@ -153,8 +157,9 @@
 
 
 	<select id="affiliatedCo_op" resultType="Map" parameterType="Integer">
-		select coop_id,name,img_url,assistant,0 as total from
-		field_coop_member where user_id = #{user_id}
+		select m.coop_id,fc.name,fc.img_url,m.assistant,0 as total from
+		field_coop_member m
+        inner join field_coop fc on m.coop_id=fc.id where m.user_id = #{user_id}
 	</select>
 
 	<select id="co_opTotal" resultType="Map" parameterType="Integer">
@@ -274,7 +279,7 @@
 	</insert>
 
 	<select id="noticelist" parameterType="Map" resultType="Map">
-		select * from common_notice where 1 = 1 and status='1'
+		select * from common_notice where notice_type = '1' and status='1'
 		<if test="msg != null and msg != ''">
 			AND notice_content LIKE
 			CONCAT(CONCAT('%',#{msg}),'%')
@@ -312,5 +317,17 @@
 		INSERT common_user_role_rel (user_id,role_id)
 		VALUES (( SELECT official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
 	</insert>
+
+	<delete id="deleteRole" parameterType="Integer">
+		DELETE FROM common_user_role_rel WHERE user_id = #{user_id} AND role_id= #{role_id}
+	</delete>
+
+	<insert id="insertRole" parameterType="Integer">
+		INSERT  common_user_role_rel (user_id,role_id) VALUES (#{user_id},#{role_id})
+	</insert>
+
+	<select id="queryIsAlreadyAssistantOtherCoop" parameterType="Integer" resultType="Map">
+		SELECT count(*) as NUM FROM field_coop_member WHERE assistant = 0 AND user_id = #{user_ID}
+	</select>
 
 </mapper>

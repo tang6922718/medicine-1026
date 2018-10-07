@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,16 +40,24 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
-	public Result<Object> setAnli(Integer issue_id) {
-		Map map = new HashMap<>();
-		map.put("issue_id", issue_id);
-		return ResultUtil.success(meetProfessorMapper.setAnli(map));
-	}
-	
-	@Override
+	@Transactional
 	public Result<Object> anli(Case anli) {
-		
-		return ResultUtil.success(meetProfessorMapper.anli(anli));
+		Map map = new HashMap<>();
+		Map map2 = new HashMap<>();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String time = format.format(date);
+		anli.setPublish_time(time);
+		map.put("issue_id", anli.getIssue_id());
+		meetProfessorMapper.anli(anli);
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		map1 = meetProfessorMapper.queryIssue(map);
+		map2.put("notice_type", "1");
+		map2.put("object_id", anli.getId());
+		map2.put("notice_content", "您的提问《" + anli.getTitle() + "》被设置为案例");
+		map2.put("notice_receiver", map1.get("issue_user_id"));
+		meetProfessorMapper.addCaseNotice(map2);
+		return ResultUtil.success(meetProfessorMapper.setAnli(map));
 	}
 
 	@Override
@@ -96,8 +106,7 @@ public class MeetProfessorImpl implements MeetProfessorService {
 	}
 
 	@Override
-	public int setRevisit(Integer id, Integer follow_days, String revisit_url,
-			String revisited_advice) {
+	public int setRevisit(Integer id, Integer follow_days, String revisit_url, String revisited_advice) {
 		Map map = new HashMap<>();
 		map.put("id", id);
 		map.put("follow_days", follow_days);
@@ -105,7 +114,7 @@ public class MeetProfessorImpl implements MeetProfessorService {
 		map.put("revisited_advice", revisited_advice);
 		return meetProfessorMapper.setRevisit(map);
 	}
-	
+
 	@Override
 	public int eddIssue(Integer id, String revisited_mark, String issue_status) {
 		Map map = new HashMap<>();
@@ -194,5 +203,11 @@ public class MeetProfessorImpl implements MeetProfessorService {
 		Map map = new HashMap<>();
 		map.put("key", key);
 		return meetProfessorMapper.getArticlelist(map);
+	}
+
+	@Override
+	public Result<Object> queryArticleList() {
+
+		return ResultUtil.success(meetProfessorMapper.queryArticleList());
 	}
 }

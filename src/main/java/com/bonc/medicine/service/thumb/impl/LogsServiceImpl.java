@@ -4,6 +4,7 @@ import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.thumb.LogsMapper;
 import com.bonc.medicine.service.thumb.LogsService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,26 +28,30 @@ public class LogsServiceImpl implements LogsService {
     public Map<String, Object> addLoginLogs(Map<String, String> paramMap) {
         int succeedRow = logsMapper.addLoginLogs(paramMap);
 
-        return mapReturnUtil("succeed", succeedRow);
+        return mapReturnUtil("succeed", succeedRow, 0);
     }
 
     @Override
     public Map<String, Object> addLogoutLogs(Map<String, String> paramMap) {
         int succeedRow = logsMapper.addLogoutLogs(paramMap);
 
-        return mapReturnUtil("succeed", succeedRow);
+        return mapReturnUtil("succeed", succeedRow, 0);
     }
 
     @Override
     public Map<String, Object> updateOperLogsNormal(String logId) {
+        String [] ids = logId.split(",");
         int succeedRow = logsMapper.updateOperLogsNormal(logId);
-        return mapReturnUtil("succeed", succeedRow);
+        Integer failedRow = ids.length == succeedRow ? 0 : ids.length - succeedRow;
+        return mapReturnUtil("succeed", succeedRow, failedRow);
     }
 
     @Override
     public Map<String, Object> updateOperLogsUnnormal(String logId) {
+        String [] ids = logId.split(",");
         int succeedRow = logsMapper.updateOperLogsUnnormal(logId);
-        return mapReturnUtil("succeed", succeedRow);
+        Integer failedRow = ids.length == succeedRow ? 0 : ids.length - succeedRow;
+        return mapReturnUtil("succeed", succeedRow, failedRow);
     }
 
     @Override
@@ -72,7 +77,7 @@ public class LogsServiceImpl implements LogsService {
     public Map<String, Object> addOperLogs(Map<String, String> paramMap) {
         int succeedRow = logsMapper.addOperLogs(paramMap);
 
-        return mapReturnUtil("succeed", succeedRow);
+        return mapReturnUtil("succeed", succeedRow, 0);
     }
 
     @Override
@@ -92,9 +97,12 @@ public class LogsServiceImpl implements LogsService {
      * @Author: hejiajun
      * @Date: 2018/9/9
      */
-    private Map<String, Object> mapReturnUtil(String key, Object value) {
+    private Map<String, Object> mapReturnUtil(String key, Object value,Integer failedRow) {
         Map<String, Object> reMap = new HashMap<>();
         reMap.put(key, value);
+        if (failedRow > 0){
+            reMap.put("failed", failedRow + "");
+        }
         return reMap;
     }
 }

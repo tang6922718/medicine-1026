@@ -53,12 +53,43 @@
 		DELETE FROM mall_recommend WHERE id = #{id}
 	</delete>
 
-	<select id="showGoodsById" parameterType="String" resultType="Map">
-		SELECT id,goods_name,linkman,img_url,detail FROM mall_supply WHERE carriage_status = 1 AND state = 0 AND is_audit = 1 AND id=#{id}
+	<select id="showGoodsById" parameterType="Map" resultType="Map">
+		SELECT
+			a.id,
+			a.goods_name,
+			a.linkman,
+			a.detail,
+			b.description1,
+			b.description2,
+			b.description3,
+			CASE WHEN CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)='' THEN a.img_url
+			ELSE CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3)
+			END AS img_url,
+			CASE WHEN CONCAT_WS(',',b.img_url1,c.img_url2,d.img_url3) != '' THEN '已存在'
+			END AS exist
+		FROM
+			mall_supply a
+		LEFT JOIN mall_recommend b ON a.id = b.supply_id1
+		<if test="site != null and site != ''">
+			AND b.site = #{site}
+		</if>
+		LEFT JOIN mall_recommend c ON a.id = c.supply_id2
+		<if test="site != null and site != ''">
+			AND c.site = #{site}
+		</if>
+		LEFT JOIN mall_recommend d ON a.id = d.supply_id3
+		<if test="site != null and site != ''">
+			AND d.site = #{site}
+		</if>
+		WHERE
+			a.carriage_status = 1
+		AND a.state = 0
+		AND a.is_audit = 1
+		AND a.id =#{id}
 	</select>
 
 	<insert id="mallRecommend" parameterType="java.util.Map" useGeneratedKeys="true">
-		INSERT INTO mall_recommend(site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time)
+		INSERT INTO mall_recommend(site,supply_id1,img_url1,supply_id2,img_url2,supply_id3,img_url3,state,upload_time,description1,description2,description3)
 		VALUES(
 		#{site},
 		#{supply_id1},
@@ -68,7 +99,10 @@
 		#{supply_id3},
 		#{img_url3},
 		#{state},
-		now()
+		now(),
+		#{description1},
+		#{description2},
+		#{description3}
 		)
 	</insert>
 
@@ -83,6 +117,9 @@
 			<if test="supply_id3 != null and supply_id3 != ''">`supply_id3`=#{supply_id3},</if>
 			<if test="img_url3 != null and img_url3 != ''">img_url3=#{img_url3},</if>
 			<if test="state != null and state != ''">state=#{state},</if>
+			<if test="description1 != null">description1=#{description1},</if>
+			<if test="description2 != null">description2=#{description2},</if>
+			<if test="description3 != null">description3=#{description3},</if>
 			upload_time=now()
 		</set>
 		where id = #{id}
@@ -108,7 +145,10 @@
 			d.goods_name,
 			d.detail,
 			a.state,
-			a.upload_time
+			a.upload_time,
+			a.description1,
+			a.description2,
+			a.description3
 		FROM
 			mall_recommend a
 		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
@@ -128,46 +168,54 @@
 
 	<select id="qualityRecommend" resultType="Map">
 		SELECT
-			a.id,
-			a.site,
-			a.supply_id1,
-			a.img_url1,
-			b.linkman AS linkman1,
-			b.goods_name AS goods_name1,
-			b.detail AS detail1,
-			b.price AS price1,
-			b.price_unit AS price_unit1,
-			b.seller_id AS seller_id1,
-			u1.head_portrait AS head_portrait1,
-			a.supply_id2,
-			a.img_url2,
-			c.linkman AS linkman2,
-			c.goods_name AS goods_name2,
-			c.detail AS detail2,
-			c.price AS price2,
-			c.price_unit AS price_unit2,
-			c.seller_id AS seller_id2,
-			u2.head_portrait AS head_portrait2,
-			a.supply_id3,
-			a.img_url3,
-			d.linkman AS linkman3,
-			d.goods_name AS goods_name3,
-			d.detail AS detail3,
-			d.price AS price3,
-			d.price_unit AS price_unit3,
-			d.seller_id AS seller_id3,
-			u3.head_portrait AS head_portrait3,
-			a.state,
-			a.upload_time
+		a.id,
+		a.site,
+		a.supply_id1,
+		a.img_url1,
+		b.linkman AS linkman1,
+		b.goods_name AS goods_name1,
+		b.detail AS detail1,
+		b.price AS price1,
+		b.price_unit AS price_unit1,
+		b.seller_id AS seller_id1,
+		u1.head_portrait AS head_portrait1,
+		u1.`name` AS name1,
+		a.supply_id2,
+		a.img_url2,
+		c.linkman AS linkman2,
+		c.goods_name AS goods_name2,
+		c.detail AS detail2,
+		c.price AS price2,
+		c.price_unit AS price_unit2,
+		c.seller_id AS seller_id2,
+		u2.head_portrait AS head_portrait2,
+		u2.`name` AS name2,
+		a.supply_id3,
+		a.img_url3,
+		d.linkman AS linkman3,
+		d.goods_name AS goods_name3,
+		d.detail AS detail3,
+		d.price AS price3,
+		d.price_unit AS price_unit3,
+		d.seller_id AS seller_id3,
+		u3.head_portrait AS head_portrait3,
+		u3.`name` AS name3,
+		a.state,
+		a.upload_time,
+		a.description1,
+		a.description2,
+		a.description3
 		FROM
 			mall_recommend a
-		LEFT JOIN mall_supply b ON a.supply_id1 = b.id
-		LEFT JOIN mall_supply c ON a.supply_id2 = c.id
-		LEFT JOIN mall_supply d ON a.supply_id3 = d.id
+		LEFT JOIN mall_supply b ON a.supply_id1 = b.id AND b.carriage_status = 1 	AND b.state = 0 AND b.is_audit = 1
+		LEFT JOIN mall_supply c ON a.supply_id2 = c.id AND c.carriage_status = 1 	AND c.state = 0 AND c.is_audit = 1
+		LEFT JOIN mall_supply d ON a.supply_id3 = d.id AND d.carriage_status = 1 	AND d.state = 0 AND d.is_audit = 1
 		LEFT JOIN common_user u1 ON b.seller_id = u1.id
 		LEFT JOIN common_user u2 ON c.seller_id = u2.id
 		LEFT JOIN common_user u3 ON d.seller_id = u3.id
-		WHERE a.site in
+		WHERE
+		a.state = 0 AND
+		a.site in
 			<foreach collection="array" item="site" index="index"
 					 open="(" close=")" separator=",">
 				#{site}

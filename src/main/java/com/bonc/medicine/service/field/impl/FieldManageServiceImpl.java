@@ -5,10 +5,12 @@ import com.bonc.medicine.entity.field.Field;
 import com.bonc.medicine.entity.field.FieldRecord;
 import com.bonc.medicine.mapper.field.FieldManageMapper;
 import com.bonc.medicine.service.field.FieldManageService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -18,25 +20,48 @@ public class FieldManageServiceImpl implements FieldManageService {
 	@Autowired
 	FieldManageMapper fieldManageMapper;
 
+	@Autowired
+	private IntegralService integralService;
+
 	@Override
+	@Transactional
 	public Result<Object> addField(Field tempData) {
 		// // 所有品种信息
 		// List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
 
 		Map map = new HashMap();
 		map = fieldManageMapper.queryUserInfo(tempData.getUser_id());
-		map.putAll(fieldManageMapper.queryCoopName(tempData.getUser_id()));
 		if (map != null) {
 			tempData.setUser_name((String) map.get("name"));
 			tempData.setUser_tel((String) map.get("telephone"));
-			tempData.setCoop_name((String) map.get("coop_name"));
 		}
+
+		Map map2 = new HashMap();
+		map2=fieldManageMapper.queryCoopName(tempData.getUser_id());  // map2 有可能为空
+		if (map2==null){
+			tempData.setCoop_name("");
+		}else {
+			tempData.setCoop_name( map2.get("coop_name")==null?"":(String) map2.get("coop_name"));
+		}
+
 		tempData.setRegistation_time(new Date());
 		tempData.setState("0");
 		// tempData.setPlant_type(ExchangeCategroyNameID.NameToId(tempData.getPlant_type(),allCategroyInfo));
 
 		// 新建地块是否成功 成功后才往品种信息表里插入地块品种信息
 		int i = fieldManageMapper.insertField(tempData);
+
+		//积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		//userId;actionCode
+		ppparamMap.put("userId", tempData.getUser_id() + "");
+		ppparamMap.put("actionCode", "REGISTER_PLANTIN");
+		try{
+
+			integralService.addIntegralHistory(ppparamMap);
+		}catch (Exception e){
+			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+		}
 		if (i > 0) {
 			int insertNum = 0;
 			int fieldID = tempData.getId();

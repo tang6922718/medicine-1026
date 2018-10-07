@@ -13,14 +13,15 @@ public enum ResultEnum {
     PERMISSION(300, "you have no permission"),
     NO_CONTENT(204, "响应成功，但资源不存在"),
     ERROR_LOGIN(400, "用户名或密码错误哦！！！亲"),
-    MISSING_PARA(201, "参数不全"),
+    MISSING_PARA(201, "参数不全,要不就是参数是错误的哦"),
     ERROR_VERIFI(202, "验证码错误"),
     ERROR_PHONE(203, "亲！先注册才能登陆哦"),
     UN_USE_PHONE(206,"账户无效，或者已经被注册"),
     NET_ERROR(405,"网络错误，请稍后再试"),
     OUT_OF_TIME(401,"登陆超时"),
     ERROR_CODE(205,"验证码错误"),
-    CODE_OUT_TIME(209,"验证码超时啦")
+    CODE_OUT_TIME(209,"验证码超时啦"),
+    ERROR_PARAM(208,"两次输入的密码不一致")
     ;
 
     private Integer code;

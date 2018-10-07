@@ -1,5 +1,7 @@
 package com.bonc.medicine.mapper.knowledgebase;
 
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -33,4 +35,16 @@ public interface SopMapper {
 
     //获取品种sop名列表
     List<Map<String, Object>> getSopLists();
+
+    //获取某一步的种植步骤
+    Map<String, Object> getStep(@Param("id") Integer variety_id, @Param("step_order") Integer step_order);
+
+    //删除某一步的种植步骤
+    int delStep(@Param("id") Integer variety_id, @Param("step_order") Integer step_order);
+
+    //添加某一步的种植步骤
+    int addStep(Map map);
+
+    // 更新sop前删除所有步骤，再重建所有步骤
+    int tombstoneStep(Integer id);
 }

@@ -18,6 +18,7 @@ public interface SpecialistMapper {
 	
 	public int updateSpecialist(Specialist specialist);
 	public List<Map<String, Object>> specialList(Map param);
+	public List<Map<String, Object>> specialListAll(Map param);
 	public List<Map<String, Object>> specialIsFollow(Map param);
 	public List<Map<String, Object>> specDetail(Map param);
 	public List<Map<String, Object>> sub(Map param);
@@ -29,6 +30,8 @@ public interface SpecialistMapper {
 	public List<Map> caseDetail(String id);
 	public List<Map> subjectList();
 	public List<Map> catalogList(Map param);
+	public List<Map> subjectListAll(Map param);
+	public List<Map> catalogListAll(Map param);
 	public List<Map> videoList(Map param);
 	
 	public int insertIssue(Issue issue);

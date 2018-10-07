@@ -30,6 +30,7 @@ public interface InfoMapper {
 
     @InsertProvider(type=InfoDynaSqlProvider.class,
             method="addInfo")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int addInfo(Map<String, Object> map);
 
 
@@ -103,6 +104,9 @@ public interface InfoMapper {
                 if (map.get("content") != null) {
                     VALUES("content", "#{content}");
                 }
+                if (map.get("status") != null) {
+                    VALUES("status", "#{status}");
+                }
                 if (map.get("user_id") != null) {
                     VALUES("user_id", "#{user_id}");
                 }
@@ -127,6 +131,9 @@ public interface InfoMapper {
                 }
                 if (map.get("img_url") != null) {
                     SET("img_url=#{img_url}");
+                }
+                if (map.get("status") != null) {
+                    SET("status=#{status}");
                 }
                 if (map.get("is_top_line") != null) {
                     SET("is_top_line=#{is_top_line}");

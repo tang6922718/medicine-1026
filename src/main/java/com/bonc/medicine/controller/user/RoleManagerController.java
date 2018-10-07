@@ -1,5 +1,7 @@
 package com.bonc.medicine.controller.user;
 
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.RoleManagerService;
@@ -30,20 +32,22 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */
+    @Authorization
     @PostMapping("/role/new/v1.0")
-    public Result createNewRole(@RequestBody Map<String, String> param){
+    public Result createNewRole(@RequestBody Map<String, String> param , @CurrentUser String userId){
         if(null == param){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
 
-        if (StringUtils.isEmpty(param.get("roleName")) || StringUtils.isEmpty(param.get("createUserId"))){
+        if (StringUtils.isEmpty(param.get("roleName")) ){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
         if(StringUtils.isEmpty(param.get("isWork"))){
             param.put("isWork", "1");
         }
+        param.put("createUserId", userId);
 
         Map<String, Object> reMap = roleManagerService.createNewRole(param);
 
@@ -124,6 +128,64 @@ public class RoleManagerController {
     public Result updateRolePermissions(){
 
         // TODO 这个方法还需要思考一下怎么实现菜单
+
+        return null;
+    }
+
+    /**
+    * @Description:查询当前后台管理的全部菜单列表
+    * @Param: []
+    * @return: com.bonc.medicine.entity.Result
+     * {
+     *     "code": 200,
+     *     "msg": "成功",
+     *     "tatol": 0,
+     *     "data": [
+     *         {
+     *             "parentName": "用户管理",
+     *             "parentUrl": "1",
+     *             "son": [
+     *                 {
+     *                     "sonUrl": "11",
+     *                     "sonName": "用户管理",
+     *                     "sonId": "11"
+     *                 },
+     *                 {
+     *                     "sonUrl": "12",
+     *                     "sonName": "合作社管理",
+     *                     "sonId": "12"
+     *                 },
+     *                 {
+     *                     "sonUrl": "13",
+     *                     "sonName": "角色审核",
+     *                     "sonId": "13"
+     *                 }
+     *             ],
+     *             "parentId": "1"
+     *         },
+     *     ]
+     * }
+    * @Author: hejiajun
+    * @Date: 2018/9/28
+    */
+    @GetMapping("/menu/all/v1.0")
+    public Result queryAllMenu(){
+
+
+        return ResultUtil.success(roleManagerService.queryAllMenu());
+    }
+
+
+    /**
+    * @Description: 通过roleId查询该角色的菜单权限列表
+    * @Param: []
+    * @return: com.bonc.medicine.entity.Result
+    * @Author: hejiajun
+    * @Date: 2018/9/28 
+    */ 
+    @GetMapping("/menu/role/v1.0/{roleId}")
+    public Result queryRoleMenu(@PathVariable String roleId){
+
 
         return null;
     }

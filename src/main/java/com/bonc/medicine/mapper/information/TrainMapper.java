@@ -80,7 +80,7 @@ public interface TrainMapper {
     @Select("SELECT COUNT(id)  as bmNum from train_appointment  WHERE object_id=#{comment_id} and object_type=#{Appointment_type}  GROUP BY user_id ")
     Map queryCommentNumber(Map<String, String> map);
 
-    @Update("update train_video_course set is_display='0' where id=#{id}")
+    @Update("update train_video_course set status='1' where id=#{id}")
     int delCourseTrainVideo(Map<String, Object> map);
 
 
@@ -125,6 +125,9 @@ public interface TrainMapper {
                 }
                 if (map.get("train_time") != null) {
                     VALUES("train_time", "#{train_time}");
+                }
+                if (map.get("spec_id") != null) {
+                    VALUES("spec_id", "#{spec_id}");
                 }
                 if (map.get("duration") != null) {
                     VALUES("duration", "#{duration}");
@@ -221,7 +224,7 @@ public interface TrainMapper {
                 if (map.get("id") != null) {
                     WHERE("id=#{id}");
                 }
-                WHERE("is_display='1'");
+                WHERE("status='0'");
             }}.toString();
         }
 
@@ -257,7 +260,9 @@ public interface TrainMapper {
                 if (map.get("train_introduce") != null) {
                     SET("train_introduce=#{train_introduce}");
                 }
-
+                if (map.get("spec_id") != null) {
+                    VALUES("spec_id", "#{spec_id}");
+                }
                 if (map.get("lecturer_introduce") != null) {
                     SET("lecturer_introduce=#{lecturer_introduce}");
                 }

@@ -5,6 +5,8 @@ import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.TrainService;
+import com.bonc.medicine.service.knowledgebase.AuditService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.Signature;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,6 +24,12 @@ public class TrainController {
     @Autowired
     TrainService trainService;
 
+    @Autowired
+    private ViewNumberService viewNumberService;
+
+    @Autowired
+    AuditService auditService;
+
     /**
      * @param map
      * @return
@@ -28,7 +37,10 @@ public class TrainController {
      */
     @RequestMapping("/createTrain")
     public Result createTrain(@RequestBody Map<String, Object> map) {
-        return ResultUtil.success(trainService.createTrain(map));
+//        int count = trainService.createTrain(map);
+//        map.put("km_type", "5");
+//        count += auditService.addAudit(map);
+        return ResultUtil.success( trainService.createTrain(map));
     }
 
     /**
@@ -48,8 +60,13 @@ public class TrainController {
      * @description 新建视频
      */
     @RequestMapping("/createVideo")
-    public Result createVideo(@RequestBody Map<String, Object> map) {
-        return ResultUtil.success(trainService.createVideo(map));
+    @Authorization
+    public Result createVideo(@RequestBody Map<String, Object> map, @CurrentUser String user_id) {
+        map.putIfAbsent("user_id", user_id);//获取当前登录者id作为视频的操作人
+        int count = trainService.createVideo(map);
+        map.put("km_type", "5");
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**
@@ -60,9 +77,10 @@ public class TrainController {
     @RequestMapping("/addComment")
     @Authorization
     public Result addComment(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+        map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.addComment(map));
     }
+
     /**
      * @param map
      * @return
@@ -89,7 +107,14 @@ public class TrainController {
      * @description 视频课程列表(视频课程列表)(通过id查询 视频课程详情) (查询)  不传全部，类别查询，id查询都可以
      */
     @RequestMapping("/selectCourseList")
-    public Result selectCourseList(@RequestBody(required = false)  Map<String, Object> map) {
+    public Result selectCourseList(@RequestBody(required = false) Map<String, Object> map) {
+
+        if (null != map.get("id")) {
+            Map<String, String> numberMap = new HashMap();
+            numberMap.put("objectId", map.get("id") + "");
+            numberMap.put("objectType", "4");
+            viewNumberService.addOrUpdateViewNumberCord(numberMap);
+        }
         return ResultUtil.success(trainService.selectCourseList(map));
     }
 
@@ -100,19 +125,19 @@ public class TrainController {
      */
     @RequestMapping("/addTrainApply")
     @Authorization
-    public Result addTrainApply(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+    public Result addTrainApply(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.addTrainApply(map));
     }
 
     /**
      * @param map
      * @return
-     * @description 查询是否报名(根据object_id,object_type,user_id)
+     * @description 查询是否报名(根据object_id, object_type, user_id)
      */
     @RequestMapping("/selectApply")
-    public Result selectApply(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+    public Result selectApply(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.selectApply(map));
     }
 
@@ -122,7 +147,7 @@ public class TrainController {
      * @description 查询报名数量(根据object_id)
      */
     @RequestMapping("/selectApplyNum")
-    public Result selectApplyNum(@RequestBody(required = false)  Map<String, Object> map) {
+    public Result selectApplyNum(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.selectApply(map));
     }
 
@@ -133,8 +158,8 @@ public class TrainController {
      * @description 我的培训(查询预约报名的直播和线下培训列表)
      */
     @RequestMapping("/selectTrainApply")
-    public Result selectTrainApply(@CurrentUser  String user_id,@RequestBody  Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+    public Result selectTrainApply(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.selectTrainApply(map));
     }
 
@@ -146,8 +171,8 @@ public class TrainController {
      */
     @RequestMapping("/editOfflineTrainVideo")
     @Authorization
-    public Result editOfflineTrainVideo(@CurrentUser String user_id,@RequestBody(required = false)  Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+    public Result editOfflineTrainVideo(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.editOfflineTrainVideo(map));
     }
 
@@ -158,16 +183,21 @@ public class TrainController {
      * @description 编辑视频  (编辑视频)
      */
     @RequestMapping("/editVideoCourse")
-    public Result editVideoCourse(@RequestBody(required = false)  Map<String, Object> map) {
-        return ResultUtil.success(trainService.editVideoCourse(map));
+    public Result editVideoCourse(@RequestBody(required = false) Map<String, Object> map) {
+        int count = trainService.editVideoCourse(map);
+        map.put("km_type", "5");
+        count += auditService.czAudit(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
+
     /**
      * @param map
      * @return
      * @description 删除线下视频  (删除视频)
      */
     @RequestMapping("/delCourseTrainVideo")
-    public Result delCourseTrainVideo(@RequestBody(required = false)  Map<String, Object> map) {
+    public Result delCourseTrainVideo(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.delCourseTrainVideo(map));
     }
 
@@ -177,7 +207,7 @@ public class TrainController {
      * @description 删除线下视频  (删除视频)
      */
     @RequestMapping("/delOfflineTrainVideo")
-    public Result delOfflineTrainVideo(@RequestBody(required = false)  Map<String, Object> map) {
+    public Result delOfflineTrainVideo(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrainVideo(map));
     }
 
@@ -207,7 +237,11 @@ public class TrainController {
      * @description 编辑线下培训(编辑线下培训)
      */
     @RequestMapping("/editOfflineTrain")
-    public Result editOfflineTrain(@RequestBody(required = false)  Map<String, Object> map) {
+    public Result editOfflineTrain(@RequestBody(required = false) Map<String, Object> map) {
+//        int count = trainService.editOfflineTrain(map);
+//        map.put("km_type", "5");
+//        count += auditService.czAudit(map);
+//        count += auditService.addAudit(map);
         return ResultUtil.success(trainService.editOfflineTrain(map));
     }
 
@@ -217,7 +251,7 @@ public class TrainController {
      * @description 删除线下培训(编辑线下培训)逻辑删除
      */
     @RequestMapping("/delOfflineTrain")
-    public Result delOfflineTrain(@RequestBody(required = false)  Map<String, Object> map) {
+    public Result delOfflineTrain(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrain(map));
     }
 
@@ -233,9 +267,9 @@ public class TrainController {
         sign.setCurrentTime(System.currentTimeMillis() / 1000);
         sign.setRandom(new Random().nextInt(Integer.MAX_VALUE));
         sign.setSignValidDuration(3600 * 24 * 2);
-        String signature="";
+        String signature = "";
         try {
-             signature = sign.getUploadSignature();
+            signature = sign.getUploadSignature();
         } catch (Exception e) {
             System.out.print("获取签名失败");
             e.printStackTrace();

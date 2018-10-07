@@ -40,9 +40,24 @@
 	<select id="subjectList" resultType="Map">
 		SELECT subject_code as id , subject_name as name FROM dict_subject
 	</select>
-	
+	<select id="subjectListAll" resultType="Map">
+		select DISTINCT ds.subject_name as name,subject_code as id  from spec_subject_rel ssr inner join dict_subject ds 
+		on ssr.subject_id = ds.subject_code
+		<if test="limit != null and limit != ''">
+			limit 0,#{limit}
+		</if>
+	</select>
 	<select id="catalogList" resultType="Map">
 		SELECT variety_code as id, variety_name as name FROM common_medicine_variety
+		<if test="limit != null and limit != ''">
+			limit 0,#{limit}
+		</if>
+	</select>
+	<select id="catalogListAll" resultType="Map">
+		SELECT DISTINCT cmv.variety_name as name ,
+		variety_code as id
+		from spec_cat_rel scr inner join common_medicine_variety cmv 
+		on scr.cat_id = cmv.variety_code
 		<if test="limit != null and limit != ''">
 			limit 0,#{limit}
 		</if>
@@ -52,7 +67,8 @@
 		SELECT
 			si.spec_id,
 			si.NAME,
-			si.head_portrait,
+			case when si.head_portrait is null or  si.head_portrait=''
+				then '1537932363932658' else si.head_portrait end as head_portrait,
 			si.employment_age,
 			si.expertise_field,
 			IFNULL( sis.interact_count, 0 ) AS interact_count ,
@@ -84,6 +100,44 @@
 		group by(si.spec_id)
 		ORDER BY si.employment_age DESC
 	</select>
+	<select id="specialListAll" parameterType="java.util.Map" resultType="Map">
+		SELECT
+			si.spec_id,
+			si.NAME,
+			case when si.head_portrait is null or  si.head_portrait=''
+				then '1537932363932658' else si.head_portrait end as head_portrait,
+			si.employment_age,
+			si.expertise_field,
+			IFNULL( sis.interact_count, 0 ) AS interact_count ,
+			count(cf.id) as follow ,
+			0 as is_follow,
+			'' as sub,
+			'' as cat
+		FROM
+			spec_info si
+			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
+			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id and cf.object_type = '1' and cf.follow_flag = '1'  
+		<if test="subject_code != null ">
+			LEFT JOIN spec_subject_rel ssr ON si.spec_id = ssr.spec_id
+		</if>
+		<if test="cat_code != null ">
+			LEFT JOIN spec_cat_rel scr ON si.spec_id = scr.spec_id
+		</if>
+		
+		WHERE 1=1 
+		<if test="subject_code != null and subject_code !='' ">
+			AND ssr.subject_id = #{subject_code}
+		</if>
+
+		<if test="cat_code != null and cat_code !='' ">
+			AND scr.cat_id = #{cat_code}
+		</if>
+		<if test="name != null and name != ''">
+			AND si.name LIKE CONCAT('%',#{name},'%') 
+		</if>
+		group by(si.spec_id)
+		ORDER BY si.employment_age DESC
+	</select>
 	
 	<select id="specialIsFollow" parameterType="java.util.Map" resultType="Map">
 		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '0'
@@ -91,7 +145,19 @@
 	
 	<select id="specDetail" parameterType="java.lang.String" resultType="Map">
 		SELECT
-			si.*,
+			si.spec_id,
+			si.company,
+			si.detail,
+			si.education,
+			si.employment_age,
+			si.expertise_field,
+			si.name,
+			si.professional_direction,
+			si.registration_date,
+			si.title,
+			si.update_time,
+			case when si.head_portrait is null or  si.head_portrait=''
+			then '1537932363932658' else si.head_portrait end as head_portrait,			
 			IFNULL( sis.interact_count, 0 ) AS interact_count,
 			count( cf.id ) AS follow,
 			0 AS is_follow ,
@@ -122,9 +188,10 @@
 	</update>
 	
 	<select id="articleList" parameterType="Map" resultType="Map">
-		SELECT sa.*, cu.telephone FROM spec_article sa
+		SELECT sa.*, cu.telephone ,cbu.name as create_name FROM spec_article sa
 		left join common_user cu on sa.spec_id = cu.id
-		WHERE 1=1
+		left join common_backend_user cbu on sa.create_user_id=cbu.id
+		WHERE sa.status = '0'
 		<if test="spec_id != null and spec_id != ''">
 			and sa.spec_id = #{spec_id}
 		</if>
@@ -144,7 +211,7 @@
 	</select>
 	
 	<select id="articleDetail" parameterType="String" resultType="Map">
-		select a.id,a.title,a.author,b.name,a.publish_time,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
+		select a.id,a.title,a.author,a.spec_id,b.name,concat(concat(b.name,"("),b.telephone,")") as name_tel,a.publish_time,a.article_type,b.telephone,a.img_url,a.content from spec_article a left join common_user b on 
 		a.spec_id = b.id where a.id = #{id}
 	</select>
 	
@@ -184,7 +251,7 @@
 		insert into spec_issue (issue_desc,img_url,video_url,is_public,issue_time,issue_address,issue_user_id,
 		issue_status,score,follow_days,is_revisited,revisited_mark,cat_code,sub_code,field_ids) 
 		values (#{issue_desc},#{img_url},#{video_url},#{is_public},#{issue_time},#{issue_address},#{issue_user_id},
-		#{issue_status},#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids})
+		'0',#{score},#{follow_days},#{is_revisited},#{revisited_mark},#{cat_code},#{sub_code},#{field_ids})
 	</insert>
 	
 	<insert id="insertIssueRel" parameterType="Map">
@@ -229,7 +296,10 @@
 			END ) status,
 
 			cu.name,
-			cu.head_portrait
+			cu.head_portrait,
+			cu.telephone,
+			cu.address,
+			cu.id as issue_user_id
 		FROM
 			spec_issue si
 			LEFT JOIN common_user cu ON si.issue_user_id = cu.id
@@ -246,8 +316,9 @@
 	</insert>
 	
 	<select id="videoList" parameterType="java.util.Map" resultType="Map">
-		select tvc.*, cu.telephone from train_video_course tvc
+		select tvc.*, cu.telephone,cbu.name as create_name from train_video_course tvc
 		left join common_user cu on tvc.spec_id = cu.id
+		left join common_backend_user cbu on tvc.user_id=cbu.id
 		WHERE 1=1
 		<if test="spec_id != null and spec_id != ''">
 			and tvc.spec_id = #{spec_id}
@@ -256,7 +327,7 @@
 			and (tvc.title LIKE CONCAT('%',#{title},'%') or tvc.lecturer_name LIKE CONCAT('%',#{title},'%'))
 		</if>
 		<if test="status != null and status != '' and status != '-1'">
-			AND tvc.is_audit = #{status}
+			AND tvc.operation_status = #{status}
 		</if>
 		<if test="start != null and start != ''">
 			AND tvc.publish_time &gt; #{start}

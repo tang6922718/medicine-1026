@@ -133,5 +133,10 @@
 
     </select>
 
+    <insert id="addIntegralRecord" parameterType="Map" >
+        insert into common_integral
+         values (#{userId}, #{point}, now())
+    </insert>
+
 
 </mapper>

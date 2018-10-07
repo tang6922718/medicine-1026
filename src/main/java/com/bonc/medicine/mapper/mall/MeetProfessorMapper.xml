@@ -19,15 +19,13 @@
 		a.is_revisited,
 		a.is_public
 		FROM
-		spec_issue a,
-		spec_issue_association b,
-		spec_info c,
-		common_user d
+		spec_issue a left join
+		spec_issue_association b on a.id = b.issueid
+		left join spec_info c on
+		b.specid = c.spec_id
+		left join common_user d on d.id = a.issue_user_id
 		WHERE
-		a.id = b.issueid
-		AND b.specid = c.spec_id
-		AND b.is_assigned = '0'
-		AND d.id = a.issue_user_id
+		b.is_assigned = '0'
 		<if test="issue_status != null and issue_status != '全部'">
 			AND issue_status LIKE
 			CONCAT(CONCAT('%',#{issue_status,jdbcType=VARCHAR}),'%')
@@ -53,26 +51,38 @@
 
 	<update id="revisited" parameterType="Map">
 		update spec_issue set revisited_mark = #{comment}
-		<if test="close != null and close == '1'"> 
+		<if test="close != null and close == '1'">
 			,issue_status = '3'
 		</if>
 		where id = #{id}
 	</update>
-	
-	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case">
+
+	<insert id="anli" parameterType="com.bonc.medicine.entity.mall.Case"
+		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		spec_case(title,varieties,content,issue_id,publish_time)
 		values(#{title},#{varieties},#{content},#{issue_id},#{publish_time})
 	</insert>
 
+	<select id="queryIssue" parameterType="Map" resultType="Map">
+		select * from spec_issue where id = #{issue_id}
+	</select>
+
+	<insert id="addCaseNotice" parameterType="Map">
+		insert into common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
+	</insert>
+
 	<update id="setAnli" parameterType="Map">
-		update spec_issue set is_public = '1' where id = #{issue_id}
+		update spec_issue set
+		is_public = '1' where id = #{issue_id}
 	</update>
 
 	<select id="untreated" parameterType="Map" resultType="Map">
 		SELECT
 		a.id,
 		b.NAME,
+		b.head_portrait,
 		a.issue_desc,
 		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) )
 		AS time
@@ -86,11 +96,13 @@
 		AND c.issueid = a.id
 		AND
 		is_assigned = '0'
-		AND c.specid = #{spec_id} UNION ALL
+		AND c.specid = #{spec_id} 
+		UNION ALL
 		SELECT
 		a.id,
 		'邀请我的'
 		AS NAME,
+		b.head_portrait,
 		a.issue_desc,
 		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) ) AS
 		time
@@ -123,14 +135,10 @@
 		FROM
 		spec_info a
 		LEFT JOIN
-		spec_issue_association b ON a.spec_id
-		= b.specid
-		AND ( b.is_assigned =
-		'0' OR b.is_assigned = '1' )
+		spec_issue_association b ON a.spec_id = b.specid AND ( b.is_assigned = '0' OR b.is_assigned = '1' )
 		LEFT JOIN
 		spec_issue c ON b.issueid = c.id
-		AND ( c.issue_status = '2' OR
-		c.issue_status = '3' )
+		AND ( c.issue_status = '2' OR c.issue_status = '3' )
 		LEFT JOIN
 		common_user d ON c.issue_user_id = d.id
 		WHERE
@@ -150,48 +158,53 @@
 		temp.content,
 		cu.NAME,
 		cu.head_portrait,
-		cu.address
+		cu.address,
+		GROUP_CONCAT(DISTINCT cmv.variety_name) as variety_name
 		FROM
 		(
-		SELECT
-		b.*,
-		p.from_uid,
-		p.to_uid,
-		p.reply_time,
-		p.content
-		FROM
-		(
-		SELECT
-		issue_desc,
-		(
-		SELECT
-		cc.id AS issue_id
-		FROM
-		common_comment cc
-		WHERE
-		cc.object_id = a.id
-		AND cc.object_type = '1'
-		ORDER BY
-		cc.reply_time DESC
-		LIMIT 1
-		) id
-		FROM
-		spec_issue a
-		WHERE
-		EXISTS (
-		SELECT 1 FROM common_comment t WHERE
-		t.object_id = a.id AND
-		t.object_type = '1' )
-		) b
+			SELECT
+			b.*,
+			p.from_uid,
+			p.to_uid,
+			p.reply_time,
+			p.content
+			FROM
+			(
+				SELECT
+				issue_desc,
+					(
+						SELECT
+						cc.id AS issue_id
+						FROM
+						common_comment cc
+						WHERE
+						cc.object_id = a.id
+						AND cc.object_type = '1'
+						ORDER BY
+						cc.reply_time DESC
+						LIMIT 1
+					) common_id,
+					a.id as id
+				FROM
+				spec_issue a
+				WHERE
+					EXISTS (
+						SELECT 1 FROM common_comment t WHERE
+						t.object_id = a.id AND
+						t.object_type = '1'
+					 )
+			) b
 		INNER JOIN
-		common_comment p ON p.id = b.id
+		common_comment p ON p.id = b.common_id
 		)
 		temp
-		LEFT JOIN common_user cu ON
-		temp.from_uid = cu.id
+		LEFT JOIN common_user cu ON temp.from_uid = cu.id
+		LEFT JOIN common_user_care_varieties_r ccv on cu.id=ccv.user_id
+		LEFT JOIN common_medicine_variety cmv on ccv.variety_code=cmv.variety_code
 		WHERE
 		temp.to_uid =
 		#{spec_id} or temp.from_uid = #{spec_id}
+		group by temp.id
 	</select>
 
 	<select id="issue_statistics_solving" parameterType="Map"
@@ -245,7 +258,9 @@
 		LEFT JOIN common_user cu ON
 		temp.from_uid = cu.id
 		WHERE
-		temp.to_uid = #{spec_id}) as temp
+		temp.to_uid = #{spec_id}
+		or temp.from_uid = #{spec_id}
+		) as temp
 	</select>
 
 
@@ -314,7 +329,8 @@
 
 	<update id="setCase" parameterType="Map">
 		update spec_issue set
-		case_detail = #{case_detail} ,case_title = #{case_title} , case_varieties = #{case_varieties}
+		case_detail = #{case_detail} ,case_title = #{case_title} ,
+		case_varieties = #{case_varieties}
 		where id = #{id}
 	</update>
 
@@ -378,15 +394,24 @@
 
 	<insert id="addArticle" parameterType="com.bonc.medicine.entity.mall.Article">
 		insert into
-		spec_article(title,article_type,author,label,spec_id,publish_time,content,effect_flag,img_url,status,fail_opinion,update_time,is_audit)
-		values(#{title},#{article_type},#{author},#{label},#{spec_id},#{publish_time},#{content},#{effect_flag},#{img_url},#{status},#{fail_opinion},#{update_time},#{is_audit});
+		spec_article(title,article_type,author,label,spec_id,publish_time,content,effect_flag,img_url,status,fail_opinion,is_audit,create_user_id)
+		values(#{title},#{article_type},#{author},#{label},#{spec_id},now(),#{content},#{effect_flag},#{img_url},'0',#{fail_opinion},'0',#{create_user_id});
 	</insert>
 
 	<update id="updateArticle" parameterType="com.bonc.medicine.entity.mall.Article">
 		update
 		spec_article set
-		title = #{title},article_type = #{article_type},author =
-		#{author},content = #{content},update_time = #{update_time}  where id = #{id}
+		title = #{title},
+		article_type = #{article_type},
+		author = #{author},
+		spec_id = #{spec_id},
+		content = #{content},
+		update_time = #{update_time},
+		is_audit = '0'
+		<if test="img_url != null and img_url != ''">
+			,img_url = #{img_url}
+		</if>
+		where id = #{id}
 	</update>
 	<select id="getArticlelist" parameterType="Map" resultType="Map">
 		select id,title,'文章类型' as type,publish_time from spec_article where
@@ -394,5 +419,11 @@
 		<if test="key != null and key != ''">
 			and title like CONCAT(CONCAT('%',#{key}),'%')
 		</if>
+	</select>
+	<select id="queryArticleList" parameterType="Map" resultType="Map">
+		SELECT concat(concat(u.name,"("),u.telephone,")") as name_tel
+		,u.id,u.name name
+		FROM
+		common_user u INNER JOIN spec_info s on u.id=s.spec_id
 	</select>
 </mapper>

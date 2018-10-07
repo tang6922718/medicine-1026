@@ -14,6 +14,7 @@ public class Purchase {
 	private char unit; // 求购数量的单位
 	private String linkman; // 联系人
 	private String linkman_phone; // 联系人电话
+	private String attribute; // 特殊属性
 	private String storehouse; // 库存地
 	private String produce_area; // 商品产地
 	private char receipt; // 可供票据
@@ -160,6 +161,12 @@ public class Purchase {
 	}
 	public void setLinkman_phone(String linkman_phone) {
 		this.linkman_phone = linkman_phone;
+	}
+	public String getAttribute() {
+		return attribute;
+	}
+	public void setAttribute(String attribute) {
+		this.attribute = attribute;
 	}
 	public String getStorehouse() {
 		return storehouse;

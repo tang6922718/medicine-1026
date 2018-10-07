@@ -88,6 +88,13 @@ public class ViewTheDatalmpl implements ViewTheDataService {
     }
 
     @Override
+    public List<Map<String, Object>> myResources(Integer user_id) {
+    	Map map = new HashMap<>();
+    	map.put("user_id", user_id);
+    	return viewTheDataMapper.myResources(map);
+    }
+    
+    @Override
     public List<Map<String, Object>> problemStatistics(Integer user_id) {
 
         Map map = new HashMap<>();

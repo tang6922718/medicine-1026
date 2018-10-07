@@ -77,6 +77,9 @@ public interface LiveMapper {
                 if (map.get("live_type") != null) {
                     VALUES("live_type", "#{live_type}");
                 }
+                if (map.get("spec_id") != null) {
+                    VALUES("spec_id", "#{spec_id}");
+                }
                 if (map.get("lecture_name") != null) {
                     VALUES("lecture_name", "#{lecture_name}");
                 }
@@ -111,7 +114,9 @@ public interface LiveMapper {
                 if(map.get("lecturer_desc") != null){
                     SET("lecturer_desc=#{lecturer_desc}");
                 }
-
+                if (map.get("spec_id") != null) {
+                    VALUES("spec_id", "#{spec_id}");
+                }
                 if(map.get("live_start") != null){
                     SET("live_start=#{live_start}");
                 }

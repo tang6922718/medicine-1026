@@ -3,11 +3,11 @@
 <mapper namespace="com.bonc.medicine.mapper.mall.BuyersMapper">
 	<insert id="insertPurchase" parameterType="com.bonc.medicine.entity.mall.Purchase">
         insert into mall_purchase (goods_name,purchase_cat_code,goods_cat_code,specification,user_id,img_url,
-        publish_time,effect_flag,purchase_quantity,unit,linkman,linkman_phone,storehouse,produce_area,
+        publish_time,effect_flag,purchase_quantity,unit,linkman,linkman_phone,attribute,storehouse,produce_area,
         receipt,quality_standard,send_sample,payment,packing,qualification_standard,state,is_aduit,comment)
         values(#{goods_name},#{purchase_cat_code},#{goods_cat_code},#{specification},
         #{user_id},#{img_url},#{publish_time},#{effect_flag},#{purchase_quantity},#{unit},
-        #{linkman},#{linkman_phone},#{storehouse},#{produce_area},#{receipt},#{quality_standard},
+        #{linkman},#{linkman_phone},#{attribute},#{storehouse},#{produce_area},#{receipt},#{quality_standard},
         #{send_sample},#{payment},#{packing},#{qualification_standard},#{state},#{is_aduit},#{comment})
     </insert>
     

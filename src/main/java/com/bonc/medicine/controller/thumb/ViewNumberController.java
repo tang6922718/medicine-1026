@@ -58,11 +58,38 @@ public class ViewNumberController {
         if (StringUtils.isEmpty(paramMap.get("objectType")) || StringUtils.isEmpty(paramMap.get("objectId"))) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
-        if (StringUtils.isEmpty(paramMap.get("viewNumber"))) {
-            paramMap.put("viewNumber", "1");
-        }
 
         return ResultUtil.success(viewNumberService.addOrUpdateViewNumberCord(paramMap));
+    }
+
+
+    /**
+    * @Description:
+    * @Param: []
+    * @return: com.bonc.medicine.entity.Result
+     *
+    * @Author: hejiajun
+    * @Date: 2018/10/1
+    */
+    
+    /**
+    * @Description:后台管理直播，是视频，线下培训详情页面的数字统计接口
+    * @Param: [videoIds:必须--可以传入多个 多个用“,”分开,  英文的逗号哦
+     *          videoType ：必须--1： 线下培训  2： 直播  0：视频 ]
+    * @return: com.bonc.medicine.entity.Result   返回 预约数；观看数；互动数；点赞数；
+    * @Author: hejiajun
+    * @Date: 2018/10/1 
+    */ 
+    @GetMapping("/video/number/statistics/v1.0")
+    public Result videoDetailNumberStatistical (@RequestParam String videoIds,
+                                                @RequestParam String videoType){
+        //1 线下培训报名  2 直播报名
+
+       /* if (StringUtils.isBlank(videoIds) || StringUtils.isBlank(videoType)){
+            return ResultUtil.error(ResultEnum.MISSING_PARA); 放在实现类中去
+        }*/
+
+        return ResultUtil.success(viewNumberService.videoDetailNumberStatistical(videoIds, videoType));
     }
 
 }

@@ -19,11 +19,11 @@ public class ResultUtil {
         result.setData(object);
         return result;
     }
-    public static Result successTatol(Object object,long tatol) {
+    public static Result successTotal(Object object,long total) {
         Result result = new Result();
         result.setCode(200);
         result.setMsg("成功");
-        result.setTatol(tatol);
+        result.setTotal(total);
         result.setData(object);
         return result;
     }

@@ -36,8 +36,8 @@
 		<if test="phone != null and phone != ''">
 			and telephone = #{phone}
 		</if>
-		<if test="userid != null and userid != ''">
-			and id = #{userid}
+		<if test="userId != null and userId != ''">
+			and id = #{userId}
 		</if>
 
 
@@ -86,10 +86,17 @@
 			common_user cu
 			LEFT JOIN common_user_role_rel cll ON cu.id = cll.user_id
 			LEFT JOIN common_role crr ON cll.role_id = crr.id
-		WHERE
-			 cu.telephone = #{phone}
+		WHERE  1  = 1
+				<if test="phone != null and phone != ''">
+					and  cu.telephone = #{phone}
+				</if>
+				<if test="userId != null and userId != ''">
+					and  cu.id = #{userId}
+				</if>
+
 			 and cu.password = #{password}
 		ORDER BY cll.role_id
+
 	</select>
 
 	<select id="backUser" parameterType="Map" resultType="Map">
@@ -105,9 +112,15 @@
 			common_backend_user cu
 			LEFT JOIN common_backend_user_role_r cll ON cu.id = cll.backend_user_id
 			LEFT JOIN common_backend_user_role crr ON cll.backend_role_id = crr.id
-		WHERE
-			 cu.telephone = #{phone}
+		WHERE  1 =  1
+
 			 and cu.password = #{password}
+			<if test="phone != null and phone != ''">
+				and  cu.telephone = #{phone}
+			</if>
+			<if test="userId != null and userId != ''">
+				and  cu.id = #{userId}
+			</if>
 		ORDER BY cll.backend_role_id
 	</select>
 
@@ -136,4 +149,44 @@
 
             limit 1
     </select>
+
+
+	<select id="interfaceForBackAfterLogin" parameterType="String" resultType="Map">
+		SELECT
+			cu.`name`,
+			cu.head_portrait,
+			cu.id,
+			MAX( cll.login_time ) AS login_time,
+			GROUP_CONCAT( DISTINCT cccr.id ) AS role_id,
+			GROUP_CONCAT( DISTINCT cccr.role_name ) AS role_name
+		FROM
+			common_logon_log cll
+			RIGHT JOIN common_backend_user cu ON cll.user_id = cu.id
+			LEFT JOIN common_backend_user_role_r urr ON cu.id = urr.backend_user_id
+			LEFT JOIN common_backend_user_role cccr ON urr.backend_role_id = cccr.id
+		WHERE
+			cu.id = #{userId}
+
+	</select>
+
+	<update id="forgetPassword" parameterType="Map">
+		update
+			${tableName}
+		set
+		password = #{password},
+		update_time = #{updateTime}
+		where
+
+			telephone = #{phone}
+	</update>
+
+	<update id="updateUserTelephoneNumber" parameterType="Map">
+
+		update
+			common_user
+		set telephone = #{phone}
+		where
+			id = #{userId}
+
+	</update>
 </mapper>

@@ -214,9 +214,6 @@
 		WHERE
 		a.state
 		= '0'
-		AND a.guide_flag = '0'
-		AND a.creator_id
-		= #{user_id}
 		AND b.record_user_id =#{user_id}
 		AND b.guide_flag = '0'
 		)

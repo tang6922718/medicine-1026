@@ -37,6 +37,10 @@ public class DataSourceConfig {
         fb.setPlugins(new Interceptor[]{pageInterceptor});
         fb.setTypeAliasesPackage(env.getProperty("mybatis.type-aliases-package"));
         fb.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(env.getProperty("mybatis.mapper-locations")));
+        
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setCallSettersOnNulls(true);
+        fb.setConfiguration(configuration);
         return fb.getObject();
     }
 }
