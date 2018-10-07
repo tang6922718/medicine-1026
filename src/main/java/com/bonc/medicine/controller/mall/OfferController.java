@@ -24,11 +24,12 @@ public class OfferController {
 	@SuppressWarnings("unchecked")
 	@PostMapping("/offer")
 	@Authorization
-	public Result<Object> realseOffer(@RequestBody Offer offer) {
+	public Result<Object> realseOffer(@RequestBody Offer offer, @CurrentUser String userId) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String publish_time = sdf.format(new Date());
 		offer.setPublish_time(publish_time);
 		offer.setState('1');
+		offer.setUser_id(userId);
 		return ResultUtil.success(offerService.realseOffer(offer));
 	}
 
