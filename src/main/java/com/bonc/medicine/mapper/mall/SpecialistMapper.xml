@@ -100,6 +100,44 @@
 		group by(si.spec_id)
 		ORDER BY si.employment_age DESC
 	</select>
+	<select id="specialListAll" parameterType="java.util.Map" resultType="Map">
+		SELECT
+			si.spec_id,
+			si.NAME,
+			case when si.head_portrait is null or  si.head_portrait=''
+				then '1537932363932658' else si.head_portrait end as head_portrait,
+			si.employment_age,
+			si.expertise_field,
+			IFNULL( sis.interact_count, 0 ) AS interact_count ,
+			count(cf.id) as follow ,
+			0 as is_follow,
+			'' as sub,
+			'' as cat
+		FROM
+			spec_info si
+			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
+			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id and cf.object_type = '1' and cf.follow_flag = '1'  
+		<if test="subject_code != null ">
+			LEFT JOIN spec_subject_rel ssr ON si.spec_id = ssr.spec_id
+		</if>
+		<if test="cat_code != null ">
+			LEFT JOIN spec_cat_rel scr ON si.spec_id = scr.spec_id
+		</if>
+		
+		WHERE 1=1 
+		<if test="subject_code != null and subject_code !='' ">
+			AND ssr.subject_id = #{subject_code}
+		</if>
+
+		<if test="cat_code != null and cat_code !='' ">
+			AND scr.cat_id = #{cat_code}
+		</if>
+		<if test="name != null and name != ''">
+			AND si.name LIKE CONCAT('%',#{name},'%') 
+		</if>
+		group by(si.spec_id)
+		ORDER BY si.employment_age DESC
+	</select>
 	
 	<select id="specialIsFollow" parameterType="java.util.Map" resultType="Map">
 		select object_id from common_follow where follow_user_id = #{user_id} and follow_flag = '1' and object_type = '0'

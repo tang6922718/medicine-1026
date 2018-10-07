@@ -55,6 +55,10 @@ public class SpecialistServiceImpl implements SpecialistService {
 	public List<Map<String, Object>> specialList(Map param) {
 		return specialistMapper.specialList(param);
 	}
+	@Override
+	public List<Map<String, Object>> specialListAll(Map param) {
+		return specialistMapper.specialListAll(param);
+	}
 	
 	@Override
 	public List<Map<String, Object>> specialIsFollow(Map param) {

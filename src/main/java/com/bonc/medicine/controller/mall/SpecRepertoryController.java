@@ -190,6 +190,58 @@ public class SpecRepertoryController {
 		
 		return ResultUtil.successTotal(list, total);
 	}
+	/**
+	 * 专家列表
+	 * 
+	 * @param name
+	 *            按名字查
+	 * @param cat_code
+	 *            按品类查
+	 * @param subject_code
+	 *            按学科查
+	 * @param user_id
+	 *            当前用户
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/spec_list_all")
+	public Result specListAll(String name, String cat_code, String subject_code, String user_id, Integer pageNum,
+			Integer pageSize) {
+		
+		Map param = new HashMap<>();
+		param.put("name", name);
+		param.put("cat_code", cat_code);
+		param.put("subject_code", subject_code);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();// 存关注数据
+		// 开始分页,不传默认查询全部
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		list = specialistService.specialListAll(param);
+		if (pageNum != null && pageSize != null) {
+			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+		}
+		if (user_id != null) {
+			for (Map<String, Object> map : list) {
+				Map param1 = new HashMap<>();
+				param1.put("userId", user_id);
+				param1.put("attedUserId", map.get("spec_id") + "");
+				param1.put("type", "1");
+				Map res = attentionService.attentionRelation(param1);
+				map.put("is_follow", res.get("followed"));
+			}
+		}
+		for (int i = 0; i < list.size(); i++) {
+			Map param1 = new HashMap<>();
+			param1.put("spec_id", list.get(i).get("spec_id").toString());
+			list.get(i).put("sub", specialistService.sub(param1).toString());
+			list.get(i).put("cat", specialistService.cat(param1).toString());
+		}
+		
+		return ResultUtil.successTotal(list, total);
+	}
 
 	/**
 	 * 专家详情

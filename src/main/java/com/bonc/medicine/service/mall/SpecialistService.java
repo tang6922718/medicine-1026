@@ -20,6 +20,7 @@ public interface SpecialistService {
 	public List<Map> catalogListAll(Map param);
 	public List<Map> subjectListAll(Map param);
 	public List<Map<String, Object>> specialList(Map param);
+	public List<Map<String, Object>> specialListAll(Map param);
 	public List<Map<String, Object>> specialIsFollow(Map param);
 	public List<Map<String, Object>> specDetail(Map param);
 	public List<Map<String, Object>> sub(Map param);
