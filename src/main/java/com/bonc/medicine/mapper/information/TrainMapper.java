@@ -304,7 +304,7 @@ public interface TrainMapper {
 
                 switch (Integer.valueOf(String.valueOf(map.get("object_type")))) {
                     case 1:
-                        FROM("train_live");
+                        FROM("train_offline");
                         break;
                     case 2:
                         FROM("train_video_course");
