@@ -38,7 +38,7 @@ public class NoticeController {
 		if (str_role_id.contains("3")) {
 			notice_role_type += "4,";
 		}
-		if (str_role_id.contains("4")) {
+		if (str_role_id.contains("5")) {
 			notice_role_type += "3,";
 		}
 		notice_role_type = notice_role_type.substring(0, notice_role_type.length() - 1);
