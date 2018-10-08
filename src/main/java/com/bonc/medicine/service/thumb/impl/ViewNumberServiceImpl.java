@@ -132,7 +132,7 @@ public class ViewNumberServiceImpl implements ViewNumberService {
         if (!StringUtils.equals("0", videoType)){
             List<Map<String, Object>> queryResultMap =  viewNumberMapper.videoDetailNumberStatistical(queryParamMap);
 
-            if (queryResultMap != null && null != queryResultMap.get(0)
+            if (queryResultMap != null && queryResultMap.size() != 0 && null != queryResultMap.get(0)
                     && null != queryResultMap.get(0).get("id")){
                 reQueryList = queryResultMap;
             }
