@@ -23,7 +23,7 @@ public interface TrainMapper {
     int addComment(Map<String, Object> map);
 
 
-    @Select("select  * from train_interact  where  object_id=#{object_id}  ORDER BY  interact_time limit 0,100")
+    @Select("select  t.*, u.name, ifnull(u.head_portrait,'1537932363932658') head_portrait from train_interact t inner join common_user u on t.user_id = u.id where  object_id=1  ORDER BY  interact_time limit 0,100")
     List<Map> selectComment(Map<String, Object> map);
 
 

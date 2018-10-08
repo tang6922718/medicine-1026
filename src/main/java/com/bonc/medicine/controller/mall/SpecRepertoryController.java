@@ -191,7 +191,7 @@ public class SpecRepertoryController {
 		return ResultUtil.successTotal(list, total);
 	}
 	/**
-	 * 专家列表
+	 * 专家列表（提供给门户使用）
 	 * 
 	 * @param name
 	 *            按名字查

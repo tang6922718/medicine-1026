@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.thumb;
 
+import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -22,7 +23,7 @@ public class InteractAndActiveController {
     private UserManagerService userManagerService;
 
     /**
-    * @Description:
+    * @Description:获取活跃天数
     * @Param: [queryId]：要查询的用户的id，必须参数
     * @return: com.bonc.medicine.entity.Result
      *  data{
@@ -31,6 +32,7 @@ public class InteractAndActiveController {
     * @Author: hejiajun
     * @Date: 2018/9/30
     */
+    @Authorization
     @GetMapping("/info/active/v1.0/{queryId}")
     public Result queryActiveDays (@PathVariable String queryId){
 
@@ -41,7 +43,7 @@ public class InteractAndActiveController {
     }
 
     /**
-     * @Description:
+     * @Description:获取互动数
      * @Param: [queryId]：要查询的用户的id  ‘1,2,3,4’ 多个这样用都逗号隔开，必须参数 queryType:目前已知  1：直播 2：专家
      * @return: com.bonc.medicine.entity.Result
      *  [{

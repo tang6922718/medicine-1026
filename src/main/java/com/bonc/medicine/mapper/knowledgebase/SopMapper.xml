@@ -17,7 +17,7 @@
 		</if>
 	</select>
 
-    <select id="getSopPlants" resultType="com.bonc.medicine.entity.knowledgebase.SopStep">
+    <select id="getSopPlants" resultType="java.util.Map">
 		SELECT * FROM km_sop_step,km_variety_sop
 		WHERE km_sop_step.sop_id = #{id}
 		AND sop_id =km_variety_sop.id

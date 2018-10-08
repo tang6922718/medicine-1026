@@ -42,8 +42,12 @@ public interface MeetProfessorMapper {
 	public List<Map<String, Object>> expert(Map map);
 
 	public int deleteInvitation(Map map);
+	
+	public int setSolving(Map map);
 
 	public int Invitation(Map map);
+	
+	public int addInvitationNotice(Map map);
 
 	public int end(Map map);
 

@@ -319,7 +319,7 @@
 		select tvc.*, cu.telephone,cbu.name as create_name from train_video_course tvc
 		left join common_user cu on tvc.spec_id = cu.id
 		left join common_backend_user cbu on tvc.user_id=cbu.id
-		WHERE 1=1
+		WHERE 1=1 and tvc.status=0
 		<if test="spec_id != null and spec_id != ''">
 			and tvc.spec_id = #{spec_id}
 		</if>

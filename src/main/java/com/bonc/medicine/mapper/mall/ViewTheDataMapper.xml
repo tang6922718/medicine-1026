@@ -35,7 +35,7 @@
 	<select id="rankInteraction" resultType="Map">
 		SELECT
 		IFNULL(b.id,'') as user_id,
-		IFNULL(b.head_portrait,''),
+		IFNULL(b.head_portrait,'') as head_portrait,
 		IFNULL(b.NAME,'') as name,
 		0 AS 'follow',
 		0 AS 'collection',

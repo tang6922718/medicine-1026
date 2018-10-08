@@ -65,11 +65,13 @@
 	</insert>
 
 	<select id="queryIssue" parameterType="Map" resultType="Map">
-		select * from spec_issue where id = #{issue_id}
+		select *
+		from spec_issue where id = #{issue_id}
 	</select>
 
 	<insert id="addCaseNotice" parameterType="Map">
-		insert into common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
+		insert into
+		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
 		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
 	</insert>
 
@@ -84,7 +86,8 @@
 		b.NAME,
 		b.head_portrait,
 		a.issue_desc,
-		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) )
+		TIMESTAMPDIFF( SECOND,
+		a.issue_time, now( ) )
 		AS time
 		FROM
 		spec_issue a,
@@ -92,11 +95,12 @@
 		spec_issue_association c
 		WHERE
 		a.issue_user_id = b.id
-		AND a.issue_status = '0'
+		AND a.issue_status
+		= '0'
 		AND c.issueid = a.id
 		AND
 		is_assigned = '0'
-		AND c.specid = #{spec_id} 
+		AND c.specid = #{spec_id}
 		UNION ALL
 		SELECT
 		a.id,
@@ -112,11 +116,13 @@
 		spec_issue_association c
 		WHERE
 		a.issue_user_id = b.id
-		AND a.issue_status = '0'
+		AND
+		a.issue_status = '0'
 		AND c.issueid = a.id
 		AND
 		c.is_assigned = '1'
-		AND c.specid = #{spec_id}
+		AND
+		c.specid = #{spec_id}
 	</select>
 
 	<select id="solved" parameterType="Map" resultType="Map">
@@ -135,10 +141,12 @@
 		FROM
 		spec_info a
 		LEFT JOIN
-		spec_issue_association b ON a.spec_id = b.specid AND ( b.is_assigned = '0' OR b.is_assigned = '1' )
+		spec_issue_association b ON a.spec_id
+		= b.specid AND ( b.is_assigned = '0' OR b.is_assigned = '1' )
 		LEFT JOIN
 		spec_issue c ON b.issueid = c.id
-		AND ( c.issue_status = '2' OR c.issue_status = '3' )
+		AND ( c.issue_status = '2' OR
+		c.issue_status = '3' )
 		LEFT JOIN
 		common_user d ON c.issue_user_id = d.id
 		WHERE
@@ -159,48 +167,52 @@
 		cu.NAME,
 		cu.head_portrait,
 		cu.address,
-		GROUP_CONCAT(DISTINCT cmv.variety_name) as variety_name
+		GROUP_CONCAT(DISTINCT cmv.variety_name) as
+		variety_name
 		FROM
 		(
-			SELECT
-			b.*,
-			p.from_uid,
-			p.to_uid,
-			p.reply_time,
-			p.content
-			FROM
-			(
-				SELECT
-				issue_desc,
-					(
-						SELECT
-						cc.id AS issue_id
-						FROM
-						common_comment cc
-						WHERE
-						cc.object_id = a.id
-						AND cc.object_type = '1'
-						ORDER BY
-						cc.reply_time DESC
-						LIMIT 1
-					) common_id,
-					a.id as id
-				FROM
-				spec_issue a
-				WHERE
-					EXISTS (
-						SELECT 1 FROM common_comment t WHERE
-						t.object_id = a.id AND
-						t.object_type = '1'
-					 )
-			) b
+		SELECT
+		b.*,
+		p.from_uid,
+		p.to_uid,
+		p.reply_time,
+		p.content
+		FROM
+		(
+		SELECT
+		issue_desc,
+		(
+		SELECT
+		cc.id AS issue_id
+		FROM
+		common_comment cc
+		WHERE
+		cc.object_id = a.id
+		AND cc.object_type = '1'
+		ORDER BY
+		cc.reply_time DESC
+		LIMIT 1
+		) common_id,
+		a.id as id
+		FROM
+		spec_issue a
+		WHERE
+		EXISTS (
+		SELECT 1 FROM common_comment t WHERE
+		t.object_id = a.id AND
+		t.object_type = '1'
+		)
+		) b
 		INNER JOIN
 		common_comment p ON p.id = b.common_id
 		)
 		temp
-		LEFT JOIN common_user cu ON temp.from_uid = cu.id
-		LEFT JOIN common_user_care_varieties_r ccv on cu.id=ccv.user_id
-		LEFT JOIN common_medicine_variety cmv on ccv.variety_code=cmv.variety_code
+		LEFT JOIN
+		common_user cu ON temp.from_uid = cu.id
+		LEFT JOIN
+		common_user_care_varieties_r ccv on cu.id=ccv.user_id
+		LEFT JOIN
+		common_medicine_variety cmv on ccv.variety_code=cmv.variety_code
 		WHERE
 		temp.to_uid =
 		#{spec_id} or temp.from_uid = #{spec_id}
@@ -259,7 +271,8 @@
 		temp.from_uid = cu.id
 		WHERE
 		temp.to_uid = #{spec_id}
-		or temp.from_uid = #{spec_id}
+		or temp.from_uid =
+		#{spec_id}
 		) as temp
 	</select>
 
@@ -320,6 +333,11 @@
 		spec_issue_association where is_assigned = '1' and issueid = #{id}
 	</delete>
 
+	<update id="setSolving">
+		update spec_issue set issue_status = '1' where id =
+		#{id}
+	</update>
+
 	<update id="setRevisit" parameterType="Map">
 		update spec_issue set
 		follow_days = #{follow_days},revisit_url =
@@ -348,6 +366,12 @@
 		insert into
 		spec_issue_association(issueid,specid,is_assigned)
 		values(#{id},#{expert_id},'1');
+	</insert>
+
+	<insert id="addInvitationNotice" parameterType="Map">
+		insert into
+		common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state)
+		values('3',#{id},#{notice_content},#{user_id},#{expert},now(),'1','1')
 	</insert>
 
 	<update id="end" parameterType="Map">
@@ -424,6 +448,7 @@
 		SELECT concat(concat(u.name,"("),u.telephone,")") as name_tel
 		,u.id,u.name name
 		FROM
-		common_user u INNER JOIN spec_info s on u.id=s.spec_id
+		common_user u INNER JOIN spec_info s on
+		u.id=s.spec_id
 	</select>
 </mapper>

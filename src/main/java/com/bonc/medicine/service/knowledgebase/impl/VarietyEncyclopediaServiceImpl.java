@@ -101,6 +101,12 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
     }
 
     @Override
+    public int  historyTextIsExist(String search_text){return varietyEncyclopediaMapper.historyTextIsExist(search_text);}
+
+    @Override
+    public int updateHistoryTextDate(String search_text){return varietyEncyclopediaMapper.updateHistoryTextDate(search_text);}
+
+    @Override
     public int addHistoryText(String search_text) {
         return varietyEncyclopediaMapper.addHistoryText(search_text);
     }

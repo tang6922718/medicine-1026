@@ -9,7 +9,7 @@
 		(select count(1) from comm_dyanimic where effect_flag = '2') as dt ,
 		(select count(1) from spec_article where status = '0' and is_audit = '0') as zy ,
 		((select count(1) from spec_article where status = '0' and is_audit = '0') + 
-		(select count(1) from train_video_course where status = '0' and operation_status = '1')) as zl ,
+		(select count(1) from train_video_course where status = '0')) as zl ,
 		(select count(1) from spec_issue where issue_status <![CDATA[ <> ]]> '3' and is_revisited ='1') as hf ,
 		(select count(1) from mall_supply where is_audit = '0' and state = '0') as gy ,
 		(select count(1) from mall_purchase where is_aduit = '0' and state = '1') as qg

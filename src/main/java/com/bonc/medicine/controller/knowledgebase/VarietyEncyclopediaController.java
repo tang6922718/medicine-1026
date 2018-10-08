@@ -231,7 +231,11 @@ public class VarietyEncyclopediaController {
     * */
     @GetMapping("/addHistoryText")
     public Result<Object> addHistoryText(@RequestParam String search_text){
-        return ResultUtil.success(varietyEncyclopediaService.addHistoryText(search_text));
+        if(varietyEncyclopediaService.historyTextIsExist(search_text)>0){
+            return ResultUtil.success(varietyEncyclopediaService.updateHistoryTextDate(search_text));
+        }else {
+            return ResultUtil.success(varietyEncyclopediaService.addHistoryText(search_text));
+        }
     }
 
     /*

@@ -29,14 +29,19 @@ public interface MeetProfessorService {
 
 	public Result<Object> expert(Integer id);
 
-	public int setRevisit(Integer id, Integer follow_days, String revisit_url,
-			String revisited_advice);
-	
+	public int setRevisit(Integer id, Integer follow_days, String revisit_url, String revisited_advice);
+
 	public int eddIssue(Integer id, String revisited_mark, String issue_status);
 
 	public void deleteInvitation(Integer id);
 
+	public void setSolving(Integer id);
+
 	public void Invitation(Integer id, String expert);
+
+	public void addInvitationNotice(Integer id, String expert, String issue_desc, Integer user_id);
+
+	public Map<String, Object> queryIssue(Integer id);
 
 	public Result<Object> end(Integer id, Integer score);
 
@@ -49,7 +54,7 @@ public interface MeetProfessorService {
 	public void aduitArticle(Integer id, String is_audit, String fail_opinion);
 
 	public void addArticle(Article article);
-	
+
 	public Result<Object> queryArticleList();
 
 	public void updateArticle(Article article);

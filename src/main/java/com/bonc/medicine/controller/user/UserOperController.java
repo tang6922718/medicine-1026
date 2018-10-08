@@ -374,7 +374,7 @@ public class UserOperController {
 
         int purchaseNumber = 0;
         for (Object coll  :whatPurchase_Number.get(0).values()) {
-            supplyNumber += Integer.parseInt(coll + "");
+            purchaseNumber += Integer.parseInt(coll + "");
         }
 
         map.put("supplyNumber", supplyNumber + "");

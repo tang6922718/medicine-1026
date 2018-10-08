@@ -31,6 +31,7 @@ public class MeetProfessorController {
 
 	@Autowired
 	private MeetProfessorService meetProfessorService;
+
 	/*
 	 * 答疑管理 疑问列表msg是内容recisited是否回访0否1是
 	 */
@@ -204,7 +205,7 @@ public class MeetProfessorController {
 	public Result<Object> setRevisit(Integer id, Integer follow_days, String revisit_url, String revisited_advice) {
 		return ResultUtil.success(meetProfessorService.setRevisit(id, follow_days, revisit_url, revisited_advice));
 	}
-	
+
 	/*
 	 * 管理员关闭问题issue_status关闭传3否则不传
 	 */
@@ -242,15 +243,19 @@ public class MeetProfessorController {
 	 * 邀请专家解答问题传入问题id,专家expert格式为1,2,3,4
 	 */
 	@GetMapping("/meetProfessor/add/Invitation")
-	public Result<Object> Invitation(Integer id, String expert) {
+	public Result<Object> Invitation(Integer id, String expert, Integer user_id) {
 		meetProfessorService.deleteInvitation(id);
-		//问题状态修改，邀请专家将未处理改为进行中
-		Map param=new HashMap();
+		// 问题状态修改，邀请专家将未处理改为进行中
+		meetProfessorService.setSolving(id);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map = meetProfessorService.queryIssue(id);
+		Map param = new HashMap();
 		param.put("object_id", id);
 		String[] a = expert.split(",");
 		for (int i = 0; i < a.length; i++) {
 			meetProfessorService.Invitation(id, a[i]);
 		}
+		meetProfessorService.addInvitationNotice(id, expert, map.get("issue_desc").toString(), user_id);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);
 		result.setMsg("成功");
@@ -313,9 +318,9 @@ public class MeetProfessorController {
 	 */
 	@PutMapping("/meetProfessor/add/Article")
 	@Authorization
-	public Result<Object> addArticle(@RequestBody Article article,@CurrentUser String crreate_user_id) {
+	public Result<Object> addArticle(@RequestBody Article article, @CurrentUser String crreate_user_id) {
 		article.setCreate_user_id(Integer.valueOf(crreate_user_id));
-		
+
 		meetProfessorService.addArticle(article);
 		Result<Object> result = new Result<Object>();
 		result.setCode(200);
@@ -323,13 +328,13 @@ public class MeetProfessorController {
 		result.setData("更新完毕");
 		return result;
 	}
+
 	/*
 	 * 获取新增专家资源专家信息
 	 */
 	@GetMapping("/meetProfessor/queryArticleList")
 	public Result<Object> queryArticleList() {
-		
-		
+
 		return meetProfessorService.queryArticleList();
 	}
 
