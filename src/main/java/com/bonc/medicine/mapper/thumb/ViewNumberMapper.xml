@@ -51,7 +51,7 @@
             sum( CASE WHEN taa.id IS NULL THEN 0 ELSE 1 END ) as appoint_number
 
         FROM
-            train_live tll
+           ${table}  tll
             LEFT JOIN train_appointment taa ON tll.id = taa.object_id
             AND taa.object_type = #{type}
         WHERE
