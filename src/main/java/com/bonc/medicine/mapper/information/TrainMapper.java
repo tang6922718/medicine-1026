@@ -41,7 +41,7 @@ public interface TrainMapper {
     List<Map> selectTrainList(Map<String, Object> map);
 
 
-    @Insert("insert into train_offline_video(train_id,video_url,upload_user_id) values (#{train_id},#{video_url},#{user_id}) ")
+    @Insert("insert into train_offline_video(train_id,video_title,video_url,upload_user_id) values (#{train_id},#{video_title},#{video_url},#{user_id}) ")
     int editOfflineTrainVideo(Map<String, Object> map);
 
 
@@ -304,7 +304,7 @@ public interface TrainMapper {
 
                 switch (Integer.valueOf(String.valueOf(map.get("object_type")))) {
                     case 1:
-                        FROM("train_offline");
+                        FROM("train_live");
                         break;
                     case 2:
                         FROM("train_video_course");

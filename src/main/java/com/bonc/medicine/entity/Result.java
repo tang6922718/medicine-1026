@@ -9,8 +9,6 @@ public class Result<T> {
     //提示信息
     private String msg;
 
-
-
     private long total;
 
     // 具体的内容
