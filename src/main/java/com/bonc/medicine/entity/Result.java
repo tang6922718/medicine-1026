@@ -9,7 +9,7 @@ public class Result<T> {
     //提示信息
     private String msg;
 
-    private long tatol;
+    private long total;
 
     // 具体的内容
     private T data;
@@ -38,11 +38,11 @@ public class Result<T> {
         this.data = data;
     }
 
-    public long getTatol() {
-        return tatol;
+    public long getTotal() {
+        return total;
     }
 
-    public void setTatol(long tatol) {
-        this.tatol = tatol;
+    public void setTotal(long total) {
+        this.total = total;
     }
 }

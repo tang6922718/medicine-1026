@@ -330,4 +330,9 @@
 		SELECT count(*) as NUM FROM field_coop_member WHERE assistant = 0 AND user_id = #{user_ID}
 	</select>
 
+	<select id="queryIsAlreadyCoopMember" resultType="Map">
+		SELECT count(*) AS isCoopMember FROM field_coop_member
+		WHERE coop_id= #{coop_id} AND  telephone= #{telephone}
+	</select>
+
 </mapper>
