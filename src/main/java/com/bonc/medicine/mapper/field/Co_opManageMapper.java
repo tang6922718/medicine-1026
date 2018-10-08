@@ -57,7 +57,11 @@ public interface Co_opManageMapper {
     
     public List<Map<String, Object>> findAllMember(Map map);
     
+    public List<Map<String, Object>> queryCoopInfo(Integer id);
+    
     public int addNotice(Map map); //通知表插入信息
+    
+    public int addCoopAduitNotice(Map map); //通知表插入合作社审核信息
     
     public int noticeState(Map map);
     

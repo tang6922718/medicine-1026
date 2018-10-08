@@ -59,53 +59,63 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 	}
 
-//	@Override
-//	public Result<Object> getCo_opInfo(int userID) {
-//		Map map = new HashMap();
-//		map = co_opManageMapper.queryCo_opInfo(userID); // 合作社基本信息
-//		int coop_ID=(int)map.get("id");
-//		map.putAll(co_opManageMapper.queryCo_opMemberNum(coop_ID)); // 合作社总人数
-//		map.putAll(co_opManageMapper.queryPlantNum(coop_ID)); // 合作社登记种植总数
-//		map.putAll(co_opManageMapper.queryAssistantNum(coop_ID)); // 合作社助手总数
-//		map.putAll(co_opManageMapper.queryCo_opNoticeNum(coop_ID));
-//		return ResultUtil.success(map);
-//	}
-
+	// @Override
+	// public Result<Object> getCo_opInfo(int userID) {
+	// Map map = new HashMap();
+	// map = co_opManageMapper.queryCo_opInfo(userID); // 合作社基本信息
+	// int coop_ID=(int)map.get("id");
+	// map.putAll(co_opManageMapper.queryCo_opMemberNum(coop_ID)); // 合作社总人数
+	// map.putAll(co_opManageMapper.queryPlantNum(coop_ID)); // 合作社登记种植总数
+	// map.putAll(co_opManageMapper.queryAssistantNum(coop_ID)); // 合作社助手总数
+	// map.putAll(co_opManageMapper.queryCo_opNoticeNum(coop_ID));
+	// return ResultUtil.success(map);
+	// }
 
 	@Override
 	public Result<Object> getCo_opInfo(Map params) {
 
-		List<Map> list=new ArrayList<Map>();
-		list=co_opManageMapper.queryCo_opByCondition(params);
-		if (list.size()>0){
-			for (Map obj:list ) {
-				obj.putAll(co_opManageMapper.queryCo_opMemberNum((int)obj.get("coopID")));
-				obj.putAll(co_opManageMapper.queryPlantNum((int)obj.get("coopID")));
-				obj.putAll(co_opManageMapper.queryAssistantNum((int)obj.get("coopID")));
-				obj.putAll(co_opManageMapper.queryCo_opNoticeNum((int)obj.get("coopID")));
+		List<Map> list = new ArrayList<Map>();
+		list = co_opManageMapper.queryCo_opByCondition(params);
+		if (list.size() > 0) {
+			for (Map obj : list) {
+				obj.putAll(co_opManageMapper.queryCo_opMemberNum((int) obj.get("coopID")));
+				obj.putAll(co_opManageMapper.queryPlantNum((int) obj.get("coopID")));
+				obj.putAll(co_opManageMapper.queryAssistantNum((int) obj.get("coopID")));
+				obj.putAll(co_opManageMapper.queryCo_opNoticeNum((int) obj.get("coopID")));
 			}
 			return ResultUtil.success(list);
-		}else {
+		} else {
 			return ResultUtil.success();
 		}
 
 	}
 
-
 	@Override
 	@Transactional
 	public Result<Object> updateCo_op(Co_op tempData) {
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list = co_opManageMapper.queryCoopInfo(tempData.getId());
+		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性
 
-		if ( "0".equals(tempData.getIs_audit())){ // 合作社审核通过时  给用户添加合作社角色属性
-
-			int i=co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
-			if (i>0){
+			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
+			if (i > 0) {
+				Map map = new HashMap<>();
+				map.put("object_id", tempData.getId());
+				map.put("notice_content", "您申请的" + list.get(0).get("name").toString() + "审核通过，可以添加和管理您的社员。");
+				map.put("notice_receiver", tempData.getOfficial_user_id());
+				co_opManageMapper.addCoopAduitNotice(map);
 				return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
-			}else {
-				return ResultUtil.error(500,"添加角色属性属性失败");
+			} else {
+				return ResultUtil.error(500, "添加角色属性属性失败");
 			}
-		}else {
+		} else {
+			Map map = new HashMap<>();
+			map.put("object_id", tempData.getId());
+			map.put("notice_content", "您申请的" + list.get(0).get("name").toString() + "审核不通过，原因是"
+					+ list.get(0).get("comment").toString() + "。");
+			map.put("notice_receiver", tempData.getOfficial_user_id());
+			co_opManageMapper.addCoopAduitNotice(map);
 			return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 		}
 	}
@@ -114,9 +124,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Transactional
 	public Result<Object> addCo_opMember(Co_op_Member tempData) {
 		// 查询所有品种信息
-		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
+		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
 
-		//根据tel 判断是否为平台用户   判断是否已经是当前合作社社员了（不允许重复添加）
+		// 根据tel 判断是否为平台用户 判断是否已经是当前合作社社员了（不允许重复添加）
 		Map map = new HashMap();
 		String tel = tempData.getTelephone();
 		map = co_opManageMapper.queryUserID(tel);
@@ -125,56 +135,58 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		}
 
 		// 判断是否已经是合作社成员了
-		Map isCoopMember=co_opManageMapper.queryIsAlreadyCoopMember(tempData.getCoop_id(),tel);
-		if (Integer.parseInt(isCoopMember.get("isCoopMember").toString())>0){
-			return ResultUtil.error(500,"该用户已经是合作社成员了");
+		Map isCoopMember = co_opManageMapper.queryIsAlreadyCoopMember(tempData.getCoop_id(), tel);
+		if (Integer.parseInt(isCoopMember.get("isCoopMember").toString()) > 0) {
+			return ResultUtil.error(500, "该用户已经是合作社成员了");
 		}
 
+		if (tempData.getAssistant() != null && tempData.getAssistant() != "") { // 后台管理新增社员时可以指定是否为技术员
 
-		if (tempData.getAssistant()!=null && tempData.getAssistant()!=""){  // 后台管理新增社员时可以指定是否为技术员
-
-			if ("0".equals(tempData.getAssistant())){ //新增的社员被指定为技术员   这里为该社员添加技术员身份(注意技术员必须为平台用户 技术员只能属于一个合作社)
+			if ("0".equals(tempData.getAssistant())) { // 新增的社员被指定为技术员
+														// 这里为该社员添加技术员身份(注意技术员必须为平台用户
+														// 技术员只能属于一个合作社)
 
 				if (map != null) {
 
-					Map isAlreadyAssistantOtherCoopMap=co_opManageMapper.queryIsAlreadyAssistantOtherCoop((int)map.get("id"));
+					Map isAlreadyAssistantOtherCoopMap = co_opManageMapper
+							.queryIsAlreadyAssistantOtherCoop((int) map.get("id"));
 
-					int num=Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
+					int num = Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
 
-					if (num>0){
-						return ResultUtil.error(500,"该用户已经是其它合作社的技术员了");
+					if (num > 0) {
+						return ResultUtil.error(500, "该用户已经是其它合作社的技术员了");
 					}
 
-					//为该合作社成员添加技术员角色  先删再插入
-					int i=co_opManageMapper.deleteRole((Integer) map.get("id"),4);
-					i=co_opManageMapper.insertRole((Integer) map.get("id"),4);
+					// 为该合作社成员添加技术员角色 先删再插入
+					int i = co_opManageMapper.deleteRole((Integer) map.get("id"), 4);
+					i = co_opManageMapper.insertRole((Integer) map.get("id"), 4);
 
-				}else {
-					return ResultUtil.error(500,"技术员必须为本平台用户");
+				} else {
+					return ResultUtil.error(500, "技术员必须为本平台用户");
 				}
 
 			}
-		}else { // APP段新增社员时没有指定是否技术员  默认不是技术员
-			tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
+		} else { // APP段新增社员时没有指定是否技术员 默认不是技术员
+			tempData.setAssistant("1"); // 助手（技术员）标识 0 是 1 不是
 		}
 
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
-		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(),categroyList));
+		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(), categroyList));
 
-		int i=co_opManageMapper.insertCo_opMember(tempData);
-		if (i>0){
-			co_opManageMapper.updateCoopTotalAreaAdd(tempData.getCoop_id(),tempData.getPlant_area());
+		int i = co_opManageMapper.insertCo_opMember(tempData);
+		if (i > 0) {
+			co_opManageMapper.updateCoopTotalAreaAdd(tempData.getCoop_id(), tempData.getPlant_area());
 		}
 		return ResultUtil.success(i);
 	}
 
 	@Override
 	public Result<Object> getCo_opMember(int ID) {
-		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
+		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
 
-		Map temp=co_opManageMapper.queryCo_opMember(ID);
+		Map temp = co_opManageMapper.queryCo_opMember(ID);
 
-		temp.put("plant_cat_id",ExchangeCategroyNameID.IDToName(temp.get("plant_cat_id").toString(),categroyList));
+		temp.put("plant_cat_id", ExchangeCategroyNameID.IDToName(temp.get("plant_cat_id").toString(), categroyList));
 
 		return ResultUtil.success(temp);
 	}
@@ -185,7 +197,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		tempData.setId(id);
 		tempData.setState("1"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		int i = co_opManageMapper.updateCo_opMember(tempData);
-		if (i>0){
+		if (i > 0) {
 			co_opManageMapper.updateCoopTotalAreaReduce(id);
 		}
 		return ResultUtil.success(co_opManageMapper.updateCo_opMember(tempData));
@@ -195,30 +207,31 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Transactional
 	public Result<Object> updateCo_opMember(Co_op_Member tempData) {
 
-		//先查询该社员之前的详细信息
-		Map coopMemberInfo=co_opManageMapper.queryCo_opMember(tempData.getId());
+		// 先查询该社员之前的详细信息
+		Map coopMemberInfo = co_opManageMapper.queryCo_opMember(tempData.getId());
 
-		if (tempData.getAssistant()!=null){
+		if (tempData.getAssistant() != null) {
 
-			if ("0".equals(tempData.getAssistant())){ // 社员变更为技术员时  要判断其是不是平台用户   是否是其它合作社的技术员
-				if (coopMemberInfo.get("user_id") !=null && coopMemberInfo.get("user_id") !=""){
+			if ("0".equals(tempData.getAssistant())) { // 社员变更为技术员时 要判断其是不是平台用户
+														// 是否是其它合作社的技术员
+				if (coopMemberInfo.get("user_id") != null && coopMemberInfo.get("user_id") != "") {
 
-					Map isAlreadyAssistantOtherCoopMap=
-							co_opManageMapper.queryIsAlreadyAssistantOtherCoop((int)coopMemberInfo.get("user_id"));
-					int num=Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
-					if (num>0){
-						return ResultUtil.error(500,"该用户已经是其它合作社的技术员了");
+					Map isAlreadyAssistantOtherCoopMap = co_opManageMapper
+							.queryIsAlreadyAssistantOtherCoop((int) coopMemberInfo.get("user_id"));
+					int num = Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
+					if (num > 0) {
+						return ResultUtil.error(500, "该用户已经是其它合作社的技术员了");
 					}
 
-					//为该合作社成员添加技术员角色  先删再插入
-					int i=co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"),4);
-					i=co_opManageMapper.insertRole((Integer) coopMemberInfo.get("user_id"),4);
+					// 为该合作社成员添加技术员角色 先删再插入
+					int i = co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"), 4);
+					i = co_opManageMapper.insertRole((Integer) coopMemberInfo.get("user_id"), 4);
 
-				}else {
-					return ResultUtil.error(500,"技术员必须为本平台用户");
+				} else {
+					return ResultUtil.error(500, "技术员必须为本平台用户");
 				}
-			}else {
-				co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"),4);
+			} else {
+				co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"), 4);
 			}
 		}
 
@@ -234,7 +247,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 	@Override
 	public Result<Object> queryAssistant(int coop_id) {
-		List<Map> list1=new ArrayList<Map>();
+		List<Map> list1 = new ArrayList<Map>();
 		list1.addAll(co_opManageMapper.queryAssistant(coop_id));
 		list1.addAll(co_opManageMapper.queryNotAssistant(coop_id));
 		return ResultUtil.success(list1);
@@ -254,12 +267,12 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Override
 	public Result<Object> getCoopMemberList2(int coop_id) {
 		// 所有品种信息
-		List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
+		List<Map> allCategroyInfo = fieldManageMapper.queryAllCategroy();
 
-		List<Map> coopMemberList=co_opManageMapper.queryCoopMemberList2(coop_id);
-		for (Map obj:coopMemberList
-			 ) {
-			obj.put("plant_cat_id",ExchangeCategroyNameID.IDToName(obj.get("plant_cat_id").toString(),allCategroyInfo));
+		List<Map> coopMemberList = co_opManageMapper.queryCoopMemberList2(coop_id);
+		for (Map obj : coopMemberList) {
+			obj.put("plant_cat_id",
+					ExchangeCategroyNameID.IDToName(obj.get("plant_cat_id").toString(), allCategroyInfo));
 		}
 
 		return ResultUtil.success(coopMemberList);
@@ -284,14 +297,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	}
 
 	@Override
-	public Result<Object> addNotice(String allUserId, String msg, String coopID, int publishUserID, String picture_url) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Calendar cal = Calendar.getInstance();
-		String time = sdf.format(cal.getTime());
+	public Result<Object> addNotice(String allUserId, String msg, String coopID, int publishUserID,
+			String picture_url) {
 		Map map = new HashMap<>();
 		map.put("allUserId", allUserId);
 		map.put("msg", msg);
-		map.put("time", time);
 		map.put("object_id", coopID);
 		map.put("publish_user_id", publishUserID);
 		map.put("picture_url", picture_url);

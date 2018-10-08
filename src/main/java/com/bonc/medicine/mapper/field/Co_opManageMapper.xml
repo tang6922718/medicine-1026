@@ -192,6 +192,9 @@
 		WHERE id = #{id}
 	</update>
 
+	<select id="queryCoopInfo" resultType="Map" parameterType="Integer">
+		select * from field_coop where id = #{id}
+	</select>
 
 	<update id="updateCo_opMember" parameterType="com.bonc.medicine.entity.field.Co_op_Member">
 		UPDATE field_coop_member SET state = #{state}
@@ -247,7 +250,14 @@
 		insert
 		into common_notice
 		(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state,picture_url)
-		values('2',#{object_id},#{msg},#{publish_user_id},#{allUserId},#{time},'1','1',#{picture_url})
+		values('2',#{object_id},#{msg},#{publish_user_id},#{allUserId},now(),'1','1',#{picture_url})
+	</insert>
+	
+	<insert id="addCoopAduitNotice" parameterType="Map">
+		insert
+		into common_notice
+		(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
 	</insert>
 
 	<update id="noticeState" parameterType="Map">
