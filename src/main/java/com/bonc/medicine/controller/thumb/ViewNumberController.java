@@ -63,15 +63,7 @@ public class ViewNumberController {
     }
 
 
-    /**
-    * @Description:
-    * @Param: []
-    * @return: com.bonc.medicine.entity.Result
-     *
-    * @Author: hejiajun
-    * @Date: 2018/10/1
-    */
-    
+
     /**
     * @Description:后台管理直播，是视频，线下培训详情页面的数字统计接口
     * @Param: [videoIds:必须--可以传入多个 多个用“,”分开,  英文的逗号哦
