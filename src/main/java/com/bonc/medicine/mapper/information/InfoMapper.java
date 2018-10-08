@@ -45,7 +45,6 @@ public interface InfoMapper {
     @Insert("insert into km_audit(title,km_type,object_id,status,fail_opinion) values (#{title},#{cat_code},#{id},#{audit_result},#{audit_info})")
     int infoAuditInsert(Map<String, Object> map);
 
-
     @Select("select * from info_basic where cat_code=#{cat_code}")
     List<Map> infoClass(Map<String, Object> map);
 
@@ -56,12 +55,8 @@ public interface InfoMapper {
     @Update("update info_basic set read_count=read_count+1 where id =#{id}")
     int updateReadCount(Map map);
 
-
-
-
     @Update("update info_basic  set  is_display='0' where id =#{id}")
     int delInfo(Map<String, Object> map);
-
 
     @Update("update info_basic  set  status='0' where id =#{id}")
     int infoRepeal(String id);

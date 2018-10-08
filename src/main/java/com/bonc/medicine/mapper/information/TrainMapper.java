@@ -305,18 +305,25 @@ public interface TrainMapper {
                 switch (Integer.valueOf(String.valueOf(map.get("object_type")))) {
                     case 1:
                         FROM("train_live");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
+                        }
                         break;
                     case 2:
-                        FROM("train_video_course");
+                        FROM("train_offline");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
+                        }
                         break;
                     default:
                         FROM("train_live");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
+                        }
                         break;
                 }
 //                where id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})
-                if (map.get("user_id") != null && map.get("object_type") != null) {
-                    WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
-                }
+
 
             }}.toString();
         }

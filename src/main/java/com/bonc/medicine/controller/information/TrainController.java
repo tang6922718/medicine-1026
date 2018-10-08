@@ -151,7 +151,6 @@ public class TrainController {
         return ResultUtil.success(trainService.selectApply(map));
     }
 
-
     /**
      * @param map
      * @return
