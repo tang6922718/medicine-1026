@@ -116,7 +116,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		// 查询所有品种信息
 		List<Map> categroyList=fieldManageMapper.queryAllCategroy();
 
-		//根据tel 判断是否为平台用户
+		//根据tel 判断是否为平台用户   判断是否已经是当前合作社社员了（不允许重复添加）
 		Map map = new HashMap();
 		String tel = tempData.getTelephone();
 		map = co_opManageMapper.queryUserID(tel);
@@ -124,7 +124,12 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			tempData.setUser_id(String.valueOf(map.get("id")));
 		}
 
-		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
+		// 判断是否已经是合作社成员了
+		Map isCoopMember=co_opManageMapper.queryIsAlreadyCoopMember(tempData.getCoop_id(),tel);
+		if (Integer.parseInt(isCoopMember.get("isCoopMember").toString())>0){
+			return ResultUtil.error(500,"该用户已经是合作社成员了");
+		}
+
 
 		if (tempData.getAssistant()!=null && tempData.getAssistant()!=""){  // 后台管理新增社员时可以指定是否为技术员
 
@@ -153,7 +158,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			tempData.setAssistant("1"); // 助手（技术员）标识    0 是     1 不是
 		}
 
-
+		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		tempData.setPlant_cat_id(ExchangeCategroyNameID.NameToId(tempData.getPlant_cat_id(),categroyList));
 
 		int i=co_opManageMapper.insertCo_opMember(tempData);

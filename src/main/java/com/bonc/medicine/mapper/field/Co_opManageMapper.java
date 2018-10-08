@@ -84,4 +84,6 @@ public interface Co_opManageMapper {
     public int insertRole(@Param("user_id") int user_id,@Param("role_id") int role_id);  // 插入指定用户指定角色
 
     public Map queryIsAlreadyAssistantOtherCoop(int user_ID); // 查询用户是否已经是其它合作社的技术员
+
+    public Map queryIsAlreadyCoopMember(@Param("coop_id") int coop_id, @Param("telephone") String telephone); // 根据电话号码和合作社ID查询用户是否已经是合作社成员
 }
