@@ -3,6 +3,7 @@ package com.bonc.medicine.mapper.information;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.jdbc.SQL;
 
+import javax.management.ObjectName;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public interface TrainMapper {
 
     @InsertProvider(type = TrainDynaSqlProvider.class,
             method = "createVideo")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int createVideo(Map<String, Object> map);
 
     @InsertProvider(type = TrainDynaSqlProvider.class,
@@ -23,7 +25,7 @@ public interface TrainMapper {
     int addComment(Map<String, Object> map);
 
 
-    @Select("select  t.*, u.name, ifnull(u.head_portrait,'1537932363932658') head_portrait from train_interact t inner join common_user u on t.user_id = u.id where  object_id=1  ORDER BY  interact_time limit 0,100")
+    @Select("select  t.*, u.name, ifnull(u.head_portrait,'1537932363932658') head_portrait from train_interact t inner join common_user u on t.user_id = u.id where  object_id=#{object_id}  ORDER BY  interact_time limit 0,100")
     List<Map> selectComment(Map<String, Object> map);
 
 
@@ -310,10 +312,11 @@ public interface TrainMapper {
                         }
                         break;
                     case 2:
-                        FROM("train_offline");
+                        FROM("(SELECT * FROM train_offline");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
-                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
+                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type}))a");
                         }
+                        LEFT_OUTER_JOIN("train_offline_video b ON a.id= b.train_id");
                         break;
                     default:
                         FROM("train_live");
