@@ -282,16 +282,14 @@
 	<select id="queryInteractTimes" parameterType="String"
 		resultType="Map">
 		SELECT
-		tii.user_id,
-		count( tii.user_id ) interact_number
+			tii.from_uid as user_id,
+			count( tii.from_uid ) interact_number
 		FROM
-		train_interact tii
-		LEFT JOIN spec_info ssi ON tii.object_id = ssi.spec_id
+			common_comment tii
+		LEFT JOIN spec_info ssi ON tii.from_uid = ssi.spec_id
 		WHERE
-		tii.user_id IN ( ${proId} )
+			tii.from_uid IN ( ${proId} )
 		GROUP BY
-		tii.user_id
-
-
+			tii.from_uid
 	</select>
 </mapper>

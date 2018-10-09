@@ -41,7 +41,9 @@ public class NoticeController {
 		if (str_role_id.contains("5")) {
 			notice_role_type += "3,";
 		}
-		notice_role_type = notice_role_type.substring(0, notice_role_type.length() - 1);
+		if(notice_role_type != ""){
+			notice_role_type.substring(0, notice_role_type.length() - 1);
+		}
 		String []  notice_role_type_array =  notice_role_type.split(",");
 		list = noticeService.systemInfo(user_id,notice_role_type_array);
 		return ResultUtil.success(list);

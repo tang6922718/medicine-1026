@@ -10,9 +10,12 @@ import com.bonc.medicine.service.management.CollectionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.Signature;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -294,8 +297,12 @@ public class TrainController {
      * @description 查询专家列表 （在创建培训的时候用）
      */
     @RequestMapping("/selectSpecialist")
-    public Result selectSpecialist() {
-        return ResultUtil.success(trainService.selectSpecialist());
+    public Result selectSpecialist(@RequestParam(required = false) String specId) {
+        Integer spec=null;
+        if (!StringUtils.isEmpty(specId)) {
+            spec = Integer.parseInt(specId);
+        }
+        return ResultUtil.success(trainService.selectSpecialist(spec));
     }
 
 

@@ -118,8 +118,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List selectSpecialist() {
-        return trainMapper.selectSpecialist();
+    public List selectSpecialist(Integer specId) {
+        return trainMapper.selectSpecialist(specId);
     }
 
     @Override
