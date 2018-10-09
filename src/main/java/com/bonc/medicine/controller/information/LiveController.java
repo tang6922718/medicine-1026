@@ -51,7 +51,7 @@ public class LiveController {
     @RequestMapping("/createLive")
     @com.bonc.medicine.annotation.Authorization
     public Result createLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
-        map.putIfAbsent("user_id",user_id);
+        map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(liveService.createLive(map));
     }
 
@@ -65,13 +65,22 @@ public class LiveController {
         for (Map<String, String> map1 : lists) {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
-        return ResultUtil.success(liveService.selectAllLive(map));
+        List<Map<String, Object>> list = liveService.selectAllLive(map);
+        Map map2 = new HashMap();
+        map2.put("object_type", "2");
+        for (Map map1 : list) {
+            map2.put("object_id", map1.get("id"));
+            map1.put("applyNum", trainService.selectApply(map2));
+        }
+
+        return ResultUtil.success(list);
     }
 
     /**
      * @param id
      * @return
      * @description 开启录制
+     *
      */
     @RequestMapping("/openRecord")
     public Result openRecord(@RequestParam String id) {

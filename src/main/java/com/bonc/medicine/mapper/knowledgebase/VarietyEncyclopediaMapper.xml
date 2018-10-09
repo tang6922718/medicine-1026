@@ -95,7 +95,7 @@
 
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">
 		SELECT
-			id,
+			a.id,
 			variety_id,
 			synopsis,
 			chinese_name,
@@ -120,10 +120,12 @@
 			variety,
 			cultivation_tech,
 			main_value,
-			composition
-		FROM km_variety_encyclopedia
+			composition,
+			b.fail_opinion
+		FROM km_variety_encyclopedia a
+		LEFT JOIN km_audit b ON a.id = b.object_id  AND b.km_type = 1
 		WHERE
-		 	id = #{id}
+		 	a.id = #{id}
 	</select>
 
 	<select id="breedInfoByVariety" parameterType="String" resultType="Map">

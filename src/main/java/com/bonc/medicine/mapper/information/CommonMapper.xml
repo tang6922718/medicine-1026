@@ -16,4 +16,15 @@
             ${where}
         </if>
     </select>
+
+    <update id="updateTrainStatus">
+        UPDATE train_offline  set `status` =
+        (case WHEN str_to_date(train_time,'%Y-%m-%d')<![CDATA[ < ]]> str_to_date(CURDATE(),'%Y-%m-%d')
+        THEN '2'
+        WHEN str_to_date(train_time,'%Y-%m-%d')= str_to_date(CURDATE(),'%Y-%m-%d')
+        THEN '1'
+        WHEN str_to_date(train_time,'%Y-%m-%d')<![CDATA[ > ]]> str_to_date(CURDATE(),'%Y-%m-%d')
+        THEN '0'
+        END);
+    </update>
 </mapper>

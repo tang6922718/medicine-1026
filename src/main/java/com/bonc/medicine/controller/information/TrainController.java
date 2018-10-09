@@ -6,15 +6,20 @@ import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.TrainService;
 import com.bonc.medicine.service.knowledgebase.AuditService;
+import com.bonc.medicine.service.management.CollectionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.Signature;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -30,6 +35,9 @@ public class TrainController {
     @Autowired
     AuditService auditService;
 
+    @Autowired
+    CollectionService collectionService;
+
     /**
      * @param map
      * @return
@@ -40,7 +48,7 @@ public class TrainController {
 //        int count = trainService.createTrain(map);
 //        map.put("km_type", "5");
 //        count += auditService.addAudit(map);
-        return ResultUtil.success( trainService.createTrain(map));
+        return ResultUtil.success(trainService.createTrain(map));
     }
 
     /**
@@ -107,7 +115,7 @@ public class TrainController {
      * @description 视频课程列表(视频课程列表)(通过id查询 视频课程详情) (查询)  不传全部，类别查询，id查询都可以
      */
     @RequestMapping("/selectCourseList")
-    public Result selectCourseList(@RequestBody(required = false) Map<String, Object> map) {
+    public Result selectCourseList(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
 
         if (null != map.get("id")) {
             Map<String, String> numberMap = new HashMap();
@@ -115,7 +123,15 @@ public class TrainController {
             numberMap.put("objectType", "4");
             viewNumberService.addOrUpdateViewNumberCord(numberMap);
         }
-        return ResultUtil.success(trainService.selectCourseList(map));
+        List<Map> list = trainService.selectCourseList(map);
+        Map map2 = new HashMap();
+        map2.put("objectType", "4");
+        for (Map map1 : list) {
+            map2.put("objectId", String.valueOf(map1.get("id")));
+            map1.put("viewNum", viewNumberService.queryViewNumber(map2));
+            map1.put("isCollect", collectionService.isCollect("5", String.valueOf(map1.get("id")), user_id));
+        }
+        return ResultUtil.success(list);
     }
 
     /**
@@ -147,7 +163,8 @@ public class TrainController {
      * @description 查询报名数量(根据object_id)
      */
     @RequestMapping("/selectApplyNum")
-    public Result selectApplyNum(@RequestBody(required = false) Map<String, Object> map) {
+    public Result selectApplyNum(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
+        map.put("user_id", user_id);
         return ResultUtil.success(trainService.selectApply(map));
     }
 
@@ -161,7 +178,6 @@ public class TrainController {
         map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.selectTrainApply(map));
     }
-
 
     /**
      * @param map
@@ -281,9 +297,21 @@ public class TrainController {
      * @description 查询专家列表 （在创建培训的时候用）
      */
     @RequestMapping("/selectSpecialist")
-    public Result selectSpecialist() {
-        return ResultUtil.success(trainService.selectSpecialist());
+    public Result selectSpecialist(@RequestParam(required = false) String specId) {
+        Integer spec=null;
+        if (!StringUtils.isEmpty(specId)) {
+            spec = Integer.parseInt(specId);
+        }
+        return ResultUtil.success(trainService.selectSpecialist(spec));
     }
 
 
+    /**
+     * @return
+     * @description 返回视频热度前5
+     */
+    @RequestMapping("/selectVideoHot")
+    public Result selectVideoHot() {
+        return ResultUtil.success(trainService.selectVideoHot());
+    }
 }

@@ -149,10 +149,9 @@ public interface LiveMapper {
                 if(map.get("id") != null && map.get("id") != ""){
                     WHERE("id=#{id}");
                 }
-
-
                 WHERE("is_display='1'");
-            }}.toString()/*+"  limit "+start+","+end*/;
+                ORDER_BY("create_time desc");
+            }}.toString();
             System.out.println(sql);
             return sql;
 

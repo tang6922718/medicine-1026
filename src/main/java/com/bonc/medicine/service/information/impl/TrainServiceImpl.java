@@ -1,5 +1,6 @@
 package com.bonc.medicine.service.information.impl;
 
+import com.bonc.medicine.mapper.information.CommonMapper;
 import com.bonc.medicine.mapper.information.TrainMapper;
 import com.bonc.medicine.service.information.TrainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class TrainServiceImpl implements TrainService {
     @Autowired(required = false)
     TrainMapper trainMapper;
 
+
+
+    @Autowired(required = false)
+    CommonMapper commonMapper;
     @Override
     public Map queryAppointmentNumber(Map<String, String> map) {
         return trainMapper.queryAppointmentNumber(map);
@@ -113,12 +118,22 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List selectSpecialist() {
-        return trainMapper.selectSpecialist();
+    public List selectSpecialist(Integer specId) {
+        return trainMapper.selectSpecialist(specId);
     }
 
     @Override
     public int selectApply(Map<String, Object> map) {
         return trainMapper.selectApply(map);
+    }
+
+    @Override
+    public List<Map> selectVideoHot() {
+        return trainMapper.selectVideoHot();
+    }
+
+    @Override
+    public int updateTrainStatus() {
+        return commonMapper.updateTrainStatus();
     }
 }

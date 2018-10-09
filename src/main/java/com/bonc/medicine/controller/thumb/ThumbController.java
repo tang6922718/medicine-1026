@@ -30,6 +30,11 @@ public class ThumbController {
     /**
     * @Description: 点赞
     * @Param: [param]
+     *
+     *          giveThumbId
+     *         acceptThumbId
+     *         type
+     *
     * @return: com.bonc.thumb.entity.Result
     * @Author: hejiajun
     * @Date: 2018/9/5 
