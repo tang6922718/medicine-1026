@@ -88,13 +88,7 @@
 
 	<select id="infoBasicDetail" parameterType="String" resultType="Map">
 		SELECT
-			a.id,
-			a.title,
-			b.cat_name,
-			a.content,
-			a.img_url,
-			a.read_count,
-			a.publish_date
+			*
 		FROM
 			info_basic a LEFT JOIN info_category b ON a.cat_code = b.cat_code
 	 	WHERE id = #{id}
