@@ -193,7 +193,8 @@
 		cc.reply_time DESC
 		LIMIT 1
 		) common_id,
-		a.id as id
+		a.id as id,
+		a.issue_user_id
 		FROM
 		spec_issue a
 		WHERE
@@ -208,7 +209,7 @@
 		)
 		temp
 		LEFT JOIN
-		common_user cu ON temp.from_uid = cu.id
+		common_user cu ON temp.issue_user_id = cu.id
 		LEFT JOIN
 		common_user_care_varieties_r ccv on cu.id=ccv.user_id
 		LEFT JOIN
