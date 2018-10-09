@@ -6,8 +6,8 @@
 	<insert id="addBasic" parameterType="com.bonc.medicine.entity.user.Basicinfo"
 		useGeneratedKeys="true" keyProperty="id">
 		Insert into common_user
-		(telephone,name,password,sex,age,address,log_time,status)
-		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now(),'1');
+		(telephone,name,password,sex,age,address,log_time,status,head_portrait)
+		values(#{telephone},#{name},#{password},#{sex},#{age},#{address},now(),'1','1537932340623980');
 	</insert>
 
 	<select id="getTel" parameterType="Map" resultType="Integer">
