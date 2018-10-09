@@ -210,7 +210,7 @@ public interface TrainMapper {
         }
 
         public String selectCourseList(final Map<String, Object> map) {
-            return new SQL() {{
+            String  sql=new SQL() {{
                 SELECT("*");
                 FROM("train_video_course");
                 if (map.get("publish_time") != null && map.get("publish_time") != "") {
@@ -219,7 +219,6 @@ public interface TrainMapper {
                 if (map.get("title") != null && map.get("title") != "") {
                     WHERE("title  like CONCAT('%',#{title},'%')");
                 }
-
                 if (map.get("video_type") != null) {
                     WHERE("video_type=#{video_type}");
                 }
@@ -228,6 +227,9 @@ public interface TrainMapper {
                 }
                 WHERE("status='0'");
             }}.toString();
+            sql = "select b.*,a.* from (" + sql+") a inner join km_audit b on a.id=b.object_id and b.km_type='5'";
+            System.out.println(sql);
+            return sql;
         }
 
         public String selectTrainList(final Map<String, Object> map) {
