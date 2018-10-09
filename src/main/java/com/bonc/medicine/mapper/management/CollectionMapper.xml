@@ -22,7 +22,7 @@
 	</insert>
 	
 	<select id="searchInfoByCollect" parameterType="String" resultType="java.util.Map">
-		SELECT
+		(SELECT
 			a.id,
 			a.title,
 			a.cat_code,
@@ -33,7 +33,11 @@
 		LEFT JOIN info_category b ON a.cat_code = b.cat_code
 		WHERE a.id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=1 AND user_id = #{user_id})
 		ORDER BY
-			a.publish_date DESC
+			a.publish_date DESC)
+		UNION
+		(SELECT a.id,a.title,4 AS cat_cade, '文章' AS cat_name,a.publish_time AS publish_date FROM spec_article a WHERE a.id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=2 AND user_id = #{user_id})
+		ORDER BY
+		a.publish_time DESC)
 	</select>
 
 	<select id="searchSupplyByCollect" parameterType="String" resultType="java.util.Map">
