@@ -43,7 +43,7 @@ public interface TrainService {
 
     int editVideoCourse(Map<String,Object> map);
 
-    List<Map> selectSpecialist();
+    List<Map> selectSpecialist(Integer specId);
 
     int selectApply(Map<String,Object> map);
 

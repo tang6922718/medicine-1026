@@ -97,16 +97,21 @@ public interface TrainMapper {
             method = "editVideoCourse")
     int editVideoCourse(Map<String, Object> map);
 
-
-    @Select("select spec_id,name  from  spec_info")
+    //select spec_id,name  from  spec_info
+    @Select({"<script>",
+            "SELECT * FROM `spec_info` where 1=1",
+            "<when test='specId!=null' >",
+            "AND spec_id = #{specId}",
+            "</when>",
+            "</script>"})
     @ResultType(List.class)
-    List<Map> selectSpecialist();
+    List<Map> selectSpecialist(@Param("specId") Integer specId);
 
 
     //查询是否报名
     @SelectProvider(type = TrainDynaSqlProvider.class,
             method = "selectApply")
-    int selectApply(Map<String,Object> map);
+    int selectApply(Map<String, Object> map);
 
     @Select("SELECT * FROM train_video_course a INNER JOIN (select object_id,view_num\n" +
             "from\n" +
@@ -116,7 +121,6 @@ public interface TrainMapper {
             "LIMIT 0,5) b ON a.id = b.object_id")
     @ResultType(List.class)
     List<Map> selectVideoHot();
-
 
 
     int updateTrainStatus();
