@@ -7,8 +7,8 @@
 	</insert>
 	
 	<insert id="insertReply" parameterType="java.util.Map">
-		insert into common_comment (comment_id,reply_oid,content,from_uid,to_uid,reply_time) 
-		values (#{comment_id},#{reply_oid},#{content},#{from_uid},#{to_uid},#{reply_time})
+		insert into common_comment (object_id,object_type,comment_id,reply_oid,content,from_uid,to_uid,reply_time) 
+		values (#{object_id},#{object_type},#{comment_id},#{reply_oid},#{content},#{from_uid},#{to_uid},#{reply_time})
 	</insert>
 	<update id="updateReplyStatus" parameterType="java.util.Map">
 		update spec_issue set  issue_status='1' where id = #{object_id}

@@ -37,6 +37,9 @@
 		<if test="start_time != null and start_time != '' and (end_time == null or end_time == '')">
 			and a.upload_time &gt;= #{start_time}
 		</if>
+		<if test="status != null and status != '' ">
+			and a.status = #{status}
+		</if>
 		ORDER BY a.upload_time
 	</select>
 

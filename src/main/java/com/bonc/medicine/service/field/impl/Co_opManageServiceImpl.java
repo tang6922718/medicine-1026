@@ -95,11 +95,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	public Result<Object> updateCo_op(Co_op tempData) {
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		list = co_opManageMapper.queryCoopInfo(tempData.getId());
 		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性
 
 			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
 			if (i > 0) {
+				list = co_opManageMapper.queryCoopInfo(tempData.getId());
 				Map map = new HashMap<>();
 				map.put("object_id", tempData.getId());
 				map.put("notice_content", "您申请的" + list.get(0).get("name").toString() + "审核通过，可以添加和管理您的社员。");
@@ -109,13 +109,17 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			} else {
 				return ResultUtil.error(500, "添加角色属性属性失败");
 			}
-		} else {
+		} else if("2".equals(tempData.getIs_audit())) {
+			co_opManageMapper.updateCo_op(tempData);
+			list = co_opManageMapper.queryCoopInfo(tempData.getId());
 			Map map = new HashMap<>();
 			map.put("object_id", tempData.getId());
 			map.put("notice_content", "您申请的" + list.get(0).get("name").toString() + "审核不通过，原因是"
 					+ list.get(0).get("comment").toString() + "。");
 			map.put("notice_receiver", tempData.getOfficial_user_id());
-			co_opManageMapper.addCoopAduitNotice(map);
+
+			return ResultUtil.success(co_opManageMapper.addCoopAduitNotice(map));
+		}else {
 			return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 		}
 	}

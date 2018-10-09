@@ -227,7 +227,7 @@ public interface TrainMapper {
         }
 
         public String selectCourseList(final Map<String, Object> map) {
-            return new SQL() {{
+            String  sql=new SQL() {{
                 SELECT("*");
                 FROM("train_video_course");
                 if (map.get("publish_time") != null && map.get("publish_time") != "") {
@@ -236,7 +236,6 @@ public interface TrainMapper {
                 if (map.get("title") != null && map.get("title") != "") {
                     WHERE("title  like CONCAT('%',#{title},'%')");
                 }
-
                 if (map.get("video_type") != null) {
                     WHERE("video_type=#{video_type}");
                 }
@@ -246,6 +245,9 @@ public interface TrainMapper {
                 WHERE("status='0'");
                 ORDER_BY("publish_time desc");
             }}.toString();
+            sql = "select b.*,a.* from (" + sql+") a inner join km_audit b on a.id=b.object_id and b.km_type='5'";
+            System.out.println(sql);
+            return sql;
         }
 
         public String selectTrainList(final Map<String, Object> map) {
@@ -330,11 +332,11 @@ public interface TrainMapper {
                         }
                         break;
                     case 2:
-                        FROM("(SELECT * FROM train_offline");
-                        if (map.get("user_id") != null && map.get("object_type") != null) {
-                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type}))a");
-                        }
+                        FROM("train_offline a");
                         LEFT_OUTER_JOIN("train_offline_video b ON a.id= b.train_id");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("a.id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
+                        }
                         break;
                     default:
                         FROM("train_live");

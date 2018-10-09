@@ -75,6 +75,7 @@ public interface UserManagerMapper {
 	public int insertUserCareVariety(List userCareVariety);
 
 	public Map activeDays(String userId);
+	public List<Map<String, Object>> activeDaysForBack(@Param("userId")String userId);
 
 	public List<Map<String, Object>> queryInteractTimes(@Param("proId")String proId);
 

@@ -34,7 +34,7 @@ public interface InfoMapper {
     int addInfo(Map<String, Object> map);
 
 
-    @Select("SELECT * FROM `info_basic` where id=#{id}")
+    @Select("select a.*,b.fail_opinion from (SELECT * FROM `info_basic` where id=#{id} ) a left join km_audit b on a.id=b.object_id and b.km_type='2'")
     @ResultType(Map.class)
     Map infoDetailById(String id);
 

@@ -230,5 +230,19 @@ public class UserManagerController {
 		return ResultUtil.success(userManagerService.activeDays(userId));
 	}
 
+	/**
+	* @Description:  通过userId 获取用户的活跃天数，多个用英文的逗号隔开
+	* @Param: [userId]
+	* @return: com.bonc.medicine.entity.Result
+	* @Author: hejiajun
+	* @Date: 2018/10/9
+	*/
+	@GetMapping("/user/active/day/v2.0")
+	public Result activeDaysForBack (@RequestParam String userId){
+
+		//System.out.println(userId);
+		return ResultUtil.success(userManagerService.activeDaysForBack(userId));
+	}
+
 
 }
