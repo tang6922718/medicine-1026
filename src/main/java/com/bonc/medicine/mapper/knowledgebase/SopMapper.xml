@@ -18,11 +18,12 @@
 	</select>
 
     <select id="getSopPlants" resultType="java.util.Map">
-		SELECT * FROM km_sop_step,km_variety_sop
+		SELECT * FROM km_sop_step,km_variety_sop,km_audit
 		WHERE km_sop_step.sop_id = #{id}
 		AND sop_id =km_variety_sop.id
 		AND km_variety_sop.sop_status=1
 		AND km_sop_step.status=1
+		AND km_audit.object_id = km_variety_sop.id AND km_audit.km_type = 4
         ORDER BY
 		km_sop_step.step_order
     </select>
