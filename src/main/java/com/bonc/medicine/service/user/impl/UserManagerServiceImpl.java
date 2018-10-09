@@ -359,7 +359,7 @@ public class UserManagerServiceImpl implements UserManagerService {
         String [] ids = userId.split(",");
         List<Map<String, Object>> reMap = userManagerMapper.activeDaysForBack(userId);
         List<Map<String, Object>> reListMap = new ArrayList<>();
-        if(null == reMap || null == reMap.get(0) || reMap.get(0).isEmpty()) {
+        if(null == reMap ||reMap.size() == 0 || null == reMap.get(0) || reMap.get(0).isEmpty()) {
             for (String id :ids ){
                 Map<String, Object> mmap = new HashMap<>();
                 mmap.put("user_id", id);
