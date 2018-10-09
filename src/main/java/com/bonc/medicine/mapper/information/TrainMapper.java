@@ -332,11 +332,11 @@ public interface TrainMapper {
                         }
                         break;
                     case 2:
-                        FROM("(SELECT * FROM train_offline");
-                        if (map.get("user_id") != null && map.get("object_type") != null) {
-                            WHERE("id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type}))a");
-                        }
+                        FROM("train_offline a");
                         LEFT_OUTER_JOIN("train_offline_video b ON a.id= b.train_id");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("a.id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})");
+                        }
                         break;
                     default:
                         FROM("train_live");
