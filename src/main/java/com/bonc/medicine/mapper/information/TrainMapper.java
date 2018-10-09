@@ -118,6 +118,10 @@ public interface TrainMapper {
     List<Map> selectVideoHot();
 
 
+
+    int updateTrainStatus();
+
+
     class TrainDynaSqlProvider {
         public String createTrain(final Map<String, Object> map) {
             String sql = new SQL() {{
@@ -236,6 +240,7 @@ public interface TrainMapper {
                     WHERE("id=#{id}");
                 }
                 WHERE("status='0'");
+                ORDER_BY("publish_time desc");
             }}.toString();
         }
 
@@ -254,7 +259,7 @@ public interface TrainMapper {
                 if (map.get("id") != null) {
                     WHERE("a.id=#{id}");
                 }
-
+                ORDER_BY("publish_time desc");
             }}.toString();
         }
 

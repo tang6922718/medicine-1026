@@ -176,7 +176,6 @@ public class TrainController {
         return ResultUtil.success(trainService.selectTrainApply(map));
     }
 
-
     /**
      * @param map
      * @return
@@ -302,12 +301,10 @@ public class TrainController {
 
     /**
      * @return
-     * @description 返回视频热度前6
+     * @description 返回视频热度前5
      */
     @RequestMapping("/selectVideoHot")
     public Result selectVideoHot() {
         return ResultUtil.success(trainService.selectVideoHot());
     }
-
-
 }
