@@ -25,7 +25,7 @@ import java.util.*;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private int OUT_TIME = 30000;
+    private int OUT_TIME = 43200;//设置登陆超时的时间
 
 	@Autowired
 	private RedisService redisService;
@@ -320,9 +320,9 @@ public class UserServiceImpl implements UserService {
         List<Map<String, Object>> reList = new ArrayList<>();
 
         // 如果是APP登陆
-        if(StringUtils.equals("APP", equipment.trim())){
+        if(StringUtils.equals("APP", equipment) || StringUtils.equals("PORTAL", equipment) ){
             reList = userMapper.loginSecond(paramMap);
-        }else if (StringUtils.equals("BACK", equipment.trim())){
+        }else if (StringUtils.equals("BACK", equipment)){
 
             reList = userMapper.backUser(paramMap);
         }
@@ -347,7 +347,9 @@ public class UserServiceImpl implements UserService {
         //user.setPassword(null);
         redisService.set(RedisKeyUtil.getUserInfoKey(token), JsonUtil.getJsonString(user));
         // 5、设置key的过期时间。模拟Session的过期时间。一般半个小时。
-        redisService.expire(RedisKeyUtil.getUserInfoKey(token), OUT_TIME);
+        if(!StringUtils.equals("APP", equipment)){
+            redisService.expire(RedisKeyUtil.getUserInfoKey(token), OUT_TIME);
+        }
         // 6、返回Result包装token。
         Map map = new HashMap();
         map.put("token", token);
