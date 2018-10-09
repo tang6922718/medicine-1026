@@ -156,15 +156,13 @@
 			si.update_time,
 			case when si.head_portrait is null or  si.head_portrait=''
 			then '1537932363932658' else si.head_portrait end as head_portrait,			
-			IFNULL( sis.interact_count, 0 ) AS interact_count,
 			count( cf.id ) AS follow,
 			0 AS is_follow ,
 			'' as sub,
 			'' as cat
 		FROM
 			spec_info si
-			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
-			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id 
+			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id
 			AND cf.object_type = '1' 
 			AND cf.follow_flag = '1' 
 		WHERE
