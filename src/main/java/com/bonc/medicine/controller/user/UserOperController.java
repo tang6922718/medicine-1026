@@ -272,7 +272,7 @@ public class UserOperController {
 
     /**
      * @Description:
-         * @Param: [phone, password,equipment：APP和门户登陆--APP 后台登陆--BACK         request, response]
+         * @Param: [phone, password,equipment：APP：APP；和门户登陆--不传； 后台登陆--BACK         request, response]
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/8/30
@@ -293,7 +293,7 @@ public class UserOperController {
 
         //默认设置为 APP和门户登陆
         if(StringUtils.isEmpty(paramMap.get("equipment")) ){
-            paramMap.put("equipment", "APP");
+            paramMap.put("equipment", "PORTAL");
         }
 
         Result result = userService.loginSecond(paramMap.get("phone"), paramMap.get("password"), paramMap.get("equipment"));
