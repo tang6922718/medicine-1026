@@ -116,10 +116,15 @@ public class ViewNumberServiceImpl implements ViewNumberService {
             return new ArrayList<>();
         }
 
+
         Map<String, String> queryParamMap = new HashMap<>();
         queryParamMap.put("type", videoType);
         queryParamMap.put("videoIds", videoIds);
-
+        if (StringUtils.equals("1", videoType)){
+            queryParamMap.put("table" , "train_offline");
+        }else if (StringUtils.equals("2", videoType)){
+            queryParamMap.put("table" , "train_live");
+        }
         List<Map<String, Object>> reQueryList = new ArrayList<>();
         //如果没有预约数的情况下 初始化定义的reQueryList对象将id放在里面的map中
         for (String inIds : idArrays){
