@@ -47,10 +47,10 @@ public class HbaseUploadFile {
         //产生一个UUID字符串，理论上绝对不会重复
 //        String uuid = UUID.randomUUID().toString();
 //        String key = myfile.getName()+"_"+uuid;//图片存储获取对应key值
-
+        String[] nameA = myfile.getOriginalFilename().split("\\.");
         Long times = new Date().getTime();
         Integer ran = (int)(Math.random()*900)+100;
-        String key = times.toString()+ran.toString();//时间戳+3位随机数作为key
+        String key = times.toString()+ran.toString()+(nameA.length>1?"."+nameA[1]:"");//时间戳+3位随机数+文件后缀名作为key
 
         conf = getConf();
         HBaseAdmin hBaseAdmin = new HBaseAdmin(conf);

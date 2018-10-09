@@ -17,9 +17,9 @@
 	<insert id="signUp" parameterType="Map">
 		insert into
 		  common_user
-		    (telephone, password, status, update_time)
+		    (name,telephone, password, status, update_time)
 		values
-		    (#{phone}, #{password}, '1', #{updateTime})
+		    (#{name}, #{phone}, #{password}, '1', #{updateTime})
 	</insert>
 
     <select id="getIdByPhone" parameterType="String" resultType="Map">

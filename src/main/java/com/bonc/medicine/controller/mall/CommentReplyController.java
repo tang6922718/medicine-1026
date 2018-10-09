@@ -19,6 +19,7 @@ import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.mall.CommentReplyService;
+import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.utils.ResultUtil;
 
 @RestController
@@ -26,6 +27,9 @@ import com.bonc.medicine.utils.ResultUtil;
 public class CommentReplyController {
 	@Autowired
 	CommentReplyService commentReplyService;
+	
+	 @Autowired
+	 ThumbService thumbService;  //点赞
 	
 	@PostMapping("/comment")
 	public Result releaseComment(@RequestBody Map param ) {
@@ -44,15 +48,26 @@ public class CommentReplyController {
 	}
 	
 	@GetMapping("/replies")
-	public Result getCommentList(String object_type, String object_id) {
+	public Result getCommentList(String object_type, String object_id,@CurrentUser String user_id) {
 		Map param = new HashMap<>();
 		param.put("object_type", object_type);
 		param.put("object_id", object_id);
 		List<Map> result = commentReplyService.queryComments(param);
 		List commentids = new ArrayList<>();
-		if(result.size()>0 && result.get(0)!=null && !result.get(0).isEmpty()){
+		if(result.size()>0 && result.get(0)!=null && !result.get(0).isEmpty()){			            
 			for (Map map : result) {			
 				commentids.add(map.get("id"));
+				 // 此处引用 点赞 的接口
+	            Map<String, String> comment_param = new HashMap<>();
+	            comment_param.put("type", "9");//评论类型为9
+	            comment_param.put("acceptThumbId", map.get("id")+"");
+	            Map<String, Object> dianzan = thumbService.thumbNumber(comment_param);
+	            Object thumbNumber = dianzan.get("thumbNumber");
+	            
+	            // 此处引用 当前用户是否对该条评论点赞
+	            int thumbStatus = thumbService.thumbStatus(user_id, "9", map.get("id")+"");
+	            map.put("thumb",thumbNumber);
+	            map.put("thumbStatus",thumbStatus);//1：点赞   0： 未点赞 ;-999:参数不全
 			}
 		}
 		List<Map> replies = new ArrayList<>();

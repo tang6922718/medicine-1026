@@ -184,8 +184,8 @@ public class SpecRepertoryController {
 		for (int i = 0; i < list.size(); i++) {
 			Map param1 = new HashMap<>();
 			param1.put("spec_id", list.get(i).get("spec_id").toString());
-			list.get(i).put("sub", specialistService.sub(param1).toString());
-			list.get(i).put("cat", specialistService.cat(param1).toString());
+			list.get(i).put("sub", specialistService.sub(param1).get(0).get("sub").toString());
+			list.get(i).put("cat", specialistService.cat(param1).get(0).get("cat").toString());
 		}
 		
 		return ResultUtil.successTotal(list, total);

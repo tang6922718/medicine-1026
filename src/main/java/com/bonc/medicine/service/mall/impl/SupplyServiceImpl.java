@@ -28,6 +28,7 @@ public class SupplyServiceImpl implements SupplyService {
     private  IntegralService integralService;
 
     @Override
+    @Transactional
     public Result<Object> releaseSupply(Supply tempData) {
         Map<String, String> ppparamMap = new HashMap<>();
         //userId;actionCode
