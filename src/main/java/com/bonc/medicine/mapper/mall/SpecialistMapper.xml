@@ -71,15 +71,13 @@
 				then '1537932363932658' else si.head_portrait end as head_portrait,
 			si.employment_age,
 			si.expertise_field,
-			IFNULL( sis.interact_count, 0 ) AS interact_count ,
 			count(cf.id) as follow ,
 			0 as is_follow,
 			'' as sub,
 			'' as cat
 		FROM
 			spec_info si
-			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
-			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id and cf.object_type = '1' and cf.follow_flag = '1'  
+			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id and cf.object_type = '1' and cf.follow_flag = '1'
 		<if test="subject_code != null and subject_code != ''">
 			LEFT JOIN spec_subject_rel ssr ON si.spec_id = ssr.spec_id
 		</if>

@@ -1,21 +1,5 @@
 package com.bonc.medicine.controller.mall;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Issue;
@@ -27,10 +11,17 @@ import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.service.mall.SpecialistService;
 import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
+import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/spec_repertory")
@@ -47,6 +38,9 @@ public class SpecRepertoryController {
 	private UserService userService;
 	@Autowired
 	private CommentReplyService commentReplyService;
+
+	@Autowired
+	private UserManagerService userManagerService;
 	
 	/**
 	 * 新建专家角色
@@ -171,6 +165,8 @@ public class SpecRepertoryController {
 		if (pageNum != null && pageSize != null) {
 			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
 		}
+
+		//interact_count 活跃天数
 		if (user_id != null) {
 			for (Map<String, Object> map : list) {
 				Map param1 = new HashMap<>();
@@ -181,13 +177,28 @@ public class SpecRepertoryController {
 				map.put("is_follow", res.get("followed"));
 			}
 		}
+
+		List<String> allIds = new ArrayList<>();
+		for (int i = 0; i < list.size(); i++) {
+			allIds.add(list.get(i).get("spec_id").toString());
+		}
+		List<Map<String, Object>> daysList = userManagerService.activeDaysForBack(allIds.toString().substring(1,
+				allIds.toString().length() - 1));
+		Map<String, String> ddayMap = new HashMap<>();
+		for (Map<String, Object> daysMap: daysList) {
+			ddayMap.put(daysMap.get("user_id") + "", daysMap.get("acDays") + "");
+
+		}
 		for (int i = 0; i < list.size(); i++) {
 			Map param1 = new HashMap<>();
 			param1.put("spec_id", list.get(i).get("spec_id").toString());
 			list.get(i).put("sub", specialistService.sub(param1).get(0).get("sub").toString());
 			list.get(i).put("cat", specialistService.cat(param1).get(0).get("cat").toString());
+			list.get(i).put("interact_count", ddayMap.get(list.get(i).get("spec_id").toString()));
 		}
-		
+
+
+
 		return ResultUtil.successTotal(list, total);
 	}
 	/**
