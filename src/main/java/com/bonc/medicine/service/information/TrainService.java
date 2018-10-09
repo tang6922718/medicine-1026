@@ -46,4 +46,6 @@ public interface TrainService {
     List<Map> selectSpecialist();
 
     int selectApply(Map<String,Object> map);
+
+    List<Map> selectVideoHot();
 }

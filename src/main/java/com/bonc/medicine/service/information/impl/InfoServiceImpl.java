@@ -19,9 +19,6 @@ public class InfoServiceImpl implements InfoService {
     @Autowired(required = false)
     private InfoMapper infoMapper;
 
-    @Autowired
-    private AuditMapper auditMapper;
-
 
     @Override
     public List<Map> getAllInfo(String catCode,  String pageNum,String pageSize,String title,String status,String source_code) {
@@ -31,6 +28,7 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int addInfo(@RequestBody Map<String, Object> map) {
+
         return infoMapper.addInfo(map);
     }
 

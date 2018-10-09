@@ -108,6 +108,15 @@ public interface TrainMapper {
             method = "selectApply")
     int selectApply(Map<String,Object> map);
 
+    @Select("SELECT * FROM train_video_course a INNER JOIN (select object_id,view_num\n" +
+            "from\n" +
+            "common_view\n" +
+            "WHERE object_type='4'\n" +
+            "ORDER BY view_num DESC\n" +
+            "LIMIT 0,5) b ON a.id = b.object_id")
+    @ResultType(List.class)
+    List<Map> selectVideoHot();
+
 
     class TrainDynaSqlProvider {
         public String createTrain(final Map<String, Object> map) {

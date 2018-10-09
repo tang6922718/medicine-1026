@@ -80,6 +80,7 @@ public class LiveController {
      * @param id
      * @return
      * @description 开启录制
+     *
      */
     @RequestMapping("/openRecord")
     public Result openRecord(@RequestParam String id) {

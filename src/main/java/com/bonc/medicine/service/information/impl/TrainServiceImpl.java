@@ -121,4 +121,9 @@ public class TrainServiceImpl implements TrainService {
     public int selectApply(Map<String, Object> map) {
         return trainMapper.selectApply(map);
     }
+
+    @Override
+    public List<Map> selectVideoHot() {
+        return trainMapper.selectVideoHot();
+    }
 }
