@@ -95,33 +95,7 @@
 
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">
 		SELECT
-			a.id,
-			codex_status,
-			variety_id,
-			synopsis,
-			chinese_name,
-			latin_name,
-			alias,
-			two_law,
-			circles,
-			door,
-			outline,
-			item,
-			suborder,
-			section,
-			family,
-			genus,
-			speices,
-			subspecies,
-			distribution_area,
-			graph_url,
-			feature,
-			habit,
-			distrubtion_range,
-			variety,
-			cultivation_tech,
-			main_value,
-			composition,
+			a.*,
 			b.fail_opinion
 		FROM km_variety_encyclopedia a
 		LEFT JOIN km_audit b ON a.id = b.object_id  AND b.km_type = 1
