@@ -158,16 +158,17 @@ public class IntegralServiceImpl implements IntegralService {
             throw new MedicineRuntimeException(ResultEnum.ERROE);
         }
         boolean goingDown = checkIntegralTimes(paramMap, ruleDemo);
-
+        Map<String, String> scoreMap = updateIntegralUtil(paramMap);
         if(!goingDown){
-            throw new MedicineRuntimeException(201, "亲！今天你也元气满满呢，操作次数上限了哦");
+            scoreMap.put("succeedScore", "0");
+            scoreMap.put("msg", "亲！今天你也元气满满呢，操作次数上限了哦");
         }
 
         //添加历史记录表
         int impactNumberScore = integralMapper.addIntegralHistory(paramMap);//如果失败等待再次执行时比较好的。
 
         //更新积分总数并且跟新缓存
-        Map<String, String> scoreMap = updateIntegralUtil(paramMap);
+
         //scoreMap.get("integral");
         if (impactNumberScore > 0) {
             scoreMap.put("succeedScore", paramMap.get("point"));
