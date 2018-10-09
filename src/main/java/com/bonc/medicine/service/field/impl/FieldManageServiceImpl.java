@@ -29,6 +29,11 @@ public class FieldManageServiceImpl implements FieldManageService {
 		// // 所有品种信息
 		// List<Map> allCategroyInfo=fieldManageMapper.queryAllCategroy();
 
+		// 根据userID 和 creatorID 是否一样来判断是否是技术指导 (避免技术员给自己新建种植结果也为技术指导)
+		if (tempData.getUser_id()==tempData.getCreator_id()){
+			tempData.setGuide_flag("1");   // 0 是   1  不是
+		}
+
 		Map map = new HashMap();
 		map = fieldManageMapper.queryUserInfo(tempData.getUser_id());
 		if (map != null) {
@@ -127,6 +132,17 @@ public class FieldManageServiceImpl implements FieldManageService {
 	 */
 	@Override
 	public Result<Object> addOperation(FieldRecord tempData) {
+		//根据记录人ID 和 地块所有者的ID 是否一样判断是否技术指导  (避免技术员给自己的地块进行农事操作结果为技术指导)
+		Map map = new HashMap();
+		map.put("field_id", tempData.getField_id());
+		List<Map> list1 = new ArrayList<Map>();
+		list1 = fieldManageMapper.getfield(map);
+		if (Integer.parseInt(list1.get(0).get("user_id").toString())==tempData.getRecord_user_id()){
+			tempData.setGuide_flag("1");  // 0 是   1  不是
+		}
+
+
+
 		// 更新相关田块的最新修改时间
 		int temp = fieldManageMapper.updateFieldInfo(tempData.getField_id(), new Date());
 		if (temp > 0) {
