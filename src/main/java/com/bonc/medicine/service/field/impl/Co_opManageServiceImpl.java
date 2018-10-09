@@ -47,6 +47,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			tempData.setOfficial_user_id((int) map.get("id"));
 			tempData.setOfficial_user_name((String) map.get("name"));
 		}
+
+		if (tempData.getPhoto_url()==null){ // 新建合作社 没传图片时 赋值""
+			tempData.setPhoto_url("");
+		}
+
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		return ResultUtil.success(co_opManageMapper.insertCo_op(tempData));
 	}
