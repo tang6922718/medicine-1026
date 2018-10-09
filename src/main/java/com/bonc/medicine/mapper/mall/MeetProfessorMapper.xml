@@ -342,7 +342,7 @@
 	<update id="setRevisit" parameterType="Map">
 		update spec_issue set
 		follow_days = #{follow_days},revisit_url =
-		#{revisit_url},revisited_advice = #{revisited_advice}
+		#{revisit_url},revisited_advice = #{revisited_advice},is_revisited='1'
 		where id = #{id}
 	</update>
 
