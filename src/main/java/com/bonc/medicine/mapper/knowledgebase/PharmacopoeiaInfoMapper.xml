@@ -33,7 +33,19 @@
 	</update>
 
 	<select id="pharaDetail" parameterType="String" resultType="java.util.Map">
-		SELECT id,cat_code,name,source,variety,detailed_content FROM km_pharmacopoeia_information WHERE id = #{id}
+		SELECT
+			a.id,
+			cat_code,
+			name,
+			source,
+			variety,
+			detailed_content,
+			b.fail_opinion
+		FROM
+			km_pharmacopoeia_information a
+		LEFT JOIN km_audit b ON a.id = b.object_id AND b.km_type = 6
+		WHERE
+			a.id =  #{id}
 	</select>
 
 	<update id="updatePharaDetail" parameterType="java.util.Map">

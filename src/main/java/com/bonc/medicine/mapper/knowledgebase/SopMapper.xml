@@ -18,7 +18,7 @@
 	</select>
 
     <select id="getSopPlants" resultType="java.util.Map">
-		SELECT * FROM km_sop_step,km_variety_sop,km_audit
+		SELECT *,km_audit.fail_opinion AS your_fail_opinion  FROM km_sop_step,km_variety_sop,km_audit
 		WHERE km_sop_step.sop_id = #{id}
 		AND sop_id =km_variety_sop.id
 		AND km_variety_sop.sop_status=1
