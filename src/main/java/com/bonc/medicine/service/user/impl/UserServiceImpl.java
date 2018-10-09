@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         paramMap.put("updateTime" , df.format(new Date()));
         paramMap.put("headPortrait", "1537932340623980"); //moren 头像
+        paramMap.put("name", UUID.randomUUID().toString()); //moren 头像
         // 1537932340623980
         //System.out.println(paramMap.get("headPortrait") == null ? paramMap.put("headPortrait", "1537932340623980")  "");
         // TODO 是否校验密码
