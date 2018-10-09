@@ -60,6 +60,7 @@ public interface UserManagerService {
 
 	public Map<String, String> activeDays(String userId);
 
+	public  List<Map<String, Object>> activeDaysForBack(String userId);
 	/**
 	 * @Description: userId要查询的用户的id ‘1,2,3,4’ 多个这样用都逗号隔开，必须参数 如果没有就返回null
 	 *               queryType:目前已知 1：直播 2：专家

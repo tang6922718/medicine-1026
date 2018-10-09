@@ -278,6 +278,17 @@
 		user_id = #{userId}
 	</select>
 
+    <select id="activeDaysForBack" parameterType="String" resultType="Map">
+		SELECT
+		  COUNT( id) AS acDays,
+			user_id
+		FROM
+		  common_logon_log
+		WHERE
+		  user_id in ( ${userId} )
+			group by user_id
+	</select>
+
 	<!-- canshu proId -->
 	<select id="queryInteractTimes" parameterType="String"
 		resultType="Map">

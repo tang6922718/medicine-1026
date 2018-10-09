@@ -1,6 +1,7 @@
 package com.bonc.medicine.service.user.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
 import com.bonc.medicine.entity.user.Cooperative;
@@ -349,6 +350,47 @@ public class UserManagerServiceImpl implements UserManagerService {
 		}
 		return reMap;
 	}
+
+    public List<Map<String, Object>> activeDaysForBack(String userId) {
+	    if (StringUtils.isBlank(userId)){
+	        throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+        }
+
+        String [] ids = userId.split(",");
+        List<Map<String, Object>> reMap = userManagerMapper.activeDaysForBack(userId);
+        List<Map<String, Object>> reListMap = new ArrayList<>();
+        if(null == reMap || null == reMap.get(0) || reMap.get(0).isEmpty()) {
+            for (String id :ids ){
+                Map<String, Object> mmap = new HashMap<>();
+                mmap.put("user_id", id);
+                mmap.put("acDays", "0");
+                reListMap.add(mmap);
+            }
+            return reListMap;
+        }
+        List<String> idList = new ArrayList<>();
+
+        for (String arrayId : ids) {
+            idList.add(arrayId);
+        }
+
+        List<String> queryList = new ArrayList<>();
+        for (Map<String, Object> map :reMap ) {
+            String iuse_id = map.get("user_id") + "";
+            queryList.add(iuse_id);
+        }
+
+        for (String idid : idList) {
+            if (!queryList.contains(idid)){
+                Map<String, Object> inaMap = new HashMap<>();
+                inaMap.put("user_id", idid);
+                inaMap.put("acDays", "0");
+                reMap.add(inaMap);
+            }
+        }
+
+        return reMap;
+    }
 
 	public List<Map<String, String>> queryInteractTimes(String userId) {
 		if (StringUtils.isEmpty(userId)) {
