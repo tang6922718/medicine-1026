@@ -40,6 +40,7 @@
 			source,
 			variety,
 			detailed_content,
+			b.status,
 			b.fail_opinion
 		FROM
 			km_pharmacopoeia_information a

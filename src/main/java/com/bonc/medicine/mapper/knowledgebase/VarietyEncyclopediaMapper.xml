@@ -96,6 +96,7 @@
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">
 		SELECT
 			a.*,
+			b.status,
 			b.fail_opinion
 		FROM km_variety_encyclopedia a
 		LEFT JOIN km_audit b ON a.id = b.object_id  AND b.km_type = 1
