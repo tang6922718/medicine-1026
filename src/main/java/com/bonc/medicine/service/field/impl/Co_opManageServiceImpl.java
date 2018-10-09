@@ -126,6 +126,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		// 查询所有品种信息
 		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
 
+		// 社员如果没有上传头像 则给个默认头像
+		if ("".equals(tempData.getImg_url())){
+			tempData.setImg_url("1537932302213128");
+		}
+
 		// 根据tel 判断是否为平台用户 判断是否已经是当前合作社社员了（不允许重复添加）
 		Map map = new HashMap();
 		String tel = tempData.getTelephone();
