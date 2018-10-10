@@ -48,7 +48,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			tempData.setOfficial_user_name((String) map.get("name"));
 		}
 
-		if (tempData.getPhoto_url()==null){ // 新建合作社 没传图片时 赋值""
+		if (tempData.getPhoto_url() == null) { // 新建合作社 没传图片时 赋值""
 			tempData.setPhoto_url("");
 		}
 
@@ -114,7 +114,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			} else {
 				return ResultUtil.error(500, "添加角色属性属性失败");
 			}
-		} else if("2".equals(tempData.getIs_audit())) {
+		} else if ("2".equals(tempData.getIs_audit())) {
 			co_opManageMapper.updateCo_op(tempData);
 			list = co_opManageMapper.queryCoopInfo(tempData.getId());
 			Map map = new HashMap<>();
@@ -124,7 +124,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			map.put("notice_receiver", tempData.getOfficial_user_id());
 
 			return ResultUtil.success(co_opManageMapper.addCoopAduitNotice(map));
-		}else {
+		} else {
 			return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 		}
 	}
@@ -136,7 +136,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
 
 		// 社员如果没有上传头像 则给个默认头像
-		if ("".equals(tempData.getImg_url())){
+		if ("".equals(tempData.getImg_url())) {
 			tempData.setImg_url("1537932302213128");
 		}
 
@@ -299,6 +299,15 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i).put("total", co_opManageMapper
 					.co_opTotal(Integer.parseInt(list.get(i).get("coop_id").toString())).get(0).get("total"));
+			if (list.get(i).get("official").toString().equals("1")) {
+				list.get(i).put("role", "管理员");
+			} else {
+				if (list.get(i).get("assistant").toString().equals("0")) {
+					list.get(i).put("role", "技术员");
+				} else {
+					list.get(i).put("role", "社员");
+				}
+			}
 		}
 		return ResultUtil.success(list);
 	}

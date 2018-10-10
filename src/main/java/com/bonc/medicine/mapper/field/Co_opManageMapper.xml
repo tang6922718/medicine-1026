@@ -22,24 +22,30 @@
 	</insert>
 
 
-	<select id="queryCo_opByCondition" resultType="Map" parameterType="Map">
-		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area ,A.img_url,A.portrait,
-		       A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
-		       A.official_user_name AS adminName,A.establish_date,A.photo_url,A.is_audit,
-		       A.comment    ,D.role,(SELECT NAME FROM common_user E WHERE E.id=A.`official_user_id`) AS NAME
+	<select id="queryCo_opByCondition" resultType="Map"
+		parameterType="Map">
+		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area
+		,A.img_url,A.portrait,
+		A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
+		A.official_user_name AS
+		adminName,A.establish_date,A.photo_url,A.is_audit,
+		A.comment ,D.role,(SELECT NAME FROM common_user E WHERE
+		E.id=A.`official_user_id`) AS NAME
 		FROM field_coop A ,
-		( SELECT B.user_id,GROUP_CONCAT(C.role_name) AS role
-		  FROM common_user_role_rel B , common_role C
-		  WHERE B.role_id = C.id GROUP BY B.user_id
+		( SELECT
+		B.user_id,GROUP_CONCAT(C.role_name) AS role
+		FROM common_user_role_rel B , common_role C
+		WHERE B.role_id = C.id GROUP BY B.user_id
 		) D
-		WHERE A.official_user_id = D.user_id  AND A.state= '0'
+		WHERE A.official_user_id =
+		D.user_id AND A.state= '0'
 
 		<if test="is_audit != null and is_audit != ''">
 			AND A.is_audit = #{is_audit}
 		</if>
 
 		<if test="coopID != null and coopID != ''">
-		  AND A.id = #{coopID}
+			AND A.id = #{coopID}
 		</if>
 
 		<if test="coopName != null and coopName != ''">
@@ -60,17 +66,18 @@
 
 		<if test="keyWord != null and keyWord != ''">
 			AND (
-			A.name LIKE CONCAT('%',#{keyWord}, '%') OR A.official_user_name LIKE CONCAT('%',#{keyWord}, '%')
+			A.name LIKE CONCAT('%',#{keyWord}, '%') OR
+			A.official_user_name LIKE CONCAT('%',#{keyWord}, '%')
 			)
 		</if>
 
 		<if test='start_time != null and start_time != "" '>
-			AND A.establish_date >= #{start_time}  
+			AND A.establish_date >= #{start_time}
 		</if>
 		<if test=' end_time != null and end_time != "" '>
 			AND #{end_time} >= A.establish_date
 		</if>
-		
+
 
 	</select>
 
@@ -95,7 +102,8 @@
 	<select id="queryCo_opNoticeNum" resultType="Map" parameterType="Integer">
 		SELECT count(*) AS Co_opNoticeNum FROM field_coop A , common_notice B
 		WHERE
-		A.state='0' AND B.status= '1' AND B.notice_type='2' AND A.id = B.object_id  AND A.id = #{coop_id}
+		A.state='0' AND B.status= '1' AND B.notice_type='2' AND A.id =
+		B.object_id AND A.id = #{coop_id}
 	</select>
 
 	<select id="queryUserID" resultType="Map">
@@ -125,13 +133,15 @@
 
 	<select id="queryAssistant" resultType="Map" parameterType="Integer">
 		SELECT id,name,img_url,assistant,user_id FROM field_coop_member
-		WHERE assistant ='0' AND
+		WHERE
+		assistant ='0' AND
 		state='0' AND coop_id = #{coop_id}
 	</select>
 
 	<select id="queryNotAssistant" resultType="Map" parameterType="Integer">
 		SELECT id,name,img_url,assistant,user_id FROM field_coop_member
-		WHERE (assistant ='1' OR
+		WHERE
+		(assistant ='1' OR
 		assistant IS NULL) AND state='0' AND coop_id =
 		#{coop_id}
 	</select>
@@ -145,11 +155,13 @@
 		A.name,A.img_url,A.user_id
 	</select>
 
-	<select id="queryCoopMemberList2" resultType="Map" parameterType="Integer">
+	<select id="queryCoopMemberList2" resultType="Map"
+		parameterType="Integer">
 		SELECT A.*,
-              CASE  WHEN A.user_id IS NULL THEN 0
-              ELSE (SELECT count(*) FROM field_info B WHERE B.user_id = A.user_id) END AS PlantNUM
-        FROM field_coop_member A
+		CASE WHEN A.user_id IS NULL THEN 0
+		ELSE (SELECT count(*) FROM field_info B WHERE B.user_id = A.user_id) END
+		AS PlantNUM
+		FROM field_coop_member A
 		WHERE A.coop_id=#{coop_id} AND A.state='0'
 		GROUP BY
 		A.name,A.img_url,A.user_id
@@ -157,9 +169,22 @@
 
 
 	<select id="affiliatedCo_op" resultType="Map" parameterType="Integer">
-		select m.coop_id,fc.name,fc.img_url,m.assistant,0 as total from
+		SELECT
+		m.coop_id,
+		m.user_id,
+		fc.NAME,
+		fc.img_url,
+		IFNULL( m.assistant, '1' ) AS assistant,
+		0 AS total,
+		fc.official_user_id,
+		m.user_id <![CDATA[ <=> ]]>
+		fc.official_user_id AS official,
+		'' AS role
+		FROM
 		field_coop_member m
-        inner join field_coop fc on m.coop_id=fc.id where m.user_id = #{user_id}
+		LEFT JOIN field_coop fc ON m.coop_id = fc.id
+		WHERE
+		m.user_id = #{user_id}
 	</select>
 
 	<select id="co_opTotal" resultType="Map" parameterType="Integer">
@@ -252,10 +277,11 @@
 		(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state,picture_url)
 		values('2',#{object_id},#{msg},#{publish_user_id},#{allUserId},now(),'1','1',#{picture_url})
 	</insert>
-	
+
 	<insert id="addCoopAduitNotice" parameterType="Map">
 		insert
-		into common_notice
+		into
+		common_notice
 		(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
 		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
 	</insert>
@@ -308,41 +334,56 @@
 	</select>
 
 
-	<select id="getCoopNoticeList" parameterType="Integer" resultType="Map">
-		SELECT notice_content,picture_url,publish_time  FROM common_notice
-		WHERE notice_type='2' AND status='1' AND object_id = #{coopID}
+	<select id="getCoopNoticeList" parameterType="Integer"
+		resultType="Map">
+		SELECT notice_content,picture_url,publish_time FROM
+		common_notice
+		WHERE notice_type='2' AND status='1' AND object_id =
+		#{coopID}
 		ORDER BY publish_time DESC
 	</select>
 
-	<update id="updateCoopTotalAreaAdd" >
-		UPDATE field_coop SET total_area = total_area + #{area} WHERE id = #{coopID}
+	<update id="updateCoopTotalAreaAdd">
+		UPDATE field_coop SET
+		total_area = total_area + #{area} WHERE id = #{coopID}
 	</update>
 
 	<update id="updateCoopTotalAreaReduce" parameterType="Integer">
-		UPDATE field_coop SET total_area = total_area - (SELECT plant_area FROM field_coop_member WHERE id=#{ID})
-        WHERE id = (SELECT coop_id FROM field_coop_member WHERE id=#{ID})
+		UPDATE
+		field_coop SET total_area = total_area - (SELECT plant_area FROM
+		field_coop_member WHERE id=#{ID})
+		WHERE id = (SELECT coop_id FROM field_coop_member WHERE id=#{ID})
 	</update>
 
 	<insert id="insertCommon_user_role_rel" parameterType="Integer">
-		INSERT common_user_role_rel (user_id,role_id)
-		VALUES (( SELECT official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
+		INSERT
+		common_user_role_rel (user_id,role_id)
+		VALUES (( SELECT
+		official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
 	</insert>
 
 	<delete id="deleteRole" parameterType="Integer">
-		DELETE FROM common_user_role_rel WHERE user_id = #{user_id} AND role_id= #{role_id}
+		DELETE FROM
+		common_user_role_rel WHERE user_id = #{user_id} AND role_id=
+		#{role_id}
 	</delete>
 
 	<insert id="insertRole" parameterType="Integer">
-		INSERT  common_user_role_rel (user_id,role_id) VALUES (#{user_id},#{role_id})
+		INSERT
+		common_user_role_rel (user_id,role_id) VALUES (#{user_id},#{role_id})
 	</insert>
 
-	<select id="queryIsAlreadyAssistantOtherCoop" parameterType="Integer" resultType="Map">
-		SELECT count(*) as NUM FROM field_coop_member WHERE assistant = 0 AND user_id = #{user_ID}
+	<select id="queryIsAlreadyAssistantOtherCoop" parameterType="Integer"
+		resultType="Map">
+		SELECT count(*) as NUM FROM field_coop_member WHERE
+		assistant = 0 AND user_id = #{user_ID}
 	</select>
 
 	<select id="queryIsAlreadyCoopMember" resultType="Map">
-		SELECT count(*) AS isCoopMember FROM field_coop_member
-		WHERE coop_id= #{coop_id} AND  telephone= #{telephone}
+		SELECT count(*)
+		AS isCoopMember FROM field_coop_member
+		WHERE coop_id= #{coop_id} AND
+		telephone= #{telephone}
 	</select>
 
 </mapper>
