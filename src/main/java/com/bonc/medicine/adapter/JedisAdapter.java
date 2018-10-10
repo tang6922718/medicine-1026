@@ -277,4 +277,35 @@ public class JedisAdapter implements InitializingBean {
             }
         }
     }
+
+
+    public long lpush(String key, String... value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.lpush(key, value);
+        } catch (Exception e) {
+            logger.error("Jedis keys 异常：" + e.getMessage());
+            return 0L;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public long llen(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.llen(key);
+        } catch (Exception e) {
+            logger.error("Jedis keys 异常：" + e.getMessage());
+            return 0L;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
 }

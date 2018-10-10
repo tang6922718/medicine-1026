@@ -87,8 +87,15 @@ public class VerificationUtils {
         return Integer.parseInt(code);
     }
 
-   /*public static void main(String[] args) {
-       getVerifByPhone("13368232405");
+ /*  public static void main(String[] args) {
+       for (int i = 0; i < 10000000; i++){
+           double codeDemo = Math.random();
+           String code = String.valueOf(codeDemo).substring(2, 6);
+           if (code.length() != 4){
+               System.out.println(code);
+           }
+
+       }
     }*/
 
 }

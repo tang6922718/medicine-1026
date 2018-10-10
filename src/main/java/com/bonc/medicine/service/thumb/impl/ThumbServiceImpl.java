@@ -60,8 +60,14 @@ public class ThumbServiceImpl implements ThumbService {
         Map<String, Object> reMap = new HashMap<>();
         synchronized (reMap){
             thumbMapper.giveThumb(paramMap);
-            reMap.put("succeed", thumbAdapter.giveThumb(acceptThumbId, type, giveThumbId));
-            thumbAdapter.expire(acceptThumbId, type);
+            if (StringUtils.equals("8", type)){
+                reMap.put("succeed", thumbAdapter.giveThumbLive(acceptThumbId, type, giveThumbId));
+                thumbAdapter.expire(acceptThumbId, type);
+            }else{
+
+                reMap.put("succeed", thumbAdapter.giveThumb(acceptThumbId, type, giveThumbId));
+                thumbAdapter.expire(acceptThumbId, type);
+            }
             return reMap;
         }
 
@@ -90,8 +96,15 @@ public class ThumbServiceImpl implements ThumbService {
         boolean exists = jedisAdapter.exists(RedisKeyUtil.getThumbKey(acceptThumbId, type));
 
         if(exists){
-            long num = jedisAdapter.scard(RedisKeyUtil.getThumbKey(acceptThumbId, type));
-            thumbAdapter.expire(acceptThumbId, type);
+            long num = 0L;
+            if (StringUtils.equals("8", type)){
+                num = jedisAdapter.llen(RedisKeyUtil.getThumbKey(acceptThumbId, type));
+                thumbAdapter.expire(acceptThumbId, type);
+            }else {
+                num = jedisAdapter.scard(RedisKeyUtil.getThumbKey(acceptThumbId, type));
+                thumbAdapter.expire(acceptThumbId, type);
+            }
+
             /*if(num == 0){
 
             }*/
@@ -107,8 +120,14 @@ public class ThumbServiceImpl implements ThumbService {
                     for (Map<String, Object> inMap : queMap ) {
                         ids.add(inMap.get("praise_user_id") == null ? "" : inMap.get("praise_user_id").toString());
                     }
-                    thumbAdapter.giveThumb(acceptThumbId,type, ids.toArray(arrays));
-                    thumbAdapter.expire(acceptThumbId, type);
+                    if (StringUtils.equals("8", type)){
+                        thumbAdapter.giveThumbLive(acceptThumbId, type, ids.toArray(arrays));
+                        thumbAdapter.expire(acceptThumbId, type);
+                    }else{
+
+                        thumbAdapter.giveThumb(acceptThumbId,type, ids.toArray(arrays));
+                        thumbAdapter.expire(acceptThumbId, type);
+                    }
                     return reMap;
                 }else{
                     reMap.put("thumbNumber", 0);

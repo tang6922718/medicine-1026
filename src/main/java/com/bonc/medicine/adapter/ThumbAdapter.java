@@ -36,6 +36,11 @@ public class ThumbAdapter {
         return jedisAdapter.expire(RedisKeyUtil.getThumbKey(acceptThumbId, type));
     }
 
+    public long giveThumbLive (String acceptThumbId, String type, String... giveThumbId){
+
+        return jedisAdapter.lpush(RedisKeyUtil.getThumbKey(acceptThumbId, type), giveThumbId);
+    }
+
 
 
 }
