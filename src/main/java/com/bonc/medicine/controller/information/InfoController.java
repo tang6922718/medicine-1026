@@ -38,9 +38,10 @@ public class InfoController {
                            @RequestParam(required = false) String title,
                            @RequestParam(required = false) String status,
                            @RequestParam(required = false) String source_code,
+                           @RequestParam(required = false) String operationClass,
                            @RequestParam(required = false, defaultValue = "1") String pageNum,
                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        List list = infoService.getAllInfo(catCode, pageNum, pageSize, title, status, source_code);
+        List list = infoService.getAllInfo(catCode, pageNum, pageSize, title, status, source_code,operationClass);
         for (Object map : list) {
             int collectionNum = collectionService.collectCount("1", String.valueOf(((Map) map).get("id")));
             ((Map) map).put("collectionNum", collectionNum);

@@ -21,9 +21,9 @@ public class InfoServiceImpl implements InfoService {
 
 
     @Override
-    public List<Map> getAllInfo(String catCode,  String pageNum,String pageSize,String title,String status,String source_code) {
+    public List<Map> getAllInfo(String catCode,  String pageNum,String pageSize,String title,String status,String source_code,String operationClass) {
         PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
-        return infoMapper.getAllInfo(catCode,title,status,source_code);
+        return infoMapper.getAllInfo(catCode,title,status,source_code,operationClass);
     }
 
     @Override
