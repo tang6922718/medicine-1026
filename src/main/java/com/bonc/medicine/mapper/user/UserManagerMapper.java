@@ -1,6 +1,7 @@
 package com.bonc.medicine.mapper.user;
 
 import com.bonc.medicine.entity.user.Basicinfo;
+import com.bonc.medicine.entity.user.CoopMember;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
 import org.apache.ibatis.annotations.Param;
@@ -31,6 +32,8 @@ public interface UserManagerMapper {
 	public void addExpert(Expert expert);
 
 	public void addCooperative(Cooperative cooperative);
+	
+	public void addCoopMember(CoopMember coopMember);
 
 	public List<Map> basicInfo(Map map);
 

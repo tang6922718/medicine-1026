@@ -11,7 +11,8 @@
 	</insert>
 
 	<select id="getTel" parameterType="Map" resultType="Integer">
-		select count(1) as exist from common_user where telephone = #{tel}
+		select
+		count(1) as exist from common_user where telephone = #{tel}
 	</select>
 
 	<update id="updateBasic" parameterType="Map">
@@ -59,11 +60,19 @@
 		values(#{id},#{subject_rel_id});
 	</insert>
 
-	<insert id="addCooperative" parameterType="com.bonc.medicine.entity.user.Cooperative">
+	<insert id="addCooperative" parameterType="com.bonc.medicine.entity.user.Cooperative"
+		useGeneratedKeys="true" keyProperty="id">
 		Insert into
 		field_coop
 		(name,official_user_id,official_user_name,address,img_url,cultivar,telephone,introduce,establish_date,state,is_audit)
 		values(#{name},#{official_user_id},#{official_user_name},#{address},#{img_url},#{cultivar},#{telphone},#{introduce},#{establish_date},'0','0');
+	</insert>
+
+	<insert id="addCoopMember" parameterType="com.bonc.medicine.entity.user.CoopMember"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		field_coop_member(name,sex,age,telephone,address,coop_id,user_id,assistant,state)
+		values(#{name},#{sex},#{age},#{telephone},#{address},#{coop_id},#{user_id},'0','0')
 	</insert>
 
 	<select id="basicInfo" parameterType="Map" resultType="Map">
@@ -182,7 +191,7 @@
 		) AS temp
 		WHERE 1 = 1
 		<if test="role !='' and role != null">
-			AND a_role =  #{role} 
+			AND a_role = #{role}
 		</if>
 		ORDER BY
 		user_id
@@ -214,11 +223,13 @@
 	<select id="queryUserInfo" resultType="Map" parameterType="Integer">
 		SELECT id,head_portrait,name,sex,age,address,telephone,
 		CASE WHEN
-		LOCATE( 5, IFNULL(GROUP_CONCAT( B.role_id ),'') ) = 0 THEN 0 ELSE 1 END as isSpc,
+		LOCATE( 5, IFNULL(GROUP_CONCAT( B.role_id ),'') ) = 0 THEN 0 ELSE 1
+		END as isSpc,
 		CASE
-		WHEN LOCATE( 1, IFNULL(GROUP_CONCAT( B.role_id ),'') ) = 0 THEN 0 ELSE 1 END as
+		WHEN LOCATE( 1, IFNULL(GROUP_CONCAT( B.role_id ),'')
+		) = 0 THEN 0 ELSE 1 END as
 		isPlant
-		FROM common_user A left join 
+		FROM common_user A left join
 		common_user_role_rel B on A.id = B.user_id
 		WHERE id= #{userID}
 
@@ -278,29 +289,32 @@
 		user_id = #{userId}
 	</select>
 
-    <select id="activeDaysForBack" parameterType="String" resultType="Map">
+	<select id="activeDaysForBack" parameterType="String"
+		resultType="Map">
 		SELECT
-		  COUNT( DISTINCT login_time) AS acDays,
-			user_id
+		COUNT( DISTINCT login_time) AS acDays,
+		user_id
 		FROM
-		  common_logon_log
+		common_logon_log
 		WHERE
-		  user_id in ( ${userId} )
-			group by user_id
+		user_id in ( ${userId} )
+		group by user_id
 	</select>
 
 	<!-- canshu proId -->
 	<select id="queryInteractTimes" parameterType="String"
 		resultType="Map">
 		SELECT
-			tii.from_uid as user_id,
-			count( tii.from_uid ) interact_number
+		tii.from_uid as user_id,
+		count( tii.from_uid )
+		interact_number
 		FROM
-			common_comment tii
-		LEFT JOIN spec_info ssi ON tii.from_uid = ssi.spec_id
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+		tii.from_uid = ssi.spec_id
 		WHERE
-			tii.from_uid IN ( ${proId} )
+		tii.from_uid IN ( ${proId} )
 		GROUP BY
-			tii.from_uid
+		tii.from_uid
 	</select>
 </mapper>
