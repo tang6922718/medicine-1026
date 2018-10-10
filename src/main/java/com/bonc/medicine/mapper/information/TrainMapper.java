@@ -245,7 +245,7 @@ public interface TrainMapper {
                 WHERE("status='0'");
                 ORDER_BY("publish_time desc");
             }}.toString();
-            sql = "select b.*,a.* from (" + sql+") a inner join km_audit b on a.id=b.object_id and b.km_type='5'";
+            sql = "select a.id,a.title,a.video_type,a.lecturer_name,a.publish_time,a.course_introduce,a.duration,a.video_url,a.img_url,a.spec_id,a.user_id,a.status,a.update_time,a.operation_status,b.fail_opinion from (" + sql+") a left join km_audit b on a.id=b.object_id and b.km_type='5'";
             System.out.println(sql);
             return sql;
         }
