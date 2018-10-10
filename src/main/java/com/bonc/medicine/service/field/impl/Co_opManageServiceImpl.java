@@ -9,6 +9,7 @@ import com.bonc.medicine.mapper.field.FieldManageMapper;
 import com.bonc.medicine.service.field.Co_opManageService;
 import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,26 +35,62 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	FieldManageMapper fieldManageMapper;
 
 	@Override
+	@Transactional
 	public Result<Object> addCo_op(Co_op tempData) {
-		if (tempData.getOfficial_user_id() == 0) {
-			Map map = new HashMap();
-			map = co_opManageMapper.queryUserID(tempData.getTelephone());
-			if ("admin".equals(map.get("table_name"))) {
-				tempData.setIs_audit("0");
-			} else {
-				tempData.setIs_audit("1");
-			}
+		// 后台管理员新建合作社没这边的 addCo_op 方法
 
-			tempData.setOfficial_user_id((int) map.get("id"));
-			tempData.setOfficial_user_name((String) map.get("name"));
+		// 所有品种信息 后面转码用
+		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
+
+		Co_op coOp=tempData; // 备份一下  后面要用
+
+		// 根据电话号码去查用户信息   该SQL返回: id,name , age,head_portrait, address, sex
+		Map map = new HashMap();
+		map = co_opManageMapper.queryUserID(tempData.getTelephone());
+
+		// 判断申请人是否已经有其它合作社了 （一个人只能是一个合作社的管理员）
+		Map isOtherCoopManager=co_opManageMapper.queryIsAlreadyCoopManager((int)map.get("id"));
+		if (Integer.parseInt(isOtherCoopManager.get("NUM").toString())>0){
+			return ResultUtil.error(500,"改用户已经申请其它合作社了(有可能还在审核),不能再申请合作社");
 		}
 
-		if (tempData.getPhoto_url() == null) { // 新建合作社 没传图片时 赋值""
+		tempData.setOfficial_user_id((int) map.get("id"));
+		tempData.setOfficial_user_name((String) map.get("name"));
+		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
+		tempData.setIs_audit("1"); //is_audit: 0 已审核   1 未审核   2 审核不通过
+
+		// 新建合作社 没传图片时 赋值""
+		if (tempData.getPhoto_url() == null) {
 			tempData.setPhoto_url("");
 		}
 
-		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
-		return ResultUtil.success(co_opManageMapper.insertCo_op(tempData));
+
+		//  合作社新建成功时把合作社管理员作为社员（管理员为技术员）插入合作社社员表中
+		int i=co_opManageMapper.insertCo_op(tempData);
+		if (i>0){
+			int coopID=tempData.getId();
+
+			Co_op_Member coOpMember=new Co_op_Member();
+			coOpMember.setName(map.get("name").toString());
+			coOpMember.setImg_url(map.get("head_portrait").toString());
+			coOpMember.setSex(map.get("sex").toString());
+			coOpMember.setAge(Integer.parseInt(map.get("age").toString()));
+			coOpMember.setTelephone(coOp.getTelephone());
+			coOpMember.setAddress(map.get("address").toString());
+			coOpMember.setPlant_age(0);
+			coOpMember.setPlant_cat_id(ExchangeCategroyNameID.NameToId(coOp.getCultivar(),categroyList));
+			coOpMember.setPlant_area(0);
+			coOpMember.setCoop_id(coopID);
+			coOpMember.setUser_id(map.get("id").toString());
+			coOpMember.setAssistant("0");
+			coOpMember.setState("1"); // 暂时设为不可用  后面合作社审核通过时再变更为可用
+
+			return ResultUtil.success(co_opManageMapper.insertCo_opMember(coOpMember));
+
+		}else {
+			return ResultUtil.error(500,"合作社信息插入失败");
+		}
+
 	}
 
 	@Override
@@ -108,8 +145,21 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 				Map map = new HashMap<>();
 				map.put("object_id", tempData.getId());
 				map.put("notice_content", "您申请的" + list.get(0).get("name").toString() + "审核通过，可以添加和管理您的社员。");
-				map.put("notice_receiver", tempData.getOfficial_user_id());
+				map.put("notice_receiver", list.get(0).get("official_user_id"));
 				co_opManageMapper.addCoopAduitNotice(map);
+
+				// 通过coopID 和 userID 查询合作社管理员的社员编号
+				int coopID=tempData.getId();
+				int userID=Integer.parseInt(list.get(0).get("official_user_id").toString());
+				Map coopMemberID=co_opManageMapper.queryCoopMemberID(coopID,userID);
+
+				// 将该合作社的社员列表中的管理员状态变更为可用
+				Co_op_Member coOpMember=new Co_op_Member();
+				coOpMember.setId(Integer.parseInt(coopMemberID.get("id").toString()));
+				coOpMember.setState("0");
+				co_opManageMapper.updateCo_opMember(coOpMember);
+
+
 				return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 			} else {
 				return ResultUtil.error(500, "添加角色属性属性失败");
@@ -137,7 +187,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 		// 社员如果没有上传头像 则给个默认头像
 		if ("".equals(tempData.getImg_url())) {
-			tempData.setImg_url("1537932302213128");
+			tempData.setImg_url("1537932302213128.png");
 		}
 
 		// 根据tel 判断是否为平台用户 判断是否已经是当前合作社社员了（不允许重复添加）

@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bonc.medicine.mapper.field.Co_opManageMapper">
 
-	<insert id="insertCo_op" parameterType="com.bonc.medicine.entity.field.Co_op">
+	<insert id="insertCo_op" parameterType="com.bonc.medicine.entity.field.Co_op"
+			useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO field_coop
 		(name,introduce,total_area,img_url,portrait,cultivar,
 		age,telephone,address,official_user_id,official_user_name,establish_date,photo_url,state,is_audit,comment)
@@ -108,21 +109,11 @@
 
 	<select id="queryUserID" resultType="Map">
 
-		SELECT
-		'common' AS
-		table_name,id,name
+		SELECT id,name , age,head_portrait,address, CASE sex WHEN '男' THEN 0 ELSE 1 END as sex
 		FROM
 		common_user
 		WHERE
 		telephone = #{tel}
-		UNION
-		SELECT
-		'admin' AS table_name,id,name
-		FROM
-		common_backend_user
-		WHERE
-		telephone =
-		#{tel}
 
 	</select>
 
@@ -384,6 +375,14 @@
 		AS isCoopMember FROM field_coop_member
 		WHERE coop_id= #{coop_id} AND
 		telephone= #{telephone}
+	</select>
+
+	<select id="queryIsAlreadyCoopManager" resultType="Map" parameterType="Integer">
+		SELECT count(*) AS NUM FROM field_coop WHERE official_user_id = #{user_ID}  AND state = 0
+	</select>
+
+	<select id="queryCoopMemberID" resultType="Map">
+		SELECT id FROM field_coop_member WHERE coop_id = #{coop_id} AND user_id = #{user_id}
 	</select>
 
 </mapper>
