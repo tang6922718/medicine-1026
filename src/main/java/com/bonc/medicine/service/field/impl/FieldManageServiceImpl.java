@@ -41,6 +41,8 @@ public class FieldManageServiceImpl implements FieldManageService {
 			tempData.setUser_tel((String) map.get("telephone"));
 		}
 
+
+		// 查询所属合作社
 		Map map2 = new HashMap();
 		map2=fieldManageMapper.queryCoopName(tempData.getUser_id());  // map2 有可能为空
 		if (map2==null){
@@ -67,6 +69,8 @@ public class FieldManageServiceImpl implements FieldManageService {
 		}catch (Exception e){
 			System.out.println("ERROR ：新建田间操作中---增加积分异常");
 		}
+
+
 		if (i > 0) {
 			int insertNum = 0;
 			int fieldID = tempData.getId();

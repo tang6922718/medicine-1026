@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.Basicinfo;
+import com.bonc.medicine.entity.user.CoopMember;
 import com.bonc.medicine.entity.user.Cooperative;
 import com.bonc.medicine.entity.user.Expert;
 import com.bonc.medicine.enums.ResultEnum;
@@ -63,6 +64,17 @@ public class UserManagerServiceImpl implements UserManagerService {
 		map1.put("img_url", img_url);
 		userManagerMapper.updateField_coop(map);
 		userManagerMapper.updateField_coop_member(map1);
+		// 积分代码
+		Map<String, String> ppparamMap = new HashMap<>();
+		// userId;actionCode
+		ppparamMap.put("userId", id + "");
+		ppparamMap.put("actionCode", "COMPLETE_INFORMA");
+		try {
+
+			integralService.addIntegralHistory(ppparamMap);
+		} catch (Exception e) {
+			System.out.println("ERROR ：修改用户信息---增加积分异常");
+		}
 		return userManagerMapper.updateBasic(map);
 	}
 
@@ -72,7 +84,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 		map.put("tel", tel);
 		return userManagerMapper.getTel(map);
 	}
-	
+
 	@Override
 	public void addExpert(Expert expert) {
 		userManagerMapper.addExpert(expert);
@@ -201,13 +213,12 @@ public class UserManagerServiceImpl implements UserManagerService {
 		Map<String, Object> fansMap = attentionService.fansNum(userId);
 		queryMap.put("fansNum", fansMap.get("fansNum"));
 
-
-
-		//Map<String, Object> hudongMap = userManagerMapper.getActiveAndhudong(Integer.parseInt(userId))
-		List<Map<String, String>> interractMap = queryInteractTimes(userId);//interactNumber
+		// Map<String, Object> hudongMap =
+		// userManagerMapper.getActiveAndhudong(Integer.parseInt(userId))
+		List<Map<String, String>> interractMap = queryInteractTimes(userId);// interactNumber
 		queryMap.put("interact_count", interractMap.get(0).get("interactNumber"));
 
-		Map activeMap =  activeDays(userId);
+		Map activeMap = activeDays(userId);
 		queryMap.put("active_count", activeMap == null ? "0" : activeMap.get("acDays"));
 		Map<String, Object> pinZhongMap = userManagerMapper.getUserCarePinZhong(Integer.parseInt(userId));
 
@@ -279,19 +290,6 @@ public class UserManagerServiceImpl implements UserManagerService {
 		basicinfo.setRole(tempData.get("role").toString());
 		userManagerMapper.addBasic(basicinfo);
 		int id = basicinfo.getId();// user_id
-
-		// 积分代码
-		Map<String, String> ppparamMap = new HashMap<>();
-		//userId;actionCode
-		ppparamMap.put("userId", id + "");
-		ppparamMap.put("actionCode", "COMPLETE_INFORMA");
-		try{
-
-			integralService.addIntegralHistory(ppparamMap);
-		}catch (Exception e){
-			System.out.println("ERROR ：新建田间操作中---增加积分异常");
-		}
-
 		String[] role = basicinfo.getRole().split(",");
 		for (int i = 0; i < role.length; i++) {
 			userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
@@ -340,6 +338,18 @@ public class UserManagerServiceImpl implements UserManagerService {
 			String time = format.format(date);
 			cooperative.setEstablish_date(time);
 			userManagerMapper.addCooperative(cooperative);
+
+			CoopMember coopMember = new CoopMember();
+			coopMember.setName(tempData.get("name").toString());
+			coopMember.setAddress(tempData.get("address").toString());
+			if (!tempData.get("age").toString().equals("")) {
+				coopMember.setAge(Integer.parseInt(tempData.get("age").toString()));
+			}
+			coopMember.setSex(tempData.get("sex").toString());
+			coopMember.setCoop_id(cooperative.getId());
+			coopMember.setTelephone(tempData.get("telephone").toString());
+			coopMember.setUser_id(id);
+			userManagerMapper.addCoopMember(coopMember);
 		}
 	}
 
@@ -351,46 +361,46 @@ public class UserManagerServiceImpl implements UserManagerService {
 		return reMap;
 	}
 
-    public List<Map<String, Object>> activeDaysForBack(String userId) {
-	    if (StringUtils.isBlank(userId)){
-	        throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
-        }
+	public List<Map<String, Object>> activeDaysForBack(String userId) {
+		if (StringUtils.isBlank(userId)) {
+			throw new MedicineRuntimeException(ResultEnum.MISSING_PARA);
+		}
 
-        String [] ids = userId.split(",");
-        List<Map<String, Object>> reMap = userManagerMapper.activeDaysForBack(userId);
-        List<Map<String, Object>> reListMap = new ArrayList<>();
-        if(null == reMap ||reMap.size() == 0 || null == reMap.get(0) || reMap.get(0).isEmpty()) {
-            for (String id :ids ){
-                Map<String, Object> mmap = new HashMap<>();
-                mmap.put("user_id", id);
-                mmap.put("acDays", "0");
-                reListMap.add(mmap);
-            }
-            return reListMap;
-        }
-        List<String> idList = new ArrayList<>();
+		String[] ids = userId.split(",");
+		List<Map<String, Object>> reMap = userManagerMapper.activeDaysForBack(userId);
+		List<Map<String, Object>> reListMap = new ArrayList<>();
+		if (null == reMap || reMap.size() == 0 || null == reMap.get(0) || reMap.get(0).isEmpty()) {
+			for (String id : ids) {
+				Map<String, Object> mmap = new HashMap<>();
+				mmap.put("user_id", id);
+				mmap.put("acDays", "0");
+				reListMap.add(mmap);
+			}
+			return reListMap;
+		}
+		List<String> idList = new ArrayList<>();
 
-        for (String arrayId : ids) {
-            idList.add(arrayId);
-        }
+		for (String arrayId : ids) {
+			idList.add(arrayId);
+		}
 
-        List<String> queryList = new ArrayList<>();
-        for (Map<String, Object> map :reMap ) {
-            String iuse_id = map.get("user_id") + "";
-            queryList.add(iuse_id);
-        }
+		List<String> queryList = new ArrayList<>();
+		for (Map<String, Object> map : reMap) {
+			String iuse_id = map.get("user_id") + "";
+			queryList.add(iuse_id);
+		}
 
-        for (String idid : idList) {
-            if (!queryList.contains(idid)){
-                Map<String, Object> inaMap = new HashMap<>();
-                inaMap.put("user_id", idid);
-                inaMap.put("acDays", "0");
-                reMap.add(inaMap);
-            }
-        }
+		for (String idid : idList) {
+			if (!queryList.contains(idid)) {
+				Map<String, Object> inaMap = new HashMap<>();
+				inaMap.put("user_id", idid);
+				inaMap.put("acDays", "0");
+				reMap.add(inaMap);
+			}
+		}
 
-        return reMap;
-    }
+		return reMap;
+	}
 
 	public List<Map<String, String>> queryInteractTimes(String userId) {
 		if (StringUtils.isEmpty(userId)) {
