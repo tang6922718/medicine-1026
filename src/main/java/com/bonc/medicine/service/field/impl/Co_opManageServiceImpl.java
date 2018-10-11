@@ -56,6 +56,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 		tempData.setOfficial_user_id((int) map.get("id"));
 		tempData.setOfficial_user_name((String) map.get("name"));
+		tempData.setCultivar(ExchangeCategroyNameID.NameToId(tempData.getCultivar(),categroyList));
 		tempData.setState("0"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		tempData.setIs_audit("1"); //is_audit: 0 已审核   1 未审核   2 审核不通过
 
