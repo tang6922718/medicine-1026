@@ -41,9 +41,8 @@ public class BuyersServiceImpl implements BuyersService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<Map<String, Object>> latestPurchaseList(int limit) {
+	public List<Map<String, Object>> latestPurchaseList() {
 		Map params = new HashMap();
-		params.put("limit", limit);
 		params.put("is_aduit", 1);
 		return buyersMapper.latestPurchaseList(params);
 	}
