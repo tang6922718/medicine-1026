@@ -267,8 +267,6 @@
 		common_medicine_variety d ON b.categroyID = d.variety_code
 		WHERE
 		a.state = '0'
-		AND a.guide_flag = '0'
-		AND a.creator_id = #{user_id}
 		AND
 		b.record_user_id = #{user_id}
 		AND b.guide_flag = '0'
@@ -291,19 +289,23 @@
 
 	<select id="queryFarmOpreationByCategroy" resultType="Map"
 		parameterType="Integer">
-		SELECT id,step_name FROM km_sop_step WHERE sop_id =
-		#{categroyID} ORDER BY step_order ASC
+		SELECT A.id,A.step_name,B.sop_type FROM km_sop_step A, km_variety_sop B
+         WHERE A.status = 1  AND A.sop_id=B.id AND B.sop_status = 1 AND B.record_status =3
+               AND B.variety_id = #{categroyID}
+		 ORDER BY A.step_order ASC
 	</select>
 
 	<select id="querySOP" resultType="Map" parameterType="Map">
-		SELECT short_desc AS briefly,detail_desc AS detail,next_suggestion,
-		recommendation,audio_url,example_url FROM km_sop_step WHERE 1=1
-		<if test='sop_id != null and sop_id != ""'>
-			AND sop_id = #{sop_id}
+		SELECT A.short_desc AS briefly,A.detail_desc AS detail,A.next_suggestion,
+		A.recommendation,A.audio_url,A.example_url,B.sop_type FROM km_sop_step A ,km_variety_sop B
+		WHERE A.status = 1  AND A.sop_id=B.id AND B.sop_status = 1 AND B.record_status =3
+		<if test='variety_id != null and variety_id != ""'>
+			AND B.variety_id = #{variety_id}
 		</if>
 		<if test='id != null and id != ""'>
-			AND id = #{id}
+			AND A.id = #{id}
 		</if>
+
 	</select>
 
 

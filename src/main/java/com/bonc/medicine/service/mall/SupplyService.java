@@ -1,5 +1,8 @@
 package com.bonc.medicine.service.mall;
 
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Supply;
@@ -10,7 +13,7 @@ public interface SupplyService {
 
     public Result<Object> getRecommend(String site); // 精品推荐查询
 
-    public Result<Object> getLastest(JSONObject json); // 最新供应列表查询
+    public List<Map<String, Object>> getLastest(JSONObject json); // 最新供应列表查询
 
     public Result<Object> getDetails(String id); //供应详情查询
 

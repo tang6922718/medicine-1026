@@ -14,7 +14,7 @@ public interface SupplyMapper {
 
     public List<Map> queryRecommend(String site); // 推荐查询
 
-    public List<Map> querySupplyByCondition(Map<String, Object> tempData); //最新供应列表查询
+    public List<Map<String, Object>> querySupplyByCondition(Map<String, Object> tempData); //最新供应列表查询
 
     public Map queryDetails(String id); //供应详情查询
 
