@@ -27,6 +27,7 @@
 			a.title,
 			a.cat_code,
 			b.cat_name,
+			a.img_url,
 			a.publish_date
 		FROM
 			info_basic a
@@ -35,7 +36,7 @@
 		ORDER BY
 			a.publish_date DESC)
 		UNION
-		(SELECT a.id,a.title,4 AS cat_cade, '文章' AS cat_name,a.publish_time AS publish_date FROM spec_article a WHERE a.id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=2 AND user_id = #{user_id})
+		(SELECT a.id,a.title,4 AS cat_cade, '文章' AS cat_name,a.img_url,a.publish_time AS publish_date FROM spec_article a WHERE a.id IN (SELECT collect_object_id FROM common_collection WHERE collect_type=2 AND user_id = #{user_id})
 		ORDER BY
 		a.publish_time DESC)
 	</select>
