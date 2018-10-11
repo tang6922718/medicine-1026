@@ -29,6 +29,7 @@ public interface InfoMapper {
             "<when test='operationClass==2'  >",
             "AND is_alarm =1 ",
             "</when>",
+            "and ORDER BY publish_date DESC",
             "</script>"})
     @ResultType(List.class)
     List<Map> getAllInfo(@Param("catCode") String catCode,@Param("title") String title,@Param("status") String status,@Param("source_code") String source_code,@Param("operationClass") String operationClass);
@@ -51,7 +52,7 @@ public interface InfoMapper {
     @Insert("insert into km_audit(title,km_type,object_id,status,fail_opinion) values (#{title},#{cat_code},#{id},#{audit_result},#{audit_info})")
     int infoAuditInsert(Map<String, Object> map);
 
-    @Select("select * from info_basic where cat_code=#{cat_code}")
+    @Select("select * from info_basic where cat_code=#{cat_code} ")
     List<Map> infoClass(Map<String, Object> map);
 
     //更新阅读量+1，并返回阅读量
