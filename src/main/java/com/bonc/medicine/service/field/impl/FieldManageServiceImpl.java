@@ -216,7 +216,7 @@ public class FieldManageServiceImpl implements FieldManageService {
 	@Override
 	public Result<Object> getCategroySOPInfo(int categroyID, int stepID) {
 		Map map = new HashMap();
-		map.put("sop_id", categroyID);
+		map.put("variety_id", categroyID);
 		map.put("id", stepID);
 		return ResultUtil.success(fieldManageMapper.querySOP(map));
 	}
