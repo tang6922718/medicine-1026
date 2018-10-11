@@ -256,12 +256,13 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	}
 
 	@Override
+	@Transactional
 	public Result<Object> deleteCo_opMember(int id) {
 		Co_op_Member tempData = new Co_op_Member();
 		tempData.setId(id);
 		tempData.setState("1"); // 数据是否可用： 0 可用 1 不可用（数据删除时至为1）
 		int i = co_opManageMapper.updateCo_opMember(tempData);
-		if (i > 0) {
+		if (i > 0) { // 社员删除时  合作社的种植面积对应减少
 			co_opManageMapper.updateCoopTotalAreaReduce(id);
 		}
 		return ResultUtil.success(co_opManageMapper.updateCo_opMember(tempData));
