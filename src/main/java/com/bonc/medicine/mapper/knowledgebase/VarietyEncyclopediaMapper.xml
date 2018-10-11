@@ -138,7 +138,7 @@
 		 	and variety_id = #{variety_code}
 		</if>
 		<if test="variety_name != null and variety_name != ''">
-			and chinese_name = concat('%',#{variety_name},'%') OR alias LIKE concat('%',#{variety_name},'%')
+			and chinese_name LIKE concat('%',#{variety_name},'%') OR alias LIKE concat('%',#{variety_name},'%')
 		</if>
 	</select>
 

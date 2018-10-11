@@ -90,4 +90,8 @@ public interface Co_opManageMapper {
     public Map queryIsAlreadyAssistantOtherCoop(int user_ID); // 查询用户是否已经是其它合作社的技术员
 
     public Map queryIsAlreadyCoopMember(@Param("coop_id") int coop_id, @Param("telephone") String telephone); // 根据电话号码和合作社ID查询用户是否已经是合作社成员
+
+    public Map queryIsAlreadyCoopManager(int user_ID); // 根据用户ID去查询其是否已经是其它合作社管理员了
+
+    public Map queryCoopMemberID(@Param("coop_id") int coopID, @Param("user_id") int userID); // 根据coopID 和 userID查询社员编号
 }

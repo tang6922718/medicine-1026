@@ -151,8 +151,8 @@
 	</select>
 
 	<select id="queryCoopName" resultType="Map" parameterType="Integer">
-		SELECT name AS coop_name FROM field_coop WHERE state='0'
-		AND id =
+		SELECT GROUP_CONCAT(name) AS coop_name FROM field_coop WHERE state='0'
+		AND id IN
 		(SELECT coop_id FROM field_coop_member WHERE state='0' AND user_id =
 		#{ID})
 	</select>

@@ -1,6 +1,7 @@
 package com.bonc.medicine.entity.user;
 
 public class Cooperative {
+	private int id;//合作社id
 	private String name;// 合作社名字
 	private int official_user_id;// 负责人id
 	private String official_user_name;// 负责人名字
@@ -11,6 +12,13 @@ public class Cooperative {
 	private String introduce;// 详细介绍
 	private String telphone;//电话号码
 
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

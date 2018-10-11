@@ -158,12 +158,13 @@ public class IntegralServiceImpl implements IntegralService {
             throw new MedicineRuntimeException(ResultEnum.ERROE);
         }
         boolean goingDown = checkIntegralTimes(paramMap, ruleDemo);
-        Map<String, String> scoreMap = updateIntegralUtil(paramMap);
+        Map<String, String> scoreMap  =  new HashMap<>();
         if(!goingDown){
             scoreMap.put("succeedScore", "0");
             scoreMap.put("msg", "亲！今天你也元气满满呢，操作次数上限了哦");
+            return scoreMap;
         }
-
+        scoreMap = updateIntegralUtil(paramMap);
         //添加历史记录表
         int impactNumberScore = integralMapper.addIntegralHistory(paramMap);//如果失败等待再次执行时比较好的。
 
