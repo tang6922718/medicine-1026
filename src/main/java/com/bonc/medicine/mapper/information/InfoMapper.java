@@ -29,7 +29,7 @@ public interface InfoMapper {
             "<when test='operationClass==2'  >",
             "AND is_alarm =1 ",
             "</when>",
-            "and ORDER BY publish_date DESC",
+            "ORDER BY publish_date DESC",
             "</script>"})
     @ResultType(List.class)
     List<Map> getAllInfo(@Param("catCode") String catCode,@Param("title") String title,@Param("status") String status,@Param("source_code") String source_code,@Param("operationClass") String operationClass);
