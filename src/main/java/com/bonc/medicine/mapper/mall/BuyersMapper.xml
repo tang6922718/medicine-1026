@@ -39,6 +39,28 @@
 		ORDER by mp.publish_time DESC
     </select>
     
+    
+    <select id="purchasepCatList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,cu.name,cu.telephone
+		FROM
+			mall_purchase mp 	
+			LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
+			Left join common_user cu ON cu.id = mp.user_id
+		WHERE mp.state = '1' and mp.is_aduit = '1'
+		<if test="cat_code != null and cat_code != ''">
+			and mp.purchase_cat_code = #{cat_code}
+		</if>
+		<if test="goods_cat_code != null and goods_cat_code != ''">
+			and mp.goods_cat_code = #{goods_cat_code}
+		</if>
+		<if test="goods_name != null and goods_name != ''">
+			and (mp.goods_name like CONCAT('%',#{goods_name},'%'))
+		</if>
+		GROUP BY mp.id,mp.goods_name,mp.specification,mp.purchase_quantity,mp.publish_time
+		ORDER by mp.publish_time DESC
+    </select>
+    
 	<!-- 逻辑上删除，数据库只做修改 -->
     <update id="deletePurchase" parameterType="java.lang.String">
     	update mall_purchase SET state = '0' WHERE id IN 
