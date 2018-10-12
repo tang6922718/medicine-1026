@@ -51,6 +51,7 @@ public class VerificationUtilsController {
     public Result getVerificationCode(@RequestBody Map<String, String> map){
 
 
+
         String code = VerificationUtils.getVerifByPhone(map.get("phone"));
 
         //目前设置的验证码过期时间是5分钟-考虑要发送会延迟

@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
         paramMap.put("password", DigestUtils.md5Hex(paramMap.get("password")));
         paramMap.put("phone", paramMap.get("phone"));
 
+
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         paramMap.put("updateTime" , df.format(new Date()));
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getTableByPhone(String phone) {
         List<Map<String, Object>> tableMap = userMapper.getTableByPhone(phone);
-        if (tableMap.size() == 0 || tableMap.get(0).get("table_name") == null ){
+        if (tableMap.size() == 0 || null ==  tableMap.get(0) || tableMap.get(0).get("table_name") == null ){
             throw new MedicineRuntimeException(ResultEnum.ERROR_PHONE);
         }
 
@@ -230,6 +231,7 @@ public class UserServiceImpl implements UserService {
         if(!StringUtils.equals(map.get("newPassword").trim(), map.get("secNewPassword").trim())){
             throw new MedicineRuntimeException(ResultEnum.ERROR_PARAM);
         }
+        getTableByPhone(map.get("telephone"));
 
         Map paramMap = new HashMap();
         paramMap.put("tableName", "common_user");
@@ -411,6 +413,7 @@ public class UserServiceImpl implements UserService {
             throw new MedicineRuntimeException(ResultEnum.ERROR_PARAM);
         }
 
+        getTableByPhone(map.get("telephone"));
         Map paramMap = new HashMap();
         paramMap.put("tableName", "common_backend_user");
         paramMap.put("phone", map.get("telephone"));
