@@ -26,7 +26,7 @@ public class Co_op {
     private Date establish_date;//合作社成立日期
     private String photo_url; // 合作社申请照片
     private String state; // 数据状态   0 可用    1 不可用
-    private String is_audit; // 是否审核   0 已审核    1 未审核
+    private String is_audit; // 是否审核   0 已审核    1 未审核   2 审核不通过
     private String comment; //审核未通过的原因
 
     public int getId() {
