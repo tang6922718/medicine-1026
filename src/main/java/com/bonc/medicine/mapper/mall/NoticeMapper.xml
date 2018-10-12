@@ -20,7 +20,7 @@
 		), ',%' )
 		AND notice_type = '2'
 		AND STATUS = '1'
-		AND state = '1' UNION
+		AND state = '1' AND is_send = '1' UNION
 		SELECT
 		id,
 		notice_type,
@@ -35,7 +35,7 @@
 		</foreach>
 		AND
 		STATUS = '1'
-		AND state = '1'
+		AND state = '1' AND is_send = '1'
 		) AS a
 		ORDER BY
 		publish_time DESC
@@ -65,7 +65,7 @@
 		c.id
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
-		AND a.notice_type = '3' and a.STATUS = '1' and a.state = '1'
+		AND a.notice_type = '3' and a.STATUS = '1' and a.state = '1' and a.is_send = '1'
 		order by a.publish_time desc 
 	</select>
 
@@ -87,7 +87,7 @@
 		c.id
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
-		AND a.notice_type = '4' and a.STATUS = '1' and a.state = '1'
+		AND a.notice_type = '4' and a.STATUS = '1' and a.state = '1' and a.is_send = '1'
 		order by a.publish_time desc
 	</select>
 
@@ -113,8 +113,12 @@
 		WHERE
 		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id} ), ',%' )
 		AND
-		a.notice_type = '5' and a.STATUS = '1' and a.state = '1'
+		a.notice_type = '5' and a.STATUS = '1' and a.state = '1' and a.is_send = '1'
 		order by a.publish_time desc
 	</select>
+
+	<update id="scanNotice">
+		update common_notice set is_send = '1' where (is_send = '0' or is_send is null) and  send_time <![CDATA[ <= ]]> now()
+	</update>
 
 </mapper>

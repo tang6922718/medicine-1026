@@ -283,6 +283,7 @@
 			si.issue_address,
 			si.follow_days,
 			cmv.variety_name,
+			cmv.variety_code,
 			ds.subject_name,
 			si.field_ids,
 			(CASE si.issue_status WHEN 0 THEN '未处理'
@@ -295,7 +296,8 @@
 			cu.head_portrait,
 			cu.telephone,
 			cu.address,
-			cu.id as issue_user_id
+			cu.id as issue_user_id,
+      		si.is_revisited
 		FROM
 			spec_issue si
 			LEFT JOIN common_user cu ON si.issue_user_id = cu.id

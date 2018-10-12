@@ -16,8 +16,8 @@
 
 	<insert id="addSupplyNotice" parameterType="Map">
 		insert into
-		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
-		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1');
+		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state,send_time,is_send)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1',now(),'1');
 	</insert>
 
 	<select id="querySupply" parameterType="Map" resultType="Map">
@@ -98,8 +98,8 @@
 
 	<insert id="addNotice" parameterType="Map">
 		insert into
-		common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state)
-		values('5',#{object_id},#{notice_content},#{publish_user_id},#{notice_receiver},now(),'1','1')
+		common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state,send_time,is_send)
+		values('5',#{object_id},#{notice_content},#{publish_user_id},#{notice_receiver},now(),'1','1',now(),'1')
 	</insert>
 
 	<insert id="reply" parameterType="com.bonc.medicine.entity.mall.Reply">

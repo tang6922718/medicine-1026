@@ -315,14 +315,23 @@ public class SpecRepertoryController {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@GetMapping("/articles")
-	public Result articleList(String spec_id, String title, String status, String start, String end) {
+	public Result articleList(String spec_id, String title, String status, String start, String end , Integer pageNum, Integer pageSize) {
 		Map param = new HashMap<>();
 		param.put("spec_id", spec_id);
 		param.put("title", title);
 		param.put("status", status);
 		param.put("start", start);
 		param.put("end", end);
-		return ResultUtil.success(specialistService.articleList(param));
+		// 开始分页,不传默认查询全部
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		List<Map> articleMap=specialistService.articleList(param);
+		if (pageNum != null && pageSize != null) {
+			total =  articleMap == null ? 0L : ((Page<Map>)articleMap).getTotal();
+		}
+		return ResultUtil.successTotal(articleMap,total);
 	}
 
 	@PutMapping("/revokeArt")
@@ -435,17 +444,37 @@ public class SpecRepertoryController {
 			Result result = meetProfessorService.expert(Integer.parseInt(issue_id));
 			if (result.getCode() == 200) {
 				List<Map> res = (List) result.getData();
-				resultMap.put("invitedNum", res.size());
+				int num=0;
 				for (Map map : res) {
 					String specid = map.get("specid") + "";
 					for (Map<String, Object> map2 : list) {
 						if (specid.equals(map2.get("spec_id") + "")) {
 							map2.put("invited", "1");
+							num++;
+						}
+						if(!"1".equals(map2.get("invited"))){
+							map2.put("invited", "0");
 						}
 					}
 				}
+				resultMap.put("invitedNum", num);
 			}
 		}
+		 Collections.sort(list, new Comparator<Map>() {  
+			  
+	            @Override  
+	            public int compare(Map o1,Map o2) {  
+	                // 按照专家是否邀请降序排列  
+	                if (Integer.parseInt(o1.get("invited")+"") > Integer.parseInt(o2.get("invited")+"") ) {  
+	                    return -1;  
+	                }  
+	                if (Integer.parseInt(o1.get("invited")+"") == Integer.parseInt(o2.get("invited")+"")) {  
+	                    return 0;  
+	                }  
+	                return 1;  
+	            }  
+	        });  
+		 
 		resultMap.put("list", list);
 		return ResultUtil.success(resultMap);
 	}

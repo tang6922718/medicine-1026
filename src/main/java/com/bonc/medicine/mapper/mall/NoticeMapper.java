@@ -18,4 +18,6 @@ public interface NoticeMapper {
 	
 	public List<Map<String, Object>> message(Map map);
 	
+	public void scanNotice();
+	
 }
