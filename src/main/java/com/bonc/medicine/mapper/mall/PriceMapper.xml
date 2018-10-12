@@ -50,7 +50,7 @@
 			AND market_name = #{market}
 		</if>
 		ORDER BY
-		price_date
+		price_date desc
 	</select>
 
 	<select id="homeMarket" parameterType="Map" resultType="Map">
@@ -105,7 +105,7 @@
 		GROUP BY
 		price_date
 		ORDER BY
-		price_date
+		price_date desc
 	</select>
 
 	<select id="detail" parameterType="Map" resultType="Map">
@@ -137,7 +137,7 @@
 		GROUP BY
 		price_date
 		ORDER BY
-		price_date
+		price_date desc
 		limit 0,10
 	</select>
 
@@ -195,7 +195,7 @@
 			#{end_time}
 		</if>
 		ORDER BY
-		price_date
+		price_date desc
 	</select>
 
 	<update id="priceState" parameterType="Map">

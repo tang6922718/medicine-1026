@@ -12,6 +12,8 @@ public class Notice {
 	private String publish_time;
 	private String status;
 	private String state;
+	private String send_time;
+	private String is_send;
 
 	public int getId() {
 		return id;
@@ -102,4 +104,20 @@ public class Notice {
 		this.state = state;
 	}
 
+	public String getSend_time() {
+		return send_time;
+	}
+
+	public void setSend_time(String send_time) {
+		this.send_time = send_time;
+	}
+
+	public String getIs_send() {
+		return is_send;
+	}
+
+	public void setIs_send(String is_send) {
+		this.is_send = is_send;
+	}
+	
 }

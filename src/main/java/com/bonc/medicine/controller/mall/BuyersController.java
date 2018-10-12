@@ -104,9 +104,10 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@GetMapping("/purchase/catalog")
-	public Result<Object> purchasepCatList(String cat_code,String goods_cat_code) {
-		return ResultUtil.success(buyersService.purchasepCatList(cat_code,goods_cat_code));
-	} 
+	public Result<Object> purchasepCatList(String cat_code, String goods_cat_code, String goods_name) {
+		return ResultUtil.success(buyersService.purchasepCatList(cat_code, goods_cat_code, goods_name));
+	}
+
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@GetMapping("/purchase/name")

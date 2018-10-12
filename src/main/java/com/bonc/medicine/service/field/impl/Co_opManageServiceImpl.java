@@ -42,8 +42,6 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		// 所有品种信息 后面转码用
 		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
 
-		Co_op coOp=tempData; // 备份一下  后面要用
-
 		// 根据电话号码去查用户信息   该SQL返回: id,name , age,head_portrait, address, sex
 		Map map = new HashMap();
 		map = co_opManageMapper.queryUserID(tempData.getTelephone());
@@ -76,10 +74,10 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			coOpMember.setImg_url(map.get("head_portrait").toString());
 			coOpMember.setSex(map.get("sex").toString());
 			coOpMember.setAge(Integer.parseInt(map.get("age").toString()));
-			coOpMember.setTelephone(coOp.getTelephone());
+			coOpMember.setTelephone(tempData.getTelephone());
 			coOpMember.setAddress(map.get("address").toString());
 			coOpMember.setPlant_age(0);
-			coOpMember.setPlant_cat_id(ExchangeCategroyNameID.NameToId(coOp.getCultivar(),categroyList));
+			coOpMember.setPlant_cat_id(tempData.getCultivar());
 			coOpMember.setPlant_area(0);
 			coOpMember.setCoop_id(coopID);
 			coOpMember.setUser_id(map.get("id").toString());
@@ -117,10 +115,14 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Override
 	public Result<Object> getCo_opInfo(Map params) {
 
+		// 所有品种信息 后面转码用
+		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
+
 		List<Map> list = new ArrayList<Map>();
 		list = co_opManageMapper.queryCo_opByCondition(params);
 		if (list.size() > 0) {
 			for (Map obj : list) {
+				obj.put("cultivar",ExchangeCategroyNameID.IDToName(obj.get("cultivar").toString(),categroyList));
 				obj.putAll(co_opManageMapper.queryCo_opMemberNum((int) obj.get("coopID")));
 				obj.putAll(co_opManageMapper.queryPlantNum((int) obj.get("coopID")));
 				obj.putAll(co_opManageMapper.queryAssistantNum((int) obj.get("coopID")));
