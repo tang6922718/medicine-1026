@@ -28,7 +28,6 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public int addInfo(@RequestBody Map<String, Object> map) {
-
         return infoMapper.addInfo(map);
     }
 

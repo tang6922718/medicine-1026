@@ -139,4 +139,9 @@ public class TrainServiceImpl implements TrainService {
     public int updateTrainStatus() {
         return commonMapper.updateTrainStatus();
     }
+
+    @Override
+    public List<Map> selectTrainContribute(Map<String, Object> map) {
+        return trainMapper.selectTrainContribute(map);
+    }
 }

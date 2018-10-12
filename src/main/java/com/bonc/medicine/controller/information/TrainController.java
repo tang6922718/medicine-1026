@@ -192,6 +192,17 @@ public class TrainController {
     /**
      * @param map
      * @return
+     * @description 我的贡献(查询我的贡献中直播和线下培训列表)
+     */
+    @RequestMapping("/selectTrainContribute")
+    public Result selectTrainContribute(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
+        return ResultUtil.success(trainService.selectTrainContribute(map));
+    }
+
+    /**
+     * @param map
+     * @return
      * @description 编辑线下视频  (编辑线下视频)
      */
     @RequestMapping("/editOfflineTrainVideo")

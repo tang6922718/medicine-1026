@@ -122,8 +122,9 @@ public interface TrainMapper {
     @ResultType(List.class)
     List<Map> selectVideoHot();
 
-
-    int updateTrainStatus();
+    @SelectProvider(type = TrainDynaSqlProvider.class,
+            method = "selectTrainContribute")
+    List<Map> selectTrainContribute(Map<String,Object> map);
 
 
     class TrainDynaSqlProvider {
@@ -346,8 +347,32 @@ public interface TrainMapper {
                         break;
                 }
 //                where id in (select object_id from train_appointment where user_id=#{user_id} and  object_type=#{object_type})
+            }}.toString();
+        }
 
-
+        public String selectTrainContribute(final Map<String, Object> map) {
+            return new SQL() {{
+                SELECT("*");
+                switch (Integer.valueOf(String.valueOf(map.get("object_type")))) {
+                    case 1:
+                        FROM("train_live");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("user_id=#{user_id}");
+                        }
+                        break;
+                    case 2:
+                        FROM("train_offline");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("user_id=#{user_id}");
+                        }
+                        break;
+                    default:
+                        FROM("train_live");
+                        if (map.get("user_id") != null && map.get("object_type") != null) {
+                            WHERE("user_id=#{user_id}");
+                        }
+                        break;
+                }
             }}.toString();
         }
 

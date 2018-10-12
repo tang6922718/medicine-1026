@@ -50,4 +50,6 @@ public interface TrainService {
     List<Map> selectVideoHot();
 
     int updateTrainStatus();
+
+    List<Map> selectTrainContribute(Map<String,Object> map);
 }
