@@ -16,7 +16,7 @@
 	<select id="selectAllDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name,b.address,if(b.head_portrait='' or b.head_portrait=null or b.head_portrait='undefined','1537932340623980',b.head_portrait) head_portrait,c.cat_name
+		,b.name,b.address,b.head_portrait,c.cat_name
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
@@ -37,7 +37,7 @@
 	<select id="selectUserDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name,b.address,if(b.head_portrait='' or b.head_portrait=null or b.head_portrait='undefined','1537932340623980',b.head_portrait) head_portrait,c.cat_name
+		,b.name,b.address,b.head_portrait,c.cat_name
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
@@ -54,7 +54,7 @@
 	<select id="selectDetailOneDyanimic" resultType="java.util.Map">
 		SELECT
 		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
-		,b.name,b.address,if(b.head_portrait='' or b.head_portrait=null or b.head_portrait='undefined','1537932340623980',b.head_portrait) head_portrait
+		,b.name,b.address,b.head_portrait
 		FROM
 		comm_dyanimic a
 		left join common_user b on a.publish_user_id = b.id
@@ -103,7 +103,7 @@
 	<select id="selectJoinDyanimic" resultType="java.util.Map">
 
 		select distinct a.* from (
-			select DISTINCT a.*,b.praise_time as joinTime,d.address,if(b.head_portrait='' or b.head_portrait=null or b.head_portrait='undefined','1537932340623980',b.head_portrait) head_portrait from
+			select DISTINCT a.*,b.praise_time as joinTime,d.address,d.head_portrait from
 			comm_dyanimic a
 			left join common_praise b on a.id = b.object_id
 			left join common_user d on a.publish_user_id = d.id
