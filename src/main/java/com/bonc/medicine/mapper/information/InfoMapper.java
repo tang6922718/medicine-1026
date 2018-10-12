@@ -29,6 +29,15 @@ public interface InfoMapper {
             "<when test='operationClass==2'  >",
             "AND is_alarm =1 ",
             "</when>",
+            "<when test='operationClass==3'  >",
+            "AND is_market_top =1 ",
+            "</when>",
+            "<when test='operationClass==4'  >",
+            "AND is_real =1 ",
+            "</when>",
+            "<when test='operationClass==5'  >",
+            "AND is_pest =1 ",
+            "</when>",
             "ORDER BY publish_date DESC",
             "</script>"})
     @ResultType(List.class)
