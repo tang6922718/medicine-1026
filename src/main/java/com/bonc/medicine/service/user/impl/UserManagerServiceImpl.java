@@ -234,7 +234,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 			return ResultUtil.error(ResultEnum.MISSING_PARA);
 		}
 
-		if (Integer.parseInt(params.get("isPlant")) == 0) { // 是否种植户 0 是 1 不是
+		if (Integer.parseInt(params.get("isPlant")) == 1) { // 是否种植户 0 不是 1 是
 			// 先删除 再插入
 			int i = userManagerMapper.deleteUserPlantRole(Integer.parseInt(params.get("userID")));
 			i = userManagerMapper.insertUserPlantRole(Integer.parseInt(params.get("userID")));

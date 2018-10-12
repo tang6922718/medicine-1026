@@ -10,6 +10,7 @@ import com.bonc.medicine.service.management.CollectionService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.Signature;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,12 @@ public class TrainController {
      * @description 线下培训列表(线下培训列表)  列表传 {}  详情传  id
      */
     @RequestMapping("/selectTrainList")
-    public Result selectTrainList(@RequestBody Map<String, Object> map) {
-        return ResultUtil.success(trainService.selectTrainList(map));
+    public Result selectTrainList(@RequestBody Map<String, Object> map,
+                                  @RequestParam(required = false, defaultValue = "1") String pageNum,
+                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        List list=trainService.selectTrainList(map,pageNum,pageSize);
+        PageInfo<List> pageInfo = new PageInfo<List>(list);
+        return ResultUtil.successTotal(list, pageInfo.getTotal());
     }
 
 
@@ -115,7 +120,10 @@ public class TrainController {
      * @description 视频课程列表(视频课程列表)(通过id查询 视频课程详情) (查询)  不传全部，类别查询，id查询都可以
      */
     @RequestMapping("/selectCourseList")
-    public Result selectCourseList(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
+    public Result selectCourseList(@CurrentUser String user_id,
+                                   @RequestBody(required = false) Map<String, Object> map,
+                                   @RequestParam(required = false, defaultValue = "1") String pageNum,
+                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
 
         if (null != map.get("id")) {
             Map<String, String> numberMap = new HashMap();
@@ -123,15 +131,17 @@ public class TrainController {
             numberMap.put("objectType", "4");
             viewNumberService.addOrUpdateViewNumberCord(numberMap);
         }
-        List<Map> list = trainService.selectCourseList(map);
+        List list = trainService.selectCourseList(map,pageNum,pageSize);
         Map map2 = new HashMap();
         map2.put("objectType", "4");
-        for (Map map1 : list) {
-            map2.put("objectId", String.valueOf(map1.get("id")));
-            map1.put("viewNum", viewNumberService.queryViewNumber(map2));
-            map1.put("isCollect", collectionService.isCollect("5", String.valueOf(map1.get("id")), user_id));
+        for (Object map1 : list) {
+            map2.put("objectId", String.valueOf(((Map)map1).get("id")));
+            ((Map)map1).put("viewNum", viewNumberService.queryViewNumber(map2));
+            ((Map)map1).put("isCollect", collectionService.isCollect("5", String.valueOf(((Map)map1).get("id")), user_id));
         }
-        return ResultUtil.success(list);
+        PageInfo<List> pageInfo = new PageInfo<List>(list);
+        return ResultUtil.successTotal(list, pageInfo.getTotal());
+
     }
 
     /**
@@ -298,7 +308,7 @@ public class TrainController {
      */
     @RequestMapping("/selectSpecialist")
     public Result selectSpecialist(@RequestParam(required = false) String specId) {
-        Integer spec=null;
+        Integer spec = null;
         if (!StringUtils.isEmpty(specId)) {
             spec = Integer.parseInt(specId);
         }

@@ -10,6 +10,7 @@ import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.TecentCloudUtils;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,27 +61,28 @@ public class LiveController {
      * @description 获取所有直播（直播课堂列表）（包含为直播未开启的）
      */
     @RequestMapping("/selectLive")
-    public Result selectLive(@RequestBody Map<String, Object> map) {
+    public Result selectLive(@RequestBody Map<String, Object> map,
+                             @RequestParam(required = false, defaultValue = "1") String pageNum,
+                             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
         for (Map<String, String> map1 : lists) {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
-        List<Map<String, Object>> list = liveService.selectAllLive(map);
+        List list = liveService.selectAllLive(map,pageNum,pageSize);
         Map map2 = new HashMap();
         map2.put("object_type", "2");
-        for (Map map1 : list) {
-            map2.put("object_id", map1.get("id"));
-            map1.put("applyNum", trainService.selectApply(map2));
+        for (Object map1 : list) {
+            map2.put("object_id", String.valueOf(((Map) map1).get("id")));
+            ((Map) map1).put("applyNum", trainService.selectApply(map2));
         }
-
-        return ResultUtil.success(list);
+        PageInfo<List> pageInfo = new PageInfo<List>(list);
+        return ResultUtil.successTotal(list, pageInfo.getTotal());
     }
 
     /**
      * @param id
      * @return
      * @description 开启录制
-     *
      */
     @RequestMapping("/openRecord")
     public Result openRecord(@RequestParam String id) {
