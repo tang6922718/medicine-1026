@@ -191,7 +191,7 @@
 			and a.publish_time &gt;= #{start_time}
 		</if>
 		and a.`status` IS null
-		ORDER BY a.`status` DESC
+		ORDER BY a.publish_time DESC,a.`status` DESC
 	</select>
 	
 	<update id="changeStatus" parameterType="java.util.Map">
