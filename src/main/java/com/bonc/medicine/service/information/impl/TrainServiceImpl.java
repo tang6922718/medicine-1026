@@ -3,6 +3,7 @@ package com.bonc.medicine.service.information.impl;
 import com.bonc.medicine.mapper.information.CommonMapper;
 import com.bonc.medicine.mapper.information.TrainMapper;
 import com.bonc.medicine.service.information.TrainService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List<Map> selectCourseList(Map<String, Object> map) {
+    public List<Map> selectCourseList(Map<String, Object> map,String pageNum,String pageSize) {
+        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
         return trainMapper.selectCourseList(map);
     }
 
@@ -58,7 +60,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List<Map> selectTrainList(Map<String, Object> map) {
+    public List<Map> selectTrainList(Map<String, Object> map,String pageNum,String pageSize) {
+        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
         return trainMapper.selectTrainList(map);
     }
 

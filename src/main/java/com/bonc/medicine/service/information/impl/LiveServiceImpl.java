@@ -3,6 +3,7 @@ package com.bonc.medicine.service.information.impl;
 import com.bonc.medicine.mapper.information.LiveMapper;
 import com.bonc.medicine.service.information.LiveService;
 import com.bonc.medicine.utils.TecentCloudUtils;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,8 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public List<Map<String, Object>> selectAllLive(Map map) {
+    public List<Map> selectAllLive(Map map,String pageNum,String pageSize) {
+        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
         return liveMapper.selectAllLive(map);
     }
 
