@@ -5,6 +5,9 @@ import com.bonc.medicine.entity.mall.Purchase;
 import com.bonc.medicine.service.mall.BuyersService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,8 +58,17 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@GetMapping("/purchase/latest")
-	public Result<Object> latestPurchaseList(int limit) {
-		return ResultUtil.success(buyersService.latestPurchaseList(limit));
+	public Result<Object> latestPurchaseList(Integer pageNum, Integer pageSize) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		list = buyersService.latestPurchaseList();
+		if (pageNum != null && pageSize != null) {
+			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+		}
+		return ResultUtil.successTotal(list, total);
 	} 
 	
 	@SuppressWarnings("unchecked")

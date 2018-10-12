@@ -64,7 +64,7 @@ public class SupplyServiceImpl implements SupplyService {
      * @return com.bonc.mall.entity.Result<java.lang.Object>
      */
     @Override
-    public Result<Object> getLastest(JSONObject json) {
+    public List<Map<String, Object>> getLastest(JSONObject json) {
         Map<String,Object> tempData=new HashMap<String, Object>();
         tempData.putAll(json);
 
@@ -73,8 +73,7 @@ public class SupplyServiceImpl implements SupplyService {
         tempData.put("carriage_status","1"); // 0，未上架；1，上架；2，下架
 
 //        PageHelper.startPage(pageNumber, pageSize);
-        List<Map> mapList=supplyMapper.querySupplyByCondition(tempData);
-        return ResultUtil.success(mapList);
+        return supplyMapper.querySupplyByCondition(tempData);
     }
 
     /* *

@@ -27,9 +27,17 @@ public class SopServiceImpl implements SopService {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public List<Map<String, Object>> sopPlantList(Integer id) {
+    public List<Map<String, Object>> sopPlantList(Integer variety_id) {
         LinkedHashMap map = new LinkedHashMap();
-        map.put("id", id);
+        map.put("variety_id", variety_id);
+        return sopMapper.getSopPlants(map);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public List<Map<String, Object>> sopPlantListBack(Integer sop_id) {
+        LinkedHashMap map = new LinkedHashMap();
+        map.put("sop_id", sop_id);
         return sopMapper.getSopPlants(map);
     }
 

@@ -36,10 +36,7 @@
 			and (mp.goods_name like CONCAT('%',#{goods_name},'%') or cu.name like CONCAT('%',#{goods_name},'%') )
 		</if>
 		GROUP BY mp.id,mp.goods_name,mp.specification,mp.purchase_quantity,mp.publish_time
-		ORDER by mp.publish_time DESC 
-		<if test="limit != null and limit != ''">
-			LIMIT 0,#{limit}
-		</if>
+		ORDER by mp.publish_time DESC
     </select>
     
 	<!-- 逻辑上删除，数据库只做修改 -->
