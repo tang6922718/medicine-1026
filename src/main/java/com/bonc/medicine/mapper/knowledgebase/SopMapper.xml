@@ -4,9 +4,9 @@
 <mapper namespace="com.bonc.medicine.mapper.knowledgebase.SopMapper">
     <select id="getSopStandards" resultType="Map">
 		SELECT
-		kvs.id,kve.chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name,cbu.id
+		kvs.id,kve.variety_name chinese_name ,kvs.record_time,kvs.sop_type,kvs.record_status,cbu.name,cbu.id
 		FROM
-		km_variety_sop kvs LEFT JOIN km_variety_encyclopedia kve ON kvs.variety_id=kve.id LEFT JOIN
+		km_variety_sop kvs LEFT JOIN common_medicine_variety kve ON kvs.variety_id=kve.variety_code LEFT JOIN
         common_backend_user cbu ON kvs.record_user_id = cbu.id
         WHERE sop_status=1
         <if test="sop_type != null and sop_type != '' and sop_type != -1">
@@ -17,16 +17,34 @@
 		</if>
 	</select>
 
-    <select id="getSopPlants" resultType="java.util.Map">
+ <!--   <select id="getSopPlants" resultType="java.util.Map">
 		SELECT *,km_audit.fail_opinion AS your_fail_opinion  FROM km_sop_step,km_variety_sop,km_audit
 		WHERE km_sop_step.sop_id = #{id}
 		AND sop_id =km_variety_sop.id
 		AND km_variety_sop.sop_status=1
 		AND km_sop_step.status=1
-		AND km_audit.object_id = km_variety_sop.id AND km_audit.km_type = 4
+		AND km_audit.object_id = .id AND km_km_variety_sopaudit.km_type = 4
         ORDER BY
 		km_sop_step.step_order
-    </select>
+    </select>-->
+	<select id="getSopPlants" resultType="java.util.Map">
+		SELECT p.*,sp.fail_opinion AS your_fail_opinion
+		FROM km_variety_sop sp
+		INNER JOIN km_sop_step p ON sp.id = p.sop_id
+		WHERE
+		<if test="variety_id != null and variety_id != ''">
+			sp.variety_id = #{variety_id}
+			AND sp.record_status = '3'
+		</if>
+		<if test="sop_id != null and sop_id != ''">
+			sp.id = #{sop_id}
+			AND sp.record_status = '2'
+		</if>
+		AND sp.sop_status = '1'
+		AND p.status = '1'
+		ORDER BY p.step_order
+	</select>
+
 
 	<insert id="sopAdd" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO km_variety_sop (
@@ -119,7 +137,7 @@
     </update>
 
 	<select id="getSopLists" resultType="Map">
-		SELECT chinese_name,id FROM km_variety_encyclopedia WHERE id NOT IN (SELECT variety_id FROM km_variety_sop WHERE
+		SELECT variety_name chinese_name,variety_code id FROM common_medicine_variety WHERE variety_code NOT IN (SELECT variety_id FROM km_variety_sop WHERE
 		sop_status = 1)
 	</select>
 

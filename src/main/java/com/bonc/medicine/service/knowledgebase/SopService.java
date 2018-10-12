@@ -7,7 +7,9 @@ public interface SopService {
     //sop标准
     List<Map<String,Object>> sopStandardList(Integer sop_type, Integer record_status);
     //sop标准种植详细信息
-    List<Map<String, Object>> sopPlantList(Integer id);
+    List<Map<String, Object>> sopPlantList(Integer variety_id);
+
+    List<Map<String, Object>> sopPlantListBack(Integer sop_id);
 
     //sop添加
     int sopAdd(Map map);

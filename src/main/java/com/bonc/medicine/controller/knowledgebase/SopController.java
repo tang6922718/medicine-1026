@@ -33,9 +33,15 @@ public class SopController {
     }
 
     @SuppressWarnings("unchecked")
-    @GetMapping("/plantDetail/{id}")
-    public Result<Object> getSopPlants(@PathVariable(required = false) Integer id) {
-        return ResultUtil.success(sopService.sopPlantList(id));
+    @GetMapping("/plantDetail/{variety_id}")
+    public Result<Object> getSopPlants(@PathVariable(required = false) Integer variety_id) {
+        return ResultUtil.success(sopService.sopPlantList(variety_id));
+    }
+
+    @SuppressWarnings("unchecked")
+    @GetMapping("/plantDetailBack/{sop_id}")
+    public Result<Object> getSopPlantsBack(@PathVariable(required = false) Integer sop_id) {
+        return ResultUtil.success(sopService.sopPlantListBack(sop_id));
     }
 
     @SuppressWarnings("unchecked")
