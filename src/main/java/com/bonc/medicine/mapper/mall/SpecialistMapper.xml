@@ -296,7 +296,8 @@
 			cu.head_portrait,
 			cu.telephone,
 			cu.address,
-			cu.id as issue_user_id
+			cu.id as issue_user_id,
+      		si.is_revisited
 		FROM
 			spec_issue si
 			LEFT JOIN common_user cu ON si.issue_user_id = cu.id
