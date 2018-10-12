@@ -1,6 +1,7 @@
 package com.bonc.medicine.controller.information;
 
 
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.InfoService;
 import com.bonc.medicine.service.knowledgebase.AuditService;
@@ -108,9 +109,9 @@ public class InfoController {
      * @description 咨讯编辑
      */
     @RequestMapping("/infoEdit")
-    /*@com.bonc.medicine.annotation.Authorization*/
-    public Result infoEdit(/*@CurrentUser String user_id,*/ @RequestBody Map<String, Object> map) {
-        /*map.putIfAbsent("user_id", user_id);*/
+    @com.bonc.medicine.annotation.Authorization
+    public Result infoEdit(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         int count = infoService.infoEditById(map);
         map.put("km_type", "2");
         count += auditService.czAudit(map);
