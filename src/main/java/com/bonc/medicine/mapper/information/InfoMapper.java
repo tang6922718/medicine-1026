@@ -152,6 +152,9 @@ public interface InfoMapper {
                 if (map.get("is_pest") != null) {
                     SET("is_pest=#{is_pest}");
                 }
+                if (map.get("abstract") != null) {
+                    SET("abstract=#{abstract}");
+                }
                 if (map.get("content") != null) {
                     SET("content=#{content}");
                 }
