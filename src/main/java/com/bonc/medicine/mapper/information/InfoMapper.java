@@ -65,7 +65,7 @@ public interface InfoMapper {
     @Update("update info_basic  set  is_display='0' where id =#{id}")
     int delInfo(Map<String, Object> map);
 
-    @Update("update info_basic  set  status='0' where id =#{id}")
+    @Update("update info_basic  set  status='5' where id =#{id}")
     int infoRepeal(String id);
 
     class InfoDynaSqlProvider {
