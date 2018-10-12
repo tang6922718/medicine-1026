@@ -117,4 +117,8 @@
 		order by a.publish_time desc
 	</select>
 
+	<update id="scanNotice">
+		update common_notice set is_send = '1' where (is_send = '0' or is_send is null) and  send_time <![CDATA[ <= ]]> now()
+	</update>
+
 </mapper>

@@ -3,7 +3,7 @@
 <mapper namespace="com.bonc.medicine.mapper.field.Co_opManageMapper">
 
 	<insert id="insertCo_op" parameterType="com.bonc.medicine.entity.field.Co_op"
-			useGeneratedKeys="true" keyProperty="id">
+		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO field_coop
 		(name,introduce,total_area,img_url,portrait,cultivar,
 		age,telephone,address,official_user_id,official_user_name,establish_date,photo_url,state,is_audit,comment)
@@ -30,15 +30,18 @@
 		A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
 		A.official_user_name AS
 		adminName,A.establish_date,A.photo_url,A.is_audit,
-		A.comment ,D.role,(SELECT NAME FROM common_user E WHERE
+		A.comment
+		,D.role,(SELECT NAME FROM common_user E WHERE
 		E.id=A.`official_user_id`) AS NAME
 		FROM field_coop A ,
 		( SELECT
 		B.user_id,GROUP_CONCAT(C.role_name) AS role
-		FROM common_user_role_rel B , common_role C
+		FROM common_user_role_rel B
+		, common_role C
 		WHERE B.role_id = C.id GROUP BY B.user_id
 		) D
-		WHERE A.official_user_id =
+		WHERE
+		A.official_user_id =
 		D.user_id AND A.state= '0'
 
 		<if test="is_audit != null and is_audit != ''">
@@ -103,13 +106,15 @@
 	<select id="queryCo_opNoticeNum" resultType="Map" parameterType="Integer">
 		SELECT count(*) AS Co_opNoticeNum FROM field_coop A , common_notice B
 		WHERE
-		A.state='0' AND B.status= '1' AND B.state = '1' AND B.is_send = '1' AND B.notice_type='2' AND A.id =
+		A.state='0' AND B.status= '1' AND B.state = '1' AND B.is_send =
+		'1' AND B.notice_type='2' AND A.id =
 		B.object_id AND A.id = #{coop_id}
 	</select>
 
 	<select id="queryUserID" resultType="Map">
 
-		SELECT id,name , age,head_portrait,address, CASE sex WHEN '男' THEN 0 ELSE 1 END as sex
+		SELECT id,name ,
+		age,head_portrait,address, CASE sex WHEN '男' THEN 0 ELSE 1 END as sex
 		FROM
 		common_user
 		WHERE
@@ -150,10 +155,13 @@
 		parameterType="Integer">
 		SELECT A.*,
 		CASE WHEN A.user_id IS NULL THEN 0
-		ELSE (SELECT count(*) FROM field_info B WHERE B.user_id = A.user_id) END
-		AS PlantNUM
+		ELSE
+		(SELECT count(*) FROM field_info B WHERE B.user_id = A.user_id) END
+		AS
+		PlantNUM
 		FROM field_coop_member A
-		WHERE A.coop_id=#{coop_id} AND A.state='0'
+		WHERE A.coop_id=#{coop_id} AND
+		A.state='0'
 		GROUP BY
 		A.name,A.img_url,A.user_id
 	</select>
@@ -165,7 +173,8 @@
 		m.user_id,
 		fc.NAME,
 		fc.img_url,
-		IFNULL( m.assistant, '1' ) AS assistant,
+		IFNULL( m.assistant, '1'
+		) AS assistant,
 		0 AS total,
 		fc.official_user_id,
 		m.user_id <![CDATA[ <=> ]]>
@@ -173,7 +182,8 @@
 		'' AS role
 		FROM
 		field_coop_member m
-		LEFT JOIN field_coop fc ON m.coop_id = fc.id
+		LEFT
+		JOIN field_coop fc ON m.coop_id = fc.id
 		WHERE
 		m.user_id = #{user_id}
 	</select>
@@ -298,11 +308,20 @@
 	</update>
 
 	<insert id="addRoleNotice" parameterType="com.bonc.medicine.entity.field.Notice">
-		insert
-		into
-		common_notice
-		(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
-		values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',#{send_time},'0')
+		<if test="send_time != null and send_time != ''">
+			insert
+			into
+			common_notice
+			(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
+			values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',#{send_time},'0')
+		</if>
+		<if test="send_time == null or send_time == ''">
+			insert
+			into
+			common_notice
+			(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
+			values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',now(),'1')
+		</if>
 	</insert>
 
 	<select id="noticelist" parameterType="Map" resultType="Map">
@@ -329,21 +348,24 @@
 		resultType="Map">
 		SELECT notice_content,picture_url,publish_time FROM
 		common_notice
-		WHERE notice_type='2' AND status='1' AND state = '1' AND is_send = '1' AND object_id =
+		WHERE notice_type='2' AND status='1' AND state = '1' AND
+		is_send = '1' AND object_id =
 		#{coopID}
 		ORDER BY publish_time DESC
 	</select>
 
 	<update id="updateCoopTotalAreaAdd">
 		UPDATE field_coop SET
-		total_area = total_area + #{area} WHERE id = #{coopID}
+		total_area = total_area +
+		#{area} WHERE id = #{coopID}
 	</update>
 
 	<update id="updateCoopTotalAreaReduce" parameterType="Integer">
 		UPDATE
 		field_coop SET total_area = total_area - (SELECT plant_area FROM
 		field_coop_member WHERE id=#{ID})
-		WHERE id = (SELECT coop_id FROM field_coop_member WHERE id=#{ID})
+		WHERE id = (SELECT coop_id FROM
+		field_coop_member WHERE id=#{ID})
 	</update>
 
 	<insert id="insertCommon_user_role_rel" parameterType="Integer">
@@ -377,12 +399,15 @@
 		telephone= #{telephone}
 	</select>
 
-	<select id="queryIsAlreadyCoopManager" resultType="Map" parameterType="Integer">
-		SELECT count(*) AS NUM FROM field_coop WHERE official_user_id = #{user_ID}  AND state = 0
+	<select id="queryIsAlreadyCoopManager" resultType="Map"
+		parameterType="Integer">
+		SELECT count(*) AS NUM FROM field_coop WHERE
+		official_user_id = #{user_ID} AND state = 0
 	</select>
 
 	<select id="queryCoopMemberID" resultType="Map">
-		SELECT id FROM field_coop_member WHERE coop_id = #{coop_id} AND user_id = #{user_id}
+		SELECT id FROM
+		field_coop_member WHERE coop_id = #{coop_id} AND user_id = #{user_id}
 	</select>
 
 </mapper>
