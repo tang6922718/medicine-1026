@@ -68,12 +68,12 @@ public class BuyersServiceImpl implements BuyersService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<Map<String, Object>> purchasepCatList(String cat_code,String goods_cat_code) {
+	public List<Map<String, Object>> purchasepCatList(String cat_code,String goods_cat_code,String goods_name) {
 		Map params = new HashMap();
 		params.put("cat_code", cat_code);
 		params.put("goods_cat_code", goods_cat_code);
-		params.put("is_aduit", 1);
-		return buyersMapper.latestPurchaseList(params);
+		params.put("goods_name", goods_name);
+		return buyersMapper.purchasepCatList(params);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

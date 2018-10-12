@@ -71,8 +71,8 @@
 
 	<insert id="addCaseNotice" parameterType="Map">
 		insert into
-		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
-		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
+		common_notice(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state,send_time,is_send)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1',now(),'1')
 	</insert>
 
 	<update id="setAnli" parameterType="Map">
@@ -371,8 +371,8 @@
 
 	<insert id="addInvitationNotice" parameterType="Map">
 		insert into
-		common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state)
-		values('3',#{id},#{notice_content},#{user_id},#{expert},now(),'1','1')
+		common_notice(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state,send_time,is_send)
+		values('3',#{id},#{notice_content},#{user_id},#{expert},now(),'1','1',now(),'1')
 	</insert>
 
 	<update id="end" parameterType="Map">

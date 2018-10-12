@@ -103,7 +103,7 @@
 	<select id="queryCo_opNoticeNum" resultType="Map" parameterType="Integer">
 		SELECT count(*) AS Co_opNoticeNum FROM field_coop A , common_notice B
 		WHERE
-		A.state='0' AND B.status= '1' AND B.notice_type='2' AND A.id =
+		A.state='0' AND B.status= '1' AND B.state = '1' AND B.is_send = '1' AND B.notice_type='2' AND A.id =
 		B.object_id AND A.id = #{coop_id}
 	</select>
 
@@ -265,16 +265,16 @@
 	<insert id="addNotice" parameterType="Map">
 		insert
 		into common_notice
-		(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state,picture_url)
-		values('2',#{object_id},#{msg},#{publish_user_id},#{allUserId},now(),'1','1',#{picture_url})
+		(notice_type,object_id,notice_content,publish_user_id,notice_receiver,publish_time,status,state,picture_url,send_time,is_send)
+		values('2',#{object_id},#{msg},#{publish_user_id},#{allUserId},now(),'1','1',#{picture_url},now(),'1')
 	</insert>
 
 	<insert id="addCoopAduitNotice" parameterType="Map">
 		insert
 		into
 		common_notice
-		(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state)
-		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1')
+		(notice_type,object_id,notice_content,notice_receiver,publish_time,status,state,send_time,is_send)
+		values('1',#{object_id},#{notice_content},#{notice_receiver},now(),'1','1',now(),'1')
 	</insert>
 
 	<update id="noticeState" parameterType="Map">
@@ -301,8 +301,8 @@
 		insert
 		into
 		common_notice
-		(notice_type,notice_content,notice_role_type,publish_time,status,state)
-		values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1')
+		(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
+		values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',#{send_time},'0')
 	</insert>
 
 	<select id="noticelist" parameterType="Map" resultType="Map">
@@ -329,7 +329,7 @@
 		resultType="Map">
 		SELECT notice_content,picture_url,publish_time FROM
 		common_notice
-		WHERE notice_type='2' AND status='1' AND object_id =
+		WHERE notice_type='2' AND status='1' AND state = '1' AND is_send = '1' AND object_id =
 		#{coopID}
 		ORDER BY publish_time DESC
 	</select>

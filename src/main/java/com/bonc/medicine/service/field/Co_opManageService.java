@@ -1,6 +1,5 @@
 package com.bonc.medicine.service.field;
 
-
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
