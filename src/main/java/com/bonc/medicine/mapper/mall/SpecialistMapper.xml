@@ -283,6 +283,7 @@
 			si.issue_address,
 			si.follow_days,
 			cmv.variety_name,
+			cmv.variety_code,
 			ds.subject_name,
 			si.field_ids,
 			(CASE si.issue_status WHEN 0 THEN '未处理'
