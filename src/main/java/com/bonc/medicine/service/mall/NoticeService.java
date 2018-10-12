@@ -16,4 +16,5 @@ public interface NoticeService {
 
 	public List<Map<String, Object>> message(Integer user_id);
 
+	public void scanNotice();
 }
