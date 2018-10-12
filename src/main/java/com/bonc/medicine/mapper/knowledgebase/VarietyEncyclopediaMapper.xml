@@ -181,7 +181,16 @@
 		<if test="type_code != null and type_code != ''">
 			AND a.km_type = #{type_code}
 		</if>
-		and a.`status` IS null OR a.`status`=2
+		<if test="start_time != null and start_time != '' and end_time != null and end_time != ''">
+			and a.publish_time BETWEEN #{start_time} and  #{end_time}
+		</if>
+		<if test=" (start_time == null or start_time == '') and end_time != null and end_time != ''">
+			and a.publish_time &lt;= #{end_time}
+		</if>
+		<if test="start_time != null and start_time != '' and (end_time == null or end_time == '')">
+			and a.publish_time &gt;= #{start_time}
+		</if>
+		and a.`status` IS null
 		ORDER BY a.`status` DESC
 	</select>
 	
