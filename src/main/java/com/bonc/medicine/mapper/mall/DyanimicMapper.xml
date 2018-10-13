@@ -43,7 +43,7 @@
 		left join common_user b on a.publish_user_id = b.id
 		left join comm_dynamic_category c on a.dyn_cat_id = c.cat_code
 		WHERE a.effect_flag = '0'
-		<if test="dyn_cat_id != null and dyn_cat_id != '' ">   /*全部的时候dyn_cat_id=0？*/
+		<if test="dyn_cat_id != null  and dyn_cat_id != 0 ">   /*全部的时候dyn_cat_id=0？*/
 			and  a.dyn_cat_id = #{dyn_cat_id}
 		</if>
 		<if test="publish_time != null and publish_time != '' ">
