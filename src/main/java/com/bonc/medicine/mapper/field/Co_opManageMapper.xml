@@ -226,12 +226,52 @@
 			,name = #{name}
 		</if>
 
-		<if test="address != null and address != ''">
-			,address = #{address}
+		<if test="introduce != null and introduce != ''">
+			,introduce = #{introduce}
+		</if>
+
+		<if test="total_area != null and total_area != ''">
+			,total_area = #{total_area}
 		</if>
 
 		<if test="img_url != null and img_url != ''">
 			,img_url = #{img_url}
+		</if>
+
+		<if test="portrait != null and portrait != ''">
+			,portrait = #{portrait}
+		</if>
+
+		<if test="cultivar != null and cultivar != ''">
+			,cultivar = #{cultivar}
+		</if>
+
+		<if test="age != null and age != ''">
+			,age = #{age}
+		</if>
+
+		<if test="telephone != null and telephone != ''">
+			,telephone = #{telephone}
+		</if>
+
+		<if test="address != null and address != ''">
+			,address = #{address}
+		</if>
+
+		<if test="official_user_id != null and official_user_id != ''">
+			,official_user_id = #{official_user_id}
+		</if>
+
+		<if test="official_user_name != null and official_user_name != ''">
+			,official_user_name = #{official_user_name}
+		</if>
+
+		<if test="establish_date != null">
+			,establish_date = #{establish_date}
+		</if>
+
+		<if test="photo_url != null and photo_url != ''">
+			,photo_url = #{photo_url}
 		</if>
 
 		<if test="is_audit != null and is_audit != ''">
