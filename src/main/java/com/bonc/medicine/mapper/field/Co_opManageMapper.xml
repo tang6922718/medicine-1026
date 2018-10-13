@@ -32,7 +32,6 @@
 				SELECT
 				A.id AS coopID,
 				A.NAME AS coopName,
-				A.NAME AS coopName,
 				A.introduce,
 				A.total_area,
 				A.img_url,
