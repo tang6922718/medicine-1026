@@ -338,7 +338,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		List<Map> coopMemberList = co_opManageMapper.queryCoopMemberList2(coop_id);
 		for (Map obj : coopMemberList) {
 			obj.put("plant_cat_id",
-					ExchangeCategroyNameID.IDToName(obj.get("plant_cat_id").toString(), allCategroyInfo));
+					ExchangeCategroyNameID.IDToName(String.valueOf(obj.get("plant_cat_id")), allCategroyInfo));
 		}
 
 		return ResultUtil.success(coopMemberList);
