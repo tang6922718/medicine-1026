@@ -62,6 +62,12 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		if (tempData.getPhoto_url() == null) {
 			tempData.setPhoto_url("");
 		}
+		if (tempData.getImg_url()==null) {
+			tempData.setImg_url("");
+		}
+		if (tempData.getPortrait()==null) {
+			tempData.setPortrait("");
+		}
 
 
 		//  合作社新建成功时把合作社管理员作为社员（管理员为技术员）插入合作社社员表中
