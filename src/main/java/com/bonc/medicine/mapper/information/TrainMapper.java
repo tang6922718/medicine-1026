@@ -12,6 +12,7 @@ public interface TrainMapper {
 
     @InsertProvider(type = TrainDynaSqlProvider.class,
             method = "createTrain")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int createTrain(Map<String, Object> map);
 
 

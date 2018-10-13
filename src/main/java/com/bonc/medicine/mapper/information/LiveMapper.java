@@ -11,6 +11,7 @@ public interface LiveMapper {
 
     @InsertProvider(type = LiveDynaSqlProvider.class,
             method = "addLive")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int addLive(Map<String, Object> map);
 
 
