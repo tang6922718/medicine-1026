@@ -150,7 +150,7 @@
 		SELECT
 			a.object_id,
 			/*CONCAT_WS('',b.chinese_name,c.title,*//*d.title,*//*e.step_name,f.title,g.name) AS*/ a.title,
-			CONCAT_WS('',b.variety_id,e.sop_id,g.cat_code) AS variety_id,
+			CONCAT_WS('',b.variety_id,g.cat_code) AS variety_id,
 			a.km_type,
 			CASE WHEN a.km_type = 1 THEN '品种百科'
 			WHEN a.km_type = 2 THEN '资讯类'
@@ -172,7 +172,7 @@
 		LEFT JOIN km_variety_encyclopedia b ON a.object_id = b.id AND a.km_type = 1
 		LEFT JOIN info_basic c ON a.object_id = c.id AND a.km_type = 2
 		/*LEFT JOIN spec_article d ON a.object_id = d.id AND a.km_type = 3*/
-		LEFT JOIN km_sop_step e ON a.object_id = e.id AND a.km_type = 4
+		/*LEFT JOIN km_sop_step e ON a.object_id = e.id AND a.km_type = 4*/
 		LEFT JOIN train_video_course f ON a.object_id = f.id AND a.km_type = 5
 		LEFT JOIN km_pharmacopoeia_information g ON a.object_id = g.id AND a.km_type = 6
 		WHERE 1=1

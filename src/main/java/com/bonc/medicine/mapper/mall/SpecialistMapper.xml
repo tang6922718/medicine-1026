@@ -37,6 +37,11 @@
 		where spec_id = #{spec_id}
 	</update>
 	
+	<update id="updateUserBasicInfo" parameterType="com.bonc.medicine.entity.mall.Specialist">
+		update common_user set name=#{name},head_portrait=#{head_portrait}
+		where id = #{spec_id}
+	</update>
+	
 	<select id="subjectList" resultType="Map">
 		SELECT subject_code as id , subject_name as name FROM dict_subject
 	</select>
@@ -66,9 +71,9 @@
 	<select id="specialList" parameterType="java.util.Map" resultType="Map">
 		SELECT
 			si.spec_id,
-			si.NAME,
-			case when si.head_portrait is null or  si.head_portrait=''
-				then '1537932363932658' else si.head_portrait end as head_portrait,
+			u.NAME,
+			case when u.head_portrait is null or  u.head_portrait=''
+				then '1537932363932658' else u.head_portrait end as head_portrait,
 			si.employment_age,
 			si.expertise_field,
 			count(cf.id) as follow ,
@@ -77,6 +82,7 @@
 			'' as cat
 		FROM
 			spec_info si
+			inner join common_user u on si.spec_id = u.id
 			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id and cf.object_type = '1' and cf.follow_flag = '1'
 		<if test="subject_code != null and subject_code != ''">
 			LEFT JOIN spec_subject_rel ssr ON si.spec_id = ssr.spec_id
@@ -93,7 +99,7 @@
 			AND scr.cat_id = #{cat_code}
 		</if>
 		<if test="name != null and name != ''">
-			AND si.name LIKE '%'|| #{name} ||'%'
+			AND u.name LIKE '%'|| #{name} ||'%'
 		</if>
 		group by(si.spec_id)
 		ORDER BY si.employment_age DESC
@@ -101,9 +107,9 @@
 	<select id="specialListAll" parameterType="java.util.Map" resultType="Map">
 		SELECT
 			si.spec_id,
-			si.NAME,
-			case when si.head_portrait is null or  si.head_portrait=''
-				then '1537932363932658' else si.head_portrait end as head_portrait,
+			u.NAME,
+			case when u.head_portrait is null or  u.head_portrait=''
+				then '1537932363932658' else u.head_portrait end as head_portrait,
 			si.employment_age,
 			si.expertise_field,
 			IFNULL( sis.interact_count, 0 ) AS interact_count ,
@@ -113,6 +119,7 @@
 			'' as cat
 		FROM
 			spec_info si
+			inner join common_user u on si.spec_id = u.id
 			LEFT JOIN spec_interact_stats sis ON si.spec_id = sis.spec_id
 			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id and cf.object_type = '1' and cf.follow_flag = '1'  
 		<if test="subject_code != null ">
@@ -131,7 +138,7 @@
 			AND scr.cat_id = #{cat_code}
 		</if>
 		<if test="name != null and name != ''">
-			AND si.name LIKE CONCAT('%',#{name},'%') 
+			AND u.name LIKE CONCAT('%',#{name},'%') 
 		</if>
 		group by(si.spec_id)
 		ORDER BY si.employment_age DESC
@@ -149,19 +156,20 @@
 			si.education,
 			si.employment_age,
 			si.expertise_field,
-			si.name,
+			u.name,
 			si.professional_direction,
 			si.registration_date,
 			si.title,
 			si.update_time,
-			case when si.head_portrait is null or  si.head_portrait=''
-			then '1537932363932658' else si.head_portrait end as head_portrait,			
+			case when u.head_portrait is null or  u.head_portrait=''
+			then '1537932363932658' else u.head_portrait end as head_portrait,			
 			count( cf.id ) AS follow,
 			0 AS is_follow ,
 			'' as sub,
 			'' as cat
 		FROM
 			spec_info si
+			inner join common_user u on u.id = si.spec_id
 			LEFT JOIN common_follow cf ON si.spec_id = cf.object_id
 			AND cf.object_type = '1' 
 			AND cf.follow_flag = '1' 

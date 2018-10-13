@@ -80,6 +80,8 @@ public class SpecRepertoryController {
 		specialistService.delCatSpec(spec_id + "");
 		specialistService.delSubSpec(spec_id + "");
 		specialistService.updateInfo(specialist);
+		//修改用户基本信息 用户名和头像
+		specialistService.updateUserBasicInfo(specialist);
 		Map param = new HashMap<>();
 		param.put("spec_id", spec_id);
 		if (specialist.getCat_code() != null && specialist.getCat_code().length != 0) {

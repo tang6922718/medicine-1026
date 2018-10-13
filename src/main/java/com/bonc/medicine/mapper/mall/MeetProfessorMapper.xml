@@ -10,7 +10,7 @@
 		d.NAME,
 		a.issue_time,
 		a.issue_desc,
-		c.NAME as
+		u.NAME as
 		expert,
 		'' AS assit,
 		a.issue_status,
@@ -21,8 +21,9 @@
 		FROM
 		spec_issue a left join
 		spec_issue_association b on a.id = b.issueid
-		left join spec_info c on
-		b.specid = c.spec_id
+		left join common_user u on u.id=b.specid
+		/*left join spec_info c on
+		b.specid = c.spec_id*/
 		left join common_user d on d.id = a.issue_user_id
 		WHERE
 		b.is_assigned = '0'
@@ -39,10 +40,11 @@
 	<select id="assistlist" parameterType="Map" resultType="Map">
 		SELECT
 		a.issueid,
-		GROUP_CONCAT( b.NAME ) AS assit
+		GROUP_CONCAT( u.NAME ) AS assit
 		FROM
 		spec_issue_association a
-		LEFT JOIN spec_info b ON a.specid = b.spec_id
+		left join common_user u on u.id=a.specid
+		/*LEFT JOIN spec_info b ON a.specid = b.spec_id*/
 		WHERE
 		a.is_assigned = '1'
 		GROUP BY
