@@ -94,8 +94,8 @@ public class IntegralController {
                                        @RequestParam(required = false) String userName,
                                        @RequestParam(required = false) String startTime,
                                        @RequestParam(required = false) String endTime,
-                                       @RequestParam(required = false, defaultValue = "1") String pageIndex,
-                                       @RequestParam(required = false, defaultValue = "16") String pageSize) {
+                                       @RequestParam(required = false) String pageIndex,
+                                       @RequestParam(required = false) String pageSize) {
         Map<String, String> parmMap = new HashMap<>();
         parmMap.put("userId", userId);
         parmMap.put("userName", userName);
