@@ -6,9 +6,9 @@
 	<!--添加动态-->
 	<insert id="insertDyanimic" parameterType="com.bonc.medicine.entity.mall.Dyanimic">
 		insert into comm_dyanimic
-		(dyn_cat_id,desciption,img_url,video_url,telephone,publish_user_id,publish_time,effect_flag)
+		(dyn_cat_id,desciption,img_url,video_url,telephone,publish_user_id,publish_time,effect_flag,create_time)
 		values
-		(#{dyn_cat_id},#{desciption},#{img_url},#{video_url},#{telephone},#{publish_user_id},now(),'2')
+		(#{dyn_cat_id},#{desciption},#{img_url},#{video_url},#{telephone},#{publish_user_id},now(),'2',CURRENT_TIMESTAMP())
     </insert>
 
 
@@ -94,7 +94,8 @@
 			<if test="fail_opinion != null">
 				fail_opinion = #{fail_opinion},
 			</if>
-				update_time = now()
+				update_time = now(),
+				publish_time = now()
 		</set>
 		where id = #{id}
 	</update>

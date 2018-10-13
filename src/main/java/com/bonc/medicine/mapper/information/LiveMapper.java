@@ -95,6 +95,7 @@ public interface LiveMapper {
                 if (map.get("img_url") != null) {
                     VALUES("img_url", "#{img_url}");
                 }
+                VALUES("create_time","CURRENT_TIMESTAMP()");
             }}.toString();
         }
 

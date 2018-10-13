@@ -21,6 +21,10 @@ public interface CollectionService {
     public Map<String,Object> infoBasicDetail(String id);
 
     public Map<String,Object> videoCourseDetail(String id);
+    
+    public Map<String,Object> trainOfflineDetail(String id);
+    
+    public Map<String,Object> trainLiveDetail(String id);
 
     public Map<String,Object> mallSupplyDetail(String id);
 

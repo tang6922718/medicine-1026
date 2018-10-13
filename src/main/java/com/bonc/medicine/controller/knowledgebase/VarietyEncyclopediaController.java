@@ -199,6 +199,10 @@ public class VarietyEncyclopediaController {
                 varietyEncyclopediaService.changeInfoStatus(map);
             }else if("5".equals(km_type)){
                 varietyEncyclopediaService.changeVedioStatus(map);
+            }else if("7".equals(km_type)){
+                varietyEncyclopediaService.changeTrainOfflineStatus(map);
+            }else if("8".equals(km_type)){
+                varietyEncyclopediaService.changeTrainLiveStatus(map);
             }
         };
 

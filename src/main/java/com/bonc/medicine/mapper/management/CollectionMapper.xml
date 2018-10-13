@@ -115,6 +115,64 @@
 			train_video_course
 		WHERE id = #{id}
 	</select>
+	
+	<select id="trainOfflineDetail" parameterType="String" resultType="Map">
+		SELECT
+			id,
+			title,
+			train_type,
+			train_introduce,
+			lecturer_introduce,
+			lecturer_name,
+			address,
+			train_time,
+			duration,
+			img_url,
+			attend_cnt,
+			status,
+			spec_id,
+			user_id,
+			publish_time,
+			fail_opinion,
+			update_time,
+			operation_status,
+			create_time
+		FROM
+			train_offline
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="trainLiveDetail" parameterType="String" resultType="Map">
+		SELECT
+			id,
+			room_title,
+			live_type,
+			room_desc,
+			lecture_name,
+			lecture_desc,
+			live_start,
+			live_end,
+			room_id,
+			push_url,
+			pull_url,
+			pull_rtmp_url,
+			user_id,
+			img_url,
+			spec_id,
+			status,
+			audience_num,
+			fail_opinion,
+			create_time,
+			operation_status,
+			update_time,
+			is_display,
+			publish_time
+		FROM
+			train_live
+		WHERE
+			id = #{id}
+	</select>
 
 	<select id="mallSupplyDetail" parameterType="String" resultType="Map">
 		 SELECT id,goods_name,supply_cat_code,goods_cat_code,price,price_unit,

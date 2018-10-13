@@ -52,6 +52,16 @@ public class CollectionServiceImpl implements CollectionService {
     public Map<String, Object> videoCourseDetail(String id) {
         return collectionMapper.videoCourseDetail(id);
     }
+    
+    @Override
+    public Map<String, Object> trainOfflineDetail(String id) {
+        return collectionMapper.trainOfflineDetail(id);
+    }
+    
+    @Override
+    public Map<String, Object> trainLiveDetail(String id) {
+        return collectionMapper.trainLiveDetail(id);
+    }
 
     @Override
     public Map<String, Object> mallSupplyDetail(String id) {

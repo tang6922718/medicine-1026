@@ -156,8 +156,10 @@
 			WHEN a.km_type = 2 THEN '资讯类'
 			/*WHEN a.km_type = 3 THEN '文章类'*/
 			WHEN a.km_type = 4 THEN '品种SOP'
-			WHEN a.km_type = 5 THEN '培训'
+			WHEN a.km_type = 5 THEN '视频课程'
 			WHEN a.km_type = 6 THEN '品种药典'
+			WHEN a.km_type = 7 THEN '线下培训'
+			WHEN a.km_type = 8 THEN '直播课堂'
 			END AS type_name,
 			date_format(a.publish_time,'%Y-%c-%d %H:%i:%s') AS publish_time,
 			a.`status`,
@@ -211,7 +213,15 @@
 	</update>
 
 	<update id="changeVedioStatus" parameterType="java.util.Map">
-		UPDATE train_video_course SET operation_status=#{iv_status} WHERE id = #{object_id}
+		UPDATE train_video_course SET operation_status=#{iv_status},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
+	</update>
+	
+	<update id="changeTrainOfflineStatus" parameterType="java.util.Map">
+		UPDATE train_offline SET operation_status=#{iv_status},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
+	</update>
+	
+	<update id="changeTrainLiveStatus" parameterType="java.util.Map">
+		UPDATE train_live SET operation_status=#{iv_status},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
 	</update>
 
 	<update id="kmAudit" parameterType="java.util.Map">

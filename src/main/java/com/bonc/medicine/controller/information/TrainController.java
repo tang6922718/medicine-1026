@@ -49,7 +49,10 @@ public class TrainController {
 //        int count = trainService.createTrain(map);
 //        map.put("km_type", "5");
 //        count += auditService.addAudit(map);
-        return ResultUtil.success(trainService.createTrain(map));
+        int count = trainService.createTrain(map);
+        map.put("km_type", "7");
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**

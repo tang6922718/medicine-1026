@@ -95,6 +95,24 @@ public class CollectionController {
     public Result<Object> videoCourseDetail(@PathVariable String id){
         return ResultUtil.success(collectionService.videoCourseDetail(id));
     }
+    
+    /*
+     * 收藏夹—线下培训搜索详情
+     * (知识库：线下培训详情一致)
+     * */
+     @GetMapping("/trainOfflineDetail/{id}")
+     public Result<Object> trainOfflineDetail(@PathVariable String id){
+         return ResultUtil.success(collectionService.trainOfflineDetail(id));
+     }
+     
+     /*
+      * 收藏夹—直播课堂搜索详情
+      * (知识库：直播课堂详情一致)
+      * */
+      @GetMapping("/trainLiveDetail/{id}")
+      public Result<Object> trainLiveDetail(@PathVariable String id){
+          return ResultUtil.success(collectionService.trainLiveDetail(id));
+      }
 
 
     /*
