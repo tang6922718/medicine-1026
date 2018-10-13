@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -119,10 +120,15 @@ public class DyanimicController {
     @GetMapping("/select/dyanimicBackstage")
     public Result<Object> dyanimicBackstage(@RequestParam(required = false) String dyn_cat_id,
                                             @RequestParam(required = false) String publish_time,
-                                            @RequestParam(required = false) String phone,
-                                            @RequestParam(required = false) String dContent) {
+                                            @RequestParam(required = false) String words) {
         List returnList = new ArrayList();
-        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time, phone, dContent);
+       /* String phone = null;
+
+        if (Pattern.matches("\\d+",words)){
+            phone = words;
+        }
+*/
+        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time,  words);
         if(list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Map map = new HashMap();

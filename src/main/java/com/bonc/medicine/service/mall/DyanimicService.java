@@ -10,7 +10,7 @@ public interface DyanimicService {
 
 	public int insertDyanimic(Dyanimic dyanimic); // 发布动态
 	public List<Map> selectAllDyanimic(int dyn_cat_id, String publish_time);		// 查询所有种类动态
-	public List<Map> selectAllDyanimic(String dyn_cat_id, String publish_time, String phone, String dContent);		// 查询所有种类动态
+	public List<Map> selectAllDyanimic(String dyn_cat_id, String publish_time, String words);		// 查询所有种类动态
 	public List<Map> selectUserDyanimic(int publish_user_id,int dyn_cat_id); //查询某一用户的动态
 	public List<Map> selectDetailOneDyanimic(int id); //查询某一条动态
 	public int delOneDyanimic(int id);//删除某一条id

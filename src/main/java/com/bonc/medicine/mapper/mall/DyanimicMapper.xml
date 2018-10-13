@@ -29,13 +29,6 @@
 			and  #{publish_time} = date(a.publish_time)
 		</if>
 
-		<if test="phone != null and phone != '' ">
-			and b.telephone like concat ( '%', #{phone}, '%')
-		</if>
-
-		<if test="dContent != null and dContent != '' ">
-			and  a.desciption  like concat ( '%', #{dContent}, '%')
-		</if>
 
 
 		ORDER by a.update_time DESC
@@ -57,14 +50,12 @@
 			and  #{publish_time} = date(a.publish_time)
 		</if>
 
-		<if test="phone != null and phone != '' ">
-			and b.telephone like concat ( '%', #{phone}, '%')
+		<if test="words != null and words != '' ">
+			and (
+				b.telephone like concat ( '%', #{words}, '%')
+				or a.desciption like concat ( '%', #{words}, '%')
+			)
 		</if>
-
-		<if test="dContent != null and dContent != '' ">
-			and  a.desciption  like concat ( '%', #{dContent}, '%')
-		</if>
-
 
 		ORDER by a.update_time DESC
 	</select>
