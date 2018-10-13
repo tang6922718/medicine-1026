@@ -1,5 +1,7 @@
 package com.bonc.medicine.service.knowledgebase.impl;
 
+import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.knowledgebase.PharmacopoeiaInfoMapper;
 import com.bonc.medicine.service.knowledgebase.PharmacopoeiaInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,11 @@ public class PharmacopoeiaInfoServiceImpl implements PharmacopoeiaInfoService {
 
     @Override
     public Map<String, Object> pharaDetail(String id) {
-        return pharmacopoeiaInfoMapper.pharaDetail(id);
+        Map<String, Object> reMap = pharmacopoeiaInfoMapper.pharaDetail(id);
+        if (reMap == null || reMap.size() == 0 || reMap.isEmpty()){
+            throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+        }
+        return reMap;
     }
 
     @Override

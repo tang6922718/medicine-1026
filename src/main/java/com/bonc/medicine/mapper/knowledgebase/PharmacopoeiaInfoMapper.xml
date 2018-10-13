@@ -44,7 +44,7 @@
 			b.fail_opinion
 		FROM
 			km_pharmacopoeia_information a
-		LEFT JOIN km_audit b ON a.id = b.object_id AND b.km_type = 6
+		inner JOIN km_audit b ON a.id = b.object_id AND b.km_type = 6
 		WHERE
 			cat_code =  #{id}
 	</select>
