@@ -15,7 +15,7 @@
 	<!-- 查询所有种类动态 -->
 	<select id="selectAllDyanimic" resultType="java.util.Map">
 		SELECT
-		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,a.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,b.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
 		,b.name,b.address,b.head_portrait,c.cat_name
 		FROM
 		comm_dyanimic a
@@ -28,6 +28,43 @@
 		<if test="publish_time != null and publish_time != '' ">
 			and  #{publish_time} = date(a.publish_time)
 		</if>
+
+		<if test="phone != null and phone != '' ">
+			and b.telephone like concat ( '%', #{phone}, '%')
+		</if>
+
+		<if test="dContent != null and dContent != '' ">
+			and  a.desciption  like concat ( '%', #{dContent}, '%')
+		</if>
+
+
+		ORDER by a.update_time DESC
+	</select>
+
+	<select id="selectAllDyanimicTwo" resultType="java.util.Map">
+		SELECT
+		a.id,a.dyn_cat_id,a.desciption,a.img_url,a.video_url,b.telephone,a.publish_user_id,a.publish_time,a.effect_flag,a.fail_opinion,a.update_time
+		,b.name,b.address,b.head_portrait,c.cat_name
+		FROM
+		comm_dyanimic a
+		left join common_user b on a.publish_user_id = b.id
+		left join comm_dynamic_category c on a.dyn_cat_id = c.cat_code
+		WHERE a.effect_flag = '0'
+		<if test="dyn_cat_id != null and dyn_cat_id != '' ">   /*全部的时候dyn_cat_id=0？*/
+			and  a.dyn_cat_id = #{dyn_cat_id}
+		</if>
+		<if test="publish_time != null and publish_time != '' ">
+			and  #{publish_time} = date(a.publish_time)
+		</if>
+
+		<if test="phone != null and phone != '' ">
+			and b.telephone like concat ( '%', #{phone}, '%')
+		</if>
+
+		<if test="dContent != null and dContent != '' ">
+			and  a.desciption  like concat ( '%', #{dContent}, '%')
+		</if>
+
 
 		ORDER by a.update_time DESC
 	</select>

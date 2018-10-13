@@ -108,12 +108,21 @@ public class DyanimicController {
     }
 
 
-    // 查询所有人动态  后台管理
-    @SuppressWarnings("unchecked")
+    /**
+    * @Description: 查询所有人动态  后台管理
+    * @Param: [dyn_cat_id, publish_time, phone, dContent]
+    * @return: com.bonc.medicine.entity.Result<java.lang.Object>
+    * @Author:
+    * @Date: 2018/10/13
+    */
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @GetMapping("/select/dyanimicBackstage")
-    public Result<Object> dyanimicBackstage(int dyn_cat_id,String publish_time) {
+    public Result<Object> dyanimicBackstage(@RequestParam(required = false) String dyn_cat_id,
+                                            @RequestParam(required = false) String publish_time,
+                                            @RequestParam(required = false) String phone,
+                                            @RequestParam(required = false) String dContent) {
         List returnList = new ArrayList();
-        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time);
+        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time, phone, dContent);
         if(list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Map map = new HashMap();
