@@ -25,61 +25,88 @@
 
 	<select id="queryCo_opByCondition" resultType="Map"
 		parameterType="Map">
-		SELECT A.id AS coopID,A.name AS coopName,A.introduce,A.total_area
-		,A.img_url,A.portrait,
-		A.cultivar,A.age,A.telephone,A.address,A.official_user_id AS adminID,
-		A.official_user_name AS
-		adminName,A.establish_date,A.photo_url,A.is_audit,
-		A.comment
-		,D.role,(SELECT NAME FROM common_user E WHERE
-		E.id=A.`official_user_id`) AS NAME
-		FROM field_coop A ,
-		( SELECT
-		B.user_id,GROUP_CONCAT(C.role_name) AS role
-		FROM common_user_role_rel B
-		, common_role C
-		WHERE B.role_id = C.id GROUP BY B.user_id
-		) D
-		WHERE
-		A.official_user_id =
-		D.user_id AND A.state= '0'
+		SELECT coopID,coopName,introduce,total_area,img_url,
+			portrait,cultivar,age,telephone,address,adminID,adminName,establish_date,
+			photo_url,is_audit,COMMENT as comment,NAME,role
+		from (
+				SELECT
+				A.id AS coopID,
+				A.NAME AS coopName,
+				A.NAME AS coopName,
+				A.introduce,
+				A.total_area,
+				A.img_url,
+				A.portrait,
+				A.cultivar,
+				A.age,
+				A.telephone,
+				A.address,
+				A.official_user_id AS adminID,
+				A.official_user_name AS adminName,
+				A.establish_date,
+				A.photo_url,
+				A.is_audit,
+				A.COMMENT,
+				D.role,
+				( SELECT NAME FROM common_user E WHERE E.id = A.`official_user_id` ) AS NAME
+				FROM
+				field_coop A,
+				(
+				SELECT
+				B.user_id,
+				GROUP_CONCAT( C.role_name ) AS role
+				FROM
+				common_user_role_rel B,
+				common_role C
+				WHERE
+				B.role_id = C.id
+				GROUP BY
+				B.user_id
+				) D
+				WHERE
+				A.official_user_id = D.user_id
+				AND A.state = '0'
+
+			) hole where 1 = 1
 
 		<if test="is_audit != null and is_audit != ''">
-			AND A.is_audit = #{is_audit}
+			AND hole.is_audit = #{is_audit}
 		</if>
 
 		<if test="coopID != null and coopID != ''">
-			AND A.id = #{coopID}
+			AND hole.coopID = #{coopID}
 		</if>
 
 		<if test="coopName != null and coopName != ''">
-			AND A.name LIKE CONCAT('%',#{coopName}, '%')
+			AND hole.coopName LIKE CONCAT('%',#{coopName}, '%')
 		</if>
 
 		<if test="tel != null and tel != ''">
-			AND A.telephone LIKE CONCAT('%',#{tel}, '%')
+			AND (hole.telephone LIKE CONCAT('%',#{tel}, '%')
+			or hole.NAME LIKE CONCAT('%',#{tel}, '%')
+			or  hole.coopID = #{tel} )
 		</if>
 
 		<if test="userID != null and userID != ''">
-			AND A.official_user_id = #{userID}
+			AND hole.adminID = #{userID}
 		</if>
 
 		<if test="userName != null and userName != ''">
-			AND A.official_user_name LIKE CONCAT('%',#{userName}, '%')
+			AND hole.adminName LIKE CONCAT('%',#{userName}, '%')
 		</if>
 
 		<if test="keyWord != null and keyWord != ''">
 			AND (
-			A.name LIKE CONCAT('%',#{keyWord}, '%') OR
-			A.official_user_name LIKE CONCAT('%',#{keyWord}, '%')
+			hole.NAME LIKE CONCAT('%',#{keyWord}, '%') OR
+			hole.adminName LIKE CONCAT('%',#{keyWord}, '%')
 			)
 		</if>
 
 		<if test='start_time != null and start_time != "" '>
-			AND A.establish_date >= #{start_time}
+			AND hole.establish_date >= #{start_time}
 		</if>
 		<if test=' end_time != null and end_time != "" '>
-			AND #{end_time} >= A.establish_date
+			AND #{end_time} >= hole.establish_date
 		</if>
 
 
