@@ -133,9 +133,11 @@ public class IntegralServiceImpl implements IntegralService {
     @Override
     public List<Map<String, Object>> queryIntegralHistory(Map<String, String> paramMap) {
 
-        PageHelper.startPage(Integer.parseInt(paramMap.get("pageIndex")), Integer.parseInt(paramMap.get("pageSize")));
+        List<Map<String, Object>> reList = integralMapper.queryIntegralHistory(paramMap);
 
-        return integralMapper.queryIntegralHistory(paramMap);
+
+
+        return reList;
     }
 
     @Override

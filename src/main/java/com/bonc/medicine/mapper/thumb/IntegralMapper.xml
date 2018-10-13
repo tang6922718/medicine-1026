@@ -87,6 +87,8 @@
         <if test="endTime != null and endTime != ''">
             and de.action_time &lt;= #{endTime}
         </if>
+
+        order by action_time desc
     </select>
 
     <!--更新用户的积分总数 -->
