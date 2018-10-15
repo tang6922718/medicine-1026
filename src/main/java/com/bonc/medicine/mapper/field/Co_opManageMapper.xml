@@ -408,6 +408,7 @@
 			AND publish_time <![CDATA[ <= ]]>
 			#{end_time}
 		</if>
+		order by publish_time desc
 	</select>
 
 
