@@ -4,32 +4,109 @@
 <mapper namespace="com.bonc.medicine.mapper.mall.ViewTheDataMapper">
 
 	<select id="interaction" parameterType="Map" resultType="Map">
-		select
+		<!-- select
 		interact_count,stats_time from spec_interact_stats where spec_id
 		= #{user_id}
 		and stats_time <![CDATA[ >= ]]>
 		#{start_time} and stats_time <![CDATA[ <= ]]>
-		#{end_time}
+		#{end_time} -->
+			
+		SELECT
+			tii.from_uid AS user_id,
+			ifnull( count( tii.from_uid ), 0 ) AS interact_count,
+			tii.reply_time as stats_time
+		FROM
+			( SELECT from_uid, DATE_FORMAT(reply_time, '%Y-%m-%d') AS reply_time FROM common_comment ) tii
+			LEFT JOIN spec_info ssi ON tii.from_uid = ssi.spec_id 
+		WHERE
+			tii.from_uid IN ( ${user_id} ) 
+			<if test="start_time != null and start_time != ''">
+				and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+			</if>
+		GROUP BY
+			tii.reply_time
+			order by 	tii.reply_time  desc
+	
 	</select>
 
 	<select id="thisWeekInteraction" parameterType="Map" resultType="Map">
-		select
+		<!-- select
 		IFNULL(sum(interact_count),0) as sum from spec_interact_stats
 		where spec_id
 		= #{user_id}
 		and stats_time <![CDATA[ >= ]]>
 		#{start_time} and stats_time <![CDATA[ <= ]]>
-		#{end_time}
+		#{end_time} -->
+		SELECT
+			
+			count( tii.from_uid ) as sum
+			
+		FROM
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+			tii.from_uid = ssi.spec_id
+		WHERE
+			tii.from_uid IN ( ${user_id} )
+			<if test="start_time != null and start_time != ''">
+				and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+			</if>
+			
+		GROUP BY
+			tii.from_uid
+	</select>
+	
+	<select id="queryInteractTimesDontName" parameterType="Map"
+		resultType="Map">
+		SELECT
+			tii.from_uid as user_id,
+			count( tii.from_uid ) as spec_interact_stats
+			
+		FROM
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+			tii.from_uid = ssi.spec_id
+		WHERE
+			tii.from_uid IN ( ${user_id} )
+			
+			<if test="start_time != null and start_time != ''">
+				and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+			</if>
+		GROUP BY
+			tii.from_uid
 	</select>
 
 	<select id="historyInteraction" parameterType="Map" resultType="Map">
-		select
+		<!-- select
 		IFNULL(sum(interact_count),0) as sum from spec_interact_stats
 		where spec_id
 		= #{user_id}
 		and stats_time <![CDATA[ >= ]]>
 		#{start_time} and stats_time <![CDATA[ <= ]]>
-		#{end_time}
+		#{end_time} -->
+		SELECT
+			
+			count( tii.from_uid ) as sum
+			
+		FROM
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+			tii.from_uid = ssi.spec_id
+		WHERE
+			tii.from_uid IN ( ${user_id} )
+			
+			and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+		GROUP BY
+			tii.from_uid
 	</select>
 
 	<select id="rankInteraction" resultType="Map">

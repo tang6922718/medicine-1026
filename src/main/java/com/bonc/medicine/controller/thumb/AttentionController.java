@@ -1,5 +1,22 @@
 package com.bonc.medicine.controller.thumb;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.annotation.Authorization;
@@ -7,18 +24,9 @@ import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
-import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.user.UserService;
-import com.bonc.medicine.utils.IntegralKeyUtil;
-import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 /**
  * @program: medicine-hn

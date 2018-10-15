@@ -19,5 +19,7 @@ public interface ViewTheDataMapper {
     public List<Map<String, Object>> myResources(Map map);
 
     public List<Map<String, Object>> problemStatistics(Map map);
+    
+    public List<Map<String, Object>> queryInteractTimesDontName(Map map);
 
 }

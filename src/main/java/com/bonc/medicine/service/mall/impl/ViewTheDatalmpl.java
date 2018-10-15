@@ -64,6 +64,7 @@ public class ViewTheDatalmpl implements ViewTheDataService {
     	map.put("user_id", user_id);
     	map.put("start_time", start_time);
     	map.put("end_time", end_time);
+    	
     	return viewTheDataMapper.historyInteraction(map);
     }
     

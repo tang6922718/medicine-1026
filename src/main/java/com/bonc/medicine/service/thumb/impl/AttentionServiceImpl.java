@@ -1,15 +1,21 @@
 package com.bonc.medicine.service.thumb.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.bonc.medicine.adapter.AttentionAdapter;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.mapper.thumb.AttentionMapper;
 import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.utils.RedisKeyUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import java.util.*;
 
 /**
  * @program: medicine-hn

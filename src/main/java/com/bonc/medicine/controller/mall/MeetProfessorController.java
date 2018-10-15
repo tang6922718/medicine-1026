@@ -22,7 +22,6 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
 import com.bonc.medicine.enums.ResultEnum;
-import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.mall.MeetProfessorService;
 import com.bonc.medicine.utils.ResultUtil;
 
