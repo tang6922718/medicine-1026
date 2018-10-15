@@ -1,5 +1,6 @@
 package com.bonc.medicine.service.field.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.field.Field;
 import com.bonc.medicine.entity.field.FieldRecord;
@@ -8,10 +9,16 @@ import com.bonc.medicine.service.field.FieldManageService;
 import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.utils.ExchangeCategroyNameID;
 import com.bonc.medicine.utils.ResultUtil;
+import com.bonc.medicine.utils.WeatherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 @Service("fieldManageService")
@@ -224,6 +231,13 @@ public class FieldManageServiceImpl implements FieldManageService {
 	@Override
 	public Result<Object> queryAllCategroy() {
 		return ResultUtil.success(fieldManageMapper.queryAllCategroy());
+	}
+
+	@Override
+	public Result<Object> queryWeatherInfo(String city_name) {
+		List<Map> cityInfoList=fieldManageMapper.queryCityNameAndCityCode();
+		String city_code=ExchangeCategroyNameID.NameToId(city_name,cityInfoList);
+		return ResultUtil.success(WeatherUtil.getCache(city_code));
 	}
 
 }

@@ -42,4 +42,6 @@ public interface FieldManageMapper {
 
     public List<Map> queryFieldCategroyInfo(int fieldID);
 
+    public List<Map> queryCityNameAndCityCode();
+
 }

@@ -96,5 +96,11 @@ public class FieldManageController {
 	public Result<Object> queryAllCategroy(){
 		return fieldManageService.queryAllCategroy();
 	}
+
+
+	@GetMapping("/weather/{city_name}")
+	public Result<Object> queryWeatherInfo(@PathVariable String city_name){
+		return fieldManageService.queryWeatherInfo(city_name);
+	}
 	
 }
