@@ -440,7 +440,7 @@
 		INSERT
 		common_user_role_rel (user_id,role_id)
 		VALUES (( SELECT
-		official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
+		official_user_id FROM field_coop WHERE id= #{coopID}) ,#{role_id})
 	</insert>
 
 	<delete id="deleteRole" parameterType="Integer">

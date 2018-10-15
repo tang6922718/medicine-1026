@@ -128,8 +128,9 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性   把合作社管理员作为技术员插入社员表中
 
-			// 给申请者加合作社角色属性
-			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
+			// 给申请者加合作社角色属性  技术员角色属性
+			 co_opManageMapper.insertCommon_user_role_rel(tempData.getId(),3);
+			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId(),4);
 			if (i > 0) {
 				list = co_opManageMapper.queryCoopInfo(tempData.getId());
 				Map map = new HashMap<>();
