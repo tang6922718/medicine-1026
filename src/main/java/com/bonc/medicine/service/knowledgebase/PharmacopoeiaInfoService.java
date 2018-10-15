@@ -11,6 +11,8 @@ public interface PharmacopoeiaInfoService {
 	public int updatePhara(Map map);
 
 	public Map<String,Object> pharaDetail(String id);
+	
+	public Map<String,Object> pharaDetailBack(String id);
 
 	public int updatePharaDetail(Map map);
 }

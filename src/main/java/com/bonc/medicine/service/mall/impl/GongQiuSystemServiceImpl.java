@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -206,12 +207,12 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 
 	@Override
-	public Result<Object> my_supply_type(Integer user_id, String type) {
+	public List<Map<String, Object>> my_supply_type(Integer user_id, String type) {
 
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		map.put("type", type);
-		return ResultUtil.success(gongQiuSystemMapper.my_supply_type(map));
+		return gongQiuSystemMapper.my_supply_type(map);
 	}
 
 	@Override
@@ -223,11 +224,11 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 
 	@Override
-	public Result<Object> my_purchase_type(Integer user_id, String type) {
+	public List<Map<String, Object>> my_purchase_type(Integer user_id, String type) {
 
 		Map map = new HashMap<>();
 		map.put("user_id", user_id);
 		map.put("type", type);
-		return ResultUtil.success(gongQiuSystemMapper.my_purchase_type(map));
+		return gongQiuSystemMapper.my_purchase_type(map);
 	}
 }
