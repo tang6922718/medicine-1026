@@ -466,6 +466,13 @@ public class SpecRepertoryController {
 			  
 	            @Override  
 	            public int compare(Map o1,Map o2) {  
+	            	if(o1.get("invited")==null){
+	            		return -1;
+	            	}
+	            	
+	            	if(o2.get("invited")==null){
+	            		return 1;
+	            	}
 	                // 按照专家是否邀请降序排列  
 	                if (Integer.parseInt(o1.get("invited")+"") > Integer.parseInt(o2.get("invited")+"") ) {  
 	                    return -1;  
