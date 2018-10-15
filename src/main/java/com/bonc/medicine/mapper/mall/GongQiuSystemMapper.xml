@@ -263,7 +263,7 @@
 		<if test="type != null and type == 4">
 			AND is_aduit = '2'
 		</if>
-		order by public_time desc
+		order by publish_time desc
 	</select>
 
 </mapper>
