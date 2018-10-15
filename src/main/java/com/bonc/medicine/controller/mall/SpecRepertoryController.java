@@ -164,6 +164,14 @@ public class SpecRepertoryController {
 			PageHelper.startPage(pageNum, pageSize);
 		}
 		list = specialistService.specialList(param);
+		
+		// 如果查询返回的时候没有，那就不进行下面的操作
+		if(null == list || list.isEmpty() || list.size() < 1){
+			return ResultUtil.successTotal(list, 0);
+		}
+		
+		
+		//  TODO  判断
 		if (pageNum != null && pageSize != null) {
 			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
 		}
