@@ -168,7 +168,8 @@
 		'' AS integral,
 		'' AS supply,
 		'' AS purchase,
-		STATUS
+		STATUS,
+		log_time
 		FROM
 		common_user a
 		LEFT JOIN common_user_role_rel b ON a.id = b.user_id
@@ -194,7 +195,7 @@
 			AND a_role = #{role}
 		</if>
 		ORDER BY
-		user_id
+		log_time desc
 	</select>
 
 	<select id="coop_hrlp_list" resultType="Map">

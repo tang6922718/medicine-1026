@@ -68,25 +68,12 @@ public class ViewTheDatalmpl implements ViewTheDataService {
     }
     
     @Override
-    public List<Map<String, Object>> rankInteraction() {
-    	return viewTheDataMapper.rankInteraction();
+    public List<Map<String, Object>> rankInteraction(Integer user_id) {
+    	Map map = new HashMap<>();
+    	map.put("user_id", user_id);
+    	return viewTheDataMapper.rankInteraction(map);
     }
     
-    @Override
-    public List<Map<String, Object>> follow() {
-    	return viewTheDataMapper.follow();
-    }
-    
-    @Override
-    public List<Map<String, Object>> collection() {
-    	return viewTheDataMapper.collection();
-    }
-    
-    @Override
-    public List<Map<String, Object>> issue() {
-    	return viewTheDataMapper.issue();
-    }
-
     @Override
     public List<Map<String, Object>> myResources(Integer user_id) {
     	Map map = new HashMap<>();

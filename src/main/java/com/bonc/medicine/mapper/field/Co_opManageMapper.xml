@@ -380,14 +380,14 @@
 			into
 			common_notice
 			(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
-			values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',#{send_time},'0')
+			values('1',#{notice_content},#{notice_role_type},now(),'1','1',#{send_time},'0')
 		</if>
 		<if test="send_time == null or send_time == ''">
 			insert
 			into
 			common_notice
 			(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
-			values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',now(),'1')
+			values('1',#{notice_content},#{notice_role_type},now(),'1','1',now(),'1')
 		</if>
 	</insert>
 

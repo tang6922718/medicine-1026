@@ -12,7 +12,8 @@
 		id,
 		notice_type,
 		notice_content,
-		publish_time
+		publish_time,
+		send_time
 		FROM
 		common_notice
 		WHERE
@@ -25,7 +26,8 @@
 		id,
 		notice_type,
 		notice_content,
-		publish_time
+		publish_time,
+		send_time
 		FROM
 		common_notice
 		WHERE
@@ -56,6 +58,7 @@
 		a.notice_content,
 		a.object_id,
 		a.publish_time,
+		a.send_time,
 		c.issue_desc
 		FROM
 		common_notice a
@@ -78,6 +81,7 @@
 		a.notice_content,
 		a.object_id,
 		a.publish_time,
+		a.send_time,
 		c.desciption
 		FROM
 		common_notice a
@@ -100,6 +104,7 @@
 		a.notice_content,
 		a.object_id,
 		a.publish_time,
+		a.send_time,
 		c.goods_name,
 		substring_index(c.img_url,',',1) as img_url,
 		d.mark_url,

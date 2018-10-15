@@ -30,7 +30,7 @@ public class Supply {
 	private String attribute; // 属性
 	private String tel; // 联系电话
 	private String linkman; // 联系人姓名
-	private Date public_time; // 发布日期
+	private String public_time; // 发布日期
 	private Character carriage_status; // 上架状态 上架状态：0，未上架；1，上架；2，下架
 	private Character state; // 数据状态 数据状态： 0 可用 1 不可用（数据删除时）
 	// private Character is_fine; // 是否精品推荐 是否精品推荐 ： 0 是 1 不是
@@ -238,11 +238,11 @@ public class Supply {
 		this.linkman = linkman;
 	}
 
-	public Date getPublic_time() {
+	public String getPublic_time() {
 		return public_time;
 	}
 
-	public void setPublic_time(Date public_time) {
+	public void setPublic_time(String public_time) {
 		this.public_time = public_time;
 	}
 
