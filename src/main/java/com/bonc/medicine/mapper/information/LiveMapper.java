@@ -152,8 +152,8 @@ public interface LiveMapper {
                 WHERE("is_display='1'");
                 ORDER_BY("create_time desc");
             }}.toString();
-            System.out.println(sql);
-            return sql;
+           String  nsql ="SELECT a.*,COUNT(b.id) as applyNum from (" +sql +") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id";
+            return nsql;
 
         }
 
