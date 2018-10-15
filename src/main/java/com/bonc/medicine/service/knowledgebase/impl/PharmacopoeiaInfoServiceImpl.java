@@ -41,6 +41,15 @@ public class PharmacopoeiaInfoServiceImpl implements PharmacopoeiaInfoService {
         }
         return reMap;
     }
+    
+    @Override
+    public Map<String, Object> pharaDetailBack(String id) {
+        Map<String, Object> reMap = pharmacopoeiaInfoMapper.pharaDetailBack(id);
+        if (reMap == null || reMap.size() == 0 || reMap.isEmpty()){
+            throw new MedicineRuntimeException(ResultEnum.NO_CONTENT);
+        }
+        return reMap;
+    }
 
     @Override
     public int updatePharaDetail(Map map) {

@@ -48,6 +48,23 @@
 		WHERE
 			cat_code =  #{id}
 	</select>
+	
+	<select id="pharaDetailBack" parameterType="String" resultType="java.util.Map">
+		SELECT
+			a.id,
+			cat_code,
+			name,
+			source,
+			variety,
+			detailed_content,
+			b.status,
+			b.fail_opinion
+		FROM
+			km_pharmacopoeia_information a
+		LEFT JOIN km_audit b ON a.id = b.object_id AND b.km_type = 6
+		WHERE
+			a.id =  #{id}
+	</select>
 
 	<update id="updatePharaDetail" parameterType="java.util.Map">
 		UPDATE  km_pharmacopoeia_information

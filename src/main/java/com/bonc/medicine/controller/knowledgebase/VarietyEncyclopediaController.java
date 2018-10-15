@@ -100,10 +100,17 @@ public class VarietyEncyclopediaController {
         return ResultUtil.success(count);
     }
     /*
-     * 药典详情*/
+     * 药典详情--品种管理*/
     @GetMapping("/pharaDetail/{id}")
     public Result<Object> pharaDetail(@PathVariable String id){
         return ResultUtil.success(pharmacopoeiaInfoService.pharaDetail(id));
+    }
+    
+    /*
+     * 药典详情--审核*/
+    @GetMapping("/pharaDetailBack/{id}")
+    public Result<Object> pharaDetailBack(@PathVariable String id){
+        return ResultUtil.success(pharmacopoeiaInfoService.pharaDetailBack(id));
     }
 
     /*

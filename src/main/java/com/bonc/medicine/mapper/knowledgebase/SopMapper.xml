@@ -38,7 +38,7 @@
 		</if>
 		<if test="sop_id != null and sop_id != ''">
 			sp.id = #{sop_id}
-			AND sp.record_status = '2'
+			<!-- AND sp.record_status = '2' -->
 		</if>
 		AND sp.sop_status = '1'
 		AND p.status = '1'
