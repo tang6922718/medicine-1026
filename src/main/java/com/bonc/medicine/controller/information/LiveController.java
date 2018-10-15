@@ -76,12 +76,12 @@ public class LiveController {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
         List list = liveService.selectAllLive(map,pageNum,pageSize);
-        Map map2 = new HashMap();
+    /*    Map map2 = new HashMap();
         map2.put("object_type", "2");
         for (Object map1 : list) {
             map2.put("object_id", String.valueOf(((Map) map1).get("id")));
             ((Map) map1).put("applyNum", trainService.selectApply(map2));
-        }
+        }*/
         PageInfo<List> pageInfo = new PageInfo<List>(list);
         return ResultUtil.successTotal(list, pageInfo.getTotal());
     }
