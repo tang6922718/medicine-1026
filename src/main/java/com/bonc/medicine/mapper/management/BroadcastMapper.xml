@@ -40,7 +40,7 @@
 		<if test="status != null and status != '' ">
 			and a.status = #{status}
 		</if>
-		ORDER BY a.upload_time
+		ORDER BY a.upload_time DESC
 	</select>
 
 	<insert id="addBroadcast" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
