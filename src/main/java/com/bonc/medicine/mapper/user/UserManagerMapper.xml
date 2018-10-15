@@ -146,7 +146,7 @@
 
 	<select id="field" parameterType="Map" resultType="Map">
 		select
-		IFNULL(count(1),0) as field from field_info where state ='1' and
+		IFNULL(count(1),0) as field from field_info where state ='0' and
 		user_id = #{id}
 	</select>
 

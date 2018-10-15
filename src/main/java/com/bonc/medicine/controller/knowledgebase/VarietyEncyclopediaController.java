@@ -7,6 +7,8 @@ import com.bonc.medicine.service.knowledgebase.PharmacopoeiaInfoService;
 import com.bonc.medicine.service.knowledgebase.VarietyEncyclopediaService;
 import com.bonc.medicine.utils.JacksonMapper;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -98,10 +100,17 @@ public class VarietyEncyclopediaController {
         return ResultUtil.success(count);
     }
     /*
-     * 药典详情*/
+     * 药典详情--品种管理*/
     @GetMapping("/pharaDetail/{id}")
     public Result<Object> pharaDetail(@PathVariable String id){
         return ResultUtil.success(pharmacopoeiaInfoService.pharaDetail(id));
+    }
+    
+    /*
+     * 药典详情--审核*/
+    @GetMapping("/pharaDetailBack/{id}")
+    public Result<Object> pharaDetailBack(@PathVariable String id){
+        return ResultUtil.success(pharmacopoeiaInfoService.pharaDetailBack(id));
     }
 
     /*
@@ -130,8 +139,17 @@ public class VarietyEncyclopediaController {
      * 品种管理查询列表
      * */
     @GetMapping("/breed")
-    public Result<Object> selectBreed(@RequestParam(required = false) String search_name,@RequestParam(required = false) String type_code,@RequestParam(required = false) String record_status){
-        return ResultUtil.success(varietyEncyclopediaService.selectBreed(search_name,type_code,record_status));
+    public Result<Object> selectBreed(@RequestParam(required = false) String search_name,@RequestParam(required = false) String type_code,@RequestParam(required = false) String record_status,@RequestParam(required = false) Integer pageNum,@RequestParam(required = false) Integer pageSize){
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        long total = 0L;
+        if (pageNum != null && pageSize != null) {
+            PageHelper.startPage(pageNum, pageSize);
+        }
+        list = varietyEncyclopediaService.selectBreed(search_name,type_code,record_status);
+        if (pageNum != null && pageSize != null) {
+            total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+        }
+        return ResultUtil.successTotal(list, total);
     }
 
     /*
@@ -162,12 +180,22 @@ public class VarietyEncyclopediaController {
      * @return
      */
     @GetMapping("/kmAuditList")
-    public Result<Object> kmAuditList(@RequestParam(required = false) String searchJson){
+    public Result<Object> kmAuditList(@RequestParam(required = false) String searchJson,@RequestParam(required = false) Integer pageNum,@RequestParam(required = false) Integer pageSize){
         if(null == searchJson || "" == searchJson){
             searchJson = "{\"keyword\": \"\", \"type_code\": \"\"}";
         }
         Map map = JacksonMapper.INSTANCE.readJsonToMap(searchJson);
-        return ResultUtil.success(varietyEncyclopediaService.kmAuditList(map));
+
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        long total = 0L;
+        if (pageNum != null && pageSize != null) {
+            PageHelper.startPage(pageNum, pageSize);
+        }
+        list = varietyEncyclopediaService.kmAuditList(map);
+        if (pageNum != null && pageSize != null) {
+            total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+        }
+        return ResultUtil.successTotal(list, total);
     }
 
     /**
@@ -199,6 +227,10 @@ public class VarietyEncyclopediaController {
                 varietyEncyclopediaService.changeInfoStatus(map);
             }else if("5".equals(km_type)){
                 varietyEncyclopediaService.changeVedioStatus(map);
+            }else if("7".equals(km_type)){
+                varietyEncyclopediaService.changeTrainOfflineStatus(map);
+            }else if("8".equals(km_type)){
+                varietyEncyclopediaService.changeTrainLiveStatus(map);
             }
         };
 

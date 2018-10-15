@@ -325,4 +325,8 @@
 		WHERE A.categroyID=B.variety_code AND A.fieldID= #{fieldID}
 	</select>
 
+	<select id="queryCityNameAndCityCode" resultType="Map">
+        SELECT city_code AS id,city_name AS name FROM field_city_info
+	</select>
+
 </mapper>

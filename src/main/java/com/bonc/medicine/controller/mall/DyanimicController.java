@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -108,12 +109,26 @@ public class DyanimicController {
     }
 
 
-    // 查询所有人动态  后台管理
-    @SuppressWarnings("unchecked")
+    /**
+    * @Description: 查询所有人动态  后台管理
+    * @Param: [dyn_cat_id, publish_time, phone, dContent]
+    * @return: com.bonc.medicine.entity.Result<java.lang.Object>
+    * @Author:
+    * @Date: 2018/10/13
+    */
+    @SuppressWarnings({"unchecked", "Duplicates"})
     @GetMapping("/select/dyanimicBackstage")
-    public Result<Object> dyanimicBackstage(int dyn_cat_id,String publish_time) {
+    public Result<Object> dyanimicBackstage(@RequestParam(required = false) String dyn_cat_id,
+                                            @RequestParam(required = false) String publish_time,
+                                            @RequestParam(required = false) String words) {
         List returnList = new ArrayList();
-        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time);
+       /* String phone = null;
+
+        if (Pattern.matches("\\d+",words)){
+            phone = words;
+        }
+*/
+        List<Map> list = dyanimicService.selectAllDyanimic(dyn_cat_id,publish_time,  words);
         if(list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Map map = new HashMap();

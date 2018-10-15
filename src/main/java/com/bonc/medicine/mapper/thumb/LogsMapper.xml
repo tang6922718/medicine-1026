@@ -39,8 +39,8 @@
 
     <select id="queryLoginOutLogs" parameterType="Map" resultType="Map">
         select
-        clo.id, DATE_FORMAT(clo.login_time, '%Y-%m-%d') as login_time, clo.ip, clo.status, cu.name,
-        DATE_FORMAT(clo.logout_time, '%Y-%m-%d') as logout_time,
+        clo.id, DATE_FORMAT(clo.login_time, '%Y-%m-%d %H:%i:%S') as login_time, clo.ip, clo.status, cu.name,
+        DATE_FORMAT(clo.logout_time, '%Y-%m-%d %H:%i:%S') as logout_time,
         case when clo.login_time is not null and clo.logout_time is null then '登入'
         when clo.logout_time is not null and clo.login_time is null then '登出' end as operation
         from

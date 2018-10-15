@@ -12,6 +12,7 @@ public interface TrainMapper {
 
     @InsertProvider(type = TrainDynaSqlProvider.class,
             method = "createTrain")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int createTrain(Map<String, Object> map);
 
 
@@ -164,6 +165,7 @@ public interface TrainMapper {
                 if (map.get("train_introduce") != null) {
                     VALUES("train_introduce", "#{train_introduce}");
                 }
+                VALUES("create_time","CURRENT_TIMESTAMP()");
             }}.toString();
 
             System.out.println(sql);
@@ -203,6 +205,7 @@ public interface TrainMapper {
                 if (map.get("spec_id") != null) {
                     VALUES("spec_id", "#{spec_id}");
                 }
+                VALUES("create_time","CURRENT_TIMESTAMP()");
 
             }}.toString();
         }

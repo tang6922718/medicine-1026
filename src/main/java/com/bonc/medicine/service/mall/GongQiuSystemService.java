@@ -1,5 +1,8 @@
 package com.bonc.medicine.service.mall;
 
+import java.util.List;
+import java.util.Map;
+
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Marks;
 import com.bonc.medicine.entity.mall.Recommend;
@@ -41,10 +44,10 @@ public interface GongQiuSystemService {
 	
 	public Result<Object> my_supply_statistics(Integer user_id);
 	
-	public Result<Object> my_supply_type(Integer user_id,String type);
+	public List<Map<String, Object>> my_supply_type(Integer user_id,String type);
 	
 	public Result<Object> my_purchase_statistics(Integer user_id);
 	
-	public Result<Object> my_purchase_type(Integer user_id,String type);
+	public List<Map<String, Object>> my_purchase_type(Integer user_id,String type);
 
 }

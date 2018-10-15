@@ -7,6 +7,8 @@ import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -94,8 +96,8 @@ public class IntegralController {
                                        @RequestParam(required = false) String userName,
                                        @RequestParam(required = false) String startTime,
                                        @RequestParam(required = false) String endTime,
-                                       @RequestParam(required = false, defaultValue = "1") String pageIndex,
-                                       @RequestParam(required = false, defaultValue = "16") String pageSize) {
+                                       @RequestParam(required = false) String pageIndex,
+                                       @RequestParam(required = false) String pageSize) {
         Map<String, String> parmMap = new HashMap<>();
         parmMap.put("userId", userId);
         parmMap.put("userName", userName);
@@ -103,6 +105,15 @@ public class IntegralController {
         parmMap.put("endTime", endTime);
         parmMap.put("pageIndex", pageIndex);
         parmMap.put("pageSize", pageSize);
+
+        if (!StringUtils.isBlank(pageIndex) && !StringUtils.isBlank(pageSize)){
+
+            PageHelper.startPage(Integer.parseInt(pageIndex), Integer.parseInt(pageSize));
+            List<Map<String, Object>> integralList = integralService.queryIntegralHistory(parmMap);
+            long total = ((Page<Map<String,Object>>)integralList).getTotal();
+
+            return ResultUtil.successTotal(integralList, total);
+        }
 
         return ResultUtil.success(integralService.queryIntegralHistory(parmMap));
     }

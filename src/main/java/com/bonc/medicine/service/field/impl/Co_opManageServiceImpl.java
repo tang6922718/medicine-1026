@@ -62,29 +62,18 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		if (tempData.getPhoto_url() == null) {
 			tempData.setPhoto_url("");
 		}
+		if (tempData.getImg_url()==null) {
+			tempData.setImg_url("");
+		}
+		if (tempData.getPortrait()==null) {
+			tempData.setPortrait("");
+		}
 
 
 		//  合作社新建成功时把合作社管理员作为社员（管理员为技术员）插入合作社社员表中
 		int i=co_opManageMapper.insertCo_op(tempData);
 		if (i>0){
-			int coopID=tempData.getId();
-
-			Co_op_Member coOpMember=new Co_op_Member();
-			coOpMember.setName(map.get("name").toString());
-			coOpMember.setImg_url(map.get("head_portrait").toString());
-			coOpMember.setSex(map.get("sex").toString());
-			coOpMember.setAge(Integer.parseInt(map.get("age").toString()));
-			coOpMember.setTelephone(tempData.getTelephone());
-			coOpMember.setAddress(map.get("address").toString());
-			coOpMember.setPlant_age(0);
-			coOpMember.setPlant_cat_id(tempData.getCultivar());
-			coOpMember.setPlant_area(0);
-			coOpMember.setCoop_id(coopID);
-			coOpMember.setUser_id(map.get("id").toString());
-			coOpMember.setAssistant("0");
-			coOpMember.setState("1"); // 暂时设为不可用  后面合作社审核通过时再变更为可用
-
-			return ResultUtil.success(co_opManageMapper.insertCo_opMember(coOpMember));
+			return ResultUtil.success(i);
 
 		}else {
 			return ResultUtil.error(500,"合作社信息插入失败");
@@ -100,17 +89,6 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
 	}
 
-	// @Override
-	// public Result<Object> getCo_opInfo(int userID) {
-	// Map map = new HashMap();
-	// map = co_opManageMapper.queryCo_opInfo(userID); // 合作社基本信息
-	// int coop_ID=(int)map.get("id");
-	// map.putAll(co_opManageMapper.queryCo_opMemberNum(coop_ID)); // 合作社总人数
-	// map.putAll(co_opManageMapper.queryPlantNum(coop_ID)); // 合作社登记种植总数
-	// map.putAll(co_opManageMapper.queryAssistantNum(coop_ID)); // 合作社助手总数
-	// map.putAll(co_opManageMapper.queryCo_opNoticeNum(coop_ID));
-	// return ResultUtil.success(map);
-	// }
 
 	@Override
 	public Result<Object> getCo_opInfo(Map params) {
@@ -138,10 +116,19 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 	@Override
 	@Transactional
 	public Result<Object> updateCo_op(Co_op tempData) {
+
+		// 所有品种信息 后面转码用
+		List<Map> categroyList = fieldManageMapper.queryAllCategroy();
+
+		if (tempData.getCultivar()!=null){
+			tempData.setCultivar(ExchangeCategroyNameID.NameToId(tempData.getCultivar(),categroyList));
+		}
+
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性
+		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性   把合作社管理员作为技术员插入社员表中
 
+			// 给申请者加合作社角色属性
 			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId());
 			if (i > 0) {
 				list = co_opManageMapper.queryCoopInfo(tempData.getId());
@@ -151,19 +138,30 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 				map.put("notice_receiver", list.get(0).get("official_user_id"));
 				co_opManageMapper.addCoopAduitNotice(map);
 
-				// 通过coopID 和 userID 查询合作社管理员的社员编号
-				int coopID=tempData.getId();
-				int userID=Integer.parseInt(list.get(0).get("official_user_id").toString());
-				Map coopMemberID=co_opManageMapper.queryCoopMemberID(coopID,userID);
+				Map coopInfo=list.get(0);
 
-				// 将该合作社的社员列表中的管理员状态变更为可用
+				//把合作社管理员作为技术员插入社员表中
+				// 根据电话号码去查用户信息   该SQL返回: id,name , age,head_portrait, address, sex
+				Map userInfo = co_opManageMapper.queryUserID(coopInfo.get("telephone").toString());
+
 				Co_op_Member coOpMember=new Co_op_Member();
-				coOpMember.setId(Integer.parseInt(coopMemberID.get("id").toString()));
+				coOpMember.setName(userInfo.get("name").toString());
+				coOpMember.setImg_url(userInfo.get("head_portrait").toString());
+				coOpMember.setSex(userInfo.get("sex").toString());
+				coOpMember.setAge(Integer.parseInt(userInfo.get("age").toString()));
+				coOpMember.setTelephone(coopInfo.get("telephone").toString());
+				coOpMember.setAddress(userInfo.get("address").toString());
+				coOpMember.setPlant_age(0);
+				coOpMember.setPlant_cat_id(coopInfo.get("cultivar").toString());
+				coOpMember.setPlant_area(0);
+				coOpMember.setCoop_id(tempData.getId());
+				coOpMember.setUser_id(userInfo.get("id").toString());
+				coOpMember.setAssistant("0");
 				coOpMember.setState("0");
-				co_opManageMapper.updateCo_opMember(coOpMember);
-
+				co_opManageMapper.insertCo_opMember(coOpMember);
 
 				return ResultUtil.success(co_opManageMapper.updateCo_op(tempData));
+
 			} else {
 				return ResultUtil.error(500, "添加角色属性属性失败");
 			}
@@ -340,7 +338,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		List<Map> coopMemberList = co_opManageMapper.queryCoopMemberList2(coop_id);
 		for (Map obj : coopMemberList) {
 			obj.put("plant_cat_id",
-					ExchangeCategroyNameID.IDToName(obj.get("plant_cat_id").toString(), allCategroyInfo));
+					ExchangeCategroyNameID.IDToName(String.valueOf(obj.get("plant_cat_id")), allCategroyInfo));
 		}
 
 		return ResultUtil.success(coopMemberList);

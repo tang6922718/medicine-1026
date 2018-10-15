@@ -22,7 +22,7 @@ public class CodeKeyUtil {
      */
     public static String getCodeKey(String phone) {
 
-        return CODE_PRE + SPLIT + phone  + CODE_SUB;
+        return CODE_PRE + SPLIT + phone  + SPLIT + CODE_SUB;
     }
 
 }

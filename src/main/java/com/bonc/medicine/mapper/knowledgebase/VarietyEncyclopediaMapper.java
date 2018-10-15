@@ -39,6 +39,10 @@ public interface VarietyEncyclopediaMapper {
     public int changeInfoStatus(Map map);
 
     public int changeVedioStatus(Map map);
+    
+    public int changeTrainOfflineStatus(Map map);
+    
+    public int changeTrainLiveStatus(Map map);
 
     public List<Map<String,Object>> sourceDistribution();
 

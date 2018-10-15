@@ -94,6 +94,12 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
 
     @Override
     public int changeVedioStatus(Map map){return varietyEncyclopediaMapper.changeVedioStatus(map);}
+    
+    @Override
+    public int changeTrainOfflineStatus(Map map){return varietyEncyclopediaMapper.changeTrainOfflineStatus(map);}
+    
+    @Override
+    public int changeTrainLiveStatus(Map map){return varietyEncyclopediaMapper.changeTrainLiveStatus(map);}
 
     @Override
     public List<Map<String, Object>> sourceDistribution() {

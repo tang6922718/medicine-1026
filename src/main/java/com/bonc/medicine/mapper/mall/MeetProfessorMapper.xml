@@ -10,7 +10,7 @@
 		d.NAME,
 		a.issue_time,
 		a.issue_desc,
-		c.NAME as
+		u.NAME as
 		expert,
 		'' AS assit,
 		a.issue_status,
@@ -21,8 +21,9 @@
 		FROM
 		spec_issue a left join
 		spec_issue_association b on a.id = b.issueid
-		left join spec_info c on
-		b.specid = c.spec_id
+		left join common_user u on u.id=b.specid
+		/*left join spec_info c on
+		b.specid = c.spec_id*/
 		left join common_user d on d.id = a.issue_user_id
 		WHERE
 		b.is_assigned = '0'
@@ -39,10 +40,11 @@
 	<select id="assistlist" parameterType="Map" resultType="Map">
 		SELECT
 		a.issueid,
-		GROUP_CONCAT( b.NAME ) AS assit
+		GROUP_CONCAT( u.NAME ) AS assit
 		FROM
 		spec_issue_association a
-		LEFT JOIN spec_info b ON a.specid = b.spec_id
+		left join common_user u on u.id=a.specid
+		/*LEFT JOIN spec_info b ON a.specid = b.spec_id*/
 		WHERE
 		a.is_assigned = '1'
 		GROUP BY
@@ -413,14 +415,14 @@
 
 	<update id="aduitArticle" parameterType="Map">
 		update spec_article set
-		is_audit = #{is_audit} , fail_opinion = #{fail_opinion} where id =
+		is_audit = #{is_audit} , fail_opinion = #{fail_opinion}, publish_time = NOW() where id =
 		#{id}
 	</update>
 
 	<insert id="addArticle" parameterType="com.bonc.medicine.entity.mall.Article">
 		insert into
-		spec_article(title,article_type,author,label,spec_id,publish_time,content,effect_flag,img_url,status,fail_opinion,is_audit,create_user_id)
-		values(#{title},#{article_type},#{author},#{label},#{spec_id},now(),#{content},#{effect_flag},#{img_url},'0',#{fail_opinion},'0',#{create_user_id});
+		spec_article(title,article_type,author,label,spec_id,create_time,content,effect_flag,img_url,status,fail_opinion,is_audit,create_user_id)
+		values(#{title},#{article_type},#{author},#{label},#{spec_id},CURRENT_TIMESTAMP(),#{content},#{effect_flag},#{img_url},'0',#{fail_opinion},'0',#{create_user_id});
 	</insert>
 
 	<update id="updateArticle" parameterType="com.bonc.medicine.entity.mall.Article">

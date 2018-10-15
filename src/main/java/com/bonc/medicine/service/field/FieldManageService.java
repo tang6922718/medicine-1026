@@ -26,5 +26,7 @@ public interface FieldManageService {
 	public Result<Object> getCategroySOPInfo(int categroyID,int stepID);
 
 	public Result<Object> queryAllCategroy();
+
+	public Result<Object> queryWeatherInfo(String city_name);
 	
 }

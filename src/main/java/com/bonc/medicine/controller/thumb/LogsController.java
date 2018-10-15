@@ -5,15 +5,14 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.thumb.LogsService;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: medicine-hn
@@ -127,10 +126,10 @@ public class LogsController {
         Map<String, String> paramMap = new HashMap<>();
 
         //如果分页参数没有。默认显示最近20条
-        if (StringUtils.isEmpty(pageIndex)) {
+        if (StringUtils.isBlank(pageIndex)) {
             paramMap.put("pageIndex", "1");
         }
-        if (StringUtils.isEmpty(pageSize)) {
+        if (StringUtils.isBlank(pageSize)) {
             paramMap.put("pageIndex", "20");
         }
         paramMap.put("userName", userName);
@@ -139,6 +138,16 @@ public class LogsController {
         paramMap.put("ip", ip);
         paramMap.put("onlyLogin", onlyLogin);
         paramMap.put("onlyLogout", onlyLogout);
+
+        // 如果有分页参数
+        if (!StringUtils.isBlank(pageIndex) && !StringUtils.isBlank(pageSize)){
+
+            PageHelper.startPage(Integer.parseInt(pageIndex), Integer.parseInt(pageSize));
+            List<Map<String, Object>> logsList = logsService.queryLoginOutLogs(paramMap);
+            long total = ((Page<Map<String,Object>>)logsList).getTotal();
+
+            return ResultUtil.successTotal(logsList, total);
+        }
 
         return ResultUtil.success(logsService.queryLoginOutLogs(paramMap));
     }

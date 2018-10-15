@@ -41,6 +41,10 @@ public class DyanimicServiceImpl implements DyanimicService {
 	public List<Map> selectAllDyanimic(int dyn_cat_id, String publish_time) {
 		return dyanimicMapper.selectAllDyanimic( dyn_cat_id,  publish_time);
 	}
+	@Override
+	public List<Map> selectAllDyanimic(String dyn_cat_id, String publish_time, String words) {
+		return dyanimicMapper.selectAllDyanimicTwo( dyn_cat_id,  publish_time, words);
+	}
 
 	@Override
 	public List<Map> selectUserDyanimic(int publish_user_id,int dyn_cat_id) {

@@ -12,8 +12,12 @@ public interface DyanimicMapper {
 
 
 	public int insertDyanimic(Dyanimic dyanimic); // 发布动态
+	public List<Map> selectAllDyanimicTwo(@Param("dyn_cat_id") String dyn_cat_id,
+									   @Param("publish_time") String publish_time,	// 查询所有种类动态
+									   @Param("words") String words);		// 查询所有种类动态
+
 	public List<Map> selectAllDyanimic(@Param("dyn_cat_id") int dyn_cat_id,
-									   @Param("publish_time") String publish_time);		// 查询所有种类动态
+									   @Param("publish_time") String publish_time);	// 查询所有种类动态
 
 	public List<Map> selectUserDyanimic(@Param("publish_user_id") int publish_user_id,
 										@Param("dyn_cat_id") int dyn_cat_id); //查询某一用户的动态

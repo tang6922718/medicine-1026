@@ -5,7 +5,7 @@
 
 	<update id="auditSSupply" parameterType="Map">
 		update mall_supply set
-		is_audit = #{result},carriage_status = '1',comment = #{comment} where
+		is_audit = #{result},carriage_status = '1',comment = #{comment},public_time = NOW() where
 		id = #{supplyId}
 	</update>
 
@@ -27,7 +27,7 @@
 
 	<update id="auditSPurchase" parameterType="Map">
 		update mall_purchase
-		set is_aduit = #{result},comment = #{comment} where id = #{purchaseId}
+		set is_aduit = #{result},comment = #{comment},publish_time = NOW() where id = #{purchaseId}
 	</update>
 
 	<update id="auditFPurchase" parameterType="Map">
@@ -231,6 +231,7 @@
 		<if test="type != null and type == 4">
 			AND is_audit = '2'
 		</if>
+		order by public_time desc
 	</select>
 
 	<select id="my_purchase_statistics" parameterType="Map"
@@ -262,6 +263,7 @@
 		<if test="type != null and type == 4">
 			AND is_aduit = '2'
 		</if>
+		order by publish_time desc
 	</select>
 
 </mapper>

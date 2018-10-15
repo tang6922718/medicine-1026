@@ -11,6 +11,7 @@ public interface LiveMapper {
 
     @InsertProvider(type = LiveDynaSqlProvider.class,
             method = "addLive")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int addLive(Map<String, Object> map);
 
 
@@ -95,6 +96,7 @@ public interface LiveMapper {
                 if (map.get("img_url") != null) {
                     VALUES("img_url", "#{img_url}");
                 }
+                VALUES("create_time","CURRENT_TIMESTAMP()");
             }}.toString();
         }
 
@@ -152,8 +154,8 @@ public interface LiveMapper {
                 WHERE("is_display='1'");
                 ORDER_BY("create_time desc");
             }}.toString();
-           String  nsql ="SELECT a.*,COUNT(b.id) as applyNum from (" +sql +") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id";
-            return nsql;
+            System.out.println(sql);
+            return sql;
 
         }
 

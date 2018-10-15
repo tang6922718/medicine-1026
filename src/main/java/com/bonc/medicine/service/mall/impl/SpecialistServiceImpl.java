@@ -40,6 +40,11 @@ public class SpecialistServiceImpl implements SpecialistService {
 	public int updateInfo(Specialist specialist) {
 		return specialistMapper.updateSpecialist(specialist);
 	}
+	
+	@Override
+	public int updateUserBasicInfo(Specialist specialist) {
+		return specialistMapper.updateUserBasicInfo(specialist);
+	}
 
 	@Override
 	public List<Map> catalogList(Map param) {

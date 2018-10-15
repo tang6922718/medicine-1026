@@ -6,6 +6,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.information.LiveService;
 import com.bonc.medicine.service.information.TrainService;
+import com.bonc.medicine.service.knowledgebase.AuditService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
@@ -35,6 +36,9 @@ public class LiveController {
 
     @Autowired
     TrainService trainService;
+    
+    @Autowired
+    AuditService auditService;
 
     @Autowired
     ThumbService thumbService;
@@ -53,7 +57,10 @@ public class LiveController {
     @com.bonc.medicine.annotation.Authorization
     public Result createLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
-        return ResultUtil.success(liveService.createLive(map));
+        int count = liveService.createLive(map);
+        map.put("km_type", "8");
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**

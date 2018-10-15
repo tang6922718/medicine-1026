@@ -5,6 +5,14 @@ import com.bonc.medicine.entity.mall.Marks;
 import com.bonc.medicine.entity.mall.Recommend;
 import com.bonc.medicine.entity.mall.Reply;
 import com.bonc.medicine.service.mall.GongQiuSystemService;
+import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +26,7 @@ public class GongQiuController {
 	 * 审核供应通过后改为审核通过且上架，未通过字段为未上架审核不通过result=1通过2不通过
 	 */
 	@GetMapping("/gongQiuSystem/auditSupply")
-	public Result<Object> auditSupply( Integer supplyId,  String result,
-			 String comment) {
+	public Result<Object> auditSupply(Integer supplyId, String result, String comment) {
 		if ("1".equals(result)) {
 			return gongQiuSystemService.auditSSupply(supplyId, result, comment);// 通过
 		} else {
@@ -31,8 +38,7 @@ public class GongQiuController {
 	 * 审核求购通过后改为审核通过，未通过字段为未上架审核不通过result=1通过2不通过
 	 */
 	@GetMapping("/gongQiuSystem/auditPurchase")
-	public Result<Object> auditPurchase( Integer purchaseId,  String result,
-			 String comment) {
+	public Result<Object> auditPurchase(Integer purchaseId, String result, String comment) {
 		if ("1".equals(result)) {
 			return gongQiuSystemService.auditSPurchase(purchaseId, result, comment);// 通过
 		} else {
@@ -140,10 +146,10 @@ public class GongQiuController {
 	 * 后台查询审核商品审核的列表
 	 */
 	@GetMapping("/gongQiuSystem/supplylist")
-	public Result<Object> supplylist(String key, String goodType,String is_audit,String carriage_status) {
-		return gongQiuSystemService.supplylist(key, goodType,is_audit,carriage_status);
+	public Result<Object> supplylist(String key, String goodType, String is_audit, String carriage_status) {
+		return gongQiuSystemService.supplylist(key, goodType, is_audit, carriage_status);
 	}
-	
+
 	/*
 	 * 后台查询求购审核的列表
 	 */
@@ -151,7 +157,7 @@ public class GongQiuController {
 	public Result<Object> purchaselist(String key, String goodType) {
 		return gongQiuSystemService.purchaselist(key, goodType);
 	}
-	
+
 	/*
 	 * 我的供应数据统计
 	 */
@@ -159,15 +165,24 @@ public class GongQiuController {
 	public Result<Object> my_supply_statistics(@PathVariable Integer user_id) {
 		return gongQiuSystemService.my_supply_statistics(user_id);
 	}
-	
+
 	/*
 	 * 我的供应按条件查询
 	 */
-	@GetMapping("/gongQiuSystem/my_supply_type/{user_id}/{type}")
-	public Result<Object> my_supply_type(@PathVariable Integer user_id,@PathVariable String type) {
-		return gongQiuSystemService.my_supply_type(user_id,type);
+	@GetMapping("/gongQiuSystem/my_supply_type")
+	public Result<Object> my_supply_type(Integer user_id, String type, Integer pageNum, Integer pageSize) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		list = gongQiuSystemService.my_supply_type(user_id, type);
+		if (pageNum != null && pageSize != null) {
+			total = list == null ? 0L : ((Page<Map<String, Object>>) list).getTotal();
+		}
+		return ResultUtil.successTotal(list, total);
 	}
-	
+
 	/*
 	 * 我的求购数据统计
 	 */
@@ -175,13 +190,22 @@ public class GongQiuController {
 	public Result<Object> my_purchase_statistics(@PathVariable Integer user_id) {
 		return gongQiuSystemService.my_purchase_statistics(user_id);
 	}
-	
+
 	/*
 	 * 我的求购按条件查询
 	 */
-	@GetMapping("/gongQiuSystem/my_purchase_type/{user_id}/{type}")
-	public Result<Object> my_purchase_type(@PathVariable Integer user_id,@PathVariable String type) {
-		return gongQiuSystemService.my_purchase_type(user_id,type);
+	@GetMapping("/gongQiuSystem/my_purchase_type")
+	public Result<Object> my_purchase_type(Integer user_id, String type, Integer pageNum, Integer pageSize) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		list = gongQiuSystemService.my_purchase_type(user_id, type);
+		if (pageNum != null && pageSize != null) {
+			total = list == null ? 0L : ((Page<Map<String, Object>>) list).getTotal();
+		}
+		return ResultUtil.successTotal(list, total);
 	}
 
 }
