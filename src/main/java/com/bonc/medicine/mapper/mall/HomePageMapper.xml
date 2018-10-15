@@ -19,7 +19,7 @@
 		(select count(1) from train_video_course where operation_status = '3' and status = '0' and publish_time <![CDATA[ >= ]]> #{min_time} and publish_time <![CDATA[ <= ]]> #{max_time}) as sp ,
 	 	(select count(1) from spec_article where status = '0' and publish_time <![CDATA[ >= ]]> #{min_time} and publish_time <![CDATA[ <= ]]> #{max_time} ) as wz ,
 	 	(select count(1) from comm_dyanimic where effect_flag = '0' and publish_time <![CDATA[ >= ]]> #{min_time} and publish_time <![CDATA[ <= ]]> #{max_time} ) as dt ,
-	 	(select count(1) from mall_supply where state = '0' and is_audit = '1' and publish_time <![CDATA[ >= ]]> #{min_time} and publish_time <![CDATA[ <= ]]> #{max_time} ) as gy ,
+	 	(select count(1) from mall_supply where state = '0' and is_audit = '1' and public_time <![CDATA[ >= ]]> #{min_time} and public_time <![CDATA[ <= ]]> #{max_time} ) as gy ,
 	 	(select count(1) from mall_purchase where state = '1' and is_aduit = '1' and publish_time <![CDATA[ >= ]]> #{min_time} and publish_time <![CDATA[ <= ]]> #{max_time} ) as qg
 	</select>
 
