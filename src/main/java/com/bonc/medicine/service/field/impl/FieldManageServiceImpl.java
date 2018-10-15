@@ -236,7 +236,12 @@ public class FieldManageServiceImpl implements FieldManageService {
 	@Override
 	public Result<Object> queryWeatherInfo(String city_name) {
 		List<Map> cityInfoList=fieldManageMapper.queryCityNameAndCityCode();
-		String city_code=ExchangeCategroyNameID.NameToId(city_name,cityInfoList);
+		String city_code=ExchangeCategroyNameID.CityNameToCode(city_name,cityInfoList);
+
+		if ("".equals(city_code)){
+			return ResultUtil.error(500,"地级市编码获取错误");
+		}
+
 		return ResultUtil.success(WeatherUtil.getCache(city_code));
 	}
 

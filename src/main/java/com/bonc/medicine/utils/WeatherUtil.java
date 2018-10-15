@@ -78,6 +78,26 @@ public class WeatherUtil {
             e.printStackTrace();
         }
 
+
+        JSONObject weatherInfo2 =null;
+        try{
+            URL url2 = new URL("http://www.weather.com.cn/data/cityinfo/"+ city_code + ".html");
+            HttpURLConnection ucon2 = (HttpURLConnection) url2.openConnection();
+            ucon2.connect();
+
+            InputStream in2 = ucon2.getInputStream();
+            BufferedReader reader2 = new BufferedReader(new InputStreamReader(in2,"UTF-8"));
+            String str2 = reader2.readLine();
+            System.out.println(str2);
+
+            weatherInfo2 = JSONObject.parseObject(str2).getJSONObject("weatherinfo");
+            System.out.println(weatherInfo2);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        weatherInfo.putAll(weatherInfo2);
+
         // 加上时间  和 信息过期时间
         Map<String,Object> temp=new HashMap<>();
         long currentTime=System.currentTimeMillis();

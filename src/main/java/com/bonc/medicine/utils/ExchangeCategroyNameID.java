@@ -78,6 +78,24 @@ public class ExchangeCategroyNameID {
 
 
 
+    public static String CityNameToCode(String name,List<Map> categroylist){
+
+        name=trimFirstAndLastChar(name,",");
+
+        String ID="";
+        for (Map temp: categroylist) {
+            if (name.indexOf(temp.get("name").toString())==0){
+                ID=temp.get("id").toString()+",";
+                break;
+            }
+        }
+
+        if (ID.length()>0) return ID.substring(0,ID.length()-1);
+        else return "";
+    }
+
+
+
     /**
      * 去除字符串首尾出现的某个字符.
      *
