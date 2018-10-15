@@ -100,9 +100,9 @@ public interface TrainMapper {
 
     //select spec_id,name  from  spec_info
     @Select({"<script>",
-            "SELECT * FROM `spec_info` where 1=1",
+            "SELECT t.spec_id, u.name  FROM `spec_info` t inner join common_user u on u.id = t.spec_id where 1=1",
             "<when test='specId!=null' >",
-            "AND spec_id = #{specId}",
+            "AND t.spec_id = #{specId}",
             "</when>",
             "</script>"})
     @ResultType(List.class)
