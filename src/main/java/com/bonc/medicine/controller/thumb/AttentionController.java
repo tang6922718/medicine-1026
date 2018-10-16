@@ -25,6 +25,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.thumb.AttentionService;
+import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 
@@ -48,8 +49,7 @@ public class AttentionController {
 
     @Autowired
     private UserService userService;
-
-
+    
 
     /**
     * @Description:查询当前用户是否关注了某用户 现在关注只有专家和用户，，，0：普通用户，1：专家
@@ -191,6 +191,7 @@ public class AttentionController {
             outMap.put("loveVariety", user.getCaresVarieties());
             outMap.put("followed",   isFlow.get("followed"));
             outMap.put("id",   ids);
+          
             outMap.put("active_count",   user.getActive_count());
             outMap.put("interactiveNumber",   user.getInteractiveNumber());
             outList.add(outMap);

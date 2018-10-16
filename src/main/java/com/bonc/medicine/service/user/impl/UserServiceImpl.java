@@ -8,6 +8,7 @@ import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.user.UserMapper;
 import com.bonc.medicine.service.RedisService;
+import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.JsonUtil;
 import com.bonc.medicine.utils.RedisKeyUtil;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+
+    @Autowired
+    private UserManagerService userManagerService;
 
 
     @Override
@@ -303,8 +307,12 @@ public class UserServiceImpl implements UserService {
         user.setExpertise_field(userMap.get("expertise_field") == null ? "" : userMap.get("expertise_field") + "");
         user.setEmployment_age(userMap.get("employment_age") == null ? "0" : userMap.get("employment_age") + "");
         user.setCaresVarieties(userMap.get("loveVariety") == null ? "" : userMap.get("loveVariety") + "");
-        user.setInteractiveNumber(userMap.get("interact_count") == null ? "0" : userMap.get("interact_count") + "");
-        user.setActive_count(userMap.get("active_count") == null ? "0" : userMap.get("active_count") + "");
+        
+        Map<String, String> acDays = userManagerService.activeDays(user.getId() + "");
+        List<Map<String, String>> interactNumber = userManagerService.queryInteractTimes(user.getId() + "");
+        user.setInteractiveNumber(interactNumber.get(0).get("interactNumber") == null ? "0" 
+        		: interactNumber.get(0).get("interactNumber"));
+        user.setActive_count(acDays.get("acDays") == null ? "0" : acDays.get("acDays"));
         return user;
     }
 
