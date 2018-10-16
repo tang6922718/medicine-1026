@@ -360,9 +360,10 @@ public interface TrainMapper {
 
         public String selectTrainContribute(final Map<String, Object> map) {
             return new SQL() {{
-                SELECT("*");
+
                 switch (Integer.valueOf(String.valueOf(map.get("object_type")))) {
                     case 1:
+                        SELECT("*");
                         FROM("train_live");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("spec_id=#{user_id}");
@@ -370,13 +371,19 @@ public interface TrainMapper {
                         ORDER_BY("create_time desc");
                         break;
                     case 2:
+
+                        SELECT("a.*,b.video_title,b.video_url,b.upload_user_id,b.upload_time from (");
+                        SELECT("*");
                         FROM("train_offline");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
-                            WHERE("spec_id=#{user_id}");
+                            WHERE("spec_id=#{user_id}) a");
                         }
+                        LEFT_OUTER_JOIN("train_offline_video b ON a.id=b.train_id AND b.effect_flag='1'");
                         ORDER_BY("create_time desc");
+
                         break;
                     default:
+                        SELECT("*");
                         FROM("train_live");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("user_id=#{user_id}");
