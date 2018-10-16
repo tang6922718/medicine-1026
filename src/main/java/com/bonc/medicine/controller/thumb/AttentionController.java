@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.kafka.common.protocol.types.Field.Str;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -307,7 +308,11 @@ public class AttentionController {
 
     @RequestMapping("/del/{key}")
     public long keys222 (@PathVariable String key){
-        jedisAdapter.del(key);
+    	Set<String>  keys = jedisAdapter.keys(key);
+    	for (String string : keys) {
+    		 jedisAdapter.del(string);
+		}
+       
         return 111L;
     }
 

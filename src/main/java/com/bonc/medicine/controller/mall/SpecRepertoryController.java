@@ -280,6 +280,10 @@ public class SpecRepertoryController {
 			param1.put("spec_id", list.get(i).get("spec_id").toString());
 			list.get(i).put("sub", specialistService.sub(param1).toString());
 			list.get(i).put("cat", specialistService.cat(param1).toString());
+			Map succeed = attentionService.fansList(list.get(i).get("spec_id").toString());
+
+	        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+	        list.get(i).put("follow", idSet.size());
 		}
 		
 		return ResultUtil.successTotal(list, total);
