@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
         List<Map<String, String>> interactNumber = userManagerService.queryInteractTimes(user.getId() + "");
         user.setInteractiveNumber(interactNumber.get(0).get("interactNumber") == null ? "0" 
         		: interactNumber.get(0).get("interactNumber"));
-        user.setActive_count(acDays.get("acDays") == null ? "0" : acDays.get("acDays"));
+        user.setActive_count(acDays.get("acDays") == null ? "0" : acDays.get("acDays") + "");
         return user;
     }
 
