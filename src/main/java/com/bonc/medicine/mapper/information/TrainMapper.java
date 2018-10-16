@@ -246,6 +246,9 @@ public interface TrainMapper {
                 if (map.get("id") != null) {
                     WHERE("id=#{id}");
                 }
+                if (map.get("operation_status") != null) {
+                    WHERE("operation_status=#{operation_status}");
+                }
                 WHERE("status='0'");
                // ORDER_BY("publish_time desc");
             }}.toString();
@@ -361,18 +364,21 @@ public interface TrainMapper {
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("user_id=#{user_id}");
                         }
+                        ORDER_BY("create_time desc");
                         break;
                     case 2:
                         FROM("train_offline");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("spec_id=#{user_id}");
                         }
+                        ORDER_BY("create_time desc");
                         break;
                     default:
                         FROM("train_live");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("user_id=#{user_id}");
                         }
+                        ORDER_BY("create_time desc");
                         break;
                 }
             }}.toString();
