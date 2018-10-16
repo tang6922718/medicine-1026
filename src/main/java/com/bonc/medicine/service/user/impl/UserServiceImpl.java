@@ -308,11 +308,12 @@ public class UserServiceImpl implements UserService {
         user.setEmployment_age(userMap.get("employment_age") == null ? "0" : userMap.get("employment_age") + "");
         user.setCaresVarieties(userMap.get("loveVariety") == null ? "" : userMap.get("loveVariety") + "");
         
-        Map<String, String> acDays = userManagerService.activeDays(user.getId() + "");
+        Map<String, Object> acDays = userManagerService.activeDays(user.getId() + "");
         List<Map<String, String>> interactNumber = userManagerService.queryInteractTimes(user.getId() + "");
         user.setInteractiveNumber(interactNumber.get(0).get("interactNumber") == null ? "0" 
         		: interactNumber.get(0).get("interactNumber"));
         user.setActive_count(acDays.get("acDays") == null ? "0" : acDays.get("acDays") + "");
+        
         return user;
     }
 

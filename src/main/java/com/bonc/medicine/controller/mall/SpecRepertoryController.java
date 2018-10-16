@@ -299,7 +299,7 @@ public class SpecRepertoryController {
 		list = specialistService.specDetail(param);
 		User user = userService.getUserInfoById(user_id);
 		String acount = user.getActive_count();
-		Map<String, String> acMap =  userManagerService.activeDays(spec_id);
+		Map<String, Object> acMap =  userManagerService.activeDays(spec_id);
         List<Map<String, String>> inMap =  userManagerService.queryInteractTimes(spec_id);
 
 		list.get(0).put("active_count", acMap.get("acDays"));
