@@ -44,8 +44,8 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public List<Map> selectAllLive(Map map,String pageNum,String pageSize) {
-        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
+    public List<Map> selectAllLive(Map map,int pageNum,int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
         return liveMapper.selectAllLive(map);
     }
 
@@ -67,5 +67,10 @@ public class LiveServiceImpl implements LiveService {
     @Override
     public int delLive(Map<String, Object> map) {
         return liveMapper.delLive(map);
+    }
+
+    @Override
+    public Integer updateWatchNum(String room_id) {
+        return liveMapper.updateWatchNum(room_id);
     }
 }

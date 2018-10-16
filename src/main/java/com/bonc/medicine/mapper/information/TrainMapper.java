@@ -35,7 +35,7 @@ public interface TrainMapper {
     List<Map> selectCourseList(Map<String, Object> map);
 
 
-    @Insert("insert into train_appointment(object_id,object_type,user_id) values (#{object_id},#{object_type},#{user_id})")
+    @Insert("insert into train_appointment(object_id,object_type,user_id) values (#{object_id},#{object_type},#{user_id}) ")
     int addTrainApply(Map<String, Object> map);
 
 
@@ -44,7 +44,7 @@ public interface TrainMapper {
     List<Map> selectTrainList(Map<String, Object> map);
 
 
-    @Insert("insert into train_offline_video(train_id,video_title,video_url,upload_user_id) values (#{train_id},#{video_title},#{video_url},#{user_id}) ")
+    @Insert("insert into train_offline_video(train_id,video_title,video_url,upload_user_id) values (#{train_id},#{video_title},#{video_url},#{user_id})  ON DUPLICATE KEY UPDATE video_title=#{video_title},video_url=#{video_url}")
     int editOfflineTrainVideo(Map<String, Object> map);
 
 
@@ -247,9 +247,9 @@ public interface TrainMapper {
                     WHERE("id=#{id}");
                 }
                 WHERE("status='0'");
-                ORDER_BY("publish_time desc");
+               // ORDER_BY("publish_time desc");
             }}.toString();
-            sql = "select a.id,a.title,a.video_type,a.lecturer_name,a.publish_time,a.course_introduce,a.duration,a.video_url,a.img_url,a.spec_id,a.user_id,a.status,a.update_time,a.operation_status,b.fail_opinion from (" + sql+") a left join km_audit b on a.id=b.object_id and b.km_type='5'";
+            sql = "select a.id,a.title,a.video_type,a.lecturer_name,a.publish_time,a.course_introduce,a.duration,a.video_url,a.img_url,a.spec_id,a.user_id,a.status,a.update_time,a.operation_status,b.fail_opinion,a.create_time from (" + sql+") a left join km_audit b on a.id=b.object_id and b.km_type='5' order by a.create_time desc";
             System.out.println(sql);
             return sql;
         }
@@ -269,7 +269,7 @@ public interface TrainMapper {
                 if (map.get("id") != null) {
                     WHERE("a.id=#{id}");
                 }
-                ORDER_BY("publish_time desc");
+                ORDER_BY("a.create_time desc");
             }}.toString();
         }
 
@@ -298,7 +298,6 @@ public interface TrainMapper {
                 if (map.get("address") != null) {
                     SET("address=#{address}");
                 }
-
                 if (map.get("train_time") != null) {
                     SET("train_time=#{train_time}");
                 }
@@ -318,7 +317,7 @@ public interface TrainMapper {
                 if (map.get("fail_opinion") != null) {
                     SET("fail_opinion=#{fail_opinion}");
                 }
-
+                SET("create_time= now()");
                 SET("operation_status='1'");
                 WHERE("id=#{id}");
             }}.toString();
@@ -366,7 +365,7 @@ public interface TrainMapper {
                     case 2:
                         FROM("train_offline");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
-                            WHERE("user_id=#{user_id}");
+                            WHERE("spec_id=#{user_id}");
                         }
                         break;
                     default:
@@ -406,9 +405,8 @@ public interface TrainMapper {
                 if (map.get("img_url") != null) {
                     SET("img_url=#{img_url}");
                 }
-
+                SET("create_time= now()");
                 SET("operation_status='1'");
-
                 WHERE("id=#{id}");
             }}.toString();
         }

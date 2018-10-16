@@ -11,6 +11,7 @@ public interface LiveMapper {
 
     @InsertProvider(type = LiveDynaSqlProvider.class,
             method = "addLive")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int addLive(Map<String, Object> map);
 
 
@@ -47,7 +48,8 @@ public interface LiveMapper {
     int delLive(Map<String, Object> map);
 
 
-
+    @Update("update  train_live set audience_num=audience_num + 1 where room_id=#{room_id} and status='1'")
+    Integer updateWatchNum(@Param("room_id") String room_id);
 
 
     class LiveDynaSqlProvider {
@@ -130,7 +132,7 @@ public interface LiveMapper {
                 if(map.get("img_url") != null){
                     SET("img_url=#{img_url}");
                 }
-
+                SET("create_time= now()");
                 SET("operation_status='1'");
                 WHERE("id=#{id}");
             }}.toString();
@@ -154,9 +156,9 @@ public interface LiveMapper {
                     WHERE("id=#{id}");
                 }
                 WHERE("is_display='1'");
-                ORDER_BY("create_time desc");
+//                ORDER_BY("create_time desc");
             }}.toString();
-           String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id";
+           String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id   order by create_time desc";
             return nsql;
 
         }

@@ -45,10 +45,8 @@ public class TrainController {
      * @description 新建线下培训(发布线下培训)
      */
     @RequestMapping("/createTrain")
-    public Result createTrain(@RequestBody Map<String, Object> map) {
-//        int count = trainService.createTrain(map);
-//        map.put("km_type", "5");
-//        count += auditService.addAudit(map);
+    public Result createTrain(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         int count = trainService.createTrain(map);
         map.put("km_type", "7");
         count += auditService.addAudit(map);
@@ -62,9 +60,9 @@ public class TrainController {
      */
     @RequestMapping("/selectTrainList")
     public Result selectTrainList(@RequestBody Map<String, Object> map,
-                                  @RequestParam(required = false, defaultValue = "1") String pageNum,
-                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        List list=trainService.selectTrainList(map,pageNum,pageSize);
+                                  @RequestParam(required = false, defaultValue = "1") int pageNum,
+                                  @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        List list = trainService.selectTrainList(map, pageNum, pageSize);
         PageInfo<List> pageInfo = new PageInfo<List>(list);
         return ResultUtil.successTotal(list, pageInfo.getTotal());
     }
@@ -125,21 +123,21 @@ public class TrainController {
     @RequestMapping("/selectCourseList")
     public Result selectCourseList(@CurrentUser String user_id,
                                    @RequestBody(required = false) Map<String, Object> map,
-                                   @RequestParam(required = false, defaultValue = "1") String pageNum,
-                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                   @RequestParam(required = false, defaultValue = "1") int pageNum,
+                                   @RequestParam(required = false, defaultValue = "10") int pageSize) {
         if (null != map.get("id")) {
             Map<String, String> numberMap = new HashMap();
             numberMap.put("objectId", map.get("id") + "");
             numberMap.put("objectType", "4");
             viewNumberService.addOrUpdateViewNumberCord(numberMap);
         }
-        List list = trainService.selectCourseList(map,pageNum,pageSize);
+        List list = trainService.selectCourseList(map, pageNum, pageSize);
         Map map2 = new HashMap();
         map2.put("objectType", "4");
         for (Object map1 : list) {
-            map2.put("objectId", String.valueOf(((Map)map1).get("id")));
-            ((Map)map1).put("viewNum", viewNumberService.queryViewNumber(map2));
-            ((Map)map1).put("isCollect", collectionService.isCollect("5", String.valueOf(((Map)map1).get("id")), user_id));
+            map2.put("objectId", String.valueOf(((Map) map1).get("id")));
+            ((Map) map1).put("viewNum", viewNumberService.queryViewNumber(map2));
+            ((Map) map1).put("isCollect", collectionService.isCollect("5", String.valueOf(((Map) map1).get("id")), user_id));
         }
         PageInfo<List> pageInfo = new PageInfo<List>(list);
         return ResultUtil.successTotal(list, pageInfo.getTotal());
@@ -276,11 +274,11 @@ public class TrainController {
      */
     @RequestMapping("/editOfflineTrain")
     public Result editOfflineTrain(@RequestBody(required = false) Map<String, Object> map) {
-//        int count = trainService.editOfflineTrain(map);
-//        map.put("km_type", "5");
-//        count += auditService.czAudit(map);
-//        count += auditService.addAudit(map);
-        return ResultUtil.success(trainService.editOfflineTrain(map));
+        int count = trainService.editOfflineTrain(map);
+        map.put("km_type", "7");
+        count += auditService.czAudit(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**

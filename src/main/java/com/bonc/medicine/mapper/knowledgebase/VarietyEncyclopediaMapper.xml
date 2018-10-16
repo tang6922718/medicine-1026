@@ -213,15 +213,15 @@
 	</update>
 
 	<update id="changeVedioStatus" parameterType="java.util.Map">
-		UPDATE train_video_course SET operation_status=#{iv_status},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
+		UPDATE train_video_course SET operation_status=#{iv_status},fail_opinion=#{fail_opinion},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
 	</update>
 	
 	<update id="changeTrainOfflineStatus" parameterType="java.util.Map">
-		UPDATE train_offline SET operation_status=#{iv_status},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
+		UPDATE train_offline SET operation_status=#{iv_status},fail_opinion=#{fail_opinion},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
 	</update>
 	
 	<update id="changeTrainLiveStatus" parameterType="java.util.Map">
-		UPDATE train_live SET operation_status=#{iv_status},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
+		UPDATE train_live SET operation_status=#{iv_status},fail_opinion=#{fail_opinion},publish_time = CURRENT_TIMESTAMP() WHERE id = #{object_id}
 	</update>
 
 	<update id="kmAudit" parameterType="java.util.Map">

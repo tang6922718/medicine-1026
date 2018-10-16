@@ -49,8 +49,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List<Map> selectCourseList(Map<String, Object> map,String pageNum,String pageSize) {
-        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
+    public List<Map> selectCourseList(Map<String, Object> map,int pageNum,int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
         return trainMapper.selectCourseList(map);
     }
 
@@ -60,8 +60,8 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Override
-    public List<Map> selectTrainList(Map<String, Object> map,String pageNum,String pageSize) {
-        PageHelper.startPage(Integer.parseInt(pageNum),Integer.parseInt(pageSize));
+    public List<Map> selectTrainList(Map<String, Object> map,int pageNum,int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
         return trainMapper.selectTrainList(map);
     }
 

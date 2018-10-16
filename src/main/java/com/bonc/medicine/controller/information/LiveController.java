@@ -36,7 +36,7 @@ public class LiveController {
 
     @Autowired
     TrainService trainService;
-    
+
     @Autowired
     AuditService auditService;
 
@@ -70,13 +70,13 @@ public class LiveController {
      */
     @RequestMapping("/selectLive")
     public Result selectLive(@RequestBody Map<String, Object> map,
-                             @RequestParam(required = false, defaultValue = "1") String pageNum,
-                             @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                             @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+                             @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize) {
         List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
         for (Map<String, String> map1 : lists) {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
-        List list = liveService.selectAllLive(map,pageNum,pageSize);
+        List list = liveService.selectAllLive(map, pageNum, pageSize);
     /*  Map map2 = new HashMap();
         map2.put("object_type", "2");
         for (Object map1 : list) {
@@ -123,8 +123,13 @@ public class LiveController {
      * @description 编辑直播 （编辑直播 ）
      */
     @RequestMapping("/editLive")
-    public Result editLive(@RequestBody Map<String, Object> map) {
-        return ResultUtil.success(liveService.editLive(map));
+    public Result editLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.put("user_id", user_id);
+        int count = liveService.editLive(map);
+        map.put("km_type", "8");
+        count += auditService.czAudit(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**
@@ -212,6 +217,14 @@ public class LiveController {
         return ResultUtil.success("ok");
     }
 
+    /**
+     * @return
+     * @description 直接更新直播人数
+     */
+    @RequestMapping("/addWatchNum")
+    public Result saveUser(@RequestParam String room_id) {
+        return ResultUtil.success(liveService.updateWatchNum(room_id));
+    }
 
     /**
      * @param map
