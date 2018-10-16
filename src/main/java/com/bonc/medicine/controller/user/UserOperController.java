@@ -275,7 +275,7 @@ public class UserOperController {
 
     /**
      * @Description:
-         * @Param: [phone, password,equipment：APP：APP；和门户登陆--不传； 后台登陆--BACK         request, response]
+         * @Param: [phone, password,equipment：APP：APP；PORTAL； 后台登陆--BACK         request, response]
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/8/30

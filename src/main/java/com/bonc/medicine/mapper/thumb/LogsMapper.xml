@@ -75,7 +75,7 @@
         select
         log.id, log.user_id, log.op_type, log.op_resource, log.op_module,
         DATE_FORMAT( log.op_time, '%Y-%m-%d %H:%i:%S') as op_time,log.op_status,
-        cu.name
+        IFNULL(cu.name,"无名氏")  as name 
         from
         common_log log
         left join
