@@ -155,6 +155,9 @@ public interface LiveMapper {
                 if(map.get("id") != null && map.get("id") != ""){
                     WHERE("id=#{id}");
                 }
+                if (map.get("operation_status") != null) {
+                    WHERE("operation_status=#{operation_status}");
+                }
                 WHERE("is_display='1'");
 //                ORDER_BY("create_time desc");
             }}.toString();
