@@ -1,6 +1,7 @@
 package com.bonc.medicine.controller.thumb;
 
 import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.thumb.LogsService;
@@ -196,14 +197,7 @@ public class LogsController {
     public Result addOperLogs(@RequestBody Map<String, String> paramMap) {
         //userId;opeType;opeResource;opModule;status,这些是paramMap的key
         //如果没有用户的userId参数就返回缺失参数的错误；
-        if (StringUtils.isEmpty(paramMap.get("userId"))) {
-            return ResultUtil.error(ResultEnum.MISSING_PARA);
-        }
-
-        //如果没有status参数就默认给1
-        if (StringUtils.isEmpty(paramMap.get("status"))) {
-            paramMap.put("status", "1");
-        }
+       
 
         // 其他参数先不校验,如果校验的话就像下面这样。
        /* if (StringUtils.isEmpty(paramMap.get("opeType"))){
@@ -236,6 +230,13 @@ public class LogsController {
         }
         param.put("endTime", endTime);
         return ResultUtil.success(logsService.queryUserLoginTimes(param));
+    }
+    
+    @MethodLog(remark = "新增,新娶媳妇,老婆")
+    @GetMapping("/test/log")
+    public String testLog (){
+    	
+    	return "i want to bo a leg";
     }
 
 }
