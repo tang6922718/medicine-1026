@@ -63,6 +63,7 @@ public class LiveController {
         return ResultUtil.success(count);
     }
 
+
     /**
      * @return
      * @description 获取所有直播（直播课堂列表）（包含为直播未开启的）
@@ -76,7 +77,7 @@ public class LiveController {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
         List list = liveService.selectAllLive(map,pageNum,pageSize);
-    /*    Map map2 = new HashMap();
+    /*  Map map2 = new HashMap();
         map2.put("object_type", "2");
         for (Object map1 : list) {
             map2.put("object_id", String.valueOf(((Map) map1).get("id")));

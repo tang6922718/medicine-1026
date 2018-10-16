@@ -127,7 +127,6 @@ public class TrainController {
                                    @RequestBody(required = false) Map<String, Object> map,
                                    @RequestParam(required = false, defaultValue = "1") String pageNum,
                                    @RequestParam(required = false, defaultValue = "10") String pageSize) {
-
         if (null != map.get("id")) {
             Map<String, String> numberMap = new HashMap();
             numberMap.put("objectId", map.get("id") + "");

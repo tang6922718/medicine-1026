@@ -46,6 +46,10 @@ public interface LiveMapper {
     @Update("update train_live  set  is_display='0' where id =#{id}")
     int delLive(Map<String, Object> map);
 
+
+
+
+
     class LiveDynaSqlProvider {
         public String addLive(final Map<String, Object> map) {
             return new SQL() {{
@@ -156,7 +160,5 @@ public interface LiveMapper {
             return nsql;
 
         }
-
-
     }
 }
