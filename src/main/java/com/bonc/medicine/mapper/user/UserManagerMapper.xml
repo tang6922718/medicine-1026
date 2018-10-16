@@ -283,7 +283,7 @@
 
 	<select id="activeDays" parameterType="String" resultType="Map">
 		SELECT
-		COUNT( DISTINCT login_time ) AS acDays
+		COUNT( DISTINCT DATE_FORMAT(login_time,'%Y-%m-%d') ) AS acDays
 		FROM
 		common_logon_log
 		WHERE
@@ -293,7 +293,7 @@
 	<select id="activeDaysForBack" parameterType="String"
 		resultType="Map">
 		SELECT
-		COUNT( DISTINCT login_time) AS acDays,
+		COUNT( DISTINCT DATE_FORMAT(login_time,'%Y-%m-%d')) AS acDays,
 		user_id
 		FROM
 		common_logon_log

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -206,6 +207,11 @@ public class SpecRepertoryController {
 		List<String> allIds = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			allIds.add(list.get(i).get("spec_id").toString());
+			//follow 
+			Map succeed = attentionService.fansList(list.get(i).get("spec_id").toString());
+
+	        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+	        list.get(i).put("follow", idSet.size());
 		}
 		List<Map<String, Object>> daysList = userManagerService.activeDaysForBack(allIds.toString().substring(1,
 				allIds.toString().length() - 1));
@@ -304,7 +310,12 @@ public class SpecRepertoryController {
 
 		list.get(0).put("active_count", acMap.get("acDays"));
 		list.get(0).put("interact_count", inMap.get(0).get("interactNumber"));
+		
+		//粉丝数
+		Map succeed = attentionService.fansList(list.get(0).get("spec_id").toString());
 
+        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+        list.get(0).put("follow", idSet.size());
 		if (user_id != null) {
 
 			Map param1 = new HashMap<>();
