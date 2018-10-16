@@ -148,10 +148,6 @@ public class UserOperController {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
 
-
-        //TODO 需要检查数据库有没有该账号
-
-
         if (StringUtils.isBlank(paramMap.get("phone")) || StringUtils.isBlank(paramMap.get("password"))
                  || StringUtils.isBlank(paramMap.get("verification"))){
             return ResultUtil.error(ResultEnum.MISSING_PARA);

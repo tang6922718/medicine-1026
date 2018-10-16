@@ -231,7 +231,6 @@ public class UserServiceImpl implements UserService {
         if(!StringUtils.equals(map.get("newPassword").trim(), map.get("secNewPassword").trim())){
             throw new MedicineRuntimeException(ResultEnum.ERROR_PARAM);
         }
-        getTableByPhone(map.get("telephone"));
 
         Map paramMap = new HashMap();
         paramMap.put("tableName", "common_user");
@@ -413,7 +412,6 @@ public class UserServiceImpl implements UserService {
             throw new MedicineRuntimeException(ResultEnum.ERROR_PARAM);
         }
 
-        getTableByPhone(map.get("telephone"));
         Map paramMap = new HashMap();
         paramMap.put("tableName", "common_backend_user");
         paramMap.put("phone", map.get("telephone"));

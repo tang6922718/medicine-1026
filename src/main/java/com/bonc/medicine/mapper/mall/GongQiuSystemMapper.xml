@@ -54,8 +54,10 @@
 	</update>
 
 	<update id="goodsOff" parameterType="Map">
-		update mall_supply set
-		carriage_status = '2' where id = #{supplyId}
+		update mall_supply set carriage_status = '2' where id = #{supplyId};
+		update mall_recommend set supply_id1 = null , img_url1 = null where supply_id1 = #{supplyId};
+		update mall_recommend set supply_id2 = null , img_url2 = null where supply_id2 = #{supplyId};
+		update mall_recommend set supply_id3 = null , img_url3 = null where supply_id3 = #{supplyId};
 	</update>
 
 	<select id="goodsRatio" parameterType="Map" resultType="Map">
@@ -149,11 +151,23 @@
 		a.price_unit,
 		a.img_url,
 		a.carriage_status,
-		a.is_audit
+		a.is_audit,
+		IFNULL(c.supply_id1 = a.id or c.supply_id2 = a.id or c.supply_id3 = a.id,0) AS appjp,
+		IFNULL(d.supply_id1 = a.id or d.supply_id2 = a.id or d.supply_id3 = a.id,0) AS appxjw,
+		IFNULL(e.supply_id1 = a.id or e.supply_id2 = a.id or e.supply_id3 = a.id,0) AS homeyt,
+		IFNULL(f.supply_id1 = a.id or f.supply_id2 = a.id or f.supply_id3 = a.id,0) AS homejp
 		FROM
 		mall_supply a
 		LEFT JOIN
 		common_user b ON a.seller_id = b.id
+		left join 
+		mall_recommend c on ((a.id = c.supply_id1 or a.id = c.supply_id2 or a.id = c.supply_id3) and c.state = '0' and c.site = '1')
+		left join 
+		mall_recommend d on ((a.id = d.supply_id1 or a.id = d.supply_id2 or a.id = d.supply_id3) and d.state = '0' and d.site = '2')
+		left join 
+		mall_recommend e on ((a.id = e.supply_id1 or a.id = e.supply_id2 or a.id = e.supply_id3) and e.state = '0' and e.site = '3')
+		left join 
+		mall_recommend f on ((a.id = f.supply_id1 or a.id = f.supply_id2 or a.id = f.supply_id3) and f.state = '0' and f.site = '4')
 		where a.state = '0'
 		<if test="key != null and key != ''">
 			AND (a.goods_name like CONCAT('%',#{key},'%') OR
@@ -170,6 +184,8 @@
 		<if test="goodType != null and goodType != ''">
 			AND a.supply_cat_code = #{goodType}
 		</if>
+		group by a.id
+		order by a.public_time desc
 	</select>
 
 	<select id="purchaselist" parameterType="Map" resultType="Map">
@@ -199,6 +215,7 @@
 		<if test="goodType != null and goodType != ''">
 			AND a.purchase_cat_code = #{goodType}
 		</if>
+		order by a.publish_time desc
 	</select>
 
 	<select id="my_supply_statistics" parameterType="Map"

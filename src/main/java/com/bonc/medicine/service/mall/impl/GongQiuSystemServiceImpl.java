@@ -111,6 +111,7 @@ public class GongQiuSystemServiceImpl implements GongQiuSystemService {
 	}
 
 	@Override
+	@Transactional
 	public Result<Object> goodsOff(String supplyId) {
 
 		Map map = new HashMap<>();
