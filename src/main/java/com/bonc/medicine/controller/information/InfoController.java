@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.information;
 
 
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.InfoService;
 import com.bonc.medicine.service.knowledgebase.AuditService;
@@ -57,6 +58,7 @@ public class InfoController {
      * @description 添加咨询
      */
     @PostMapping("/addInfo")
+    @MethodLog(remark = "新增,添加咨询,咨询")
     /*@com.bonc.medicine.annotation.Authorization*/
     public Result addInfo(/*@CurrentUser String user_id, */@RequestBody Map<String, Object> map) {
         /*map.put("user_id", user_id);*/
@@ -73,6 +75,7 @@ public class InfoController {
      * @description 咨讯撤销
      */
     @RequestMapping("/infoRepeal")
+    @MethodLog(remark = "修改,咨讯撤销,咨询")
     public Result infoRepeal(@RequestParam String id) {
         return ResultUtil.success(infoService.infoRepeal(id));
     }
@@ -84,6 +87,7 @@ public class InfoController {
      * @description 咨讯审核
      */
     @RequestMapping("/infoAudit")
+    @MethodLog(remark = "修改,咨讯审核,咨询")
     public Result infoAudit(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(infoService.infoAudit(map));
     }
@@ -109,6 +113,7 @@ public class InfoController {
      * @description 咨讯编辑
      */
     @RequestMapping("/infoEdit")
+    @MethodLog(remark = "修改,修改咨讯,咨询")
     @com.bonc.medicine.annotation.Authorization
     public Result infoEdit(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
@@ -145,6 +150,7 @@ public class InfoController {
      * @description 删除资讯
      */
     @RequestMapping("/delInfo")
+    @MethodLog(remark = "删除,删除咨讯,咨询")
     public Result delInfo(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(infoService.delInfo(map));
     }

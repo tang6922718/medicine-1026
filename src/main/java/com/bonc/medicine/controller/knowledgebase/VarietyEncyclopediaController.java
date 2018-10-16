@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.knowledgebase;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.hbase.HbaseUploadFile;
 import com.bonc.medicine.service.knowledgebase.AuditService;
@@ -78,6 +79,7 @@ public class VarietyEncyclopediaController {
      * */
     @PostMapping("/addBreedInfo" )
     @Transactional
+    @MethodLog(remark = "新增,增加品种百科,知识库")
     public Result<Object> addVarietyEncyclopedia(@RequestBody String addJson ) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
         int count = varietyEncyclopediaService.addBreed(map);
@@ -91,6 +93,7 @@ public class VarietyEncyclopediaController {
      * */
     @PostMapping("/editBreedInfo")
     @Transactional
+    @MethodLog(remark = "修改,修改品种百科,知识库")
     public Result<Object> editVarietyEncyclopedia(@RequestBody String addJson) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
         int count = varietyEncyclopediaService.updateBreedInfo(map);
@@ -116,6 +119,7 @@ public class VarietyEncyclopediaController {
     /*
      * 药典修改*/
     @PostMapping("/updetePharaDetail")
+    @MethodLog(remark = "修改,药典修改,知识库")
     public Result<Object> updatePharaDetail(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(editJson);
         map.put("km_status","2");
@@ -131,6 +135,7 @@ public class VarietyEncyclopediaController {
     /*
      * 撤销药典*/
     @GetMapping("/undoBreedStatus/{id}")
+    @MethodLog(remark = "修改,撤销药典,知识库")
     public Result<Object> undoBreedStatus(@PathVariable String id){
         return ResultUtil.success(varietyEncyclopediaService.undoBreedStatus(id));
     }

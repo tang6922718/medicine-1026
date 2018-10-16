@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.field;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.field.Co_op;
 import com.bonc.medicine.entity.field.Co_op_Member;
@@ -37,6 +38,7 @@ public class Co_opManageController {
 	 * 
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
+	@MethodLog(remark = "新增,新增合作社,合作社")
 	@PostMapping("/add/co_op")
 	public Result<Object> addCo_op(@RequestBody Co_op tempData) {
 		return co_opManageService.addCo_op(tempData);
@@ -53,6 +55,7 @@ public class Co_opManageController {
 	 * 
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
+	@MethodLog(remark = "删除,删除合作社,合作社")
 	@DeleteMapping("/co_op/{id}")
 	public Result<Object> deleteCo_op(@PathVariable int id) {
 		return co_opManageService.deleteCo_op(id);
@@ -86,6 +89,7 @@ public class Co_opManageController {
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
 	@PutMapping("/co_op")
+	@MethodLog(remark = "修改,修改合作社信息,合作社")
 	public Result<Object> updateCo_op(@RequestBody Co_op tempData) {
 		return co_opManageService.updateCo_op(tempData);
 	}
@@ -102,6 +106,7 @@ public class Co_opManageController {
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
 	@PostMapping("/co_opmember")
+	@MethodLog(remark = "新增,新增合作社成员,合作社")
 	public Result<Object> addCo_opMember(@RequestBody Co_op_Member tempData) {
 		return co_opManageService.addCo_opMember(tempData);
 	}
@@ -150,6 +155,7 @@ public class Co_opManageController {
 	 * @return com.bonc.field.entity.Result<java.lang.Object>
 	 */
 	@PutMapping("/co_opmember")
+	@MethodLog(remark = "修改,合作社社员信息修改,合作社")
 	public Result<Object> updateCo_opMember(@RequestBody Co_op_Member tempData) {
 		return co_opManageService.updateCo_opMember(tempData);
 	}
@@ -256,6 +262,7 @@ public class Co_opManageController {
 	 * 给该合作社下所有人发通知
 	 */
 	@GetMapping("/Co_op/sendMsg")
+	@MethodLog(remark = "新增,给该合作社下所有人发通知,通知消息")
 	public Result<Object> affiliatedCo_op( int user_id,  String msg , String picture_url) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list = co_opManageService.findAllMember(user_id);
@@ -277,6 +284,7 @@ public class Co_opManageController {
 	 * 公告启用-停用
 	 */
 	@GetMapping("/Co_op/noticeState")
+	@MethodLog(remark = "修改,公告启用-停用,通知消息")
 	public Result<Object> noticeState(int id, String state) {
 		co_opManageService.noticeState(id, state);
 		Result result = new Result();
@@ -290,6 +298,7 @@ public class Co_opManageController {
 	 * 公告删除
 	 */
 	@GetMapping("/Co_op/dalete/notice")
+	@MethodLog(remark = "删除,公告删除,通知消息")
 	public Result<Object> deleteNotice(int id) {
 		co_opManageService.deleteNotice(id);
 		Result result = new Result();
@@ -311,6 +320,7 @@ public class Co_opManageController {
 	 * 更新公告
 	 */
 	@GetMapping("/Co_op/update/notice")
+	@MethodLog(remark = "修改,修改公告,通知消息")
 	public Result<Object> updateNotice(int id, String msg) {
 		return co_opManageService.updateNotice(id, msg);
 	}
@@ -319,6 +329,7 @@ public class Co_opManageController {
 	 * 新增公告
 	 */
 	@PostMapping("/Co_op/add/roleNotice")
+	@MethodLog(remark = "新增,新增公告,通知消息")
 	public Result<Object> addRoleNotice(@RequestBody Notice notice) {
 		return co_opManageService.addRoleNotice(notice);
 	}

@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.mall;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Purchase;
 import com.bonc.medicine.service.mall.BuyersService;
@@ -30,6 +31,7 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
     @PostMapping("/purchase")
+	@MethodLog(remark = "新增,新增求购,供求")
     public Result<Object> releasePurchase(@RequestBody Purchase tempData){
 		tempData.setState('1');
 		tempData.setIs_aduit('0');
@@ -39,6 +41,7 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@DeleteMapping("/purchase")
+	@MethodLog(remark = "删除,删除求购,供求")
 	public Result<Object> deletePurchase(@RequestBody Map param) {
 		List ids = (List)param.get("ids");
 		return ResultUtil.success(buyersService.deletePurchase(ids));
@@ -47,6 +50,7 @@ public class BuyersController {
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@PutMapping("/revokePurchase")
+	@MethodLog(remark = "修改,下架求购,供求")
 	public Result<Object> revokePurchase(@RequestBody Map param) {
 		List ids = (List)param.get("ids");
 		return ResultUtil.success(buyersService.revokePurchase(ids));
