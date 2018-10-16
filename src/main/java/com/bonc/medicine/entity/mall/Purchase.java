@@ -11,7 +11,7 @@ public class Purchase {
 	private String publish_time; // 发布时间
 	private char effect_flag; // 生效标识
 	private int purchase_quantity; // 求购数量
-	private char unit; // 求购数量的单位
+	private String unit; // 求购数量的单位
 	private String linkman; // 联系人
 	private String linkman_phone; // 联系人电话
 	private String attribute; // 特殊属性
@@ -29,10 +29,10 @@ public class Purchase {
 	
 	
 	
-	public char getUnit() {
+	public String getUnit() {
 		return unit;
 	}
-	public void setUnit(char unit) {
+	public void setUnit(String unit) {
 		this.unit = unit;
 	}
 	public int getId() {
