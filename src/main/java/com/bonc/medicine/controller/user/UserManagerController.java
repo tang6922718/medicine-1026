@@ -1,19 +1,24 @@
 package com.bonc.medicine.controller.user;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
-import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class UserManagerController {
@@ -24,6 +29,7 @@ public class UserManagerController {
 	/*
 	 * 添加基础信息
 	 */
+	@MethodLog(remark = "修改,增加基础信息,用户")
 	@PostMapping("/userManager/addBasic")
 	public Result<Object> addUser(@RequestBody JSONObject json) {
 		userManagerService.addUser(json);
@@ -57,6 +63,7 @@ public class UserManagerController {
 	/*
 	 * 账号解冻和激活 1：有效。0：冻结
 	 */
+	@MethodLog(remark = "修改,修改账号状态,用户")
 	@PutMapping("/userManager/userStatus")
 	public Result<Object> userStatus(@RequestBody Map param) {
 		return userManagerService.userStatus(Integer.parseInt(param.get("id") + ""), param.get("status") + "");
@@ -208,6 +215,7 @@ public class UserManagerController {
 	 * 
 	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
 	 */
+	@MethodLog(remark = "修改,修改用户关心品种,用户")
 	@PutMapping("/userManager/updateCareVariety")
 	public Result<Object> updateUserCareVariety(@RequestBody Map<String, Object> parsms) {
 		return userManagerService.updateUserCareVariety(parsms);

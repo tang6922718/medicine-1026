@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Article;
 import com.bonc.medicine.entity.mall.Case;
@@ -340,6 +341,7 @@ public class MeetProfessorController {
 	/*
 	 * 修改文章
 	 */
+	@MethodLog(remark = "修改,修改文章,知识库")
 	@PutMapping("/meetProfessor/update/Article")
 	public Result<Object> updateArticle(@RequestBody Article article) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

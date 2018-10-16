@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.management;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.hbase.HbaseUploadFile;
 import com.bonc.medicine.service.management.BroadcastService;
@@ -31,6 +32,7 @@ public class BroadcastController {
     /*
     * 运营管理-轮播图管理，查询搜索、编辑访问接口
     * */
+    
     @PostMapping("/broadcast")
     public Result<Object> selectBroadcast(@RequestBody(required = false) String searchJson){
         if(null == searchJson || "" == searchJson){
@@ -55,6 +57,7 @@ public class BroadcastController {
     /*
     * 新增轮播图
     * */
+    @MethodLog(remark = "新增,新增轮播图,运营管理")
     @PostMapping("/addBroadcast")
     public Result<Object> addBroadcast(/*@RequestBody MultipartFile myfile,*/ @RequestBody String addJson) throws Exception{
 //        String key = uploadFile.uploadFileToHbase(myfile);
@@ -66,6 +69,7 @@ public class BroadcastController {
     /*
     * 修改轮播图
     * */
+    @MethodLog(remark = "修改,修改轮播图,运营管理")
     @PostMapping("/editBroadcast")
     public Result<Object> editBroadcast(/*@RequestBody MultipartFile myfile, */@RequestBody String editJson) throws Exception{
 //        String key = uploadFile.uploadFileToHbase(myfile);
@@ -93,6 +97,7 @@ public class BroadcastController {
     /*
     * 删除轮播图
     * */
+    @MethodLog(remark = "删除,删除轮播图,运营管理")
     @GetMapping("/deleteBroadcast/{id}")
     public Result<Object> deleteBroadcast(@PathVariable String id){
         return ResultUtil.success(broadcastService.deleteBroadcast(id));

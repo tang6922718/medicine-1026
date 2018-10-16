@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.user;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.OperatorManagementService;
@@ -76,6 +77,7 @@ public class OperatorManagementController {
     * @Author: hejiajun
     * @Date: 2018/9/19 
     */ 
+    @MethodLog(remark = "新增,新增操作员,操作员")
     @PostMapping("/oper/new/v1.0")
     public Result createNewOperationUser(@RequestBody Map<String, String> map){
         if (StringUtils.isEmpty(map.get("name")) || StringUtils.isEmpty(map.get("loginid"))
@@ -105,6 +107,7 @@ public class OperatorManagementController {
     * @Author: hejiajun
     * @Date: 2018/9/19 
     */ 
+    @MethodLog(remark = "修改,修改操作员基本信息,操作员")
     @PutMapping("/oper/update/v1.0")
     public Result updateOperationUser(@RequestBody Map<String, String> map){
         if (StringUtils.isEmpty(map.get("id"))){

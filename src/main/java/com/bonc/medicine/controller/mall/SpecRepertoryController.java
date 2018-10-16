@@ -1,6 +1,25 @@
 package com.bonc.medicine.controller.mall;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Issue;
 import com.bonc.medicine.entity.mall.Specialist;
@@ -16,12 +35,6 @@ import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @RestController
 @RequestMapping("/spec_repertory")
@@ -48,6 +61,7 @@ public class SpecRepertoryController {
 	 * @param specialist
 	 * @return
 	 */
+	@MethodLog(remark = "新增,新增专家账号,专家")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/new")
 	@Transactional
@@ -72,6 +86,7 @@ public class SpecRepertoryController {
 	 * @param specialist
 	 * @return
 	 */
+	@MethodLog(remark = "修改,修改专家信息,专家")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/info")
 	@Transactional
@@ -551,6 +566,7 @@ public class SpecRepertoryController {
 		return ResultUtil.success(specialistService.issueDetail(issue_id));
 	}
 
+	@MethodLog(remark = "新增,上传资源,资源管理")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/file")
 	public Result uploadFile(@RequestBody Map param) {

@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.management;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.management.MallRecommendService;
 import com.bonc.medicine.utils.JacksonMapper;
@@ -77,6 +78,7 @@ public class MallRecommendController {
     /*
     * 删除对应商品推荐
     * */
+    @MethodLog(remark = "删除,删除推荐的商品,商品推荐")
     @GetMapping("/deleteMallRecommend/{id}")
     public Result<Object> deleteMallRecommend(@PathVariable String id){
         return ResultUtil.success(mallRecommendService.deleteMallRecommend(id));
@@ -87,6 +89,7 @@ public class MallRecommendController {
      * @param addJson  {"site":"4","supply_id1":10,"img_url1":"/img/url111","supply_id2":11,"img_url2":"/img/url111","supply_id3":12,"img_url3":"/img/url111","state":"0"}
      * @return
      */
+    @MethodLog(remark = "新增,新增商品推荐,商品推荐")
     @PostMapping("/mallRecommend")
     public Result<Object> mallRecommend(@RequestBody String addJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(addJson);
@@ -100,6 +103,7 @@ public class MallRecommendController {
      * @param editJson {"id":14,"site":"2","supply_id1":10,"img_url1":"/img/url111","supply_id2":11,"img_url2":"/img/url111","supply_id3":12,"img_url3":"/img/url111","state":"0"}
      * @return
      */
+    @MethodLog(remark = "修改,修改商品推荐,商品推荐")
     @PostMapping("/editMallRecommend")
     public Result<Object> editMallRecommend(@RequestBody String editJson){
         Map map = JacksonMapper.INSTANCE.readJsonToMap(editJson);

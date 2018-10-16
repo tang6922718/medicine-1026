@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.thumb.ThumbService;
@@ -31,6 +32,7 @@ public class CommentReplyController {
 	 @Autowired
 	 ThumbService thumbService;  //点赞
 	
+	@MethodLog(remark = "新增,新增评论,评论")
 	@PostMapping("/comment")
 	public Result releaseComment(@RequestBody Map param ) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -39,6 +41,7 @@ public class CommentReplyController {
 		return ResultUtil.success(commentReplyService.insertComment(param));
 	}
 	
+	@MethodLog(remark = "新增,回复,动态")
 	@PostMapping("/reply")
 	public Result releaseReply(@RequestBody Map param) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -86,6 +89,7 @@ public class CommentReplyController {
 		return ResultUtil.success(commentReplyService.commentsCount(param));
 	}
 	
+	@MethodLog(remark = "删除,删除评论,动态")
 	@DeleteMapping("/delete")
 	public Result deleteComment(String id) {
 		return ResultUtil.success(commentReplyService.deleteComment(id));
