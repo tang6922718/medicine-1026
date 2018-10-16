@@ -290,9 +290,11 @@ public class UserManagerServiceImpl implements UserManagerService {
 		basicinfo.setRole(tempData.get("role").toString());
 		userManagerMapper.addBasic(basicinfo);
 		int id = basicinfo.getId();// user_id
-		String[] role = basicinfo.getRole().split(",");
-		for (int i = 0; i < role.length; i++) {
-			userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
+		if (!basicinfo.getRole().equals("")) {
+			String[] role = basicinfo.getRole().split(",");
+			for (int i = 0; i < role.length; i++) {
+				userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
+			}
 		}
 		if (basicinfo.getRole().toString().contains("5")) {
 			Expert expert = new Expert();

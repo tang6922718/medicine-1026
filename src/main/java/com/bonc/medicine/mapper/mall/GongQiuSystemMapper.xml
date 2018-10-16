@@ -54,8 +54,10 @@
 	</update>
 
 	<update id="goodsOff" parameterType="Map">
-		update mall_supply set
-		carriage_status = '2' where id = #{supplyId}
+		update mall_supply set carriage_status = '2' where id = #{supplyId};
+		update mall_recommend set supply_id1 = null , img_url1 = null where supply_id1 = #{supplyId};
+		update mall_recommend set supply_id2 = null , img_url2 = null where supply_id2 = #{supplyId};
+		update mall_recommend set supply_id3 = null , img_url3 = null where supply_id3 = #{supplyId};
 	</update>
 
 	<select id="goodsRatio" parameterType="Map" resultType="Map">
