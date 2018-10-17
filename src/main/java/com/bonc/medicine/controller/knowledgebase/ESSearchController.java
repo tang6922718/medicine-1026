@@ -76,7 +76,7 @@ public class ESSearchController {
 
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb)./*addSort(new ScoreSortBuilder()).*/addSort(sortBuilder).setSize(50).execute().actionGet();
-//        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
+        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
 
         SearchHits hits = sr.getHits();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -199,60 +199,68 @@ public class ESSearchController {
         /*
         * 类别过滤
         * */
-        switch (searchType){
-            case "km_variety_encyclopedia":
-                qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
-                break;
-            default:
-                qb.must(QueryBuilders.termQuery("type", searchType));
-                break;
+        if(null!=searchType && !"".equals(searchType)){
+            switch (searchType){
+                case "km_variety_encyclopedia":
+                    qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
+                    break;
+                default:
+                    qb.must(QueryBuilders.termQuery("type", searchType));
+                    break;
+            }
+
+            /**
+             * 每个类别状态码和搜索词过滤
+             */
+            switch (searchType){
+                case "spec_info":
+                    qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
+                    break;
+                case "comm_dyanimic":
+                    qb.must(QueryBuilders.termQuery("effect_flag", "0"));
+                    qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
+                    break;
+                case "common_price":
+                    qb.must(QueryBuilders.termQuery("state", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "1"));
+                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+                    break;
+                case "train_video_course":
+                    qb.must(QueryBuilders.termQuery("operation_status", "3"));
+                    qb.must(QueryBuilders.termQuery("status", "1"));
+                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "info_basic":
+                    qb.must(QueryBuilders.termQuery("is_display", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "3"));
+                    qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "spec_article":
+                    qb.must(QueryBuilders.termQuery("is_audit", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "0"));
+                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "km_variety_encyclopedia":
+                    qb.must(QueryBuilders.termQuery("record_status", "3"));
+                    qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "spec_case":
+//                qb.should(QueryBuilders.wildcardQuery("title.keyword", "*"+searchText+"*"));
+                    qb.must(QueryBuilders.wildcardQuery("varieties.keyword", "*"+searchText+"*"));
+                    break;
+                default:
+                    qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+            }
+
+        }else {
+            qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
         }
 
-        /**
-         * 每个类别状态码和搜索词过滤
-         */
-        switch (searchType){
-            case "spec_info":
-                qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
-                break;
-            case "comm_dyanimic":
-                qb.must(QueryBuilders.termQuery("effect_flag", "0"));
-                qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
-                break;
-            case "common_price":
-                qb.must(QueryBuilders.termQuery("state", "1"));
-                qb.must(QueryBuilders.termQuery("status", "1"));
-                qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
-                break;
-            case "train_video_course":
-                qb.must(QueryBuilders.termQuery("operation_status", "3"));
-                qb.must(QueryBuilders.termQuery("status", "1"));
-                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-                break;
-            case "info_basic":
-                qb.must(QueryBuilders.termQuery("is_display", "1"));
-                qb.must(QueryBuilders.termQuery("status", "3"));
-                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-                break;
-            case "spec_article":
-                qb.must(QueryBuilders.termQuery("is_audit", "1"));
-                qb.must(QueryBuilders.termQuery("status", "0"));
-                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-                break;
-            case "km_variety_encyclopedia":
-                qb.must(QueryBuilders.termQuery("record_status", "3"));
-                qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
-//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-                break;
-            case "spec_case":
-//                qb.should(QueryBuilders.wildcardQuery("title.keyword", "*"+searchText+"*"));
-                qb.must(QueryBuilders.wildcardQuery("varieties.keyword", "*"+searchText+"*"));
-                break;
-            default:
-                qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
-//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-                break;
-        }
+
         return qb;
     }
 
