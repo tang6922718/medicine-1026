@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.information;
 
 
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.information.LiveService;
@@ -54,6 +55,7 @@ public class LiveController {
      * @description 创建直播(直播)
      */
     @RequestMapping("/createLive")
+    @MethodLog(remark = "新增,创建直播,培训")
     @com.bonc.medicine.annotation.Authorization
     public Result createLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
@@ -123,6 +125,7 @@ public class LiveController {
      * @description 编辑直播 （编辑直播 ）
      */
     @RequestMapping("/editLive")
+    @MethodLog(remark = "修改,编辑直播,培训")
     public Result editLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
         map.put("user_id", user_id);
         int count = liveService.editLive(map);
@@ -138,6 +141,7 @@ public class LiveController {
      * @description 撤销直播 （撤销直播）
      */
     @RequestMapping("/repealLive")
+    @MethodLog(remark = "修改,撤销直播,培训")
     public Result repealLive(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(liveService.repealLive(map));
     }
@@ -148,6 +152,7 @@ public class LiveController {
      * @description 删除直播 （删除直播）
      */
     @RequestMapping("/delLive")
+    @MethodLog(remark = "删除,删除直播,培训")
     public Result delLive(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(liveService.delLive(map));
     }

@@ -1,6 +1,26 @@
 package com.bonc.medicine.controller.mall;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Issue;
 import com.bonc.medicine.entity.mall.Specialist;
@@ -16,12 +36,6 @@ import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @RestController
 @RequestMapping("/spec_repertory")
@@ -48,6 +62,7 @@ public class SpecRepertoryController {
 	 * @param specialist
 	 * @return
 	 */
+	@MethodLog(remark = "新增,新增专家账号,专家")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/new")
 	@Transactional
@@ -72,6 +87,7 @@ public class SpecRepertoryController {
 	 * @param specialist
 	 * @return
 	 */
+	@MethodLog(remark = "修改,修改专家信息,专家")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PutMapping("/info")
 	@Transactional
@@ -191,6 +207,11 @@ public class SpecRepertoryController {
 		List<String> allIds = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			allIds.add(list.get(i).get("spec_id").toString());
+			//follow 
+			Map succeed = attentionService.fansList(list.get(i).get("spec_id").toString());
+
+	        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+	        list.get(i).put("follow", idSet.size());
 		}
 		List<Map<String, Object>> daysList = userManagerService.activeDaysForBack(allIds.toString().substring(1,
 				allIds.toString().length() - 1));
@@ -259,6 +280,10 @@ public class SpecRepertoryController {
 			param1.put("spec_id", list.get(i).get("spec_id").toString());
 			list.get(i).put("sub", specialistService.sub(param1).toString());
 			list.get(i).put("cat", specialistService.cat(param1).toString());
+			Map succeed = attentionService.fansList(list.get(i).get("spec_id").toString());
+
+	        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+	        list.get(i).put("follow", idSet.size());
 		}
 		
 		return ResultUtil.successTotal(list, total);
@@ -284,12 +309,17 @@ public class SpecRepertoryController {
 		list = specialistService.specDetail(param);
 		User user = userService.getUserInfoById(user_id);
 		String acount = user.getActive_count();
-		Map<String, String> acMap =  userManagerService.activeDays(spec_id);
+		Map<String, Object> acMap =  userManagerService.activeDays(spec_id);
         List<Map<String, String>> inMap =  userManagerService.queryInteractTimes(spec_id);
 
 		list.get(0).put("active_count", acMap.get("acDays"));
 		list.get(0).put("interact_count", inMap.get(0).get("interactNumber"));
+		
+		//粉丝数
+		Map succeed = attentionService.fansList(list.get(0).get("spec_id").toString());
 
+        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
+        list.get(0).put("follow", idSet.size());
 		if (user_id != null) {
 
 			Map param1 = new HashMap<>();
@@ -551,6 +581,7 @@ public class SpecRepertoryController {
 		return ResultUtil.success(specialistService.issueDetail(issue_id));
 	}
 
+	@MethodLog(remark = "新增,上传资源,资源管理")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/file")
 	public Result uploadFile(@RequestBody Map param) {

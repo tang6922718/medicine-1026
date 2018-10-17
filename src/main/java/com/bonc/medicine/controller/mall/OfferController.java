@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.mall;
 
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Offer;
 import com.bonc.medicine.service.mall.OfferService;
@@ -21,6 +22,7 @@ public class OfferController {
 	@Autowired
 	OfferService offerService;
 
+	@MethodLog(remark = "新增,报价,供求")
 	@SuppressWarnings("unchecked")
 	@PostMapping("/offer")
 	@Authorization

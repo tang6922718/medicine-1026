@@ -76,7 +76,6 @@
 				then '1537932363932658' else u.head_portrait end as head_portrait,
 			si.employment_age,
 			si.expertise_field,
-			count(cf.id) as follow ,
 			0 as is_follow,
 			'' as sub,
 			'' as cat
@@ -163,7 +162,6 @@
 			si.update_time,
 			case when u.head_portrait is null or  u.head_portrait=''
 			then '1537932363932658' else u.head_portrait end as head_portrait,			
-			count( cf.id ) AS follow,
 			0 AS is_follow ,
 			'' as sub,
 			'' as cat

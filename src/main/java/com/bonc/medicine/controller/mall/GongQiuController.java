@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.mall;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Marks;
 import com.bonc.medicine.entity.mall.Recommend;
@@ -49,6 +50,7 @@ public class GongQiuController {
 	/*
 	 * 设置商品推荐
 	 */
+	@MethodLog(remark = "新增,新增商品推荐,供求")
 	@PostMapping("/gongQiuSystem/recommend")
 	public Result<Object> recommend(@RequestBody Recommend recommend) {
 		return gongQiuSystemService.recommend(recommend);

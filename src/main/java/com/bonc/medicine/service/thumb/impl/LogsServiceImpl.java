@@ -77,9 +77,9 @@ public class LogsServiceImpl implements LogsService {
 
     @Override
     public Map<String, Object> addOperLogs(Map<String, String> paramMap) {
-    	/* if (StringUtils.isBlank(paramMap.get("userId"))) {
+    	 if (StringUtils.isBlank(paramMap.get("userId"))) {
     		 paramMap.put("userId", "0");
-         }*/
+         }
 
          //如果没有status参数就默认给1
          if (StringUtils.isBlank(paramMap.get("status"))) {

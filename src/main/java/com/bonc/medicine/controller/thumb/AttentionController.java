@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.kafka.common.protocol.types.Field.Str;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.thumb.AttentionService;
+import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.ResultUtil;
 
@@ -48,8 +50,7 @@ public class AttentionController {
 
     @Autowired
     private UserService userService;
-
-
+    
 
     /**
     * @Description:查询当前用户是否关注了某用户 现在关注只有专家和用户，，，0：普通用户，1：专家
@@ -191,6 +192,7 @@ public class AttentionController {
             outMap.put("loveVariety", user.getCaresVarieties());
             outMap.put("followed",   isFlow.get("followed"));
             outMap.put("id",   ids);
+          
             outMap.put("active_count",   user.getActive_count());
             outMap.put("interactiveNumber",   user.getInteractiveNumber());
             outList.add(outMap);
@@ -306,7 +308,11 @@ public class AttentionController {
 
     @RequestMapping("/del/{key}")
     public long keys222 (@PathVariable String key){
-        jedisAdapter.del(key);
+    	Set<String>  keys = jedisAdapter.keys(key);
+    	for (String string : keys) {
+    		 jedisAdapter.del(string);
+		}
+       
         return 111L;
     }
 

@@ -40,7 +40,6 @@ public class LogTransService {
 	 private UserService userService;
 	 
     public LogTransService() {
-        System.out.println("Aop");
     }
 
     /**
