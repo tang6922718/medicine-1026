@@ -28,7 +28,7 @@
 			</if>
 		GROUP BY
 			tii.reply_time
-			order by 	tii.reply_time  desc
+			order by 	tii.reply_time  asc
 	
 	</select>
 
