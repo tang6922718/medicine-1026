@@ -41,6 +41,7 @@
             and ccu.id = #{opid}
         </if>
 
+		order by create_time desc
     </select>
 
     <!-- 查询所有的角色和对应的id，只查询管理员创建的和有效的。目前设计的是只有一个超级管理员是默认的不是被创建出来的-->

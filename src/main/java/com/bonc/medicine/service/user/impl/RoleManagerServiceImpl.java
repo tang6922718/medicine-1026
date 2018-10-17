@@ -1,19 +1,21 @@
 package com.bonc.medicine.service.user.impl;
 
-import com.bonc.medicine.Exception.MedicineRuntimeException;
-import com.bonc.medicine.enums.ResultEnum;
-import com.bonc.medicine.mapper.user.RoleManagerMapper;
-import com.bonc.medicine.service.user.RoleManagerService;
-import com.bonc.medicine.utils.TimeFormatUtils;
-import com.github.pagehelper.PageHelper;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.rmi.MarshalledObject;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.mapper.user.RoleManagerMapper;
+import com.bonc.medicine.service.user.RoleManagerService;
+import com.github.pagehelper.PageHelper;
 
 /**
  * @program: medicine
@@ -169,6 +171,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 
                 reMap.put("son", sonMeunList);
             }else {
+            	 reList.add(reMap);
                 parentId = meunMap.get("parent_id") + "";
                 reMap = new HashMap();
                 reMap.put("parentId", parentId);
@@ -186,7 +189,8 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 
                 reMap.put("son", sonMeunList);
             }
-            reList.add(reMap);
+            
+           
         }
 
         return reList;
