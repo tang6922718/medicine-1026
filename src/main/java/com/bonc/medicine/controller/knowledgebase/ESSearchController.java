@@ -76,7 +76,7 @@ public class ESSearchController {
 
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb)./*addSort(new ScoreSortBuilder()).*/addSort(sortBuilder).setSize(50).execute().actionGet();
-        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
+//        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
 
         SearchHits hits = sr.getHits();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -233,7 +233,9 @@ public class ESSearchController {
                 case "info_basic":
                     qb.must(QueryBuilders.termQuery("is_display", "1"));
                     qb.must(QueryBuilders.termQuery("status", "3"));
-                    qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
                     break;
                 case "spec_article":
@@ -243,7 +245,9 @@ public class ESSearchController {
                     break;
                 case "km_variety_encyclopedia":
                     qb.must(QueryBuilders.termQuery("record_status", "3"));
-                    qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
                     break;
                 case "spec_case":
@@ -257,7 +261,9 @@ public class ESSearchController {
             }
 
         }else {
-            qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+            if(null != searchText && ""!=searchText){
+                qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+            }
         }
 
 
