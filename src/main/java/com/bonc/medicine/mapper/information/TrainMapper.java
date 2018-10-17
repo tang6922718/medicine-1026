@@ -258,11 +258,10 @@ public interface TrainMapper {
         }
 
         public String selectTrainList(final Map<String, Object> map) {
-            return new SQL() {{
-                SELECT("*");
+            return  new SQL() {{
+                SELECT("a.*,b.video_title,b.video_url,b.upload_user_id,b.upload_time");
                 FROM("train_offline a");
                 LEFT_OUTER_JOIN("train_offline_video b on a.id =b.train_id");
-                WHERE("is_display='1'");
                 if (map.get("publish_time") != null && map.get("publish_time") != "") {
                     WHERE("publish_time >=#{publish_time}");
                 }
@@ -275,6 +274,7 @@ public interface TrainMapper {
                 if (map.get("operation_status") != null) {
                     WHERE("operation_status=#{operation_status}");
                 }
+                WHERE("is_display='1'");
                 ORDER_BY("a.create_time desc");
             }}.toString();
         }
@@ -368,25 +368,31 @@ public interface TrainMapper {
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("spec_id=#{user_id}");
                         }
+                        if (map.get("operation_status") != null) {
+                            WHERE("operation_status=#{operation_status}");
+                        }
                         ORDER_BY("create_time desc");
                         break;
                     case 2:
-
-                        SELECT("a.*,b.video_title,b.video_url,b.upload_user_id,b.upload_time from (");
-                        SELECT("*");
-                        FROM("train_offline");
+                        SELECT("a.*,b.video_title,b.video_url,b.upload_user_id,b.upload_time from ( select *");
+                        FROM("train_offline ) a");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
-                            WHERE("spec_id=#{user_id}) a");
+                            WHERE("spec_id=#{user_id}");
+                        }
+                        if (map.get("operation_status") != null) {
+                            WHERE("operation_status=#{operation_status}");
                         }
                         LEFT_OUTER_JOIN("train_offline_video b ON a.id=b.train_id AND b.effect_flag='1'");
                         ORDER_BY("create_time desc");
-
                         break;
                     default:
                         SELECT("*");
                         FROM("train_live");
                         if (map.get("user_id") != null && map.get("object_type") != null) {
                             WHERE("user_id=#{user_id}");
+                        }
+                        if (map.get("operation_status") != null) {
+                            WHERE("operation_status=#{operation_status}");
                         }
                         ORDER_BY("create_time desc");
                         break;
