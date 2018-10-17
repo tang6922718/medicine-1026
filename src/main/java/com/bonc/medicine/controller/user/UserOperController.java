@@ -144,7 +144,7 @@ public class UserOperController {
      * @Date: 2018/9/1
      */
     //@Authorization
-    @MethodLog(remark = "修改,修改密码,用户")
+    @MethodLog(remark = "修改,忘记密码,用户")
     @PutMapping("/password/forget/v1.0")
     public Result forgetPassword(@RequestBody Map<String, String> paramMap) {
         if (null == paramMap) {
@@ -178,7 +178,6 @@ public class UserOperController {
 
     }
 
-    @MethodLog(remark = "退出登陆,退出登录,用户")
     @DeleteMapping("/user/logout/v1.0")
     @Authorization
     @ApiOperation(value = "退出登录")
@@ -256,7 +255,7 @@ public class UserOperController {
      * @Author: hejiajun
      * @Date: 2018/9/1
      */
-    @MethodLog(remark = "修改,修改密码,用户")
+    @MethodLog(remark = "修改,后台管理修改密码,用户")
     @Authorization
     @PutMapping("/password/update/back/v1.0")
     public Result changePasswordBack(@RequestBody Map<String, String> paramMap, @CurrentUser String backId) {
@@ -286,7 +285,6 @@ public class UserOperController {
      * @Author: hejiajun
      * @Date: 2018/8/30
      */
-    @MethodLog(remark = "登陆,用户登陆,用户")
     @PostMapping("/user/login/v2.0")
     public Result loginSecond(@RequestBody Map<String, String> paramMap,
                         HttpServletRequest request,
