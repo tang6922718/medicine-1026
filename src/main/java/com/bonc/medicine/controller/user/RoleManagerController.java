@@ -129,6 +129,8 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */ 
+    @MethodLog(remark = "修改,修改角色可以访问的菜单,角色")
+    @Authorization
     public Result updateRolePermissions(){
 
         // TODO 这个方法还需要思考一下怎么实现菜单
