@@ -62,7 +62,7 @@
 	</update>
 
 	<update id="undoBreedStatus" parameterType="String">
-		UPDATE km_variety_encyclopedia SET  record_status = 5 WHERE id = #{id}
+		UPDATE km_pharmacopoeia_information SET  record_status = 5 WHERE id = #{id}
 	</update>
 
 	<select id="selectBreed" parameterType="java.util.Map" resultType="Map">
@@ -71,7 +71,8 @@
 		a.chinese_name,
 		a.variety_id,
 		a.codex_status,
-		a.record_status,
+ 		CASE WHEN a.codex_status = 1 THEN b.record_status
+		ELSE a.record_status END AS record_status,
 		a.record_time,
 		CASE WHEN a.codex_status = 1 THEN '药典'
 		ELSE '百科' END AS type
@@ -214,7 +215,7 @@
 	</update>
 
 	<update id="changePhaStatus" parameterType="java.util.Map">
-		UPDATE km_variety_encyclopedia SET record_status =#{km_status} WHERE variety_id = (SELECT cat_code FROM km_pharmacopoeia_information WHERE id=#{object_id})
+		UPDATE km_pharmacopoeia_information SET record_status =#{km_status} WHERE id=#{object_id}
 	</update>
 
 	<update id="changeSopStatus" parameterType="java.util.Map">

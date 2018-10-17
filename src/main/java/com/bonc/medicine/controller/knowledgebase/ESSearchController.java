@@ -223,12 +223,18 @@ public class ESSearchController {
                 case "common_price":
                     qb.must(QueryBuilders.termQuery("state", "1"));
                     qb.must(QueryBuilders.termQuery("status", "1"));
-                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+//                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.matchQuery(searchText, "cat_name"));
+                    }
                     break;
                 case "train_video_course":
                     qb.must(QueryBuilders.termQuery("operation_status", "3"));
                     qb.must(QueryBuilders.termQuery("status", "1"));
-                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
+//                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
                     break;
                 case "info_basic":
                     qb.must(QueryBuilders.termQuery("is_display", "1"));
@@ -255,7 +261,9 @@ public class ESSearchController {
                     qb.must(QueryBuilders.wildcardQuery("varieties.keyword", "*"+searchText+"*"));
                     break;
                 default:
-                    qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
                     break;
             }
