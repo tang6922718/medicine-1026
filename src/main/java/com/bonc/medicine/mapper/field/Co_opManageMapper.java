@@ -94,4 +94,6 @@ public interface Co_opManageMapper {
     public Map queryIsAlreadyCoopManager(int user_ID); // 根据用户ID去查询其是否已经是其它合作社管理员了
 
     public Map queryCoopMemberID(@Param("coop_id") int coopID, @Param("user_id") int userID); // 根据coopID 和 userID查询社员编号
+
+    public int insertNotice(Notice notice); // 发布通知
 }

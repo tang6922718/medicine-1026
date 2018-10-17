@@ -391,6 +391,12 @@
 		</if>
 	</insert>
 
+	<insert id="insertNotice" parameterType="com.bonc.medicine.entity.field.Notice">
+		INSERT INTO common_notice(notice_type,object_id,notice_content,publish_user_id,notice_role_type,notice_receiver,publish_time,status,state,picture_url,send_time,is_send)
+		VALUES
+		(#{notice_type},#{object_id},#{notice_content},#{publish_user_id},#{notice_role_type},#{notice_receiver},now(),#{status},#{state},#{img_url},now(),#{is_send})
+	</insert>
+
 	<select id="noticelist" parameterType="Map" resultType="Map">
 		select * from common_notice where notice_type = '1' and status='1'
 		<if test="msg != null and msg != ''">
