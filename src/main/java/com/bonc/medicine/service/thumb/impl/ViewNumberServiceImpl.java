@@ -1,21 +1,23 @@
 package com.bonc.medicine.service.thumb.impl;
 
-import com.bonc.medicine.Exception.MedicineRuntimeException;
-import com.bonc.medicine.adapter.JedisAdapter;
-import com.bonc.medicine.enums.ResultEnum;
-import com.bonc.medicine.mapper.thumb.ViewNumberMapper;
-import com.bonc.medicine.service.thumb.ThumbService;
-import com.bonc.medicine.service.thumb.ViewNumberService;
-import com.bonc.medicine.utils.ResultUtil;
-import com.bonc.medicine.utils.ViewNumberKeyUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.bonc.medicine.Exception.MedicineRuntimeException;
+import com.bonc.medicine.adapter.JedisAdapter;
+import com.bonc.medicine.enums.ResultEnum;
+import com.bonc.medicine.mapper.thumb.ViewNumberMapper;
+import com.bonc.medicine.service.mall.CommentReplyService;
+import com.bonc.medicine.service.thumb.ThumbService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
+import com.bonc.medicine.utils.ResultUtil;
+import com.bonc.medicine.utils.ViewNumberKeyUtil;
 
 /**
  * @program: medicine-hn
@@ -34,6 +36,9 @@ public class ViewNumberServiceImpl implements ViewNumberService {
 
     @Autowired
     private ThumbService thumbService;
+    
+    @Autowired
+    private CommentReplyService commentReplyService;
 
 
     @Override
@@ -164,7 +169,12 @@ public class ViewNumberServiceImpl implements ViewNumberService {
                 Map<String, Object> thumgNumberMap = thumbService.thumbNumber(param);
                 // thumbNumber
                 onlyIdMap.put("thumbNumber", thumgNumberMap.get("thumbNumber"));
-                onlyIdMap.put("commentNumber", "faker"); // 这是伪代码
+                
+                Map paramThis = new HashMap<>();
+                paramThis.put("object_type", "4");
+                paramThis.put("object_id", onlyIdMap.get("id") + "");
+        		
+                onlyIdMap.put("commentNumber", commentReplyService.commentsCount(paramThis) + ""); 
             }
         }
 
