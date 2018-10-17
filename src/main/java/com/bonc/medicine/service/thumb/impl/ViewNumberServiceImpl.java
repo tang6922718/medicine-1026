@@ -159,7 +159,7 @@ public class ViewNumberServiceImpl implements ViewNumberService {
                 onlyIdMap.put("viewNumber", viewNumberMap.get("viewNumber"));
 
                 Map<String, String> param = new HashMap<>();
-                param.put("type", "8");
+                param.put("type", paramaMap.get("objectType"));
                 param.put("acceptThumbId", onlyIdMap.get("id") + "");
                 Map<String, Object> thumgNumberMap = thumbService.thumbNumber(param);
                 // thumbNumber
