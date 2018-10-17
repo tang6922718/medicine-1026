@@ -9,7 +9,7 @@
 		(select count(1) from comm_dyanimic where effect_flag = '2') as dt ,
 		(select count(1) from spec_article where status = '0' and is_audit = '0') as zy ,
 		(select count(1) from spec_upload_file where status = '0') as zl ,
-		(select count(1) from spec_issue where is_revisited ='1') as hf ,
+		(select count(1) from spec_issue where is_revisited ='0') as hf ,
 		(select count(1) from mall_supply where is_audit = '0' and state = '0') as gy ,
 		(select count(1) from mall_purchase where is_aduit = '0' and state = '1') as qg
 	</select>
