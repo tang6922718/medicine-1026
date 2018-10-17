@@ -66,7 +66,7 @@
 	</update>
 
 	<select id="selectBreed" parameterType="java.util.Map" resultType="Map">
-		SELECT
+		SELECT * from ((SELECT
 		a.id,
 		a.chinese_name,
 		a.variety_id,
@@ -77,20 +77,33 @@
 		ELSE '百科' END AS type
 		FROM
 		km_variety_encyclopedia a
+		LEFT JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code)
+		UNION
+		(SELECT
+		a.id,
+		a.chinese_name,
+		a.variety_id,
+		a.codex_status,
+		a.record_status,
+		a.record_time,
+		'百科' AS type
+		FROM
+		km_variety_encyclopedia a
 		LEFT JOIN km_pharmacopoeia_information b ON a.variety_id = b.cat_code
+		WHERE a.codex_status = 1)) aa
 		WHERE
 		1 = 1
 		<if test="search_name != null and search_name != ''">
-			and a.chinese_name LIKE concat('%',#{search_name},'%')
+			and aa.chinese_name LIKE concat('%',#{search_name},'%')
 		</if>
 		<if test="type_code != null and type_code != ''">
-			and codex_status = #{type_code}
+			and aa.codex_status = #{type_code}
 		</if>
 		<if test="record_status != null and record_status != ''">
-			and record_status= #{record_status}
+			and aa.record_status= #{record_status}
 		</if>
 		ORDER BY
-		record_time DESC
+		aa.record_time DESC
 	</select>
 
 	<select id="selectBreedDetail" parameterType="String" resultType="Map">
