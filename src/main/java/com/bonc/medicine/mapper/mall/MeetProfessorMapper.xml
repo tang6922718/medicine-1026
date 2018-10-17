@@ -451,11 +451,12 @@
 		where id = #{id}
 	</update>
 	<select id="getArticlelist" parameterType="Map" resultType="Map">
-		select id,title,'文章类型' as type,publish_time from spec_article where
+		select id,title,'文章类型' as type,update_time as publish_time from spec_article where
 		status = '0' and is_audit = '0'
 		<if test="key != null and key != ''">
 			and title like CONCAT(CONCAT('%',#{key}),'%')
 		</if>
+		order by update_time desc
 	</select>
 	<select id="queryArticleList" parameterType="Map" resultType="Map">
 		SELECT concat(concat(u.name,"("),u.telephone,")") as name_tel

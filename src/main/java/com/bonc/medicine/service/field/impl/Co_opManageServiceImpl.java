@@ -49,7 +49,13 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		// 判断申请人是否已经有其它合作社了 （一个人只能是一个合作社的管理员）
 		Map isOtherCoopManager=co_opManageMapper.queryIsAlreadyCoopManager((int)map.get("id"));
 		if (Integer.parseInt(isOtherCoopManager.get("NUM").toString())>0){
-			return ResultUtil.error(500,"改用户已经申请其它合作社了(有可能还在审核),不能再申请合作社");
+			return ResultUtil.error(500,"该用户已经申请其它合作社了(有可能还在审核),不能再申请合作社");
+		}
+
+		// 判断申请人是否有技术员角色  （用户不能同时有合作社 技术员 角色属性）
+		Map isAlreadyAssistantOtherCoopMap=co_opManageMapper.queryIsAlreadyAssistantOtherCoop((int)map.get("id"));
+		if (Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString())>0){
+			return ResultUtil.error(500,"该用户已经是其它合作社的技术员了,不能再申请合作社");
 		}
 
 		tempData.setOfficial_user_id((int) map.get("id"));
@@ -70,7 +76,6 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		}
 
 
-		//  合作社新建成功时把合作社管理员作为社员（管理员为技术员）插入合作社社员表中
 		int i=co_opManageMapper.insertCo_op(tempData);
 		if (i>0){
 			return ResultUtil.success(i);
@@ -126,11 +131,11 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 		tempData.setState("0"); // 数据状态 0 可用 1 不可用
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性   把合作社管理员作为技术员插入社员表中
+		if ("0".equals(tempData.getIs_audit())) { // 合作社审核通过时 给用户添加合作社角色属性
 
-			// 给申请者加合作社角色属性  技术员角色属性
-			 co_opManageMapper.insertCommon_user_role_rel(tempData.getId(),3);
-			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId(),4);
+			// 给申请者加合作社角色属性
+			int i= co_opManageMapper.insertCommon_user_role_rel(tempData.getId(),3);
+//			int i = co_opManageMapper.insertCommon_user_role_rel(tempData.getId(),4);   // 合作社  技术员不能同时属于一个用户
 			if (i > 0) {
 				list = co_opManageMapper.queryCoopInfo(tempData.getId());
 				Map map = new HashMap<>();
@@ -141,7 +146,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 
 				Map coopInfo=list.get(0);
 
-				//把合作社管理员作为技术员插入社员表中
+				//把合作社管理员作为管理员插入社员表中
 				// 根据电话号码去查用户信息   该SQL返回: id,name , age,head_portrait, address, sex
 				Map userInfo = co_opManageMapper.queryUserID(coopInfo.get("telephone").toString());
 
@@ -157,7 +162,7 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 				coOpMember.setPlant_area(0);
 				coOpMember.setCoop_id(tempData.getId());
 				coOpMember.setUser_id(userInfo.get("id").toString());
-				coOpMember.setAssistant("0");
+				coOpMember.setAssistant("2");  // 0 技术员   1 普通社员   2 管理员
 				coOpMember.setState("0");
 				co_opManageMapper.insertCo_opMember(coOpMember);
 
@@ -206,22 +211,28 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 			return ResultUtil.error(500, "该用户已经是合作社成员了");
 		}
 
+
 		if (tempData.getAssistant() != null && tempData.getAssistant() != "") { // 后台管理新增社员时可以指定是否为技术员
 
 			if ("0".equals(tempData.getAssistant())) { // 新增的社员被指定为技术员
 														// 这里为该社员添加技术员身份(注意技术员必须为平台用户
-														// 技术员只能属于一个合作社)
-
+														// 技术员只能属于一个合作社   技术员 合作社角色不能同时属于一个用户)
 				if (map != null) {
 
+					// 判断是否已经是技术员
 					Map isAlreadyAssistantOtherCoopMap = co_opManageMapper
 							.queryIsAlreadyAssistantOtherCoop((int) map.get("id"));
-
-					int num = Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
-
-					if (num > 0) {
+					if (Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString()) > 0) {
 						return ResultUtil.error(500, "该用户已经是其它合作社的技术员了");
 					}
+
+
+					// 判断是否是合作社管理员
+					Map isOtherCoopManager=co_opManageMapper.queryIsAlreadyCoopManager((int)map.get("id"));
+					if (Integer.parseInt(isOtherCoopManager.get("NUM").toString())>0){
+						return ResultUtil.error(500,"该用户已经申请其它合作社了(有可能还在审核),不能成为技术员");
+					}
+
 
 					// 为该合作社成员添加技术员角色 先删再插入
 					int i = co_opManageMapper.deleteRole((Integer) map.get("id"), 4);
@@ -280,19 +291,47 @@ public class Co_opManageServiceImpl implements Co_opManageService {
 		if (tempData.getAssistant() != null) {
 
 			if ("0".equals(tempData.getAssistant())) { // 社员变更为技术员时 要判断其是不是平台用户
-														// 是否是其它合作社的技术员
+														// 是否是其它合作社的技术员  是否是其它合作社的管理员
 				if (coopMemberInfo.get("user_id") != null && coopMemberInfo.get("user_id") != "") {
 
+					// 是否是其它合作社的技术员
 					Map isAlreadyAssistantOtherCoopMap = co_opManageMapper
 							.queryIsAlreadyAssistantOtherCoop((int) coopMemberInfo.get("user_id"));
-					int num = Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString());
-					if (num > 0) {
+					if (Integer.parseInt(isAlreadyAssistantOtherCoopMap.get("NUM").toString()) > 0) {
 						return ResultUtil.error(500, "该用户已经是其它合作社的技术员了");
 					}
+
+
+					// 是否是其它合作社的管理员 (不能同时有合作社角色和技术员角色)
+					Map isOtherCoopManager=co_opManageMapper.queryIsAlreadyCoopManager((int)coopMemberInfo.get("user_id"));
+					if (Integer.parseInt(isOtherCoopManager.get("NUM").toString())>0){
+						return ResultUtil.error(500,"该用户已经申请其它合作社了(有可能还在审核),不能再成为技术员");
+					}
+
 
 					// 为该合作社成员添加技术员角色 先删再插入
 					int i = co_opManageMapper.deleteRole((Integer) coopMemberInfo.get("user_id"), 4);
 					i = co_opManageMapper.insertRole((Integer) coopMemberInfo.get("user_id"), 4);
+
+
+					// 给社员发送通知 告知其已被设为技术员
+					Map param=new HashMap();
+					param.put("coopID",coopMemberInfo.get("coop_id"));
+					Map coopInfo=co_opManageMapper.queryCo_opByCondition(param).get(0);
+
+					Notice notice=new Notice();
+					notice.setNotice_type("2");
+					notice.setObject_id((int)coopMemberInfo.get("coop_id"));
+					notice.setNotice_content("你已被设为技术员,请退出重新登录变更角色权限。");
+					notice.setPublish_user_id((int)coopInfo.get("adminID"));
+					notice.setNotice_receiver(coopMemberInfo.get("user_id").toString());
+//					notice.setPublish_time("发布时间");
+					notice.setStatus("1");
+					notice.setState("1");
+//					notice.setSend_time("发送时间");
+					notice.setIs_send("1");
+
+					co_opManageMapper.insertNotice(notice);
 
 				} else {
 					return ResultUtil.error(500, "技术员必须为本平台用户");

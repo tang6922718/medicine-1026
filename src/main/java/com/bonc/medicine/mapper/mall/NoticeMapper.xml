@@ -9,25 +9,27 @@
 		FROM
 		(
 		SELECT
-		id,
-		notice_type,
-		notice_content,
-		publish_time,
-		send_time
+		a.id,
+		a.notice_type,
+		a.notice_content,
+		a.publish_time,
+		a.send_time,
+		b.name
 		FROM
-		common_notice
+		common_notice a left join field_coop b on a.object_id = b.id
 		WHERE
-		CONCAT(',',notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id}
+		CONCAT(',',a.notice_receiver,',') LIKE CONCAT( CONCAT( '%,', 1
 		), ',%' )
-		AND notice_type = '2'
-		AND STATUS = '1'
-		AND state = '1' AND is_send = '1' UNION
+		AND a.notice_type = '2'
+		AND a.STATUS = '1'
+		AND a.state = '1' AND a.is_send = '1' UNION
 		SELECT
 		id,
 		notice_type,
 		notice_content,
 		publish_time,
-		send_time
+		send_time,
+		'' as name
 		FROM
 		common_notice
 		WHERE

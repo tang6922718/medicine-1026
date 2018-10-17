@@ -1,7 +1,20 @@
 package com.bonc.medicine.controller.mall;
 
 
-import com.bonc.medicine.annotation.Authorization;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
@@ -12,14 +25,6 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 
 @RestController

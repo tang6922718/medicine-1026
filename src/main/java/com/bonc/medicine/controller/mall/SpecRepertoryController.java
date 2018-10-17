@@ -213,11 +213,12 @@ public class SpecRepertoryController {
 	        Set<String> idSet = (Set<String>)(succeed.get("fansList"));
 	        list.get(i).put("follow", idSet.size());
 		}
-		List<Map<String, Object>> daysList = userManagerService.activeDaysForBack(allIds.toString().substring(1,
-				allIds.toString().length() - 1));
+		String idddss = allIds.toString().replaceAll(" ", "");
+		List<Map<String, String>> daysList = userManagerService.queryInteractTimes(idddss.toString().substring(1,
+				idddss.toString().length() - 1));
 		Map<String, String> ddayMap = new HashMap<>();
-		for (Map<String, Object> daysMap: daysList) {
-			ddayMap.put(daysMap.get("user_id") + "", daysMap.get("acDays") + "");
+		for (Map<String, String> daysMap: daysList) {
+			ddayMap.put(daysMap.get("proId") + "", daysMap.get("interactNumber") + "");
 
 		}
 		for (int i = 0; i < list.size(); i++) {
@@ -225,7 +226,7 @@ public class SpecRepertoryController {
 			param1.put("spec_id", list.get(i).get("spec_id").toString());
 			list.get(i).put("sub", specialistService.sub(param1).get(0).get("sub").toString());
 			list.get(i).put("cat", specialistService.cat(param1).get(0).get("cat").toString());
-			list.get(i).put("interact_count", ddayMap.get(list.get(i).get("spec_id").toString()));
+			list.get(i).put("interact_count", ddayMap.get(list.get(i).get("spec_id") + ""));
 		}
 
 
