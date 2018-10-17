@@ -5,6 +5,7 @@ public class Offer {
 	private int id; // 编号
 	private int purchase_id; // 求购编号
 	private int price; // 报价
+	private String price_unit;//报价单位
 	private String publish_time; // 报价时间
 	private int supply_quantity; // 供应数量
 	private String inventory; // 库存地
@@ -46,6 +47,12 @@ public class Offer {
 	}
 	public void setPrice(int price) {
 		this.price = price;
+	}
+	public String getPrice_unit() {
+		return price_unit;
+	}
+	public void setPrice_unit(String price_unit) {
+		this.price_unit = price_unit;
 	}
 	public int getSupply_quantity() {
 		return supply_quantity;

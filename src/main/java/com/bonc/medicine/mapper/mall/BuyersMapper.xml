@@ -14,7 +14,7 @@
 
     <select id="latestPurchaseList" parameterType="java.util.Map" resultType="java.util.Map">
     	SELECT
-			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,cu.name,cu.telephone
+			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,mo.price_unit,cu.name,cu.telephone
 		FROM
 			mall_purchase mp 	
 			LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
@@ -42,7 +42,7 @@
     
     <select id="purchasepCatList" parameterType="java.util.Map" resultType="java.util.Map">
     	SELECT
-			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,cu.name,cu.telephone
+			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,mo.price_unit,cu.name,cu.telephone
 		FROM
 			mall_purchase mp 	
 			LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
