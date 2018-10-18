@@ -62,12 +62,17 @@
 	</update>
 
 	<update id="undoBreedStatus" parameterType="String">
+		UPDATE km_variety_encyclopedia SET  record_status = 5 WHERE id = #{id}
+	</update>
+
+	<update id="undoPharStatus" parameterType="String">
 		UPDATE km_pharmacopoeia_information SET  record_status = 5 WHERE id = #{id}
 	</update>
 
 	<select id="selectBreed" parameterType="java.util.Map" resultType="Map">
 		SELECT * from ((SELECT
 		a.id,
+		b.id AS pha_id,
 		a.chinese_name,
 		a.variety_id,
 		a.codex_status,
@@ -82,6 +87,7 @@
 		UNION
 		(SELECT
 		a.id,
+		b.id AS pha_id,
 		a.chinese_name,
 		a.variety_id,
 		a.codex_status,

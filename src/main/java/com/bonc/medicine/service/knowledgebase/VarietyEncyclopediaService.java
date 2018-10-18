@@ -22,6 +22,8 @@ public interface VarietyEncyclopediaService {
 
     public int undoBreedStatus(String id);
 
+    public int undoPharStatus(String id);
+
     public List<Map<String,Object>> showHotBreed();
 
     public List<Map<String,Object>> kmAuditList(Map map);

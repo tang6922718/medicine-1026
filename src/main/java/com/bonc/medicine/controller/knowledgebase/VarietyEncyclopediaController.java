@@ -133,11 +133,19 @@ public class VarietyEncyclopediaController {
 
 
     /*
-     * 撤销药典*/
+     * 撤销百科*/
     @GetMapping("/undoBreedStatus/{id}")
-    @MethodLog(remark = "修改,撤销药典,知识库")
+    @MethodLog(remark = "修改,撤销百科,知识库")
     public Result<Object> undoBreedStatus(@PathVariable String id){
         return ResultUtil.success(varietyEncyclopediaService.undoBreedStatus(id));
+    }
+
+    /*
+    * 撤销药典*/
+    @GetMapping("/undoPharStatus/{id}")
+    @MethodLog(remark = "修改,撤销药典,知识库")
+    public Result<Object> undoPharStatus(@PathVariable String id){
+        return ResultUtil.success(varietyEncyclopediaService.undoPharStatus(id));
     }
 
     /*

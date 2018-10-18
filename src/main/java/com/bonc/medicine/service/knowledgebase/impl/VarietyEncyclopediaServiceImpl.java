@@ -62,6 +62,9 @@ public class VarietyEncyclopediaServiceImpl implements VarietyEncyclopediaServic
     }
 
     @Override
+    public int undoPharStatus(String id){return varietyEncyclopediaMapper.undoPharStatus(id);}
+
+    @Override
     public List<Map<String, Object>> showHotBreed() {
         return varietyEncyclopediaMapper.showHotBreed();
     }
