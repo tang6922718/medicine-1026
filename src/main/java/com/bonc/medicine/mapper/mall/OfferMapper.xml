@@ -25,6 +25,7 @@
 		mp.attribute,
 		mo.publish_time,
 		mo.purchase_id,
+		mo.produce_area,
 		mo.id
 		FROM
 		mall_offer mo
