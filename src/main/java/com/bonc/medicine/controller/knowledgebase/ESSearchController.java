@@ -72,7 +72,7 @@ public class ESSearchController {
         SearchRequestBuilder srb = client.prepareSearch("knowledge");
 
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
-        qb = validateCodeSearch(searchText,searchType,qb);
+        qb = validateCodeSearch(searchText,searchType,qb,null);
 
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb)./*addSort(new ScoreSortBuilder()).*/addSort(sortBuilder).setSize(50).execute().actionGet();
@@ -103,7 +103,7 @@ public class ESSearchController {
         //根据索引搜索
         SearchRequestBuilder srb = client.prepareSearch("knowledge");
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
-        qb = validateCodeSearch(searchText,searchType,qb);
+        qb = validateCodeSearch(searchText,searchType,qb,null);
 
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
@@ -150,8 +150,11 @@ public class ESSearchController {
             return ResultUtil.success(0);
         }
 
+//        相关资讯、文章、视频提取匹配类别与资讯标签
+        Map map = hits.getAt(0).getSource();
+
 //        查出 arcitle_type
-        String article_type = (String) hits.getAt(0).getSource().get("artice_type");
+        String article_type = (String) map.get("artice_type");
 
 //        根据查出的文章类型，推荐相同类型的文章，按分值排序，取前10篇
         BoolQueryBuilder qbd = QueryBuilders.boolQuery();
@@ -159,7 +162,7 @@ public class ESSearchController {
         qbd.must(QueryBuilders.matchQuery("artice_type", article_type));
         qbd.mustNot(QueryBuilders.idsQuery().addIds(type+"_"+id));
 
-        qbd = validateCodeSearch(type,"",qbd);
+        qbd = validateCodeSearch("",type,qbd,map);
 
         SearchResponse sresult = srb.setQuery(qbd).execute().actionGet();
         SearchHits hitsResult = sresult.getHits();
@@ -195,7 +198,7 @@ public class ESSearchController {
      * @param searchText
      * @return
      */
-    private BoolQueryBuilder validateCodeSearch(String searchText,String searchType,BoolQueryBuilder qb){
+    private BoolQueryBuilder validateCodeSearch(String searchText,String searchType,BoolQueryBuilder qb,Map map){
         /*
         * 类别过滤
         * */
@@ -235,6 +238,11 @@ public class ESSearchController {
                         qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
                     }
 //                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+
+                    if(null != map){
+                        qb.must(QueryBuilders.termQuery("video_type", map.get("video_type")));
+                    }
+
                     break;
                 case "info_basic":
                     qb.must(QueryBuilders.termQuery("is_display", "1"));
@@ -243,11 +251,28 @@ public class ESSearchController {
                         qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
                     }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+
+                    if(null != map){
+                        qb.must(QueryBuilders.termQuery("cat_code", map.get("cat_code")));
+                        BoolQueryBuilder qbtmp = QueryBuilders.boolQuery();
+                        qbtmp.should(QueryBuilders.termQuery("is_market_top", map.get("is_market_top")));
+                        qbtmp.should(QueryBuilders.termQuery("is_top_line", map.get("is_top_line")));
+                        qbtmp.should(QueryBuilders.termQuery("is_alarm", map.get("is_alarm")));
+                        qbtmp.should(QueryBuilders.termQuery("is_real", map.get("is_real")));
+                        qbtmp.should(QueryBuilders.termQuery("is_pest", map.get("is_pest")));
+                        qb.must(qbtmp);
+                    }
+
                     break;
                 case "spec_article":
                     qb.must(QueryBuilders.termQuery("is_audit", "1"));
                     qb.must(QueryBuilders.termQuery("status", "0"));
                     qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+
+                    if(null != map){
+                        qb.must(QueryBuilders.termQuery("article_type", map.get("article_type")));
+                    }
+
                     break;
                 case "km_variety_encyclopedia":
                     qb.must(QueryBuilders.termQuery("record_status", "3"));
