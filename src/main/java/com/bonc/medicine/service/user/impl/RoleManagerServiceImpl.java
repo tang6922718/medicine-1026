@@ -146,7 +146,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 			throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
 		}
 
-		return null;
+		return new HashMap<>();
 	}
 
 	public List<Map<String, Object>> queryRoleMenu(String roleId) {
