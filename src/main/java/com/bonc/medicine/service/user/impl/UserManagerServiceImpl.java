@@ -102,6 +102,14 @@ public class UserManagerServiceImpl implements UserManagerService {
 		map.put("id", id);
 		return ResultUtil.success(userManagerMapper.basicInfo(map));
 	}
+	
+	@Override
+	public List<Map<String, Object>> basicInfo2(String id) {
+		
+		Map map = new HashMap<>();
+		map.put("id", id);
+		return userManagerMapper.basicInfo2(map);
+	}
 
 	@Override
 	public Result<Object> userStatus(Integer id, String status) {

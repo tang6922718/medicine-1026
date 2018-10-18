@@ -1,9 +1,11 @@
 package com.bonc.medicine.controller.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,8 @@ import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.service.thumb.AttentionService;
+import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
 
@@ -25,6 +29,10 @@ public class UserManagerController {
 
 	@Autowired
 	private UserManagerService userManagerService;
+	@Autowired
+	private AttentionService attentionService;
+	@Autowired
+    private IntegralService integralService;
 
 	/*
 	 * 添加基础信息
@@ -58,6 +66,27 @@ public class UserManagerController {
 	@GetMapping("/userManager/get/basicInfo")
 	public Result<Object> basicInfo(Integer id) {
 		return userManagerService.basicInfo(id);
+	}
+	
+	/*
+	 * 用户详情2-基本信息           旧的暂时保留，新写一个
+	 */
+	@GetMapping("/userManager/get/basicInfo2")
+	public Result<Object> basicInfo2( String userId) {
+		Map<String, String> reMap = new HashMap<>();
+		Map<String, String> reMap1 = new HashMap<>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        if (StringUtils.equals("", userId)){
+            reMap.put("attNumber", "0");
+        }
+        reMap = integralService.queryIntegralByUserId(userId);
+        reMap1 = attentionService.myAttentionNumber(userId);
+        boolean goingDown = integralService.queryClockInStatus(userId, "CLOCK_IN");
+        list = userManagerService.basicInfo2(userId);
+        list.get(0).put("reKey", reMap.get("reKey").toString());
+        list.get(0).put("attNumber", reMap1.get("attNumber").toString());
+        list.get(0).put("goingDown", goingDown);
+		return ResultUtil.success(list);
 	}
 
 	/*

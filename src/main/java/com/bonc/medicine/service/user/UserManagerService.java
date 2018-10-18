@@ -25,6 +25,8 @@ public interface UserManagerService {
 	public void addCooperative(Cooperative cooperative);
 
 	public Result<Object> basicInfo(Integer id);
+	
+	public List<Map<String, Object>> basicInfo2(String id);
 
 	public Result<Object> userStatus(Integer id, String status);
 
