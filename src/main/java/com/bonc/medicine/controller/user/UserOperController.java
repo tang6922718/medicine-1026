@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.user;
 
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.constants.Constants;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.user.User;
@@ -111,6 +112,7 @@ public class UserOperController {
      * @Author: hejiajun
      * @Date: 2018/8/31
      */
+    @MethodLog(remark = "注册,用户注册,用户")
     @PostMapping("/user/signup/v1.0")
     public Result signUp(@RequestBody Map<String, String> paramMap) {
 
@@ -142,15 +144,12 @@ public class UserOperController {
      * @Date: 2018/9/1
      */
     //@Authorization
+    @MethodLog(remark = "修改,忘记密码,用户")
     @PutMapping("/password/forget/v1.0")
     public Result forgetPassword(@RequestBody Map<String, String> paramMap) {
         if (null == paramMap) {
             return ResultUtil.error(ResultEnum.MISSING_PARA);
         }
-
-
-        //TODO 需要检查数据库有没有该账号
-
 
         if (StringUtils.isBlank(paramMap.get("phone")) || StringUtils.isBlank(paramMap.get("password"))
                  || StringUtils.isBlank(paramMap.get("verification"))){
@@ -226,6 +225,7 @@ public class UserOperController {
      * @Author: hejiajun
      * @Date: 2018/9/1
      */
+    @MethodLog(remark = "修改,修改密码,用户")
     @Authorization
     @PutMapping("/password/update/v1.0")
     public Result changePassword(@RequestBody Map<String, String> paramMap, @CurrentUser String userId) {
@@ -255,6 +255,7 @@ public class UserOperController {
      * @Author: hejiajun
      * @Date: 2018/9/1
      */
+    @MethodLog(remark = "修改,后台管理修改密码,用户")
     @Authorization
     @PutMapping("/password/update/back/v1.0")
     public Result changePasswordBack(@RequestBody Map<String, String> paramMap, @CurrentUser String backId) {
@@ -279,7 +280,7 @@ public class UserOperController {
 
     /**
      * @Description:
-         * @Param: [phone, password,equipment：APP：APP；和门户登陆--不传； 后台登陆--BACK         request, response]
+         * @Param: [phone, password,equipment：APP：APP；PORTAL； 后台登陆--BACK         request, response]
      * @return: com.bonc.user.entity.Result
      * @Author: hejiajun
      * @Date: 2018/8/30
@@ -396,6 +397,7 @@ public class UserOperController {
     * @Author: hejiajun
     * @Date: 2018/10/3 
     */ 
+    @MethodLog(remark = "修改,修改手机号码,用户")
     @Authorization
     @PutMapping("/user/update/phone/v1.0")
     public Result updateUserTelephoneNumber (@CurrentUser String userId, @RequestBody Map<String, String> reqMap){

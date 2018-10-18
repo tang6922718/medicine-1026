@@ -12,7 +12,7 @@
         values(#{goods_name},#{supply_cat_code},#{goods_cat_code},#{price},#{price_unit},#{seller_id},#{img_url},
         #{specification},#{inventory},#{inventory_unit},#{sales_volumn},#{sales_volumn_unit},#{produce_area},
         #{storehouse},#{receipt},#{qualifications},#{quality_standard},#{send_sample},#{payment},#{packing},#{detail},#{attribute},#{tel},#{linkman},
-        #{public_time},#{carriage_status},#{state},#{is_audit},#{comment})
+        now(),#{carriage_status},#{state},#{is_audit},#{comment})
     </insert>
 
     <select id="queryRecommend" resultType="Map" parameterType="Map">

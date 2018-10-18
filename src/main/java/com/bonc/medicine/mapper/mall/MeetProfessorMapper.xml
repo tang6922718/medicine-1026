@@ -83,11 +83,12 @@
 	</update>
 
 	<select id="untreated" parameterType="Map" resultType="Map">
-		SELECT
+		select * from (SELECT
 		a.id,
 		b.NAME,
 		b.head_portrait,
 		a.issue_desc,
+		a.issue_time,
 		TIMESTAMPDIFF( SECOND,
 		a.issue_time, now( ) )
 		AS time
@@ -110,6 +111,7 @@
 		AS NAME,
 		b.head_portrait,
 		a.issue_desc,
+		a.issue_time,
 		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) ) AS
 		time
 		FROM
@@ -124,7 +126,9 @@
 		AND
 		c.is_assigned = '1'
 		AND
-		c.specid = #{spec_id}
+		c.specid = #{spec_id} ) ffff
+		
+		order by ffff.issue_time desc
 	</select>
 
 	<select id="solved" parameterType="Map" resultType="Map">
@@ -154,6 +158,8 @@
 		WHERE
 		a.spec_id = #{spec_id} and
 		c.id is not null
+		
+		order by c.issue_time desc
 	</select>
 
 	<select id="solving" parameterType="Map" resultType="Map">
@@ -204,7 +210,7 @@
 		SELECT 1 FROM common_comment t WHERE
 		t.object_id = a.id AND
 		t.object_type = '1'
-		)
+		) 
 		) b
 		INNER JOIN
 		common_comment p ON p.id = b.common_id
@@ -220,6 +226,9 @@
 		temp.to_uid =
 		#{spec_id} or temp.from_uid = #{spec_id}
 		group by temp.id
+		
+			ORDER BY
+			temp.reply_time desc 
 	</select>
 
 	<select id="issue_statistics_solving" parameterType="Map"
@@ -385,6 +394,7 @@
 	<select id="articlelist" parameterType="Map" resultType="Map">
 		select
 		id,title,publish_time,img_url from spec_article where spec_id = #{id}
+		order by publish_time desc
 	</select>
 
 	<select id="fileManage" parameterType="Map" resultType="Map">
@@ -441,11 +451,12 @@
 		where id = #{id}
 	</update>
 	<select id="getArticlelist" parameterType="Map" resultType="Map">
-		select id,title,'文章类型' as type,publish_time from spec_article where
+		select id,title,'文章类型' as type,update_time as publish_time from spec_article where
 		status = '0' and is_audit = '0'
 		<if test="key != null and key != ''">
 			and title like CONCAT(CONCAT('%',#{key}),'%')
 		</if>
+		order by update_time desc
 	</select>
 	<select id="queryArticleList" parameterType="Map" resultType="Map">
 		SELECT concat(concat(u.name,"("),u.telephone,")") as name_tel

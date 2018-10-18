@@ -1,5 +1,6 @@
 package com.bonc.medicine.controller.field;
 
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.field.Field;
 import com.bonc.medicine.entity.field.FieldRecord;
@@ -17,6 +18,7 @@ public class FieldManageController {
 	FieldManageService fieldManageService;
 		
 	@PostMapping("/info")
+	@MethodLog(remark = "新增,新增地块,田间管理")
     public Result<Object> addFieldInfo(@RequestBody Field tempData){
 		 return fieldManageService.addField(tempData);
     }
@@ -36,6 +38,7 @@ public class FieldManageController {
 
 
 	@PostMapping("/operation")
+	@MethodLog(remark = "新增,新增农事操作,田间管理")
     public Result<Object> addOperation(@RequestBody FieldRecord tempData){
 		 return fieldManageService.addOperation(tempData);
     }
@@ -95,6 +98,12 @@ public class FieldManageController {
 	@GetMapping("/allcategroy")
 	public Result<Object> queryAllCategroy(){
 		return fieldManageService.queryAllCategroy();
+	}
+
+
+	@GetMapping("/weather/{city_name}")
+	public Result<Object> queryWeatherInfo(@PathVariable String city_name){
+		return fieldManageService.queryWeatherInfo(city_name);
 	}
 	
 }

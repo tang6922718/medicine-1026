@@ -1,22 +1,29 @@
 package com.bonc.medicine.controller.mall;
 
-import com.alibaba.fastjson.JSONObject;
-import com.bonc.medicine.entity.Result;
-import com.bonc.medicine.entity.mall.Offer;
-import com.bonc.medicine.entity.mall.Supply;
-import com.bonc.medicine.service.mall.SupplyService;
-import com.bonc.medicine.service.thumb.ViewNumberService;
-import com.bonc.medicine.utils.ResultUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONObject;
+import com.bonc.medicine.annotation.MethodLog;
+import com.bonc.medicine.entity.Result;
+import com.bonc.medicine.entity.mall.Supply;
+import com.bonc.medicine.service.mall.SupplyService;
+import com.bonc.medicine.service.thumb.ViewNumberService;
+import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 
 @RestController
 @RequestMapping("/seller")
@@ -38,6 +45,7 @@ public class SupplyController {
 	 * 
 	 * @return com.bonc.mall.entity.Result<java.lang.Object>
 	 */
+	@MethodLog(remark = "新增,发布供应,供求")
 	@PostMapping("/supply")
 	public Result<Object> releaseSupply(@RequestBody Supply tempData) {// 这里用Supply实体类来接受参数
 		return supplyService.releaseSupply(tempData);
@@ -174,6 +182,7 @@ public class SupplyController {
 	 * 
 	 * @return com.bonc.mall.entity.Result<java.lang.Object>
 	 */
+	@MethodLog(remark = "删除,供应下架操作,供求")
 	@DeleteMapping("/xiajia/{ID}")
 	public Result<Object> deleteXiaJia(@PathVariable int ID) {
 		return supplyService.deleteXiaJia(ID);
@@ -206,6 +215,7 @@ public class SupplyController {
 	 * 
 	 * @return com.bonc.mall.entity.Result<java.lang.Object>
 	 */
+	@MethodLog(remark = "删除,删除审核未通过的供应,供求")
 	@DeleteMapping("/unchecked/supply/{ID}")
 	public Result<Object> deleteUncheckedSupply(@PathVariable int ID) {
 		return supplyService.deleteUncheckedSupply(ID);

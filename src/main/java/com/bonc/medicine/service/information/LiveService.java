@@ -11,7 +11,7 @@ public interface  LiveService {
 
     int updateLiveStatus(String roomId, String status);
 
-    List<Map>  selectAllLive(Map map,String pageNum,String pageSize);
+    List<Map>  selectAllLive(Map map,int pageNum,int pageSize);
 
     int updateWatchPeople(Map map);
 
@@ -20,4 +20,6 @@ public interface  LiveService {
     int repealLive(Map<String, Object> map);
 
     int delLive(Map<String,Object> map);
+
+    Integer updateWatchNum(String room_id);
 }

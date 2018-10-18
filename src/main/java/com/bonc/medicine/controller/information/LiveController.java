@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.information;
 
 
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.RedisService;
 import com.bonc.medicine.service.information.LiveService;
@@ -36,7 +37,7 @@ public class LiveController {
 
     @Autowired
     TrainService trainService;
-    
+
     @Autowired
     AuditService auditService;
 
@@ -54,6 +55,7 @@ public class LiveController {
      * @description 创建直播(直播)
      */
     @RequestMapping("/createLive")
+    @MethodLog(remark = "新增,创建直播,培训")
     @com.bonc.medicine.annotation.Authorization
     public Result createLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
@@ -63,25 +65,26 @@ public class LiveController {
         return ResultUtil.success(count);
     }
 
+
     /**
      * @return
      * @description 获取所有直播（直播课堂列表）（包含为直播未开启的）
      */
     @RequestMapping("/selectLive")
     public Result selectLive(@RequestBody Map<String, Object> map,
-                             @RequestParam(required = false, defaultValue = "1") String pageNum,
-                             @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                             @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+                             @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize) {
         List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
         for (Map<String, String> map1 : lists) {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
         }
-        List list = liveService.selectAllLive(map,pageNum,pageSize);
-        Map map2 = new HashMap();
+        List list = liveService.selectAllLive(map, pageNum, pageSize);
+    /*  Map map2 = new HashMap();
         map2.put("object_type", "2");
         for (Object map1 : list) {
             map2.put("object_id", String.valueOf(((Map) map1).get("id")));
             ((Map) map1).put("applyNum", trainService.selectApply(map2));
-        }
+        }*/
         PageInfo<List> pageInfo = new PageInfo<List>(list);
         return ResultUtil.successTotal(list, pageInfo.getTotal());
     }
@@ -122,8 +125,14 @@ public class LiveController {
      * @description 编辑直播 （编辑直播 ）
      */
     @RequestMapping("/editLive")
-    public Result editLive(@RequestBody Map<String, Object> map) {
-        return ResultUtil.success(liveService.editLive(map));
+    @MethodLog(remark = "修改,编辑直播,培训")
+    public Result editLive(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.put("user_id", user_id);
+        int count = liveService.editLive(map);
+        map.put("km_type", "8");
+        count += auditService.czAudit(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**
@@ -132,6 +141,7 @@ public class LiveController {
      * @description 撤销直播 （撤销直播）
      */
     @RequestMapping("/repealLive")
+    @MethodLog(remark = "修改,撤销直播,培训")
     public Result repealLive(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(liveService.repealLive(map));
     }
@@ -142,6 +152,7 @@ public class LiveController {
      * @description 删除直播 （删除直播）
      */
     @RequestMapping("/delLive")
+    @MethodLog(remark = "删除,删除直播,培训")
     public Result delLive(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(liveService.delLive(map));
     }
@@ -211,6 +222,14 @@ public class LiveController {
         return ResultUtil.success("ok");
     }
 
+    /**
+     * @return
+     * @description 直接更新直播人数
+     */
+    @RequestMapping("/addWatchNum")
+    public Result saveUser(@RequestParam String room_id) {
+        return ResultUtil.success(liveService.updateWatchNum(room_id));
+    }
 
     /**
      * @param map

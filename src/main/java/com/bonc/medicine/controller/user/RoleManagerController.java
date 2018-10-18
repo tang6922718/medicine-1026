@@ -2,6 +2,7 @@ package com.bonc.medicine.controller.user;
 
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.service.user.RoleManagerService;
@@ -32,6 +33,7 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */
+    @MethodLog(remark = "新建,新建角色,角色")
     @Authorization
     @PostMapping("/role/new/v1.0")
     public Result createNewRole(@RequestBody Map<String, String> param , @CurrentUser String userId){
@@ -85,6 +87,7 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */
+    @MethodLog(remark = "删除,删除角色,角色")
     @DeleteMapping("/role/remove/v1.0/{id}")
     public Result removeRole(@PathVariable(required = true,name = "id") String id){
 
@@ -102,6 +105,7 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */
+    @MethodLog(remark = "修改,修改角色信息,角色")
     @PutMapping("/role/update/v1.0")
     public Result updateRoleInfo(@RequestBody Map<String, String> param){
         //roleName;isWork;id
@@ -125,6 +129,8 @@ public class RoleManagerController {
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */ 
+    @MethodLog(remark = "修改,修改角色可以访问的菜单,角色")
+    @Authorization
     public Result updateRolePermissions(){
 
         // TODO 这个方法还需要思考一下怎么实现菜单

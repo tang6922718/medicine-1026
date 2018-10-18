@@ -40,7 +40,6 @@ public class SupplyServiceImpl implements SupplyService {
         }catch (Exception e){
             System.out.println("ERROR ：发布供应操作中---增加积分异常");
         }
-        tempData.setPublic_time(new Date()); // 时间暂时以后台为准
         return ResultUtil.success(supplyMapper.insertSupply(tempData));
     }
 

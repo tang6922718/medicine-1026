@@ -15,11 +15,11 @@ public interface TrainService {
 
     List<Map> selectComment(Map<String, Object> map);
 
-    List<Map> selectCourseList(Map<String, Object> map,String pageNum,String pageSize);
+    List<Map> selectCourseList(Map<String, Object> map,int pageNum,int pageSize);
 
     int addTrainApply(Map<String, Object> map);
 
-    List<Map> selectTrainList(Map<String, Object> map,String pageNum,String pageSize);
+    List<Map> selectTrainList(Map<String, Object> map,int pageNum,int pageSize);
 
     int editOfflineTrainVideo(Map<String, Object> map);
 

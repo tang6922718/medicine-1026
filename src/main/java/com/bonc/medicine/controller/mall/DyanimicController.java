@@ -1,8 +1,22 @@
 package com.bonc.medicine.controller.mall;
 
 
-import com.bonc.medicine.annotation.Authorization;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.entity.mall.Dyanimic;
 import com.bonc.medicine.service.mall.CommentReplyService;
@@ -11,14 +25,6 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 
 @RestController
@@ -38,6 +44,7 @@ public class DyanimicController {
 
 
     //新增一条动态
+    @MethodLog(remark = "新增,发布动态,动态")
     @SuppressWarnings("unchecked")
     @PostMapping("/insert")
     public Result<Object> insertDyanimic(@RequestBody Map map, @CurrentUser String userid){
@@ -442,6 +449,7 @@ public class DyanimicController {
     }
 
     // 删除某一条动态
+    @MethodLog(remark = "删除,删除动态,动态")
     @SuppressWarnings("unchecked")
     @DeleteMapping("/delete/oneDyanimic")
     public Result<Object> delOneDyanimic(int id){

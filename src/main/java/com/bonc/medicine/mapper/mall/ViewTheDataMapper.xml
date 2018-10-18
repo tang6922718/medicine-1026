@@ -4,73 +4,237 @@
 <mapper namespace="com.bonc.medicine.mapper.mall.ViewTheDataMapper">
 
 	<select id="interaction" parameterType="Map" resultType="Map">
-		select
+		<!-- select
 		interact_count,stats_time from spec_interact_stats where spec_id
 		= #{user_id}
 		and stats_time <![CDATA[ >= ]]>
 		#{start_time} and stats_time <![CDATA[ <= ]]>
-		#{end_time}
+		#{end_time} -->
+			
+		SELECT
+			tii.from_uid AS user_id,
+			ifnull( count( tii.from_uid ), 0 ) AS interact_count,
+			tii.reply_time as stats_time
+		FROM
+			( SELECT from_uid, DATE_FORMAT(reply_time, '%Y-%m-%d') AS reply_time FROM common_comment ) tii
+			LEFT JOIN spec_info ssi ON tii.from_uid = ssi.spec_id 
+		WHERE
+			tii.from_uid IN ( ${user_id} ) 
+			<if test="start_time != null and start_time != ''">
+				and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+			</if>
+		GROUP BY
+			tii.reply_time
+			order by 	tii.reply_time  asc
+	
 	</select>
 
 	<select id="thisWeekInteraction" parameterType="Map" resultType="Map">
-		select
+		<!-- select
 		IFNULL(sum(interact_count),0) as sum from spec_interact_stats
 		where spec_id
 		= #{user_id}
 		and stats_time <![CDATA[ >= ]]>
 		#{start_time} and stats_time <![CDATA[ <= ]]>
-		#{end_time}
+		#{end_time} -->
+		SELECT
+			
+			count( tii.from_uid ) as sum
+			
+		FROM
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+			tii.from_uid = ssi.spec_id
+		WHERE
+			tii.from_uid IN ( ${user_id} )
+			<if test="start_time != null and start_time != ''">
+				and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+			</if>
+			
+		GROUP BY
+			tii.from_uid
+	</select>
+	
+	<select id="queryInteractTimesDontName" parameterType="Map"
+		resultType="Map">
+		SELECT
+			tii.from_uid as user_id,
+			count( tii.from_uid ) as spec_interact_stats
+			
+		FROM
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+			tii.from_uid = ssi.spec_id
+		WHERE
+			tii.from_uid IN ( ${user_id} )
+			
+			<if test="start_time != null and start_time != ''">
+				and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+			</if>
+		GROUP BY
+			tii.from_uid
 	</select>
 
 	<select id="historyInteraction" parameterType="Map" resultType="Map">
-		select
+		<!-- select
 		IFNULL(sum(interact_count),0) as sum from spec_interact_stats
 		where spec_id
 		= #{user_id}
 		and stats_time <![CDATA[ >= ]]>
 		#{start_time} and stats_time <![CDATA[ <= ]]>
-		#{end_time}
+		#{end_time} -->
+		SELECT
+			
+			count( tii.from_uid ) as sum
+			
+		FROM
+		common_comment tii
+		LEFT JOIN spec_info ssi ON
+			tii.from_uid = ssi.spec_id
+		WHERE
+			tii.from_uid IN ( ${user_id} )
+			
+			and tii.reply_time <![CDATA[ >= ]]> #{start_time} 
+			and tii.reply_time <![CDATA[ <= ]]> #{end_time}
+		GROUP BY
+			tii.from_uid
 	</select>
 
 	<select id="rankInteraction" resultType="Map">
-		SELECT
-		IFNULL(b.id,'') as user_id,
-		IFNULL(b.head_portrait,'') as head_portrait,
-		IFNULL(b.NAME,'') as name,
-		0 AS 'follow',
-		0 AS 'collection',
-		0 AS
-		'issue',
-		0 AS total
-		FROM
-		spec_info a
-		LEFT JOIN common_user b ON a.spec_id
-		= b.id
-	</select>
-
-	<select id="follow" resultType="Map">
-		select object_id,count(1) as
-		follow from common_follow where follow_flag = '1' group by object_id
-	</select>
-
-	<select id="collection" resultType="Map">
-		select
-		collect_object_id,count(1) as collection from common_collection where
-		(collect_type = '5' or collect_type = '2') group by collect_object_id
-	</select>
-
-	<select id="issue" resultType="Map">
-		select specid,count(1) as issue
-		from spec_issue_association where (is_assigned = '0' or is_assigned =
-		'1') group by specid
+		<if test="user_id == null or user_id =='' ">
+			SELECT
+			*,
+			( follow + wz + sp + issue ) AS total
+			FROM
+			(
+			SELECT
+			IFNULL( b.id, '' ) AS user_id,
+			IFNULL( b.head_portrait, '' ) AS
+			head_portrait,
+			IFNULL( b.NAME, '' ) AS NAME,
+			( SELECT count( 1 ) AS
+			follow FROM common_follow WHERE follow_flag = '1' AND object_id =
+			a.spec_id ) AS 'follow',
+			(
+			SELECT
+			count( 1 ) AS 'wz'
+			FROM
+			common_collection cc
+			INNER JOIN spec_article sa ON
+			cc.collect_object_id = sa.id
+			WHERE
+			cc.collect_type = '2'
+			AND sa.STATUS =
+			'0'
+			AND sa.spec_id = a.spec_id
+			) AS 'wz',
+			(
+			SELECT
+			count( 1 ) AS 'sp'
+			FROM
+			common_collection cc
+			INNER JOIN train_video_course tvc ON
+			cc.collect_object_id = tvc.id
+			WHERE
+			cc.collect_type = '5'
+			AND tvc.STATUS
+			= '0'
+			AND tvc.spec_id = a.spec_id
+			) AS 'sp',
+			( SELECT count( 1 ) AS
+			issue FROM spec_issue_association
+			WHERE ( is_assigned = '0' OR
+			is_assigned = '1' ) AND specid =
+			a.spec_id ) AS 'issue'
+			FROM
+			spec_info a
+			INNER JOIN common_user b ON a.spec_id = b.id
+			) AS temp
+			ORDER BY
+			total
+			DESC
+			LIMIT 0,
+			10
+		</if>
+		<if test="user_id != null and user_id !='' ">
+			SELECT
+			*,
+			( follow + wz + sp + issue ) AS total
+			FROM
+			(
+			SELECT
+			IFNULL( b.id, '' ) AS user_id,
+			IFNULL( b.head_portrait, '' ) AS
+			head_portrait,
+			IFNULL( b.NAME, '' ) AS NAME,
+			( SELECT count( 1 ) AS
+			follow FROM common_follow WHERE follow_flag = '1' AND object_id =
+			a.spec_id ) AS 'follow',
+			(
+			SELECT
+			count( 1 ) AS 'wz'
+			FROM
+			common_collection cc
+			INNER JOIN spec_article sa ON
+			cc.collect_object_id = sa.id
+			WHERE
+			cc.collect_type = '2'
+			AND sa.STATUS =
+			'0'
+			AND sa.spec_id = a.spec_id
+			) AS 'wz',
+			(
+			SELECT
+			count( 1 ) AS 'sp'
+			FROM
+			common_collection cc
+			INNER JOIN train_video_course tvc ON
+			cc.collect_object_id = tvc.id
+			WHERE
+			cc.collect_type = '5'
+			AND tvc.STATUS
+			= '0'
+			AND tvc.spec_id = a.spec_id
+			) AS 'sp',
+			( SELECT count( 1 ) AS
+			issue FROM spec_issue_association
+			WHERE ( is_assigned = '0' OR
+			is_assigned = '1' ) AND specid =
+			a.spec_id ) AS 'issue'
+			FROM
+			spec_info a
+			INNER JOIN common_user b ON a.spec_id = b.id
+			) AS temp
+			ORDER BY
+			total
+			DESC , user_id DESC
+		</if>
 	</select>
 
 	<select id="myResources" parameterType="Map" resultType="Map">
 		SELECT
-	( SELECT count( 1 ) FROM train_live WHERE id IN ( SELECT object_id FROM train_appointment WHERE user_id = #{user_id} AND object_type = 1 ) ) AS zb,
-	( SELECT count( 1 ) FROM train_video_course WHERE id IN ( SELECT object_id FROM train_appointment WHERE user_id = #{user_id} AND object_type = 2 ) ) AS px,
-	( SELECT count( 1 ) FROM train_video_course WHERE spec_id = #{user_id} ) AS sp,
-	( SELECT count( 1 ) FROM spec_article WHERE STATUS = '0' AND spec_id = #{user_id} ) AS wz
+		(
+		SELECT count( 1 ) FROM train_live WHERE id IN ( SELECT object_id FROM
+		train_appointment WHERE user_id = #{user_id} AND object_type = 1 ) )
+		AS zb,
+		( SELECT count( 1 ) FROM train_video_course WHERE id IN ( SELECT
+		object_id FROM train_appointment WHERE user_id = #{user_id} AND
+		object_type = 2 ) ) AS px,
+		( SELECT count( 1 ) FROM train_video_course
+		WHERE spec_id = #{user_id}
+		) AS sp,
+		( SELECT count( 1 ) FROM
+		spec_article WHERE STATUS = '0' AND spec_id =
+		#{user_id} ) AS wz
 	</select>
 
 	<select id="problemStatistics" parameterType="Map" resultType="Map">

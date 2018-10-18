@@ -146,7 +146,7 @@
 
 	<select id="field" parameterType="Map" resultType="Map">
 		select
-		IFNULL(count(1),0) as field from field_info where state ='1' and
+		IFNULL(count(1),0) as field from field_info where state ='0' and
 		user_id = #{id}
 	</select>
 
@@ -168,7 +168,8 @@
 		'' AS integral,
 		'' AS supply,
 		'' AS purchase,
-		STATUS
+		STATUS,
+		log_time
 		FROM
 		common_user a
 		LEFT JOIN common_user_role_rel b ON a.id = b.user_id
@@ -194,7 +195,7 @@
 			AND a_role = #{role}
 		</if>
 		ORDER BY
-		user_id
+		log_time desc
 	</select>
 
 	<select id="coop_hrlp_list" resultType="Map">
@@ -282,7 +283,7 @@
 
 	<select id="activeDays" parameterType="String" resultType="Map">
 		SELECT
-		COUNT( DISTINCT login_time ) AS acDays
+		COUNT( DISTINCT DATE_FORMAT(login_time,'%Y-%m-%d') ) AS acDays
 		FROM
 		common_logon_log
 		WHERE
@@ -292,7 +293,7 @@
 	<select id="activeDaysForBack" parameterType="String"
 		resultType="Map">
 		SELECT
-		COUNT( DISTINCT login_time) AS acDays,
+		COUNT( DISTINCT DATE_FORMAT(login_time,'%Y-%m-%d')) AS acDays,
 		user_id
 		FROM
 		common_logon_log
@@ -317,4 +318,6 @@
 		GROUP BY
 		tii.from_uid
 	</select>
+	
+	
 </mapper>

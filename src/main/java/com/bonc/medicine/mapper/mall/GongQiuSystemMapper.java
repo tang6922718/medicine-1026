@@ -54,9 +54,9 @@ public interface GongQiuSystemMapper {
 	
 	public List<Map> my_supply_statistics(Map map);
 	
-	public List<Map> my_supply_type(Map map);
+	public List<Map<String, Object>> my_supply_type(Map map);
 	
 	public List<Map> my_purchase_statistics(Map map);
 	
-	public List<Map> my_purchase_type(Map map);
+	public List<Map<String, Object>> my_purchase_type(Map map);
 }

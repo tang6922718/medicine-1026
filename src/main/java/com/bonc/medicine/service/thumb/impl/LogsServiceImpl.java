@@ -4,6 +4,8 @@ import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.thumb.LogsMapper;
 import com.bonc.medicine.service.thumb.LogsService;
+import com.bonc.medicine.utils.ResultUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +77,14 @@ public class LogsServiceImpl implements LogsService {
 
     @Override
     public Map<String, Object> addOperLogs(Map<String, String> paramMap) {
+    	 if (StringUtils.isBlank(paramMap.get("userId"))) {
+    		 paramMap.put("userId", "0");
+         }
+
+         //如果没有status参数就默认给1
+         if (StringUtils.isBlank(paramMap.get("status"))) {
+             paramMap.put("status", "1");
+         }
         int succeedRow = logsMapper.addOperLogs(paramMap);
 
         return mapReturnUtil("succeed", succeedRow, 0);

@@ -290,9 +290,11 @@ public class UserManagerServiceImpl implements UserManagerService {
 		basicinfo.setRole(tempData.get("role").toString());
 		userManagerMapper.addBasic(basicinfo);
 		int id = basicinfo.getId();// user_id
-		String[] role = basicinfo.getRole().split(",");
-		for (int i = 0; i < role.length; i++) {
-			userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
+		if (!basicinfo.getRole().equals("")) {
+			String[] role = basicinfo.getRole().split(",");
+			for (int i = 0; i < role.length; i++) {
+				userManagerMapper.addUserRoleRel(id, Integer.parseInt(role[i]));
+			}
 		}
 		if (basicinfo.getRole().toString().contains("5")) {
 			Expert expert = new Expert();
@@ -353,8 +355,8 @@ public class UserManagerServiceImpl implements UserManagerService {
 		}
 	}
 
-	public Map<String, String> activeDays(String userId) {
-		Map<String, String> reMap = userManagerMapper.activeDays(userId);
+	public Map<String, Object> activeDays(String userId) {
+		Map<String, Object> reMap = userManagerMapper.activeDays(userId);
 		if (reMap == null || reMap.isEmpty()) {
 			reMap.put("acDays", "0");
 		}

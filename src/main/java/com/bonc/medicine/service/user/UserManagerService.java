@@ -58,7 +58,7 @@ public interface UserManagerService {
 
 	public Result<Object> updateUserCareVariety(Map<String, Object> params);
 
-	public Map<String, String> activeDays(String userId);
+	public Map<String, Object> activeDays(String userId);
 
 	public  List<Map<String, Object>> activeDaysForBack(String userId);
 	/**

@@ -380,15 +380,21 @@
 			into
 			common_notice
 			(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
-			values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',#{send_time},'0')
+			values('1',#{notice_content},#{notice_role_type},now(),'1','1',#{send_time},'0')
 		</if>
 		<if test="send_time == null or send_time == ''">
 			insert
 			into
 			common_notice
 			(notice_type,notice_content,notice_role_type,publish_time,status,state,send_time,is_send)
-			values('1',#{notice_content},#{notice_role_type},#{publish_time},'1','1',now(),'1')
+			values('1',#{notice_content},#{notice_role_type},now(),'1','1',now(),'1')
 		</if>
+	</insert>
+
+	<insert id="insertNotice" parameterType="com.bonc.medicine.entity.field.Notice">
+		INSERT INTO common_notice(notice_type,object_id,notice_content,publish_user_id,notice_role_type,notice_receiver,publish_time,status,state,picture_url,send_time,is_send)
+		VALUES
+		(#{notice_type},#{object_id},#{notice_content},#{publish_user_id},#{notice_role_type},#{notice_receiver},now(),#{status},#{state},#{img_url},now(),#{is_send})
 	</insert>
 
 	<select id="noticelist" parameterType="Map" resultType="Map">
@@ -408,6 +414,7 @@
 			AND publish_time <![CDATA[ <= ]]>
 			#{end_time}
 		</if>
+		order by publish_time desc
 	</select>
 
 
@@ -439,7 +446,7 @@
 		INSERT
 		common_user_role_rel (user_id,role_id)
 		VALUES (( SELECT
-		official_user_id FROM field_coop WHERE id= #{coopID}) ,3)
+		official_user_id FROM field_coop WHERE id= #{coopID}) ,#{role_id})
 	</insert>
 
 	<delete id="deleteRole" parameterType="Integer">

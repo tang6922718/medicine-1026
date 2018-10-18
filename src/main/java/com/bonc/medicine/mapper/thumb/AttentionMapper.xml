@@ -29,6 +29,7 @@
           follow_flag = 1
         and object_type = #{type}
         and follow_user_id = #{userId}
+        order by update_time desc
     </select>
 
     <!--关注 -->

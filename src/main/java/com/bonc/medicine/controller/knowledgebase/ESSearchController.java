@@ -1,8 +1,6 @@
 package com.bonc.medicine.controller.knowledgebase;
 
 
-import com.bonc.medicine.annotation.Authorization;
-import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.HomeTypeEnum;
 import com.bonc.medicine.service.knowledgebase.VarietyEncyclopediaService;
@@ -14,6 +12,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -70,53 +69,22 @@ public class ESSearchController {
         //获取连接client
         Client client = elasticsearchTemplate.getClient();
         //根据索引搜索
-        // SearchRequestBuilder srb = null == searchType || ""== searchType ?  client.prepareSearch("knowledge"): client.prepareSearch("knowledge").setTypes(searchType);
         SearchRequestBuilder srb = client.prepareSearch("knowledge");
 
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
-        qb.must(QueryBuilders.matchAllQuery());
-        SearchResponse sr;
-        if (null != searchType && "" != searchType) {
-            if("km_variety_encyclopedia".equals(searchType)){
-                qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
-            }else {
-                qb.must(QueryBuilders.termQuery("type", searchType));
-            }
-        }
-        if (null != searchText && "" != searchText) {
-            if("spec_info".equals(searchType)){
-                qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
-            }else if("comm_dyanimic".equals(searchType)){
-                qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
-            }else if("common_price".equals(searchType)){
-                qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
-            }else {
-                BoolQueryBuilder qb2 = QueryBuilders.boolQuery();
-                qb2.should(QueryBuilders.wildcardQuery("abstract.keyword", "*"+searchText+"*"));
-                qb2.should(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-                qb.must(qb2);
-//                qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
-            }
+        qb = validateCodeSearch(searchText,searchType,qb);
 
-        }
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
-        sr = srb.setQuery(qb).addSort(sortBuilder).setSize(50).execute().actionGet();
+        SearchResponse sr = srb.setQuery(qb)./*addSort(new ScoreSortBuilder()).*/addSort(sortBuilder).setSize(50).execute().actionGet();
 //        System.out.println( srb.setQuery(qb).addSort(sortBuilder).setSize(50));
-        /*if(null == searchText || ""== searchText){
-            sr = srb.setQuery(QueryBuilders.matchAllQuery()).execute().actionGet(); // 查询所有
-        }else{
-            sr = srb.setQuery(QueryBuilders.multiMatchQuery(searchText,"abstract")).execute().actionGet();//条件查询
-        }*/
 
         SearchHits hits = sr.getHits();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (SearchHit hit : hits) {
             Map<String, Object> source = hit.getSource();
             list.add(source);
-            System.out.println(hit.getSourceAsString());
+//            System.out.println(hit.getSourceAsString());
         }
-//        int len = list.size();
-//        len = len > 50 ? 50 : len;
         return ResultUtil.success(list);
 
     }
@@ -135,20 +103,8 @@ public class ESSearchController {
         //根据索引搜索
         SearchRequestBuilder srb = client.prepareSearch("knowledge");
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
-        qb.must(QueryBuilders.termQuery("type", searchType));
-        if (null != searchText && "" != searchText) {
-            if("spec_info".equals(searchType)){
-                qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
-            }else if("comm_dyanimic".equals(searchType)){
-                qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
-            }else if("common_price".equals(searchType)){
-                qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
-            }else {
-                qb.should(QueryBuilders.wildcardQuery("abstract.keyword", "*"+searchText+"*"));
-                qb.should(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
-//                qb.must(QueryBuilders.multiMatchQuery(searchText,"abstract","keywords"));
-            }
-        }
+        qb = validateCodeSearch(searchText,searchType,qb);
+
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
         SearchHits hits = sr.getHits();
@@ -156,7 +112,7 @@ public class ESSearchController {
         for (SearchHit hit : hits) {
             Map<String, Object> source = hit.getSource();
             list.add(source);
-            System.out.println(hit.getSourceAsString());
+//            System.out.println(hit.getSourceAsString());
         }
         return list;
     }
@@ -199,9 +155,11 @@ public class ESSearchController {
 
 //        根据查出的文章类型，推荐相同类型的文章，按分值排序，取前10篇
         BoolQueryBuilder qbd = QueryBuilders.boolQuery();
-        qbd.must(QueryBuilders.termQuery("type", type));
+//        qbd.must(QueryBuilders.termQuery("type", type));
         qbd.must(QueryBuilders.matchQuery("artice_type", article_type));
         qbd.mustNot(QueryBuilders.idsQuery().addIds(type+"_"+id));
+
+        qbd = validateCodeSearch(type,"",qbd);
 
         SearchResponse sresult = srb.setQuery(qbd).execute().actionGet();
         SearchHits hitsResult = sresult.getHits();
@@ -220,8 +178,7 @@ public class ESSearchController {
             list.add(source);
 //            System.out.println(hit.getSourceAsString());
         }
-//        int len = list.size();
-//        len = len>10?10:len;
+
         Collections.sort(list, new Comparator<Map<String, Object>>() {
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                 Double score1 = Double.valueOf(o1.get("article_score").toString()) ;//score1是从你list里面拿出来的一个
@@ -230,6 +187,95 @@ public class ESSearchController {
             }
         });
         return ResultUtil.success(list);
+    }
+
+    /**
+     * 每种类别的查询条件
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    private BoolQueryBuilder validateCodeSearch(String searchText,String searchType,BoolQueryBuilder qb){
+        /*
+        * 类别过滤
+        * */
+        if(null!=searchType && !"".equals(searchType)){
+            switch (searchType){
+                case "km_variety_encyclopedia":
+                    qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
+                    break;
+                default:
+                    qb.must(QueryBuilders.termQuery("type", searchType));
+                    break;
+            }
+
+            /**
+             * 每个类别状态码和搜索词过滤
+             */
+            switch (searchType){
+                case "spec_info":
+                    qb.must(QueryBuilders.wildcardQuery("professional_direction.keyword", "*"+searchText+"*"));
+                    break;
+                case "comm_dyanimic":
+                    qb.must(QueryBuilders.termQuery("effect_flag", "0"));
+                    qb.must(QueryBuilders.wildcardQuery("desciption.keyword", "*"+searchText+"*"));
+                    break;
+                case "common_price":
+                    qb.must(QueryBuilders.termQuery("state", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "1"));
+//                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.matchQuery(searchText, "cat_name"));
+                    }
+                    break;
+                case "train_video_course":
+                    qb.must(QueryBuilders.termQuery("operation_status", "3"));
+                    qb.must(QueryBuilders.termQuery("status", "1"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
+//                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "info_basic":
+                    qb.must(QueryBuilders.termQuery("is_display", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "3"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
+//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "spec_article":
+                    qb.must(QueryBuilders.termQuery("is_audit", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "0"));
+                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "km_variety_encyclopedia":
+                    qb.must(QueryBuilders.termQuery("record_status", "3"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
+//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "spec_case":
+//                qb.should(QueryBuilders.wildcardQuery("title.keyword", "*"+searchText+"*"));
+                    qb.must(QueryBuilders.wildcardQuery("varieties.keyword", "*"+searchText+"*"));
+                    break;
+                default:
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
+//                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+            }
+
+        }else {
+            if(null != searchText && ""!=searchText){
+                qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+            }
+        }
+
+
+        return qb;
     }
 
 }

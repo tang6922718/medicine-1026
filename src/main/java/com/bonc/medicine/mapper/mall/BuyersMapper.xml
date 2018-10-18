@@ -6,7 +6,7 @@
         publish_time,effect_flag,purchase_quantity,unit,linkman,linkman_phone,attribute,storehouse,produce_area,
         receipt,quality_standard,send_sample,payment,packing,qualification_standard,state,is_aduit,comment,create_time)
         values(#{goods_name},#{purchase_cat_code},#{goods_cat_code},#{specification},
-        #{user_id},#{img_url},#{publish_time},#{effect_flag},#{purchase_quantity},#{unit},
+        #{user_id},#{img_url},now(),#{effect_flag},#{purchase_quantity},#{unit},
         #{linkman},#{linkman_phone},#{attribute},#{storehouse},#{produce_area},#{receipt},#{quality_standard},
         #{send_sample},#{payment},#{packing},#{qualification_standard},#{state},#{is_aduit},#{comment},CURRENT_TIMESTAMP())
     </insert>
@@ -14,7 +14,7 @@
 
     <select id="latestPurchaseList" parameterType="java.util.Map" resultType="java.util.Map">
     	SELECT
-			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,cu.name,cu.telephone
+			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,mo.price_unit,cu.name,cu.telephone
 		FROM
 			mall_purchase mp 	
 			LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id
@@ -42,7 +42,7 @@
     
     <select id="purchasepCatList" parameterType="java.util.Map" resultType="java.util.Map">
     	SELECT
-			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,cu.name,cu.telephone
+			mp.*,COUNT(mo.purchase_id) as offer ,mo.price,mo.price_unit,cu.name,cu.telephone
 		FROM
 			mall_purchase mp 	
 			LEFT JOIN mall_offer mo	ON mp.id = mo.purchase_id

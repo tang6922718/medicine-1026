@@ -1,8 +1,21 @@
 package com.bonc.medicine.controller.information;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.bonc.medicine.annotation.Authorization;
 import com.bonc.medicine.annotation.CurrentUser;
+import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.service.information.TrainService;
 import com.bonc.medicine.service.knowledgebase.AuditService;
@@ -11,18 +24,6 @@ import com.bonc.medicine.service.thumb.ViewNumberService;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.Signature;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 @RestController
 public class TrainController {
@@ -45,10 +46,9 @@ public class TrainController {
      * @description 新建线下培训(发布线下培训)
      */
     @RequestMapping("/createTrain")
-    public Result createTrain(@RequestBody Map<String, Object> map) {
-//        int count = trainService.createTrain(map);
-//        map.put("km_type", "5");
-//        count += auditService.addAudit(map);
+    @MethodLog(remark = "新增,新增线下培训,培训")
+    public Result createTrain(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.putIfAbsent("user_id", user_id);
         int count = trainService.createTrain(map);
         map.put("km_type", "7");
         count += auditService.addAudit(map);
@@ -62,9 +62,9 @@ public class TrainController {
      */
     @RequestMapping("/selectTrainList")
     public Result selectTrainList(@RequestBody Map<String, Object> map,
-                                  @RequestParam(required = false, defaultValue = "1") String pageNum,
-                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        List list=trainService.selectTrainList(map,pageNum,pageSize);
+                                  @RequestParam(required = false, defaultValue = "1") int pageNum,
+                                  @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        List list = trainService.selectTrainList(map, pageNum, pageSize);
         PageInfo<List> pageInfo = new PageInfo<List>(list);
         return ResultUtil.successTotal(list, pageInfo.getTotal());
     }
@@ -77,6 +77,7 @@ public class TrainController {
      */
     @RequestMapping("/createVideo")
     @Authorization
+    @MethodLog(remark = "新增,新建视频,培训")
     public Result createVideo(@RequestBody Map<String, Object> map, @CurrentUser String user_id) {
         map.putIfAbsent("user_id", user_id);//获取当前登录者id作为视频的操作人
         int count = trainService.createVideo(map);
@@ -92,6 +93,7 @@ public class TrainController {
      */
     @RequestMapping("/addComment")
     @Authorization
+    @MethodLog(remark = "新增,交流互动,培训")
     public Result addComment(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.addComment(map));
@@ -125,22 +127,21 @@ public class TrainController {
     @RequestMapping("/selectCourseList")
     public Result selectCourseList(@CurrentUser String user_id,
                                    @RequestBody(required = false) Map<String, Object> map,
-                                   @RequestParam(required = false, defaultValue = "1") String pageNum,
-                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
-
-        if (null != map.get("id")) {
+                                   @RequestParam(required = false, defaultValue = "1") int pageNum,
+                                   @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        /*if (null != map.get("id")) {
             Map<String, String> numberMap = new HashMap();
             numberMap.put("objectId", map.get("id") + "");
             numberMap.put("objectType", "4");
             viewNumberService.addOrUpdateViewNumberCord(numberMap);
-        }
-        List list = trainService.selectCourseList(map,pageNum,pageSize);
+        }*/
+        List list = trainService.selectCourseList(map, pageNum, pageSize);
         Map map2 = new HashMap();
         map2.put("objectType", "4");
         for (Object map1 : list) {
-            map2.put("objectId", String.valueOf(((Map)map1).get("id")));
-            ((Map)map1).put("viewNum", viewNumberService.queryViewNumber(map2));
-            ((Map)map1).put("isCollect", collectionService.isCollect("5", String.valueOf(((Map)map1).get("id")), user_id));
+            map2.put("objectId", String.valueOf(((Map) map1).get("id")));
+            ((Map) map1).put("viewNum", viewNumberService.queryViewNumber(map2));
+            ((Map) map1).put("isCollect", collectionService.isCollect("5", String.valueOf(((Map) map1).get("id")), user_id));
         }
         PageInfo<List> pageInfo = new PageInfo<List>(list);
         return ResultUtil.successTotal(list, pageInfo.getTotal());
@@ -154,6 +155,7 @@ public class TrainController {
      */
     @RequestMapping("/addTrainApply")
     @Authorization
+    @MethodLog(remark = "新增,预约报名,培训")
     public Result addTrainApply(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.addTrainApply(map));
@@ -210,6 +212,7 @@ public class TrainController {
      */
     @RequestMapping("/editOfflineTrainVideo")
     @Authorization
+    @MethodLog(remark = "修改,编辑线下视频,培训")
     public Result editOfflineTrainVideo(@CurrentUser String user_id, @RequestBody(required = false) Map<String, Object> map) {
         map.putIfAbsent("user_id", user_id);
         return ResultUtil.success(trainService.editOfflineTrainVideo(map));
@@ -222,6 +225,7 @@ public class TrainController {
      * @description 编辑视频  (编辑视频)
      */
     @RequestMapping("/editVideoCourse")
+    @MethodLog(remark = "修改,编辑视频,培训")
     public Result editVideoCourse(@RequestBody(required = false) Map<String, Object> map) {
         int count = trainService.editVideoCourse(map);
         map.put("km_type", "5");
@@ -236,6 +240,7 @@ public class TrainController {
      * @description 删除线下视频  (删除视频)
      */
     @RequestMapping("/delCourseTrainVideo")
+    @MethodLog(remark = "删除,删除线下视频,培训")
     public Result delCourseTrainVideo(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.delCourseTrainVideo(map));
     }
@@ -245,6 +250,7 @@ public class TrainController {
      * @return
      * @description 删除线下视频  (删除视频)
      */
+    @MethodLog(remark = "删除,删除线下视频,培训")
     @RequestMapping("/delOfflineTrainVideo")
     public Result delOfflineTrainVideo(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrainVideo(map));
@@ -256,6 +262,7 @@ public class TrainController {
      * @description 撤销线下培训（撤销线下培训）
      */
     @RequestMapping("/repealOfflineTrain")
+    @MethodLog(remark = "修改,修改线下培训,培训")
     public Result repealOfflineTrain(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(trainService.repealOfflineTrain(map));
     }
@@ -266,6 +273,7 @@ public class TrainController {
      * @description 撤销课程视频（撤销课程视频）
      */
     @RequestMapping("/repealVideoCourse")
+    @MethodLog(remark = "修改,修改课程视频,培训")
     public Result repealVideoCourse(@RequestBody Map<String, Object> map) {
         return ResultUtil.success(trainService.repealVideoCourse(map));
     }
@@ -276,12 +284,13 @@ public class TrainController {
      * @description 编辑线下培训(编辑线下培训)
      */
     @RequestMapping("/editOfflineTrain")
+    @MethodLog(remark = "修改,修改线下培训,培训")
     public Result editOfflineTrain(@RequestBody(required = false) Map<String, Object> map) {
-//        int count = trainService.editOfflineTrain(map);
-//        map.put("km_type", "5");
-//        count += auditService.czAudit(map);
-//        count += auditService.addAudit(map);
-        return ResultUtil.success(trainService.editOfflineTrain(map));
+        int count = trainService.editOfflineTrain(map);
+        map.put("km_type", "7");
+        count += auditService.czAudit(map);
+        count += auditService.addAudit(map);
+        return ResultUtil.success(count);
     }
 
     /**
@@ -290,6 +299,7 @@ public class TrainController {
      * @description 删除线下培训(编辑线下培训)逻辑删除
      */
     @RequestMapping("/delOfflineTrain")
+    @MethodLog(remark = "删除,删除线下培训,培训")
     public Result delOfflineTrain(@RequestBody(required = false) Map<String, Object> map) {
         return ResultUtil.success(trainService.delOfflineTrain(map));
     }
