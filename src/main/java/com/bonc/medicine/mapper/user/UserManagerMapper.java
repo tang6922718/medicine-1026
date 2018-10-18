@@ -36,6 +36,8 @@ public interface UserManagerMapper {
 	public void addCoopMember(CoopMember coopMember);
 
 	public List<Map> basicInfo(Map map);
+	
+	public List<Map<String, Object>> basicInfo2(Map map);
 
 	public int userStatus(Map map);
 

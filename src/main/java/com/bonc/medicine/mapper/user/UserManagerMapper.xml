@@ -100,6 +100,32 @@
 		common_role e on
 		d.role_id = e.id where a.id = #{id}
 	</select>
+	
+	<select id="basicInfo2" parameterType="Map" resultType="Map">
+		SELECT
+		a.id,
+		a.NAME,
+		a.age,
+		a.sex,
+		a.telephone,
+		a.address,
+		a.log_time,
+		GROUP_CONCAT( DISTINCT (
+		c.chinese_name ) ) AS care_name,
+		GROUP_CONCAT(
+		DISTINCT ( e.role_name )
+		) AS role_name,
+		a.head_portrait
+		FROM
+		common_user
+		a left join
+		common_user_care_varieties_r b on a.id = b.user_id left
+		join
+		km_variety_encyclopedia c on b.variety_code = c.id left join
+		common_user_role_rel d on a.id = d.user_id left join
+		common_role e on
+		d.role_id = e.id where a.id = #{id}
+	</select>
 
 	<update id="userStatus" parameterType="Map">
 		update common_user set
