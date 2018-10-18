@@ -66,13 +66,23 @@
     </update>
 
 
-    <insert id="updateRolePermissions" parameterType="Map">
+    <select id="queryRolesMenuNumber" parameterType="String" resultType="Map">
+		select count(id) as menuNumber from common_role_menu_rel where role_id =   #{roleId}
 
+    </select>
+    
+    <insert id="updateRolePermissions" parameterType="List">
+ 		insert into 
+ 			common_role_menu_rel 
+ 			(role_id, menu_id) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roleId},#{item.menuId})
+        </foreach>
 
     </insert>
 
     <delete id="deleteRoleMeunRelation" parameterType="String">
-
+		delete from common_role_menu_rel where role_id =   #{roleId}
 
     </delete>
     
@@ -92,6 +102,25 @@
         ORDER BY
             mm.id
 
+    </select>
+    
+    <select id="queryRoleMenu" resultType="Map" parameterType="String">
+	     SELECT
+			mm.menu_name,
+			mm.id,
+			mm.menu_url AS son_url,
+			nn.menu_name AS parent_menu_name,
+			nn.id AS parent_id,
+			nn.menu_url AS parent_url 
+		FROM
+			common_role_menu_rel mrr
+			INNER JOIN common_menu mm ON mrr.menu_id = mm.id 
+			AND mrr.role_id = #{roleId}
+			LEFT JOIN common_menu nn ON mm.parent_id = nn.id 
+		WHERE
+			mm.parent_id IS NOT NULL 
+		ORDER BY
+		mm.id
     </select>
 
 </mapper>

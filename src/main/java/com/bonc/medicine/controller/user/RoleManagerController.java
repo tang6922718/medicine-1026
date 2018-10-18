@@ -124,18 +124,24 @@ public class RoleManagerController {
 
     /**
     * @Description: 修改角色能访问的菜单
-    * @Param: []
+    * @Param: {
+				"roleId":"123",
+				"menuIds":"12,13,14,15"
+		} 
     * @return: com.bonc.medicine.entity.Result
     * @Author: hejiajun
     * @Date: 2018/9/15 
     */ 
     @MethodLog(remark = "修改,修改角色可以访问的菜单,角色")
     @Authorization
-    public Result updateRolePermissions(){
+    @PutMapping("/role/permiss/v1.0")
+    public Result updateRolePermissions(@RequestBody Map<String, String> putParam){
+    	
+    	if(StringUtils.isBlank(putParam.get("roleId"))){
+    		 return ResultUtil.error(ResultEnum.MISSING_PARA);
+    	}
 
-        // TODO 这个方法还需要思考一下怎么实现菜单
-
-        return null;
+        return ResultUtil.success(roleManagerService.updateRolePermissions(putParam));
     }
 
     /**
@@ -192,8 +198,11 @@ public class RoleManagerController {
     @GetMapping("/menu/role/v1.0/{roleId}")
     public Result queryRoleMenu(@PathVariable String roleId){
 
+    	if(StringUtils.isBlank(roleId)){
+    		ResultUtil.error(ResultEnum.MISSING_PARA);
+    	}
 
-        return null;
+    	return ResultUtil.success(roleManagerService.queryRoleMenu(roleId));
     }
 
 }

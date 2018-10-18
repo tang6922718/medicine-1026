@@ -53,7 +53,7 @@ public interface RoleManagerService {
      * @Author: hejiajun
      * @Date: 2018/9/15
      */
-    public Map<String, Object> updateRolePermissions();
+    public Map<String, Object> updateRolePermissions(Map<String, String> putParam);
 
     /**
     * @Description:获取全部的菜单--后台管理
@@ -63,4 +63,6 @@ public interface RoleManagerService {
     * @Date: 2018/9/28
     */
     public List<Map<String, Object>> queryAllMenu();
+    
+    public List<Map<String, Object>> queryRoleMenu(String roleId);
 }

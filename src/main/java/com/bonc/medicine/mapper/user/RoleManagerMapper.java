@@ -1,5 +1,6 @@
 package com.bonc.medicine.mapper.user;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,7 +23,13 @@ public interface RoleManagerMapper {
 
     public int updateRoleInfo(Map<String, String> map);
 
-    public int updateRolePermissions();
+    public int updateRolePermissions(List<Map<String, String>> idMap);
+    
+    public int deleteRoleMeunRelation(@Param("roleId")String roleId);
+    
+    public Map<String, Object> queryRolesMenuNumber(@Param("roleId")String roleId);
 
     public List<Map<String, Object>> queryAllMenu();
+    
+    public List<Map<String, Object>> queryRoleMenu(@Param("roleId")String roleId);
 }
