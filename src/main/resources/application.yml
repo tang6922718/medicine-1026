@@ -109,4 +109,12 @@ pagehelper:
   params: count=countSql
   returnPageInfo: check
 
+self:
+  sms:
+    requestUrl: http://118.178.86.197/cmas/cmasoutapi.do
+    username: hnxjw
+    password: 874639
+    sign: bf944381d72d1f05f5d6fe68f8070645
+    key: CoC5rDRDZoa5CzY9
+  
 
