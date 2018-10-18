@@ -15,6 +15,7 @@
         <if test="record_status != null and record_status != '' and record_status != -1">
 			AND kvs.record_status = #{record_status}
 		</if>
+		order by kvs.record_time DESC
 	</select>
 
  <!--   <select id="getSopPlants" resultType="java.util.Map">
