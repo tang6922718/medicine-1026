@@ -91,11 +91,13 @@
 		a.issue_time,
 		TIMESTAMPDIFF( SECOND,
 		a.issue_time, now( ) )
-		AS time
+		AS time,
+		cmyy.variety_name
 		FROM
 		spec_issue a,
 		common_user b,
-		spec_issue_association c
+		spec_issue_association c,
+			common_medicine_variety cmyy
 		WHERE
 		a.issue_user_id = b.id
 		AND a.issue_status
@@ -104,7 +106,9 @@
 		AND
 		is_assigned = '0'
 		AND c.specid = #{spec_id}
+		
 		UNION ALL
+		
 		SELECT
 		a.id,
 		'邀请我的'
@@ -113,11 +117,13 @@
 		a.issue_desc,
 		a.issue_time,
 		TIMESTAMPDIFF( SECOND, a.issue_time, now( ) ) AS
-		time
+		time,
+		cmyy.variety_name
 		FROM
 		spec_issue a,
 		common_user b,
-		spec_issue_association c
+		spec_issue_association c,
+			common_medicine_variety cmyy
 		WHERE
 		a.issue_user_id = b.id
 		AND
@@ -142,8 +148,8 @@
 		AS issue_time,
 		c.issue_desc,
 		c.score,
-		c.id as
-		issue_id
+		c.id as issue_id,
+		cmyy.variety_name
 		FROM
 		spec_info a
 		LEFT JOIN
@@ -155,6 +161,8 @@
 		c.issue_status = '3' )
 		LEFT JOIN
 		common_user d ON c.issue_user_id = d.id
+		left join common_medicine_variety cmyy
+		on c.cat_code = cmyy.variety_code
 		WHERE
 		a.spec_id = #{spec_id} and
 		c.id is not null
