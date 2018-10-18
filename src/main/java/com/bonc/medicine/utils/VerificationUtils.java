@@ -1,13 +1,11 @@
 package com.bonc.medicine.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.enums.ResultEnum;
-import org.apache.commons.lang.StringUtils;
-
-import java.io.IOException;
-import java.util.Random;
 
 /**
  * @program: medicine-hn

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+
 /**
  * @program: medicine
  * @description:
@@ -16,16 +18,25 @@ import java.util.Map;
  **/
 public class HttpTool {
 
-    private static String requestUrl = "http://118.178.86.197/cmas/cmasoutapi.do";
+	@Value("${self.sms.requestUrl}")
+    private static String requestUrl  = "http://118.178.86.197/cmas/cmasoutapi.do";
     private static String method = "httpSend";
-    private static String username = "zhtest";
-    private static String password = "143267";
+    
+    @Value("${self.sms.username}")
+    private static String username = "hnxjw";
+    
+    @Value("${self.sms.password}")
+    private static String password = "874639";
 
     private static String msg = "%d（动态验证码）请勿转发或者告诉别人";
-    private static String sign = "2ae7c453ab591648928313e52b009656";
+    
+    @Value("${self.sms.sign}")
+    private static String sign = "bf944381d72d1f05f5d6fe68f8070645";
     private static String needstatus = "true";
     private static String needmo = "false";
-    private static String key = "mBfIfzm97FKmC4Fn";
+    
+    @Value("${self.sms.key}")
+    private static String key = "CoC5rDRDZoa5CzY9";
 
     private static String proxyHost = null;
     private static Integer proxyPort = null;

@@ -201,7 +201,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 	public List<Map<String, Object>> convertReturnData(List<Map<String, Object>> meunList) {
 		List<Map<String, Object>> reList = new ArrayList<>();
 
-		String parentId = "1";
+		String parentId = "0";
 		String parentName = null;
 		String parentUrl = null;
 		Map<String, Object> reMap = new HashMap<>();
@@ -229,7 +229,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 					reList.add(reMap);
 				}
 			} else {
-				reList.add(reMap);
+				
 				parentId = meunMap.get("parent_id") + "";
 				reMap = new HashMap();
 				reMap.put("parentId", parentId);
@@ -246,6 +246,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 				sonMeunList.add(sonMap);
 
 				reMap.put("son", sonMeunList);
+				
 				reList.add(reMap);
 			}
 		}
