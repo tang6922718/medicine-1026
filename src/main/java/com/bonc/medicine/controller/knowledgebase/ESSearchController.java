@@ -226,10 +226,10 @@ public class ESSearchController {
                 case "common_price":
                     qb.must(QueryBuilders.termQuery("state", "1"));
                     qb.must(QueryBuilders.termQuery("status", "1"));
-//                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
-                    if(null != searchText && ""!=searchText){
-                        qb.must(QueryBuilders.matchQuery(searchText, "cat_name"));
-                    }
+                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+//                    if(null != searchText && ""!=searchText){
+//                        qb.must(QueryBuilders.matchQuery("cat_name", searchText));
+//                    }
                     break;
                 case "train_video_course":
                     qb.must(QueryBuilders.termQuery("operation_status", "3"));
