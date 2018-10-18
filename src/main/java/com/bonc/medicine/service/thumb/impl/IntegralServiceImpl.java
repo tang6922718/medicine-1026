@@ -249,7 +249,7 @@ public class IntegralServiceImpl implements IntegralService {
                 integralAdapter.expireKey(userId);
                 return reMap;
             } else {
-                reMap.put("reKey", "0");
+                reMap.put(reKey, "0");
                 return reMap;
             }
         }

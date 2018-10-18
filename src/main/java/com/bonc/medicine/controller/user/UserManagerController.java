@@ -83,7 +83,7 @@ public class UserManagerController {
         reMap1 = attentionService.myAttentionNumber(userId);
         boolean goingDown = integralService.queryClockInStatus(userId, "CLOCK_IN");
         list = userManagerService.basicInfo2(userId);
-        list.get(0).put("reKey", reMap.get("reKey").toString());
+        list.get(0).put("integral", reMap.get("integral").toString());
         list.get(0).put("attNumber", reMap1.get("attNumber").toString());
         list.get(0).put("goingDown", goingDown);
 		return ResultUtil.success(list);
