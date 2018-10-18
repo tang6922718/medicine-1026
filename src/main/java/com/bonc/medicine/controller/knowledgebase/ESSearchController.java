@@ -69,7 +69,7 @@ public class ESSearchController {
         //获取连接client
         Client client = elasticsearchTemplate.getClient();
         //根据索引搜索
-        SearchRequestBuilder srb = client.prepareSearch("knowledge");
+        SearchRequestBuilder srb = client.prepareSearch("knowledge_new");
 
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         qb = validateCodeSearch(searchText,searchType,qb,null);
@@ -101,7 +101,7 @@ public class ESSearchController {
         //获取连接client
         Client client = elasticsearchTemplate.getClient();
         //根据索引搜索
-        SearchRequestBuilder srb = client.prepareSearch("knowledge");
+        SearchRequestBuilder srb = client.prepareSearch("knowledge_new");
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         qb = validateCodeSearch(searchText,searchType,qb,null);
 
@@ -138,7 +138,7 @@ public class ESSearchController {
     public Result<Object> relativeSearch(@RequestParam String id,@RequestParam String type) throws Exception {
         //获取连接client
         Client client = elasticsearchTemplate.getClient();
-        SearchRequestBuilder srb = client.prepareSearch("knowledge");
+        SearchRequestBuilder srb = client.prepareSearch("knowledge_new");
 
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         qb.must(QueryBuilders.termQuery("type", type));
@@ -226,16 +226,16 @@ public class ESSearchController {
                 case "common_price":
                     qb.must(QueryBuilders.termQuery("state", "1"));
                     qb.must(QueryBuilders.termQuery("status", "1"));
-                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
-//                    if(null != searchText && ""!=searchText){
-//                        qb.must(QueryBuilders.matchQuery("cat_name", searchText));
-//                    }
+//                    qb.must(QueryBuilders.wildcardQuery("cat_name.keyword", "*"+searchText+"*"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.matchQuery("cat_name", searchText));
+                    }
                     break;
                 case "train_video_course":
                     qb.must(QueryBuilders.termQuery("operation_status", "3"));
                     qb.must(QueryBuilders.termQuery("status", "1"));
                     if(null != searchText && ""!=searchText){
-                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract","title"));
                     }
 //                    qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
 
@@ -248,7 +248,7 @@ public class ESSearchController {
                     qb.must(QueryBuilders.termQuery("is_display", "1"));
                     qb.must(QueryBuilders.termQuery("status", "3"));
                     if(null != searchText && ""!=searchText){
-                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract","title"));
                     }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
 
@@ -283,7 +283,11 @@ public class ESSearchController {
                     break;
                 case "spec_case":
 //                qb.should(QueryBuilders.wildcardQuery("title.keyword", "*"+searchText+"*"));
-                    qb.must(QueryBuilders.wildcardQuery("varieties.keyword", "*"+searchText+"*"));
+//                    qb.must(QueryBuilders.wildcardQuery("varieties.keyword", "*"+searchText+"*"));
+
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract","title"));
+                    }
                     break;
                 default:
                     if(null != searchText && ""!=searchText){
