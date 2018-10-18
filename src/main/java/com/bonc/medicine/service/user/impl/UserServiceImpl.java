@@ -1,5 +1,20 @@
 package com.bonc.medicine.service.user.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.entity.Result;
@@ -8,19 +23,12 @@ import com.bonc.medicine.entity.user.User;
 import com.bonc.medicine.enums.ResultEnum;
 import com.bonc.medicine.mapper.user.UserMapper;
 import com.bonc.medicine.service.RedisService;
+import com.bonc.medicine.service.user.RoleManagerService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.service.user.UserService;
 import com.bonc.medicine.utils.JsonUtil;
 import com.bonc.medicine.utils.RedisKeyUtil;
 import com.bonc.medicine.utils.ResultUtil;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Repository
 @Transactional
@@ -39,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserManagerService userManagerService;
+    
+    @Autowired
+    private RoleManagerService roleManagerService;
 
 
     @Override
@@ -373,7 +384,10 @@ public class UserServiceImpl implements UserService {
         map.put("name", user.getName());
         if (StringUtils.equals(equipment, "BACK")) {
             Map otherInfo = interfaceForBackAfterLogin(user.getId() + "");
+            
+            List<Map<String, Object>> menuIds = roleManagerService.queryRoleMenu(user.getRoles());
             map.put("otherInfo", otherInfo);
+            map.put("menuIds", menuIds);
         }
         return ResultUtil.success(map);
     }
