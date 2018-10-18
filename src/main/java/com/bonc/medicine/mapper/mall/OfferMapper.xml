@@ -3,13 +3,13 @@
 <mapper namespace="com.bonc.medicine.mapper.mall.OfferMapper">
 	<insert id="insertOffer" parameterType="com.bonc.medicine.mapper.mall.OfferMapper">
 		insert into mall_offer
-		(purchase_id,price,price_unit,publish_time,supply_quantity,inventory,produce_area,
+		(purchase_id,price,price_unit,publish_time,supply_quantity,inventory,produce_area,attribute,
 		quality_standard,img_url,receipt,qualification_standard,
 		send_sample,payment,packing,goods_source,linkman,telephone,
 		state,user_id)
 		values
 		(#{purchase_id},#{price},#{price_unit},#{publish_time},#{supply_quantity},#{inventory},
-		#{produce_area},#{quality_standard},#{img_url},#{receipt},
+		#{produce_area},#{attribute},#{quality_standard},#{img_url},#{receipt},
 		#{qualification_standard},#{send_sample},#{payment},#{packing},
 		#{goods_source},#{linkman},#{telephone},#{state},#{user_id})
 	</insert>
@@ -19,6 +19,10 @@
 		mp.goods_name,
 		mp.specification,
 		mp.purchase_quantity,
+		mp.unit,
+		mp.purchase_cat_code,
+		mp.goods_cat_code,
+		mp.attribute,
 		mo.publish_time,
 		mo.purchase_id,
 		mo.id
@@ -65,7 +69,10 @@
 		mo.price_unit,
 		mo.supply_quantity,
 		mo.publish_time,
-		mo.linkman
+		mo.linkman,
+		mo.attribute,
+		mp.purchase_cat_code,
+		mp.goods_cat_code
 		FROM
 		mall_purchase mp
 		RIGHT JOIN mall_offer mo ON mp.id = mo.purchase_id

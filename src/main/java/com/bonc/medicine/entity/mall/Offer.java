@@ -10,6 +10,7 @@ public class Offer {
 	private int supply_quantity; // 供应数量
 	private String inventory; // 库存地
 	private String produce_area; // 药材产地
+	private String attribute; // 特殊属性
 	private char quality_standard; // 质量标准
 	private String img_url; // 药材图片
 	private char receipt; // 可供票据
@@ -71,6 +72,12 @@ public class Offer {
 	}
 	public void setProduce_area(String produce_area) {
 		this.produce_area = produce_area;
+	}
+	public String getAttribute() {
+		return attribute;
+	}
+	public void setAttribute(String attribute) {
+		this.attribute = attribute;
 	}
 	public char getQuality_standard() {
 		return quality_standard;
