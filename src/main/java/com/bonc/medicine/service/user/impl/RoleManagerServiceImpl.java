@@ -216,6 +216,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 				reMap.put("parentId", parentId);
 				reMap.put("parentName", meunMap.get("parent_menu_name") + "");
 				reMap.put("parentUrl", meunMap.get("parent_url") + "");
+				reMap.put("icon", meunMap.get("icon") + "");
 
 				Map<String, String> sonMap = new HashMap<>();
 				sonMap.put("sonName", meunMap.get("menu_name") + "");
@@ -235,6 +236,7 @@ public class RoleManagerServiceImpl implements RoleManagerService {
 				reMap.put("parentId", parentId);
 				reMap.put("parentName", meunMap.get("parent_menu_name") + "");
 				reMap.put("parentUrl", meunMap.get("parent_url") + "");
+				reMap.put("icon", meunMap.get("icon") + "");
 
 				sonMeunList = new ArrayList<>();
 

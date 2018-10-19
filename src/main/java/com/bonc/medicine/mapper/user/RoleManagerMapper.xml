@@ -93,7 +93,8 @@
             mm.menu_url as son_url,
             nn.menu_name AS parent_menu_name,
             nn.id AS parent_id,
-            nn.menu_url as parent_url
+            nn.menu_url as parent_url,
+            nn.menu_icon as icon
         FROM
             common_menu mm
             LEFT JOIN common_menu nn ON mm.parent_id = nn.id
@@ -111,7 +112,8 @@
 			mm.menu_url AS son_url,
 			nn.menu_name AS parent_menu_name,
 			nn.id AS parent_id,
-			nn.menu_url AS parent_url 
+			nn.menu_url AS parent_url ,
+			nn.menu_icon as icon
 		FROM
 			common_role_menu_rel mrr
 			INNER JOIN common_menu mm ON mrr.menu_id = mm.id 
