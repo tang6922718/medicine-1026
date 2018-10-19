@@ -27,7 +27,7 @@
 		parameterType="Map">
 		SELECT coopID,coopName,introduce,total_area,img_url,
 			portrait,cultivar,age,telephone,address,adminID,adminName,establish_date,
-			photo_url,is_audit,COMMENT as comment,NAME,role
+			photo_url,is_audit,COMMENT as comment,NAME,ifnull(role,'商户')
 		from (
 				SELECT
 				A.id AS coopID,
@@ -49,7 +49,8 @@
 				D.role,
 				( SELECT NAME FROM common_user E WHERE E.id = A.`official_user_id` ) AS NAME
 				FROM
-				field_coop A,
+				field_coop A
+				LEFT JOIN
 				(
 				SELECT
 				B.user_id,
@@ -61,10 +62,9 @@
 				B.role_id = C.id
 				GROUP BY
 				B.user_id
-				) D
+				) D ON A.official_user_id = D.user_id
 				WHERE
-				A.official_user_id = D.user_id
-				AND A.state = '0'
+				A.state = '0'
 
 			) hole where 1 = 1
 
