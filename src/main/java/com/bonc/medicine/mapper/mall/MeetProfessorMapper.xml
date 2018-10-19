@@ -103,6 +103,7 @@
 		AND a.issue_status
 		= '0'
 		AND c.issueid = a.id
+		and cmyy.variety_code = a.cat_code
 		AND
 		is_assigned = '0'
 		AND c.specid = #{spec_id}
@@ -128,6 +129,7 @@
 		a.issue_user_id = b.id
 		AND
 		a.issue_status = '0'
+		and cmyy.variety_code = a.cat_code
 		AND c.issueid = a.id
 		AND
 		c.is_assigned = '1'
