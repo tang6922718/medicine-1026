@@ -166,7 +166,8 @@ public class LogsController {
                                 @RequestParam(required = false) String endTime,
                                 @RequestParam(required = false) String status,
                                 @RequestParam(required = false) String pageIndex,
-                                @RequestParam(required = false) String pageSize) {
+                                @RequestParam(required = false) String pageSize,
+                                @RequestParam(required = false) String opType) {
 
         Map<String, String> paramMap = new HashMap<>();
 
@@ -181,6 +182,7 @@ public class LogsController {
         paramMap.put("starTime", starTime);
         paramMap.put("endTime", endTime);
         paramMap.put("status", status);
+        paramMap.put("opType", opType);
 
         return ResultUtil.success(logsService.queryOperLogs(paramMap));
     }

@@ -84,9 +84,7 @@
         log.user_id = cu.id
         where
         1 = 1
-        <if test="userName != '' and userName != null">
-            and cu.name like CONCAT('%',#{userName},'%')
-        </if>
+
 
         <if test="starTime != '' and starTime != null">
             and log.login_time &gt;= #{starTime}
@@ -98,6 +96,19 @@
 
         <if test="status != '' and status != null">
             and log.op_status = #{status}
+        </if>
+
+        <if test="opType != '' and opType != null">
+            and log.op_type = #{opType}
+        </if>
+
+        <if test="userName != '' and userName != null">
+            and ( cu.name like CONCAT('%',#{userName},'%')
+
+            OR log.op_module like CONCAT('%',#{userName},'%')
+
+            OR log.op_resource like CONCAT('%',#{userName},'%')
+            )
         </if>
 
         order by op_time desc
