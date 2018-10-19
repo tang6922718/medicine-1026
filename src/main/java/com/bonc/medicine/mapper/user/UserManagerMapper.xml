@@ -247,7 +247,7 @@
 		by user_id
 	</select>
 
-	<select id="queryUserInfo" resultType="Map" parameterType="Integer">
+	<select id="queryUserInfo" resultType="Map" parameterType="String">
 		SELECT id,head_portrait,name,sex,age,address,telephone,
 		CASE WHEN
 		LOCATE( 5, IFNULL(GROUP_CONCAT( B.role_id ),'') ) = 0 THEN 0 ELSE 1

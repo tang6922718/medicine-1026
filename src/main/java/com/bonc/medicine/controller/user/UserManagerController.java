@@ -32,7 +32,7 @@ public class UserManagerController {
 	@Autowired
 	private AttentionService attentionService;
 	@Autowired
-    private IntegralService integralService;
+	private IntegralService integralService;
 
 	/*
 	 * 添加基础信息
@@ -41,7 +41,6 @@ public class UserManagerController {
 	@PostMapping("/userManager/addBasic")
 	public Result<Object> addUser(@RequestBody JSONObject json) {
 		userManagerService.addUser(json);
-
 
 		return ResultUtil.success("成功");
 	}
@@ -53,7 +52,7 @@ public class UserManagerController {
 	public Result<Object> getTel(String tel) {
 		return ResultUtil.success(userManagerService.getTel(tel));
 	}
-	
+
 	@GetMapping("/userManager/update/Basic")
 	public Result<Object> updateBasic(Integer id, String name, String sex, Integer age, String address,
 			String img_url) {
@@ -67,25 +66,25 @@ public class UserManagerController {
 	public Result<Object> basicInfo(Integer id) {
 		return userManagerService.basicInfo(id);
 	}
-	
+
 	/*
-	 * 用户详情2-基本信息           旧的暂时保留，新写一个
+	 * 用户详情2-基本信息 废弃
 	 */
 	@GetMapping("/userManager/get/basicInfo2")
-	public Result<Object> basicInfo2( String userId) {
+	public Result<Object> basicInfo2(String userId) {
 		Map<String, String> reMap = new HashMap<>();
 		Map<String, String> reMap1 = new HashMap<>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        if (StringUtils.equals("", userId)){
-            reMap.put("attNumber", "0");
-        }
-        reMap = integralService.queryIntegralByUserId(userId);
-        reMap1 = attentionService.myAttentionNumber(userId);
-        boolean goingDown = integralService.queryClockInStatus(userId, "CLOCK_IN");
-        list = userManagerService.basicInfo2(userId);
-        list.get(0).put("integral", reMap.get("integral").toString());
-        list.get(0).put("attNumber", reMap1.get("attNumber").toString());
-        list.get(0).put("goingDown", goingDown);
+		if (StringUtils.equals("", userId)) {
+			reMap.put("attNumber", "0");
+		}
+		reMap = integralService.queryIntegralByUserId(userId);
+		reMap1 = attentionService.myAttentionNumber(userId);
+		boolean goingDown = integralService.queryClockInStatus(userId, "CLOCK_IN");
+		list = userManagerService.basicInfo2(userId);
+		list.get(0).put("integral", reMap.get("integral").toString());
+		list.get(0).put("attNumber", reMap1.get("attNumber").toString());
+		list.get(0).put("goingDown", goingDown);
 		return ResultUtil.success(list);
 	}
 
@@ -213,8 +212,44 @@ public class UserManagerController {
 	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
 	 */
 	@GetMapping("/userManager/userbaseinfo")
-	public Result<Object> queryUserInfo(@RequestParam int userID) {
-		return userManagerService.queryUserInfo(userID);
+	public Result<Object> queryUserInfo(String userID) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, String> reMap = new HashMap<>();
+		Map<String, String> reMap1 = new HashMap<>();
+		reMap = integralService.queryIntegralByUserId(userID);
+		reMap1 = attentionService.myAttentionNumber(userID);
+		boolean goingDown = integralService.queryClockInStatus(userID, "CLOCK_IN");
+		map = userManagerService.queryUserInfo(userID);
+		map.put("integral", reMap.get("integral").toString());
+		map.put("attNumber", reMap1.get("attNumber").toString());
+		map.put("goingDown", goingDown);
+		return ResultUtil.success(map);
+	}
+	
+	/*
+	 * *
+	 * 
+	 * @Description 查询用户的基本信息
+	 * 
+	 * @Date 17:51 2018/9/18
+	 * 
+	 * @Param [userID]
+	 * 
+	 * @return com.bonc.medicine.entity.Result<java.lang.Object>
+	 */
+	@GetMapping("/userManager/userbaseinfo2")
+	public Result<Object> queryUserInfo2(String userID) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, String> reMap = new HashMap<>();
+		Map<String, String> reMap1 = new HashMap<>();
+		reMap = integralService.queryIntegralByUserId(userID);
+		reMap1 = attentionService.myAttentionNumber(userID);
+		boolean goingDown = integralService.queryClockInStatus(userID, "CLOCK_IN");
+		map = userManagerService.queryUserInfo(userID);
+		map.put("integral", reMap.get("integral").toString());
+		map.put("attNumber", reMap1.get("attNumber").toString());
+		map.put("goingDown", goingDown);
+		return ResultUtil.success(map);
 	}
 
 	/*
@@ -250,36 +285,33 @@ public class UserManagerController {
 		return userManagerService.updateUserCareVariety(parsms);
 	}
 
-
 	/**
-	* @Description: 根据用户的id获取当前用户的活跃天数；不是从之前的统计的表去查询。而是去登陆日志表中去统计
-	* @Param: []
-	* @return: com.bonc.medicine.entity.Result
-	 *     reMap.put("acDays", "0");
-	* @Author: hejiajun
-	* @Date: 2018/9/29 
-	*/
+	 * @Description: 根据用户的id获取当前用户的活跃天数；不是从之前的统计的表去查询。而是去登陆日志表中去统计
+	 * @Param: []
+	 * @return: com.bonc.medicine.entity.Result reMap.put("acDays", "0");
+	 * @Author: hejiajun
+	 * @Date: 2018/9/29
+	 */
 	@Authorization
 	@GetMapping("/user/active/day/v1.0")
-	public Result activeDays (@CurrentUser String userId){
+	public Result activeDays(@CurrentUser String userId) {
 
-		//System.out.println(userId);
+		// System.out.println(userId);
 		return ResultUtil.success(userManagerService.activeDays(userId));
 	}
 
 	/**
-	* @Description:  通过userId 获取用户的活跃天数，多个用英文的逗号隔开
-	* @Param: [userId]
-	* @return: com.bonc.medicine.entity.Result
-	* @Author: hejiajun
-	* @Date: 2018/10/9
-	*/
+	 * @Description: 通过userId 获取用户的活跃天数，多个用英文的逗号隔开
+	 * @Param: [userId]
+	 * @return: com.bonc.medicine.entity.Result
+	 * @Author: hejiajun
+	 * @Date: 2018/10/9
+	 */
 	@GetMapping("/user/active/day/v2.0")
-	public Result activeDaysForBack (@RequestParam String userId){
+	public Result activeDaysForBack(@RequestParam String userId) {
 
-		//System.out.println(userId);
+		// System.out.println(userId);
 		return ResultUtil.success(userManagerService.activeDaysForBack(userId));
 	}
-
 
 }

@@ -65,7 +65,7 @@ public interface UserManagerMapper {
 
 	public List<Map<String, Object>> purchaselist();
 
-	public Map queryUserInfo(int userID);
+	public Map<String, Object> queryUserInfo(String userID);
 
 	public Map getActiveAndhudong(int userID);
 

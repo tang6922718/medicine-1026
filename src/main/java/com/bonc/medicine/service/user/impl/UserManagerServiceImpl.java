@@ -212,10 +212,10 @@ public class UserManagerServiceImpl implements UserManagerService {
 	}
 
 	@Override
-	public Result<Object> queryUserInfo(int userID) {
+	public Map<String, Object> queryUserInfo(String userID) {
 
 		// return ResultUtil.success(userManagerMapper.queryUserInfo(userID));
-		Map queryMap = userManagerMapper.queryUserInfo(userID);
+		Map<String, Object> queryMap = userManagerMapper.queryUserInfo(userID);
 
 		String userId = queryMap.get("id") + "";
 		Map<String, Object> fansMap = attentionService.fansNum(userId);
@@ -233,7 +233,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 		queryMap.put("loveMedicineName", pinZhongMap == null ? "" : pinZhongMap.get("loveMedicineName"));
 		queryMap.put("loveMedicineID", pinZhongMap == null ? "" : pinZhongMap.get("loveMedicineID"));
 
-		return ResultUtil.success(queryMap);
+		return queryMap;
 	}
 
 	@Override

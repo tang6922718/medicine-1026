@@ -54,7 +54,7 @@ public interface UserManagerService {
 
 	public List<Map<String, Object>> purchaselist();
 
-	public Result<Object> queryUserInfo(int userID);
+	public Map<String, Object> queryUserInfo(String userID);
 
 	public Result<Object> updateUserPlantRole(Map<String, String> params);
 
