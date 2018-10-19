@@ -97,8 +97,10 @@
         </if>
 
         <if test="status != '' and status != null">
-            and log.status = #{status}
+            and log.op_status = #{status}
         </if>
+
+        order by op_time desc
     </select>
 
     <insert id="addOperLogs" parameterType="Map">
