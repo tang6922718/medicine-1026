@@ -172,7 +172,7 @@
 		order by c.issue_time desc
 	</select>
 
-	<select id="solving" parameterType="Map" resultType="Map">
+	<!-- <select id="solving" parameterType="Map" resultType="Map">
 		SELECT
 		temp.issue_desc,
 		temp.id,
@@ -240,9 +240,66 @@
 		
 			ORDER BY
 			temp.reply_time desc 
+	</select> -->
+	
+	<select id="solving" parameterType="Map" resultType="Map">
+		SELECT
+			b.issue_desc,b.id, p.from_uid,
+			p.to_uid,
+			TIMESTAMPDIFF(SECOND, p.reply_time, now()) AS reply_time,
+			p.content,
+			cu. NAME,
+			cu.head_portrait,
+			cu.address,
+			(
+				SELECT
+					GROUP_CONCAT(DISTINCT cmv.variety_name) AS variety_name
+				FROM
+					common_user_care_varieties_r ccv
+				LEFT JOIN common_medicine_variety cmv ON ccv.variety_code = cmv.variety_code
+				WHERE
+					ccv.user_id = cu.id
+			) AS variety_name
+		FROM
+			(
+				SELECT
+					s.id,
+					s.issue_desc,
+					s.issue_user_id,
+					(
+						SELECT
+							cc.id AS issue_id
+						FROM
+							common_comment cc
+						WHERE
+							cc.object_id = s.id
+						AND cc.object_type = '1'
+						ORDER BY
+							cc.reply_time DESC
+						LIMIT 1
+					) AS common_id
+				FROM
+					spec_issue s
+				INNER JOIN spec_issue_association a ON a.issueid = s.id
+				WHERE
+					EXISTS (
+						SELECT
+							1
+						FROM
+							common_comment t
+						WHERE
+							t.object_id = s.id
+						AND t.object_type = '1'
+					)
+				AND s.issue_status IN ('0', '1')
+				AND a.specid = #{spec_id}
+			) b
+		INNER JOIN common_comment p ON p.id = b.common_id
+		LEFT JOIN common_user cu ON b.issue_user_id = cu.id
+		ORDER BY p.reply_time desc
 	</select>
 
-	<select id="issue_statistics_solving" parameterType="Map"
+	<!-- <select id="issue_statistics_solving" parameterType="Map"
 		resultType="Map">
 		select count(1) as jxz from (SELECT
 		temp.issue_desc,
@@ -298,6 +355,27 @@
 		or temp.from_uid =
 		#{spec_id}
 		) as temp
+	</select> -->
+	
+	<select id="issue_statistics_solving" parameterType="Map"
+		resultType="Map">
+		SELECT
+			count(*) as jxz
+		FROM
+			spec_issue s
+		INNER JOIN spec_issue_association a ON a.issueid = s.id
+		WHERE
+			EXISTS (
+				SELECT
+					1
+				FROM
+					common_comment t
+				WHERE
+					t.object_id = s.id
+				AND t.object_type = '1'
+			)
+		AND s.issue_status IN ('0', '1')
+		AND a.specid = #{spec_id}
 	</select>
 
 
