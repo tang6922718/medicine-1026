@@ -69,6 +69,8 @@
         <if test="onlyLogout!= '' and onlyLogout != null">
             and clo.logout_time is null
         </if>
+
+        order by logout_time desc
     </select>
 
     <select id="queryOperLogs" parameterType="Map" resultType="Map">
