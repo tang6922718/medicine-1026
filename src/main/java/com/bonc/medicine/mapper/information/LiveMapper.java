@@ -160,6 +160,7 @@ public interface LiveMapper {
                 }
                 WHERE("is_display='1'");
 //                ORDER_BY("create_time desc");
+                ORDER_BY("publish_time desc");
             }}.toString();
            String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id   order by create_time desc";
             return nsql;
