@@ -144,8 +144,8 @@ public interface LiveMapper {
             int end=Integer.parseInt(String.valueOf(map.get("pageSize")));*/
 
             String sql=new SQL() {{
-                SELECT("*");
-                FROM("train_live");
+                SELECT("a.*,(select count(*) from train_appointment b where b.object_id = a.id and b.object_type = '2') AS applyNum");
+                FROM("train_live a");
                 if(map.get("live_start") != null && map.get("live_start") != ""){
                     WHERE("live_start>=#{live_start}");
                 }
@@ -159,11 +159,10 @@ public interface LiveMapper {
                     WHERE("operation_status=#{operation_status}");
                 }
                 WHERE("is_display='1'");
-//                ORDER_BY("create_time desc");
                 ORDER_BY("publish_time desc");
             }}.toString();
-           String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id   order by create_time desc";
-            return nsql;
+           //String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id   order by create_time desc";
+            return sql;
 
         }
     }
