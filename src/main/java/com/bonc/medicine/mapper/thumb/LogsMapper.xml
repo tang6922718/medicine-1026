@@ -111,7 +111,7 @@
 
     <select id="queryUserLoginTimes" parameterType="Map" resultType="Map">
         select
-        DATE_FORMAT(clo.login_time, '%Y-%m-%d') as login_time,
+        DATE_FORMAT(clo.login_time, '%Y-%m-%d') as login_time_f,
         count(1) as loginTimes
         from
         common_logon_log clo
@@ -132,7 +132,7 @@
         and
         clo.login_time is not null
         group by
-        login_time
+        login_time_f
     </select>
 
 </mapper>
