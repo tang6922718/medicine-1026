@@ -237,7 +237,7 @@ public class ESSearchController {
                     break;
                 case "train_video_course":
                     qb.must(QueryBuilders.termQuery("operation_status", "3"));
-                    qb.must(QueryBuilders.termQuery("status", "1"));
+                    qb.must(QueryBuilders.termQuery("status", "0"));
                     if(null != searchText && ""!=searchText){
                         qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract","title"));
                     }
