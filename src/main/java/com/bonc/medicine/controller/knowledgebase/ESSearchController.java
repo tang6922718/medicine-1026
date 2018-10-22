@@ -42,8 +42,8 @@ public class ESSearchController {
      * @throws Exception
      */
     @GetMapping("/toSearch")
-    public Result<Object> searchByType(@RequestParam(required = false) String searchText, @RequestParam(required = false) String searchType) throws Exception {
-        return searchAll(searchText,searchType);
+    public Result<Object> searchByType(@RequestParam(required = false) String searchText, @RequestParam(required = false) String searchType, @RequestParam(required = false) String platform) throws Exception {
+        return searchAll(searchText,searchType,platform);
     }
 
     /**
@@ -65,14 +65,14 @@ public class ESSearchController {
         return ResultUtil.success(getEveryTypeInfo(userCare));
     }
 
-    private Result<Object> searchAll(String searchText, String searchType) throws Exception {
+    private Result<Object> searchAll(String searchText, String searchType,String platform) throws Exception {
         //获取连接client
         Client client = elasticsearchTemplate.getClient();
         //根据索引搜索
         SearchRequestBuilder srb = client.prepareSearch("knowledge_new");
 
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
-        qb = validateCodeSearch(searchText,searchType,qb,null);
+        qb = validateCodeSearch(searchText,searchType,qb,null,platform);
 
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb)./*addSort(new ScoreSortBuilder()).*/addSort(sortBuilder).setSize(50).execute().actionGet();
@@ -103,7 +103,7 @@ public class ESSearchController {
         //根据索引搜索
         SearchRequestBuilder srb = client.prepareSearch("knowledge_new");
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
-        qb = validateCodeSearch(searchText,searchType,qb,null);
+        qb = validateCodeSearch(searchText,searchType,qb,null,null);
 
         SortBuilder sortBuilder = SortBuilders.fieldSort("@timestamp").order(SortOrder.DESC).unmappedType("boolean"); // 定义排序方式
         SearchResponse sr = srb.setQuery(qb).addSort(sortBuilder).setSize(5).execute().actionGet();
@@ -162,7 +162,7 @@ public class ESSearchController {
         qbd.must(QueryBuilders.matchQuery("artice_type", article_type));
         qbd.mustNot(QueryBuilders.idsQuery().addIds(type+"_"+id));
 
-        qbd = validateCodeSearch("",type,qbd,map);
+        qbd = validateCodeSearch("",type,qbd,map,null);
 
         SearchResponse sresult = srb.setQuery(qbd).execute().actionGet();
         SearchHits hitsResult = sresult.getHits();
@@ -198,14 +198,18 @@ public class ESSearchController {
      * @param searchText
      * @return
      */
-    private BoolQueryBuilder validateCodeSearch(String searchText,String searchType,BoolQueryBuilder qb,Map map){
+    private BoolQueryBuilder validateCodeSearch(String searchText,String searchType,BoolQueryBuilder qb,Map map,String platform){
         /*
         * 类别过滤
         * */
         if(null!=searchType && !"".equals(searchType)){
             switch (searchType){
                 case "km_variety_encyclopedia":
-                    qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
+                    if(null !=platform){
+                        qb.must(QueryBuilders.termQuery("type", searchType));
+                    }else {
+                        qb.must(QueryBuilders.termsQuery("type",searchType,"km_pharmacopoeia_information"));
+                    }
                     break;
                 default:
                     qb.must(QueryBuilders.termQuery("type", searchType));
@@ -280,6 +284,12 @@ public class ESSearchController {
                         qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
                     }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
+                    break;
+                case "km_pharmacopoeia_information":
+                    qb.must(QueryBuilders.termQuery("record_status", "3"));
+                    if(null != searchText && ""!=searchText){
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                    }
                     break;
                 case "spec_case":
 //                qb.should(QueryBuilders.wildcardQuery("title.keyword", "*"+searchText+"*"));
