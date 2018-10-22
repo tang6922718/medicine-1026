@@ -51,6 +51,9 @@ public interface LiveMapper {
     @Update("update  train_live set audience_num=audience_num + 1 where room_id=#{room_id} and status='1'")
     Integer updateWatchNum(@Param("room_id") String room_id);
 
+    @Update("update  train_live set replay_url=#{replay_url} where id=#{id}")
+    int replayUpload(Map map);
+
 
     class LiveDynaSqlProvider {
         public String addLive(final Map<String, Object> map) {
@@ -144,8 +147,8 @@ public interface LiveMapper {
             int end=Integer.parseInt(String.valueOf(map.get("pageSize")));*/
 
             String sql=new SQL() {{
-                SELECT("a.*,(select count(*) from train_appointment b where b.object_id = a.id and b.object_type = '2') AS applyNum");
-                FROM("train_live a");
+                SELECT("*");
+                FROM("train_live");
                 if(map.get("live_start") != null && map.get("live_start") != ""){
                     WHERE("live_start>=#{live_start}");
                 }
@@ -159,10 +162,10 @@ public interface LiveMapper {
                     WHERE("operation_status=#{operation_status}");
                 }
                 WHERE("is_display='1'");
-                ORDER_BY("publish_time desc");
+//                ORDER_BY("create_time desc");
             }}.toString();
-           //String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id   order by create_time desc";
-            return sql;
+           String nsql = "SELECT a.*,COUNT(b.id) as applyNum FROM ("+sql+") a LEFT JOIN train_appointment b ON a.id=b.object_id AND b.object_type='2' GROUP BY a.id   order by create_time desc";
+            return nsql;
 
         }
     }

@@ -59,9 +59,9 @@ public class InfoController {
      */
     @PostMapping("/addInfo")
     @MethodLog(remark = "新增,添加咨询,咨询")
-    /*@com.bonc.medicine.annotation.Authorization*/
-    public Result addInfo(/*@CurrentUser String user_id, */@RequestBody Map<String, Object> map) {
-        /*map.put("user_id", user_id);*/
+    @com.bonc.medicine.annotation.Authorization
+    public Result addInfo(@CurrentUser String user_id, @RequestBody Map<String, Object> map) {
+        map.put("user_id", user_id);
         int count = infoService.addInfo(map);
         map.put("km_type", "2");
         count += auditService.addAudit(map);
@@ -88,7 +88,8 @@ public class InfoController {
      */
     @RequestMapping("/infoAudit")
     @MethodLog(remark = "修改,咨讯审核,咨询")
-    public Result infoAudit(@RequestBody Map<String, Object> map) {
+    public Result infoAudit(@CurrentUser String  user_id,@RequestBody Map<String, Object> map) {
+        map.put("user_id",user_id);
         return ResultUtil.success(infoService.infoAudit(map));
     }
 

@@ -27,14 +27,16 @@
         THEN '0'
         END);
 
-        UPDATE train_live  set `status` =
-        (case WHEN str_to_date(live_start,'%Y-%m-%d') <![CDATA[ < ]]>  str_to_date(CURDATE(),'%Y-%m-%d')
-        THEN '2'
-        WHEN str_to_date(live_start,'%Y-%m-%d') =  str_to_date(CURDATE(),'%Y-%m-%d')
-        THEN '1'
-        WHEN str_to_date(live_start,'%Y-%m-%d')<![CDATA[ > ]]> str_to_date(CURDATE(),'%Y-%m-%d')
-        THEN '0'
-        END);
-
+        UPDATE train_live
+        SET `status` = (
+        CASE
+        WHEN  str_to_date(live_start, '%Y-%m-%d') <![CDATA[ < ]]>  CURDATE() THEN
+        '2'
+        WHEN str_to_date(live_start, '%Y-%m-%d') = CURDATE() THEN
+        '1'
+        WHEN str_to_date(live_start, '%Y-%m-%d') <![CDATA[ > ]]> CURDATE() THEN
+        '0'
+        END
+        );
     </update>
 </mapper>

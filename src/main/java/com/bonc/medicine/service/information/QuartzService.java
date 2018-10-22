@@ -26,6 +26,6 @@ public class QuartzService {
      */
     @Scheduled(cron = "0 0 0/1 * * ?")
     public void updateTrainStatus() {
-       trainService.updateTrainStatus();
+        trainService.updateTrainStatus();
     }
 }

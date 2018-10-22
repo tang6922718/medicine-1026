@@ -232,6 +232,25 @@ public class LiveController {
     }
 
     /**
+     * @return
+     * @description 回播上传（无直播端采用web上传的方式）
+     */
+    @RequestMapping("/replayUpload")
+    public Result replayUpload(@RequestBody Map map) {
+        return ResultUtil.success(liveService.replayUpload(map));
+    }
+
+    /**
+     * @return
+     * @description 回播上传（测试）
+     */
+    @RequestMapping("/replayCallback")
+    public Result replayCallback(@RequestBody Map map) {
+        System.out.println(map.toString());
+        return ResultUtil.success(map);
+    }
+
+    /**
      * @param map
      * @return
      * @description 记录观众ToRedis

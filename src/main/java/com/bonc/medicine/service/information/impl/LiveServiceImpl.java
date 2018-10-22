@@ -73,4 +73,9 @@ public class LiveServiceImpl implements LiveService {
     public Integer updateWatchNum(String room_id) {
         return liveMapper.updateWatchNum(room_id);
     }
+
+    @Override
+    public int replayUpload(Map map) {
+        return liveMapper.replayUpload(map);
+    }
 }

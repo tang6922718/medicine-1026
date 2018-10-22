@@ -22,4 +22,6 @@ public interface  LiveService {
     int delLive(Map<String,Object> map);
 
     Integer updateWatchNum(String room_id);
+
+    int replayUpload(Map map);
 }
