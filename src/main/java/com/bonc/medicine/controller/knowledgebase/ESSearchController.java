@@ -281,14 +281,14 @@ public class ESSearchController {
                 case "km_variety_encyclopedia":
                     qb.must(QueryBuilders.termQuery("record_status", "3"));
                     if(null != searchText && ""!=searchText){
-                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract","cat_name"));
                     }
 //                qb.must(QueryBuilders.wildcardQuery("keywords.keyword", "*"+searchText+"*"));
                     break;
                 case "km_pharmacopoeia_information":
                     qb.must(QueryBuilders.termQuery("record_status", "3"));
                     if(null != searchText && ""!=searchText){
-                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract"));
+                        qb.must(QueryBuilders.multiMatchQuery(searchText, "keywords","abstract","cat_name"));
                     }
                     break;
                 case "spec_case":
