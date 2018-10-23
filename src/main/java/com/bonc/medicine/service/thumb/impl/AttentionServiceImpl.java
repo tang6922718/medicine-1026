@@ -97,7 +97,7 @@ public class AttentionServiceImpl implements AttentionService {
                     reMap.put(key, set);
                     return reMap;
                 }else{
-                    reMap.put("key", new HashSet<>());
+                    reMap.put(key, new HashSet<>());
                     return reMap;
                 }
             }
@@ -124,7 +124,7 @@ public class AttentionServiceImpl implements AttentionService {
         boolean exists = jedisAdapter.exists(RedisKeyUtil.getFansKey(attedUserId));
 
         if(exists){
-            long num = jedisAdapter.scard(RedisKeyUtil.getFansKey(attedUserId));
+            long num = jedisAdapter.zcard(RedisKeyUtil.getFansKey(attedUserId));
             jedisAdapter.expire(RedisKeyUtil.getFansKey(attedUserId));
             /*if(num == 0){
 
@@ -208,7 +208,7 @@ public class AttentionServiceImpl implements AttentionService {
         //attNumber
         long userUmber = 0L;
         if (jedisAdapter.exists(RedisKeyUtil.getAttentionKey(userId, "0"))){
-            userUmber = jedisAdapter.scard(RedisKeyUtil.getAttentionKey(userId, "0"));
+            userUmber = jedisAdapter.zcard(RedisKeyUtil.getAttentionKey(userId, "0"));
         }else{
             Map<String, Object> queryMap = attentionMapper.myAttentionNumberUser(userId);
             userUmber = queryMap == null ? 0L : Long.parseLong(queryMap.get("attNumber") + "");
@@ -217,7 +217,7 @@ public class AttentionServiceImpl implements AttentionService {
 
         long proNumber = 0L;
         if (jedisAdapter.exists(RedisKeyUtil.getAttentionKey(userId, "1"))){
-            proNumber = jedisAdapter.scard(RedisKeyUtil.getAttentionKey(userId, "1"));
+            proNumber = jedisAdapter.zcard(RedisKeyUtil.getAttentionKey(userId, "1"));
         }else{
             Map<String, Object> queryMap = attentionMapper.myAttentionNumberPro(userId);
             proNumber = queryMap == null ? 0L : Long.parseLong(queryMap.get("attNumber") + "");
