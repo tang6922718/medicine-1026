@@ -46,7 +46,7 @@ public class CommentReplyServiceImpl implements CommentReplyService {
 
 			integralService.addIntegralHistory(ppparamMap);
 		}catch (Exception e){
-			System.out.println("ERROR ：新建田间操作中---增加积分异常");
+			System.out.println("ERROR ：新评论回复操作中---增加积分异常");
 		}
 		return num;
 	}

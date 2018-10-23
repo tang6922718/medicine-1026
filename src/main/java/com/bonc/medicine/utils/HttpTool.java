@@ -1,14 +1,13 @@
 package com.bonc.medicine.utils;
 
 
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @program: medicine
