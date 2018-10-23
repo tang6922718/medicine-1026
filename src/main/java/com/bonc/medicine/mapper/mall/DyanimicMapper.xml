@@ -103,7 +103,24 @@
 
 	<!--查询待审核的动态-->
 	<select id="selectUncheckDyanimic" resultType="java.util.Map">
-		SELECT * FROM  comm_dyanimic where effect_flag = '2'
+		SELECT
+		cdy.id,
+		cdy.dyn_cat_id,
+		cdy.desciption,
+		cdy.img_url,
+		cdy.video_url,
+		cdy.publish_user_id,
+		cdy.publish_time,
+		cdy.effect_flag,
+		cdy.fail_opinion,
+		cdy.update_time,
+		cdy.create_time,
+		cuu.telephone
+		FROM
+		comm_dyanimic cdy
+		LEFT JOIN common_user cuu ON cdy.publish_user_id = cuu.id
+		WHERE
+		effect_flag = '2'
 		<if test="dyn_cat_id != null and dyn_cat_id != 0 ">
 			and  dyn_cat_id = #{dyn_cat_id}
 		</if>
