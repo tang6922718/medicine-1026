@@ -155,7 +155,7 @@ public class TecentCloudUtils {
         JSONArray jsonObject2 = jsonObject.getJSONArray("file_list");
         for (int i = 0; i < jsonObject2.size(); i++) {
             String id = jsonObject2.getJSONObject(i).getString("id");
-            String status = jsonObject2.getJSONObject(i).getString("stream_id");
+            String room_id = jsonObject2.getJSONObject(i).getString("stream_id");
             String file_size = jsonObject2.getJSONObject(i).getString("file_size");
             String start_time = jsonObject2.getJSONObject(i).getString("start_time");
             String end_time = jsonObject2.getJSONObject(i).getString("end_time");
@@ -163,7 +163,7 @@ public class TecentCloudUtils {
 
             Map<String, String> map = new HashMap<>();
             map.put("id", id);
-            map.put("status", status);
+            map.put("room_id", room_id);
             map.put("file_size", file_size);
             map.put("start_time", start_time);
             map.put("end_time", end_time);
