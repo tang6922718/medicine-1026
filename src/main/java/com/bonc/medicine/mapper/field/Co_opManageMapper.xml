@@ -27,7 +27,7 @@
 		parameterType="Map">
 		SELECT coopID,coopName,introduce,total_area,img_url,
 			portrait,cultivar,age,telephone,address,adminID,adminName,establish_date,
-			photo_url,is_audit,COMMENT as comment,NAME,ifnull(role,'商户')
+			photo_url,is_audit,COMMENT as comment,NAME,ifnull(role,'商户') AS role
 		from (
 				SELECT
 				A.id AS coopID,
@@ -109,6 +109,7 @@
 			AND #{end_time} >= hole.establish_date
 		</if>
 
+		ORDER BY hole.establish_date DESC
 
 	</select>
 
