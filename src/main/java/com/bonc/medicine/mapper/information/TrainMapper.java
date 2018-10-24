@@ -167,8 +167,6 @@ public interface TrainMapper {
                 }
                 VALUES("create_time","CURRENT_TIMESTAMP()");
             }}.toString();
-
-            System.out.println(sql);
             return sql;
         }
 
@@ -225,8 +223,6 @@ public interface TrainMapper {
                 if (map.get("content") != null) {
                     VALUES("content", "#{content}");
                 }
-
-
             }}.toString();
         }
 
