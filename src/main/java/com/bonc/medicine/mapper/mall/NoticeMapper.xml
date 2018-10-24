@@ -18,7 +18,7 @@
 		FROM
 		common_notice a left join field_coop b on a.object_id = b.id
 		WHERE
-		CONCAT(',',a.notice_receiver,',') LIKE CONCAT( CONCAT( '%,', 1
+		CONCAT(',',a.notice_receiver,',') LIKE CONCAT( CONCAT( '%,', #{user_id}
 		), ',%' )
 		AND a.notice_type = '2'
 		AND a.STATUS = '1'
