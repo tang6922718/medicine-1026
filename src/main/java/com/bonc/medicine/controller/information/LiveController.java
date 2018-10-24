@@ -10,6 +10,7 @@ import com.bonc.medicine.service.information.TrainService;
 import com.bonc.medicine.service.knowledgebase.AuditService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
+import com.bonc.medicine.utils.JacksonMapper;
 import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.TecentCloudUtils;
 import com.github.pagehelper.PageInfo;
@@ -74,10 +75,14 @@ public class LiveController {
     public Result selectLive(@RequestBody Map<String, Object> map,
                              @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
                              @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
-        for (Map<String, String> map1 : lists) {
+
+
+
+       /*  不在腾讯云上去检测直播状态，根据数据库开播时间每小时为单位扫描更改状态
+       List<Map<String, String>> lists = TecentCloudUtils.getAllRoomList();
+       for (Map<String, String> map1 : lists) {
             liveService.updateLiveStatus(map1.get("id"), map1.get("status"));
-        }
+        }*/
         List list = liveService.selectAllLive(map, pageNum, pageSize);
     /*  Map map2 = new HashMap();
         map2.put("object_type", "2");
@@ -246,7 +251,7 @@ public class LiveController {
      */
     @RequestMapping("/replayCallback")
     public Result replayCallback(@RequestBody Map map) {
-        System.out.println(map.toString());
+        System.out.println(JacksonMapper.INSTANCE.writeObjectToJson(map));
         return ResultUtil.success(map);
     }
 
