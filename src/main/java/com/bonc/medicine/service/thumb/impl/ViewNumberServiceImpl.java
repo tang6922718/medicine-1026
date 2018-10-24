@@ -150,15 +150,13 @@ public class ViewNumberServiceImpl implements ViewNumberService {
         }
 
         // 将别人定的TYPE和观看数里面的type对应起来
+        Map<String, String> paramaMap = new HashMap<>();
         if (!StringUtils.equals("1", videoType)){
 
-            Map<String, String> paramaMap = new HashMap<>();
             if (StringUtils.equals("0", videoType)){
                 paramaMap.put("objectType", "4");
             }else if (StringUtils.equals("2", videoType)){
-                paramaMap.put("objectType", "8");
-            }else if (StringUtils.equals("1", videoType)){
-                paramaMap.put("objectType", "8");
+                paramaMap.put("objectType", "9");
             }
 
             for (Map<String, Object> onlyIdMap : reQueryList) {
@@ -173,15 +171,18 @@ public class ViewNumberServiceImpl implements ViewNumberService {
                 // thumbNumber
                 onlyIdMap.put("thumbNumber", thumgNumberMap.get("thumbNumber"));
                 
-                Map paramThis = new HashMap<>();
+
+            }
+        }else {
+            paramaMap.put("objectType", "8");
+            Map paramThis = new HashMap<>();
+            for (Map<String, Object> onlyIdMap : reQueryList) {
                 paramThis.put("object_type", paramaMap.get("objectType"));
                 paramThis.put("object_id", onlyIdMap.get("id") + "");
-        		
-                onlyIdMap.put("commentNumber", commentReplyService.commentsCount(paramThis) + ""); 
+                onlyIdMap.put("commentNumber", commentReplyService.commentsCount(paramThis) + "");
             }
-        }
 
-        // TODO 线下培训的评论回复还没有
+        }
 
         return reQueryList;
     }
