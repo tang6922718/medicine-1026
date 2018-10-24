@@ -19,23 +19,23 @@
 
     <update id="updateTrainStatus">
         UPDATE train_offline  set `status` =
-        (case WHEN str_to_date(train_time,'%Y-%m-%d')<![CDATA[ < ]]> str_to_date(CURDATE(),'%Y-%m-%d')
+        (case WHEN str_to_date(train_time,'%Y-%m-%d')<![CDATA[ < ]]> CURDATE()
         THEN '2'
-        WHEN str_to_date(train_time,'%Y-%m-%d')= str_to_date(CURDATE(),'%Y-%m-%d')
+        WHEN str_to_date(train_time,'%Y-%m-%d')= CURDATE()
         THEN '1'
-        WHEN str_to_date(train_time,'%Y-%m-%d')<![CDATA[ > ]]> str_to_date(CURDATE(),'%Y-%m-%d')
+        WHEN str_to_date(train_time,'%Y-%m-%d')<![CDATA[ > ]]> CURDATE()
         THEN '0'
         END);
 
         UPDATE train_live
         SET `status` = (
         CASE
-        WHEN  str_to_date(live_start, '%Y-%m-%d') <![CDATA[ < ]]>  CURDATE() THEN
-        '2'
-        WHEN str_to_date(live_start, '%Y-%m-%d') = CURDATE() THEN
-        '1'
-        WHEN str_to_date(live_start, '%Y-%m-%d') <![CDATA[ > ]]> CURDATE() THEN
-        '0'
+        WHEN  DATE_FORMAT(live_start, '%Y-%m-%d') <![CDATA[ < ]]>  CURDATE()
+        THEN '2'
+        WHEN DATE_FORMAT(live_start, '%Y-%m-%d') = CURDATE()
+        THEN '1'
+        WHEN DATE_FORMAT(live_start, '%Y-%m-%d') <![CDATA[ > ]]> CURDATE()
+        THEN '0'
         END
         );
     </update>
