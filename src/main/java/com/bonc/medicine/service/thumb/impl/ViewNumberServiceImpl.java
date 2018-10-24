@@ -1,14 +1,5 @@
 package com.bonc.medicine.service.thumb.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.bonc.medicine.Exception.MedicineRuntimeException;
 import com.bonc.medicine.adapter.JedisAdapter;
 import com.bonc.medicine.enums.ResultEnum;
@@ -16,8 +7,15 @@ import com.bonc.medicine.mapper.thumb.ViewNumberMapper;
 import com.bonc.medicine.service.mall.CommentReplyService;
 import com.bonc.medicine.service.thumb.ThumbService;
 import com.bonc.medicine.service.thumb.ViewNumberService;
-import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.ViewNumberKeyUtil;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: medicine-hn
@@ -82,6 +80,9 @@ public class ViewNumberServiceImpl implements ViewNumberService {
     public Map<String, Object> addOrUpdateViewNumberCord(Map<String, String> map) {
         if (StringUtils.isEmpty(map.get("viewNumber"))) {
             map.put("viewNumber", "1");
+        }
+        if(StringUtils.isBlank( map.get("objectId"))){
+            return new HashMap<>();
         }
 
         String objectId = map.get("objectId");
