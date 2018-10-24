@@ -24,4 +24,7 @@ public interface  LiveService {
     Integer updateWatchNum(String room_id);
 
     int replayUpload(Map map);
+
+
+    int updateLiveReplay(Map map);
 }

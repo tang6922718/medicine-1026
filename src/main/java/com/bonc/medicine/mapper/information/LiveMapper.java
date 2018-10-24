@@ -54,6 +54,12 @@ public interface LiveMapper {
     @Update("update  train_live set replay_url=#{replay_url} where id=#{id}")
     int replayUpload(Map map);
 
+    @Update("UPDATE train_live SET replay_url=#{video_url}" +
+            "WHERE  room_id=#{channel_id}" +
+            " AND  date_sub(live_start, interval 1 hour) < FROM_UNIXTIME(#{start_time})" +
+            " AND  date_add(live_end, interval 1 hour) > FROM_UNIXTIME(#{end_time})")
+    int updateLiveReplay(Map map);
+
 
     class LiveDynaSqlProvider {
         public String addLive(final Map<String, Object> map) {

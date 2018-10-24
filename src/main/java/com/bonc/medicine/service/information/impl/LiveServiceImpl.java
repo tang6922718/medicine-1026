@@ -78,4 +78,9 @@ public class LiveServiceImpl implements LiveService {
     public int replayUpload(Map map) {
         return liveMapper.replayUpload(map);
     }
+
+    @Override
+    public int updateLiveReplay(Map map) {
+        return liveMapper.updateLiveReplay(map);
+    }
 }
