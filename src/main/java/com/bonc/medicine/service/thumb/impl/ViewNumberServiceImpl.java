@@ -156,6 +156,8 @@ public class ViewNumberServiceImpl implements ViewNumberService {
                 paramaMap.put("objectType", "4");
             }else if (StringUtils.equals("2", videoType)){
                 paramaMap.put("objectType", "8");
+            }else if (StringUtils.equals("1", videoType)){
+                paramaMap.put("objectType", "8");
             }
 
             for (Map<String, Object> onlyIdMap : reQueryList) {
@@ -171,7 +173,7 @@ public class ViewNumberServiceImpl implements ViewNumberService {
                 onlyIdMap.put("thumbNumber", thumgNumberMap.get("thumbNumber"));
                 
                 Map paramThis = new HashMap<>();
-                paramThis.put("object_type", "4");
+                paramThis.put("object_type", paramaMap.get("objectType"));
                 paramThis.put("object_id", onlyIdMap.get("id") + "");
         		
                 onlyIdMap.put("commentNumber", commentReplyService.commentsCount(paramThis) + ""); 

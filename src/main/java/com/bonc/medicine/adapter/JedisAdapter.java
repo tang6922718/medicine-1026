@@ -308,4 +308,79 @@ public class JedisAdapter implements InitializingBean {
             }
         }
     }
+
+    public long lrem(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.lrem(key, 0L,value);
+        } catch (Exception e) {
+            logger.error("Jedis keys 异常：" + e.getMessage());
+            return 0L;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public long zadd(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zadd(key, System.currentTimeMillis(),value);
+        } catch (Exception e) {
+            logger.error("Jedis zadd 异常：" + e.getMessage());
+            return 0L;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+   public Set<String> zrange(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zrevrange(key, 0, -1);
+            //return jedis.zrange;
+        } catch (Exception e) {
+            logger.error("Jedis zrevrange 异常：" + e.getMessage());
+            return new HashSet<>();
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public long zrem(String key , String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zrem(key, value);
+        } catch (Exception e) {
+            logger.error("Jedis zrem 异常：" + e.getMessage());
+            return 0L;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    public long zcard(String key ) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zcard(key);
+        } catch (Exception e) {
+            logger.error("Jedis zcard 异常：" + e.getMessage());
+            return 0L;
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
 }

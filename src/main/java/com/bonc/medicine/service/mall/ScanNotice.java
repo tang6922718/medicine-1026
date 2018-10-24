@@ -9,8 +9,14 @@ public class ScanNotice {
 	
 	@Autowired
 	NoticeService noticeService;
+
 	@Scheduled(cron = "0 0/5 * * * ?")
     public void updateTrainStatus() {
 		noticeService.scanNotice();
     }
+
+
+
+
+
 }

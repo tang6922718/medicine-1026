@@ -41,7 +41,11 @@ public class AttentionAdapter {
         String attKey = RedisKeyUtil.getAttentionKey(userId, entityType);
 
         // entityId 的用户是否在key为attKey 的集合中
-        if (jedisAdapter.sismember(attKey, entityId)) {
+        /*if (jedisAdapter.sismember(attKey, entityId)) {
+            return 1;
+        }*/
+        Set<String>  keyts = jedisAdapter.zrange(attKey);
+        if ( keyts.contains(entityId)){
             return 1;
         }
         //String disLikeKey = RedisKeyUtil.getDisLikeKey(entityId, entityType);
@@ -61,12 +65,11 @@ public class AttentionAdapter {
         // 在当前news上点赞后获取key: LIKE:ENTITY_NEWS:2
         String attKey = RedisKeyUtil.getAttentionKey(userId, entityType);
         // 在喜欢集合中添加当前操作用户的userId(即当前用户点赞后，被点赞用户的like集合中就会加上一个点赞的用户信息)
+        for (int i = entityId.length -1 ; i >= 0 ; i--){
 
-        //jedisAdapter.sadd(attKey, userId);
+            jedisAdapter.zadd(attKey, entityId[i]);
+        }
 
-        //String disLikeKey = RedisKeyUtil.getDisLikeKey(entityId, entityType);
-        //jedisAdapter.srem(disLikeKey, String.valueOf(userId));
-        jedisAdapter.sadd(attKey, entityId);
         return jedisAdapter.expire(attKey);
     }
 
@@ -74,13 +77,13 @@ public class AttentionAdapter {
         // 在当前news上点赞后获取key: LIKE:ENTITY_NEWS:2
         String attKey = RedisKeyUtil.getAttentionKey(userId, entityType);
         // 在喜欢集合中添加当前操作用户的userId(即当前用户点赞后，被点赞用户的like集合中就会加上一个点赞的用户信息)
-        return jedisAdapter.sdiff(attKey);
+        return jedisAdapter.zrange(attKey);
     }
 
     public Set<String> getFansListId(String userId) {
         String getFansKey = RedisKeyUtil.getFansKey(userId);
         // 在喜欢集合中添加当前操作用户的userId(即当前用户点赞后，被点赞用户的like集合中就会加上一个点赞的用户信息)
-        return jedisAdapter.sdiff(getFansKey);
+        return jedisAdapter.zrange(getFansKey);
     }
 
     /*
@@ -101,7 +104,7 @@ public class AttentionAdapter {
         //String likeKey = RedisKeyUtil.getLikeKey(entityId, entityType);
         //jedisAdapter.srem(attKey, String.valueOf(userId));
 
-        jedisAdapter.srem(attKey, entityId);
+        jedisAdapter.zrem(attKey, entityId);
         return jedisAdapter.expire(attKey);
     }
 
@@ -109,7 +112,12 @@ public class AttentionAdapter {
 
         String fasKey = RedisKeyUtil.getFansKey(attedUserId);
 
-        jedisAdapter.sadd(fasKey, entityId);
+        for (int i = entityId.length -1 ; i >= 0 ; i--){
+
+            jedisAdapter.zadd(fasKey, entityId[i]);
+        }
+
+        //jedisAdapter.zadd(fasKey, entityId);
         return jedisAdapter.expire(fasKey);
     }
 
@@ -117,7 +125,7 @@ public class AttentionAdapter {
 
         String fasKey = RedisKeyUtil.getFansKey(attedUserId);
 
-        jedisAdapter.srem(fasKey, entityId);
+        jedisAdapter.zrem(fasKey, entityId);
         return jedisAdapter.expire(fasKey);
     }
 

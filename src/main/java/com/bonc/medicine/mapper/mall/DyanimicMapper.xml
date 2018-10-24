@@ -127,6 +127,8 @@
 		<if test="publish_time != null and publish_time != '' ">
 			and  #{publish_time} = date(publish_time)
 		</if>
+
+        order by cdy.publish_time desc
   	</select>
 
 	<!--审核 动态，批准0或不批准1-->

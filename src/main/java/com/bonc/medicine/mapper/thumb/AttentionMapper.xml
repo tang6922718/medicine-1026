@@ -22,14 +22,14 @@
     <!--Wode gaunzhuliebiao-->
     <select id="attentionList" parameterType="Map" resultType="Map">
         select
-          object_id
+          object_id,update_time
         from
           common_follow
         where
           follow_flag = 1
         and object_type = #{type}
         and follow_user_id = #{userId}
-        order by update_time desc
+        order by id desc
     </select>
 
     <!--关注 -->
@@ -48,7 +48,7 @@
 
     <select id="fansNum" parameterType="String" resultType="Map">
         select distinct
-          follow_user_id
+          follow_user_id,update_time
         from
           common_follow
         where follow_flag = 1
@@ -63,6 +63,8 @@
         WHERE
             follow_flag = 1
             AND object_id = #{userId}
+
+            order by id desc
     </select>
 
     <select id="myAttentionNumberUser" parameterType="String" resultType="Map">
