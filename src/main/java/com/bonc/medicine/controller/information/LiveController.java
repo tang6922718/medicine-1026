@@ -15,6 +15,7 @@ import com.bonc.medicine.utils.ResultUtil;
 import com.bonc.medicine.utils.TecentCloudUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -247,10 +248,17 @@ public class LiveController {
 
     /**
      * @return
-     * @description 回播上传（测试）
+     * @description 回播上传（采用直播自动录制方式，完成录制回调接口）
      */
     @RequestMapping("/replayCallback")
     public Result replayCallback(@RequestBody Map map) {
+        if (map.get("event_type").equals(100)
+                && (!StringUtils.isEmpty(map.get("video_url")))
+                && (!StringUtils.isEmpty(map.get("channel_id")))) {
+
+            liveService.updateLiveReplay(map);
+
+        }
         System.out.println(JacksonMapper.INSTANCE.writeObjectToJson(map));
         return ResultUtil.success(map);
     }
