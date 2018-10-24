@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -218,7 +219,8 @@ public class SpecRepertoryController {
 				idddss.toString().length() - 1));
 		Map<String, String> ddayMap = new HashMap<>();
 		for (Map<String, String> daysMap: daysList) {
-			ddayMap.put(daysMap.get("proId") + "", daysMap.get("interactNumber") + "");
+			String number  = daysMap.get("interactNumber") == null || StringUtils.isBlank(daysMap.get("interactNumber")) ? "0" :  daysMap.get("interactNumber");
+			ddayMap.put(daysMap.get("proId") + "", number + "");
 
 		}
 		for (int i = 0; i < list.size(); i++) {
@@ -226,7 +228,8 @@ public class SpecRepertoryController {
 			param1.put("spec_id", list.get(i).get("spec_id").toString());
 			list.get(i).put("sub", specialistService.sub(param1).get(0).get("sub").toString());
 			list.get(i).put("cat", specialistService.cat(param1).get(0).get("cat").toString());
-			list.get(i).put("interact_count", ddayMap.get(list.get(i).get("spec_id") + ""));
+			list.get(i).put("interact_count", ddayMap.get(list.get(i).get("spec_id") + "") == null ? "0"
+                    : ddayMap.get(list.get(i).get("spec_id") + ""));
 		}
 
 
