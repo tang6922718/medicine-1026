@@ -164,7 +164,7 @@
 	</update>
 
 	<select id="guideRecord" resultType="Map" parameterType="Map">
-		( SELECT
+		SELECT * FROM ( SELECT
 		'新建种植' AS 'record',
 		a.id,
 		a.user_name,
@@ -183,8 +183,10 @@
 		a.state = '0'
 		AND a.guide_flag = '0'
 		AND a.creator_id = #{user_id}
-		) UNION
-		(
+		ORDER BY a.registation_time DESC
+		)  aa
+		UNION
+		SELECT * FROM (
 		SELECT
 		'登记种植信息' AS
 		'record',
@@ -216,7 +218,8 @@
 		= '0'
 		AND b.record_user_id =#{user_id}
 		AND b.guide_flag = '0'
-		)
+		ORDER BY b.record_time DESC
+		) bb
 	</select>
 
 	<select id="guideRecordNum" resultType="Map" parameterType="Map">
