@@ -24,7 +24,7 @@
             common_backend_user ccu
         LEFT JOIN common_backend_user_role_r crr ON ccu.id = crr.backend_user_id
         LEFT JOIN common_backend_user_role cro ON crr.backend_role_id = cro.id
-        left join common_backend_user ccc on cro.create_user_id = ccc.id
+        left join common_backend_user ccc on ccu.create_user_id = ccc.id
         where
             cro.create_user_id is not null
 
@@ -62,7 +62,7 @@
         INSERT INTO common_backend_user
         VALUES
 	    (0, #{name}, #{loginid}, #{password}, #{telephone}, #{email}, #{age}, #{sex},
-	     #{address}, #{isAllowed}, #{status}, now(), #{isBackendUser}, #{headPortrait})
+	     #{address}, #{isAllowed}, #{status}, now(), #{isBackendUser}, #{headPortrait}, #{create_user_id})
     </insert>
 
     <!--创建用户和角色的关系-->

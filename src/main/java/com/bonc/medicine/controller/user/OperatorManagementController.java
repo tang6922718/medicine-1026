@@ -1,5 +1,7 @@
 package com.bonc.medicine.controller.user;
 
+import com.bonc.medicine.annotation.Authorization;
+import com.bonc.medicine.annotation.CurrentUser;
 import com.bonc.medicine.annotation.MethodLog;
 import com.bonc.medicine.entity.Result;
 import com.bonc.medicine.enums.ResultEnum;
@@ -79,7 +81,8 @@ public class OperatorManagementController {
     */ 
     @MethodLog(remark = "新增,新增操作员,操作员")
     @PostMapping("/oper/new/v1.0")
-    public Result createNewOperationUser(@RequestBody Map<String, String> map){
+    @Authorization
+    public Result createNewOperationUser(@RequestBody Map<String, String> map, @CurrentUser String create_user_id){
         if (StringUtils.isEmpty(map.get("name")) || StringUtils.isEmpty(map.get("loginid"))
                 || StringUtils.isEmpty(map.get("password")) || StringUtils.isEmpty(map.get("telephone"))
                 || StringUtils.isEmpty(map.get("isAllowed"))){
@@ -89,6 +92,7 @@ public class OperatorManagementController {
         if (StringUtils.isEmpty(map.get("backendRoleid"))){
             ResultUtil.error(ResultEnum.MISSING_PARA);
         }
+        map.put("create_user_id", create_user_id);
 
         return ResultUtil.success(operatorManagementService.createNewOperationUser((Map)map));
     }
