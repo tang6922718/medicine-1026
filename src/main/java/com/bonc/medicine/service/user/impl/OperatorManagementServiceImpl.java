@@ -85,7 +85,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
     @Transactional
     public Map<String, Object> updateOperationUser(Map<String, String> map) {
 
-        String pass = map.get("password").length() == 32 ? "" : DigestUtils.md5Hex(map.get("password"));
+        String pass = StringUtils.isBlank(map.get("password")) ? "" : DigestUtils.md5Hex(map.get("password"));
         map.put("password", pass);
         int row = operatorManagementMapper.updateOperationUserInfo(map);
         if (row < 1){
