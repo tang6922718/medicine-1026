@@ -96,7 +96,7 @@
 
 		<if test="keyWord != null and keyWord != ''">
 			AND (
-			hole.NAME LIKE CONCAT('%',#{keyWord}, '%') OR
+			hole.coopName LIKE CONCAT('%',#{keyWord}, '%') OR
 			hole.adminName LIKE CONCAT('%',#{keyWord}, '%')
             or  hole.telephone LIKE CONCAT('%',#{keyWord}, '%')
 			)
