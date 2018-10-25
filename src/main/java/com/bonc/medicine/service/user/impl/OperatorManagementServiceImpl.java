@@ -61,7 +61,7 @@ public class OperatorManagementServiceImpl implements OperatorManagementService 
     public Map<String, Object> createNewOperationUser(Map<String, Object> map) {
          //=operatorManagementMapper.createNewOperationUserInfo(map);
         map.put("password", DigestUtils.md5Hex(map.get("password") + ""));
-        int woes  =operatorManagementMapper.createNewOperationUserInfo(map);
+        int woes  = operatorManagementMapper.createNewOperationUserInfo(map);
         //System.out.println(aaa);
         if (woes < 1 || StringUtils.isEmpty(map.get("id") + "")){
             throw new MedicineRuntimeException(ResultEnum.NET_ERROR);
