@@ -79,7 +79,7 @@ public interface TrainMapper {
     Map queryAppointmentNumber(Map<String, String> map);
 
 
-    //评论统计  todo
+    //评论统计
     @Select("SELECT COUNT(id)  as bmNum from train_appointment  WHERE object_id=#{comment_id} and object_type=#{Appointment_type}  GROUP BY user_id ")
     Map queryCommentNumber(Map<String, String> map);
 
