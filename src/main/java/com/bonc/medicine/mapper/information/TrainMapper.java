@@ -259,7 +259,7 @@ public interface TrainMapper {
                 FROM("train_offline a");
                 LEFT_OUTER_JOIN("train_offline_video b on a.id =b.train_id");
                 if (map.get("publish_time") != null && map.get("publish_time") != "") {
-                    WHERE("publish_time >=#{publish_time}");
+                    WHERE("a.create_time >=#{publish_time}");
                 }
                 if (map.get("title") != null && map.get("title") != "") {
                     WHERE("title  like CONCAT('%',#{title},'%')");
