@@ -41,6 +41,12 @@ public class TecentCloudUtils {
     public static final String PULL_URL = "http://" + bizid + ".liveplay.myqcloud.com/live/" + bizid + "_";
 
     /**
+     * 兼容PC和app拉流地址  HLS
+     */
+    public static final String PULL_HLS_URL = "http://" + bizid + ".liveplay.myqcloud.com/live/" + bizid + "_";
+
+
+    /**
      * 这是推流防盗链的生成 KEY+ streamId + txTime
      *
      * @param key      防盗链使用的key
@@ -87,6 +93,13 @@ public class TecentCloudUtils {
         return pullRtmpUrl;
     }
 
+    /**
+     * PC拉流地址获得
+     */
+    public static String getPullHlsrl(String owenrId) {
+        String pullHlsUrl = PULL_HLS_URL + owenrId+".m3u8";
+        return pullHlsUrl;
+    }
     /**
      * 获取关闭直播的url关闭直播 需要发送请求给腾讯服务器,然后返回结果
      *
