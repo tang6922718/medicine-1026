@@ -24,7 +24,7 @@ public class QuartzService {
      * 等于当前培训日期     进行中状态 1
      * 大于培训日期         结束状态 2
      */
-    @Scheduled(cron = "0 /20 * * * ? *")
+    @Scheduled(cron = "0 0/20 * * * ?")
     public void updateTrainStatus() {
         trainService.updateTrainStatus();
     }
