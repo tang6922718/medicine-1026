@@ -16,6 +16,12 @@ public class ScanNotice {
     }
 
 
+ /*   @Scheduled(cron = "0 15 22 * * * ?")
+    public void removeUnusedAttentionData() {
+		noticeService.scanNotice();
+    }*/
+
+
 
 
 
