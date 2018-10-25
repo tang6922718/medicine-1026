@@ -23,6 +23,8 @@ import com.bonc.medicine.service.thumb.AttentionService;
 import com.bonc.medicine.service.thumb.IntegralService;
 import com.bonc.medicine.service.user.UserManagerService;
 import com.bonc.medicine.utils.ResultUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 
 @RestController
 public class UserManagerController {
@@ -157,13 +159,21 @@ public class UserManagerController {
 	 * 用户管理列表
 	 */
 	@GetMapping("/userManager/get/userlist")
-	public Result<Object> userlist(String tel, String role, String startTime, String endTime) {
+	public Result<Object> userlist(String tel, String role, String startTime, String endTime, Integer pageNum,
+			Integer pageSize) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();// 保存1，2，3，4，10列数据
 		List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();// 保存5,6列数据
 		List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();// 保存7列数据
 		List<Map<String, Object>> list3 = new ArrayList<Map<String, Object>>();// 保存8列数据
 		List<Map<String, Object>> list4 = new ArrayList<Map<String, Object>>();// 保存9列数据
+		long total = 0L;
+		if (pageNum != null && pageSize != null) {
+			PageHelper.startPage(pageNum, pageSize);
+		}
 		list = userManagerService.userlist(tel, role, startTime, endTime);
+		if (pageNum != null && pageSize != null) {
+			total =  list == null ? 0L : ((Page<Map<String,Object>>)list).getTotal();
+		}
 		list1 = userManagerService.coop_hrlp_list();
 		for (int i = 0; i < list1.size(); i++) {
 			for (int j = 0; j < list.size(); j++) {
@@ -197,7 +207,7 @@ public class UserManagerController {
 				}
 			}
 		}
-		return ResultUtil.success(list);
+		return ResultUtil.successTotal(list, total);
 	}
 
 	/*
@@ -225,7 +235,7 @@ public class UserManagerController {
 		map.put("goingDown", goingDown);
 		return ResultUtil.success(map);
 	}
-	
+
 	/*
 	 * *
 	 * 
