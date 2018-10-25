@@ -167,7 +167,7 @@ public class LiveController {
     /**
      * @param map
      * @return
-     * @description 统一查看观看数，收藏数等接口 （你传我就帮你查）
+     * @description 统一查看观看数，收藏数等接口 （你传我就帮你查）   关闭不用
      */
     @RequestMapping("/selectWatchNum")
     public Result selectWatchNum(@RequestBody Map<String, String> map) {

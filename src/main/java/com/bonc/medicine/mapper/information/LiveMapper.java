@@ -74,7 +74,7 @@ public interface LiveMapper {
                 if (map.get("room_desc") != null) {
                     VALUES("room_desc", "#{room_desc}");
                 }
-                if (map.get("room_desc") != null) {
+                if (map.get("lecture_desc") != null) {
                     VALUES("lecture_desc", "#{lecture_desc}");
                 }
                 if (map.get("room_id") != null) {

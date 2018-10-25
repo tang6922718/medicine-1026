@@ -99,7 +99,7 @@ public class TrainController {
         return ResultUtil.success(trainService.addComment(map));
     }
 
-    /**todo
+    /**
      * @param map
      * @return
      * @description 交流互动(交流互动) (查询)
@@ -237,7 +237,7 @@ public class TrainController {
     /**
      * @param map
      * @return
-     * @description 删除线下视频  (删除视频)
+     * @description 删除视频  (删除视频)
      */
     @RequestMapping("/delCourseTrainVideo")
     @MethodLog(remark = "删除,删除线下视频,培训")

@@ -24,15 +24,10 @@ public class LiveServiceImpl implements LiveService {
 
         map.put("room_id", TecentCloudUtils.bizid+"_"+map.get("user_id").toString());
         map.put("push_url",TecentCloudUtils.getPushUrl(map.get("user_id").toString()));
-        map.put("pull_url",TecentCloudUtils.getPullUrl(map.get("user_id").toString()));
+        map.put("pull_url",TecentCloudUtils.getPullHlsrl(map.get("user_id").toString()));
         map.put("pull_rtmp_url",TecentCloudUtils.getPullRtmpUrl(map.get("user_id").toString()));
 
-     /*   try {
-            map.put("live_start",new SimpleDateFormat("YYYY-MM-DD HH:mm:ss").parse((String) map.get("live_start")));
-            map.put("live_end",new SimpleDateFormat("YYYY-MM-DD HH:mm:ss").parse((String) map.get("live_end")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
+
 
 
         return liveMapper.addLive(map);
