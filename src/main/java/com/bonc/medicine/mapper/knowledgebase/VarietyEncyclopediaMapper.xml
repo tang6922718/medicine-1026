@@ -104,7 +104,7 @@
 			and aa.chinese_name LIKE concat('%',#{search_name},'%')
 		</if>
 		<if test="type_code != null and type_code != ''">
-			and aa.codex_status = #{type_code}
+			and aa.type = #{type_code}
 		</if>
 		<if test="record_status != null and record_status != ''">
 			and aa.record_status= #{record_status}
