@@ -93,7 +93,7 @@ mybatis:
   configuration:
     call-setters-on-nulls: true
 hbase:
-  master: 192.168.1.24
+  master: 192.168.1.26
   zookeeper:
     quorum: hadoop003,hadoop004,hadoop005,hadoop006,hadoop007
     property:
