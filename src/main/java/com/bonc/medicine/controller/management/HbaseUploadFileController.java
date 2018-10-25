@@ -22,8 +22,8 @@ public class HbaseUploadFileController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public String uploadFileToHbase(@RequestParam MultipartFile myfile) throws IOException {
-        return  uploadFile.uploadFileToHbase(myfile);
+    public String uploadFileToHbase(@RequestParam MultipartFile myfile,@RequestParam(required = false) String key) throws IOException {
+        return  uploadFile.uploadFileToHbase(myfile,key);
     }
 
     @PostMapping("/read")

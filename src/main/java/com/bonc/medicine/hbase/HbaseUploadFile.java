@@ -1,22 +1,20 @@
 package com.bonc.medicine.hbase;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Administrator on 2018/9/3.
@@ -41,7 +39,7 @@ public class HbaseUploadFile {
     /*
      * 文件保存至Hbase
      * */
-    public String uploadFileToHbase( MultipartFile myfile) throws IOException{
+    public String uploadFileToHbase( MultipartFile myfile,String keyy) throws IOException{
         String tableName = "image_audio_vedio";
         String family="cf";
         //产生一个UUID字符串，理论上绝对不会重复
@@ -50,7 +48,8 @@ public class HbaseUploadFile {
         String[] nameA = myfile.getOriginalFilename().split("\\.");
         Long times = new Date().getTime();
         Integer ran = (int)(Math.random()*900)+100;
-        String key = times.toString()+ran.toString()+(nameA.length>1?"."+nameA[1]:"");//时间戳+3位随机数+文件后缀名作为key
+        String key = !StringUtils.isBlank(keyy) ? keyy
+                : times.toString()+ran.toString()+(nameA.length>1?"."+nameA[1]:"");//时间戳+3位随机数+文件后缀名作为key
 
         conf = getConf();
         HBaseAdmin hBaseAdmin = new HBaseAdmin(conf);
